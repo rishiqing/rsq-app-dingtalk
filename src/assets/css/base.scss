@@ -1,0 +1,258 @@
+/**
+ * base css rule according to SMACSS
+ * https://smacss.com/book/prototyping
+ */
+html, body {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+}
+
+/* 基本布局 */
+.fixed-view {
+    position: fixed;overflow: auto;left:0;right:0;top: 0;bottom: 0;
+    -webkit-overflow-scrolling: touch;}
+
+.fixed-view.is-show-title {
+    top: $headerHeight;
+}
+.fixed-view.is-show-nav {
+    bottom: $footerHeight;
+}
+
+.bottom-fixed {
+    position: fixed;left:0;right:0;bottom:0;
+}
+
+
+.div-editable {
+    outline: none;
+    padding: 15px 2px;
+    min-height: 70px;
+}
+div.div-editable.editable-blank {
+    color: #A3A3A3;
+}
+
+/* float button */
+.float-action-button {
+    position: fixed;width: 56px;height:56px;left:50%;margin-left: -28px;bottom: 34px;line-height: 52px;
+    border-radius: 50%;text-align: center;
+}
+
+.text-grey {color: #999;}
+.text-mid-line {text-decoration: line-through;}
+
+/* 通用list列表 */
+/* 单行居中列表项样式
+    基本结构：
+    .itm-outer  最外层样式
+        .itm-inner  内层样式，方便设置边距
+            .itm-title  中间的文字显示区
+            .itm-front-icons  文字之前的图标区
+            .itm-rear-icons  文字之后的图标区
+ */
+.itm-lst {
+    position: relative;overflow-y: auto;overflow-x:hidden;margin:0;
+    -webkit-overflow-scrolling: touch;
+}
+.itm-lst--border {
+    border-top:0.5px solid #E4E4E4;
+    border-bottom:0.5px solid #E4E4E4;
+}
+.itm-lst--itm-border > li .itm-inner {
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+}
+.itm-lst--itm-border > li:last-child .itm-inner {
+    border-bottom: none;
+}
+.itm-lst--margin {
+    margin: 12px 0;
+}
+.itm-outer {position: relative;box-sizing: border-box;width:100%;padding: 0 16px;}
+.itm-inner {position: relative;}
+.itm-title {height:56px;line-height:56px;overflow: hidden;}
+.itm-title-main {}
+.itm-title.itm-title-lines {line-height:40px;}
+.itm-title-lines .itm-title-sub {font-size: 13px;color:$mainColor;position: absolute;left: 40px;top: 24px;}
+.itm-title--center {text-align: center;}
+
+.itm-title-super {}
+.itm-title-super > * {display: inline-block;vertical-align: middle;font-size:14px;margin-right:5px;}
+
+.itm-icons {position: absolute;top:50%;margin-top: -21px;height:42px;line-height:42px;
+    overflow:hidden;max-width: 60%;text-overflow: ellipsis;white-space: nowrap;}
+.itm-icons.itm-icon--align-top {top: 21px;}
+.itm-icons .icon {font-size:2.4rem;}
+.itm-icons.itm-icons--white-bg .icon {background: #fff;}
+.itm-front-icons {}
+.itm-rear-icons {}
+
+
+.itm-placeholder {height: 170px;text-align: center;line-height:170px;color:$textGrey;}
+.itm-avatar {width: 36px;height:36px;margin-top:3px;background-size: cover;border-radius: 2px;}
+.itm-avatar--round {border-radius: 50%;}
+.itm-avatar.itm-avatar--small {width: 32px;height:32px;margin-top:5px;}
+.itm-avatar-wrap--small {padding-top: 5px;}
+.itm-icon-img-wrap>* {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+.itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;}
+
+
+.itm-lst-title {position: relative;padding: 0 20px;}
+.itm-lst-title-text {height:34px;line-height: 34px;font-size:14px;}
+
+.itm-edt {}
+.itm-edt-fields {
+    min-height: 100%;background: #f6f6f6;padding: 10px 0;}
+.itm-group, .itm-single {
+    position: relative;
+    background: #ffffff;
+    box-shadow: $zDeepShadow0;
+    /* border-radius: 2px; */
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+.itm-group > .itm-outer:last-child {
+
+}
+
+.itm-complex-title {padding: 16px 0;}
+.itm-complex-title-label {height: 32px;}
+.itm-complex-title-input {height: 32px;border-bottom: solid 1px #f3f3f3;}
+.itm--large .itm-complex-title {padding-left: 80px;height:64px;}
+.itm--large .itm-icons {margin-top: -32px;height:64px;line-height:64px;}
+.itm--large .itm-avatar {width: 64px;border-radius: 4px;}
+
+/* 个性化item */
+.kb-item:first-child {padding-top: 8px;}
+.kb-item:last-child {padding-bottom: 8px;}
+
+.itm-lst--kanban .itm-title {padding-left: 56px;}
+
+.itm-lst--kc {padding-bottom: 100px;}
+/* .itm-lst--kc .itm-lst {padding: 0 10px;} */
+.itm-lst--kc .itm-title {padding-left: 40px;}
+.itm-lst--kc .kb-item:last-child .itm-inner {border-bottom: none;}
+
+.itm-lst--docset {padding-bottom: 100px;}
+.itm-lst--doc .doc-item:last-child .itm-inner {border-bottom: none;}
+.doc-item .itm-title {height:initial;line-height:initial;}
+.doc-item .itm-title-super {padding: 16px 0;margin: 0;}
+.keep-one-line {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;}
+
+.itm--edit-todo .itm-title {padding-left: 40px;height:50px;line-height:50px;}
+.itm--edit-todo .itm-inner {border-top: solid 1px rgba(0,0,0,0.1);}
+.itm--edit-todo .itm-outer:first-child .itm-inner {border: none;}
+
+.itm-list--kb-new {padding-top: 10px;}
+
+/* 评论相关 */
+.cmt {position: relative;padding-top: 10px;padding-bottom: 10px;}
+.cmt .cmt-name {padding-right: 40px;}
+.cmt .cmt-time, .cmt .cmt-name {font-size: 1.2rem;color: #a3a3a3;}
+.cmt .cmt-content {padding-top: 15px;}
+.cmt .btn-reply {position: absolute;right:0;top:10px;}
+
+
+.cmt-send-field {position: fixed;bottom:0;width:100%;z-index:999;background:#f6f6f6;
+    overflow:hidden;box-sizing: border-box;padding: 15px;
+    border-top:solid 1px #e8e8e8;}
+.cmt-send-input-wrap {position:relative;padding:0 70px 0 0;}
+.cmt-send-btn-upload {position:absolute;color:#0096f6;font-size: 30px;left:0;bottom:0;width: 40px;
+    height: 30px;line-height: 30px;margin: 7px 0;
+    text-align: center;border-right:solid 1px rgba(0,0,0,0.1);}
+.cmt-send-input textarea {
+    /*padding: 8px 8px 8px 50px;*/
+    padding: 8px;
+    font-size: 16px;
+    background:#ffffff;
+    box-shadow:0px 0px 1px 0px rgba(0,0,0,0.13);
+    border-radius:3px;
+    resize: none;
+    overflow: auto;
+    max-height: 200px;
+}
+input[type="button"].cmt-send-btn-submit {
+    position:absolute;right:15px;height:40px;line-height:40px;bottom:15px;width:60px;padding:0;}
+
+.todo-done {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+/* modal */
+.modal-wrap {
+    position: relative;
+}
+.modal-shade, .modal-main {
+    position: fixed;left: 0;top: 0;width: 100%;height: 100%;
+}
+.modal-shade {background-color: rgba(0,0,0,.5);pointer-events: auto;}
+.modal-main {display: table;}
+.modal-cell {display: table-cell;vertical-align: middle;text-align: center;}
+.modal-content {
+    display: inline-block;box-shadow: $zDeepShadow5;background: $bgColor;
+    overflow: hidden;border-radius: 4px;
+}
+.modal-content.content--kb-edit {width: 80%;}
+.modal-header {position: relative;color: #fff;}
+.modal-header-bg {background-size: cover; background-position: center;width: 100%;height: 120px;}
+.modal-btn-right-top {position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 3.2rem;}
+.modal-header-title {position: absolute;left: 10%;width: 80%;bottom: 10%;}
+.modal-header-title-text {display: inline;padding: 5px;background: rgba(0,0,0,0.26);color: #fff;border-radius: 3px;}
+.modal-body, .modal-footer {padding: 20px;text-align: left;}
+
+.content--con-edit .modal-header-bg {background: $mainColor;}
+.content--con-edit .modal-header-title-text {
+    display:block;width: 100%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;margin: 0;
+    background: transparent;font-size: 2.8rem;}
+
+.bg-con-ie {background: red;}
+.bg-con-iu {background: orange;}
+.bg-con-ue {background: blue;}
+.bg-con-uu {background: green;}
+
+/* text-icon combined text and icon */
+.text-icon {width: 48px;height: 48px;margin: 0 auto;text-align: center;color: #BBC7D3;padding-top: 3px;}
+.text-icon .icon {font-size: 2rem;line-height:0;}
+.text-icon .icon-title {display: block;margin-top:-1px;font-size:1rem;}
+
+.btn-block {width:100%;}
+
+/* 含有一半border */
+.itm--part-line .itm-outer {padding-right:0;}
+.itm--part-line .itm-inner {padding-right: 16px;}
+.itm--part-line .u-abs-right {right:16px;}
+
+
+/* 个人中心 */
+.main-avatar {}
+.main-avatar .avatar {margin: 36px auto 22px auto;}
+.main-avatar-text {text-align: center;font-size: 1.6rem;margin: 0 30px 36px;}
+
+/* 笔记 */
+.doc-title .itm-outer {
+    background: transparent;
+}
+.doc-title .itm-title {
+    border-bottom: solid 1px #dadada;
+}
+.doc-title .itm-title-main input[type=text] {
+    background: transparent;
+    height: 56px;font-size: 2.4rem;
+}
+.doc-body {
+    padding: 0 16px;overflow-y: auto;background: #fff;
+    position: absolute;left: 0;right: 0;top: 67px;bottom: 0;
+}

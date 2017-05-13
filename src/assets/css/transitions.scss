@@ -1,0 +1,23 @@
+/* 渐隐渐显 */
+.fade-transition {
+    transition: all .3s ease;
+}
+.fade-enter, .fade-leave {
+    opacity: 0;
+}
+
+/* 右滑 */
+.right-slide-transition {
+    transition: all .3s ease;
+}
+.right-slide-enter, .right-slide-leave {
+    transform: translateX(100%);
+}
+
+.staggered-transition {
+    transition: all .5s ease;
+}
+.staggered-enter, .staggered-leave {
+    transform: translateX(-10px);
+    opacity: 0;
+}

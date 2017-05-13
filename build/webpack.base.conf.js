@@ -1,4 +1,5 @@
 var path = require('path')
+var url = require('url')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
@@ -15,14 +16,19 @@ module.exports = {
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+      ? url.resolve(config.build.frontServer, config.build.assetsPublicPath)
+      : url.resolve(config.dev.frontServer, config.dev.assetsPublicPath)
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'api': resolve('src/api'),
+      'com': resolve('src/components'),
+      'ut': resolve('src/utils'),
+      'as': resolve('src/assets'),
+      'vx': resolve('src/vuex')
     }
   },
   module: {

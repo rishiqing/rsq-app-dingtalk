@@ -1,2 +1,9 @@
 build/*.js
 config/*.js
+src/assets/js/*.js
+
+# temp
+src/api/*.js
+src/store/*.js
+src/utils/*.js
+src/components/**

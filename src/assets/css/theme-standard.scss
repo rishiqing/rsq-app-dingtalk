@@ -1,0 +1,36 @@
+/**
+  标准皮肤
+**/
+.rsq-webview {}
+.router-view {
+    padding-bottom: 49px;
+}
+.editor-view {padding: 10px 0;background:$bgColor;}
+.router-view.bg-grey {background: #f6f6f6;}
+.text--hightlight {color: $mainColor;}
+
+.float-action-button {
+    background: #fff;box-shadow: $zDeepShadow1;
+}
+.float-action-button .icon {
+    color: $mainColor;
+    font-size: 1.8em;
+}
+.clickable {cursor: pointer;}
+
+.itm-outer {background: $bgColor;}
+.itm-icons .icon {color:#cbcbcb;}
+.itm-blank {color:#cecece;background:#fff;}
+
+.itm-lst-title-text {color: #858e99;}
+
+.kb-item, .ds-item {background: #fff;}
+.ds-item .itm-title {padding-left:52px;}
+.ds-item .itm-avatar {width:28px;}
+
+.itm-lst--kc .itm-inner, .itm-list--kb-cards .itm-inner, .itm-bordered
+{
+    border-bottom: solid 1px rgba(0,0,0,0.1);
+}
+
+

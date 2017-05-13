@@ -13,6 +13,11 @@ var webpackConfig = require('./webpack.prod.conf')
 var spinner = ora('building for production...')
 spinner.start()
 
+console.log(chalk.blue('basic prod config:'))
+console.log(chalk.blue('auth server:', config.build.authServer))
+console.log(chalk.blue('rishiqing api server:', config.build.apiServer))
+console.log(chalk.blue('frontend server:', config.build.frontServer))
+
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
   if (err) throw err
   webpack(webpackConfig, function (err, stats) {

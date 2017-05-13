@@ -6,6 +6,7 @@ if (!process.env.NODE_ENV) {
 }
 
 var opn = require('opn')
+var chalk = require('chalk')
 var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
@@ -41,6 +42,13 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
+//  跨域访问
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
@@ -71,12 +79,21 @@ var readyPromise = new Promise(resolve => {
   _resolve = resolve
 })
 
-console.log('> Starting dev server...')
+console.log(chalk.blue('basic dev config:'))
+console.log(chalk.blue('auth server:', config.dev.authServer))
+console.log(chalk.blue('rishiqing api server:', config.dev.apiServer))
+console.log(chalk.blue('frontend server:', config.dev.frontServer))
+console.log(chalk.blue('dev server(should be same as frontend server):', uri))
+if(config.dev.frontServer !== uri){
+  console.log(chalk.black.bgRed(' WARN '), chalk.red('dev server is not same as frontend server, this may cause some problem in dev environment'))
+}
+console.log(chalk.green('> Starting dev server...'))
+
 devMiddleware.waitUntilValid(() => {
-  console.log('> Listening at ' + uri + '\n')
+  console.log(chalk.green('> Listening at ' + uri + '\n'))
   // when env is testing, don't need open it
   if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
-    opn(uri)
+    // opn(uri)
   }
   _resolve()
 })

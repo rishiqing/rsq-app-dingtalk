@@ -1,0 +1,93 @@
+.is-hidden {
+    display: none !important;
+}
+/* 顶部title */
+.frm-header {position: fixed;top:0;left:0;right:0;height:52px;
+    line-height: 52px;font-size:18px;text-align: center;
+    background: #0096f6;color: #fff;z-index: 1000;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);}
+.frm-header-title {text-align: center;
+    max-width: 70%;
+    margin: 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;}
+
+/* 顶部icon按钮 */
+.frm-header-button {
+    position: absolute;
+    top: 6px;font-size:14px;
+    height:40px;line-height: 40px;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.frm-option-main {}
+.frm-option-sub {
+    position: absolute;
+    right: 10px;
+    padding: 10px 0;
+    background: #FFF;
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.20);
+    border-radius: 4px;
+}
+.frm-options-menu-list {}
+.frm-options-menu {
+    box-sizing: border-box;
+    padding: 0 10px;
+    height: 28px;line-height: 28px;
+    font-size: 14px;color: #0B0D0C;
+    white-space: nowrap;cursor: pointer;
+    min-width: 60px;
+}
+.frm-options-menu:hover {
+    background: #f8f8f8;
+}
+.frm-abs--left {left:0;}
+.frm-abs--right {right:0;}
+
+.frm-webview {padding-top: 52px;}
+
+/*picker样式*/
+.frm-picker.layui-m-layerchild h3 {
+    height: 50px;
+    line-height: 50px;
+    border: 1px solid #E9E9E9;
+    margin-bottom: 10px;
+}
+.frm-picker .layui-m-layercont {
+    max-height: 300px;max-height:50vh;
+    padding: 0 30px 10px 30px;
+    overflow-y: auto;
+}
+.frm-picker .frm-picker-list {
+}
+.frm-picker .frm-picker-item {
+    position: relative; height: 36px;line-height: 36px;color:#666;font-size: 14px;
+    text-align: left;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;cursor: pointer;
+}
+.frm-picker .frm-picker-item--checked:after {
+    content: '\e5ca';
+    position: absolute;
+    right: 0;
+    color: #0fa0ce;
+}
+
+/* frame date picker */
+.frm-dp-title {height: 52px; line-height: 52px;}
+.frm-dp-title .icon {font-size: 2.6rem;}
+.frm-dp-title i.icon {cursor: pointer;}
+.frm-dp-title-text {}
+.frm-dp-content  {width:100%;height:240px;text-align: center;}
+.frm-dp-table {width:100%;height:240px;text-align: center;}
+.frm-dp-day {margin:0 auto;width:30px;height:30px;line-height:30px;text-align: center;border-radius: 50%;cursor: pointer;}
+.frm-dp-grey {color: #a8a8a8;}
+.frm-dp-selected {background: #0fa0ce;color:#fff;}

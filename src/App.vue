@@ -1,23 +1,25 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
+  <div id="app" class="rsq-webview">
     <router-view></router-view>
+    <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
-</script>
+  import Nav from 'com/Nav'
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  export default {
+    name: 'app',
+    computed: {
+      isAddNav () {
+        return this.$store.state.env.isAddNav
+      },
+      isShowNav () {
+        return this.$store.state.env.isShowNav
+      }
+    },
+    components: {
+      'r-nav': Nav
+    }
+  }
+</script>

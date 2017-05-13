@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>rsq-app-portlet</title>
+    <script>
+      var rsqConfig = {
+        authServer: '<%= htmlWebpackPlugin.options.authServer %>',
+        apiServer: '<%= htmlWebpackPlugin.options.apiServer %>'
+      }
+    </script>
   </head>
   <body>
     <div id="app"></div>

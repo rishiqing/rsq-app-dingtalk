@@ -11,7 +11,6 @@ var postcssOptions = {
     // require('cssnano')()
   ]
 }
-// var postcssOptions = {}
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'

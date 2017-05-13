@@ -1,3 +1,5 @@
+@import "test-sub.scss";
+
 body {
-  background: #f00;
+  background: $mainColor;
 }

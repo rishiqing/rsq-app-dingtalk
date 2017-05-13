@@ -1,0 +1,24 @@
+/**
+ * state css rule according to SMACSS
+ * https://smacss.com/book/prototyping
+ */
+
+.is-hidden {
+    display: none!important;
+}
+.is-active {
+    color: $mainColor!important;
+}
+.is-alert {
+    color: $alertColor!important;
+}
+.is-bg-alert {
+    color: $bgColor;
+    background: $alertColor!important;
+}
+.is-yellow {
+    color: #ff0!important;
+}
+.is-blue {
+    color: $mainColor!important;
+}
