@@ -1,5 +1,11 @@
 # 开发文档
 
+## 分支说明
+
+* v1.0.0：基于vue1.0版本的uigit 
+* v1.1.0：新版本UI + 笔记
+* v2.0.0：基于vue2.0版本，包括了新UI和笔记功能
+
 ## postcss替换sass
 
 > sass使用繁琐，而postcss通过precss插件可以兼容大部分sass语法，故使用postcss解析编译前的css文件。

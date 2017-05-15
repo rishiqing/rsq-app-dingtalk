@@ -1,162 +1,190 @@
 import util from 'ut/jsUtil'
 
+/**
+ * mutation命名规则：
+ * 模块前缀_主要操作实体_操作动作
+ * 1、模块前缀：
+ * SYS：系统级别，例如当前用户、团队用户等
+ * INB：inbox收纳箱
+ * SCH：schedule日程
+ * TD：收纳箱和日程的公共模块
+ * PLN：Plan计划（看板）
+ * DOC：笔记
+ * ME：个人相关
+ * 2、操作实体，常用的有：
+ * USR：用户
+ * STF：员工
+ * TODO：任务，包括了收纳箱、日程、计划任务
+ * KB：计划看板
+ * KBCARD：看板卡片
+ * DSET：文集doc set
+ * NOTE：笔记
+ * LST：各种列表
+ * 3、操作动作
+ * CREATED
+ * UPDATED
+ * DELETED
+ * GET
+ * SET
+ * READY
+ * CACHED
+ */
 export default {
   increment (state, p) {
     state.count ++
   },
-  SYS_DO_LOGIN(state, user) {
-    state.loginUser = user;
+  /**
+   * 登录后设置全局loginUser
+   * @param state
+   * @param p.user
+   * @constructor
+   */
+  SYS_USR_LOGIN(state, p) {
+    state.loginUser = p.user;
   },
-  SYS_DO_LOGOUT(state){
+  /**
+   * 注销后将全局loginUser置为null
+   * @param state
+   * @constructor
+   */
+  SYS_USR_LOGOUT(state){
     state.loginUser = null;
   },
-  SYS_PAGE_VIEW_INIT(state, props) {
-    state.currentPage = props.path;
-  },
-  SYS_PAGE_SECTION_PUSH(state, props){
-    var section = {
-      id: props.sectionId,
-      isShowTitle: props.isShowTitle,
-      isShowNav: props.isShowNav,
-      name: props.titleName,
-      buttons: props.titleButtons
-    };
-    state.section.history.push(section);
-  },
-  SYS_PAGE_SECTION_POP(state){
-    state.section.history.pop();
-  },
-  SYS_PAGE_SECTION_RESET(state){
-    state.section.history = [];
-  },
-
   //  section show and hide
-  SYS_SHOW_INBOX_EDIT(state, status){
-    state.inbox.isShowEdit = status;
-  },
-  SYS_SHOW_SCHEDULE_EDIT(state, status){
-    state.schedule.isShowEdit = status;
-  },
-  SYS_SHOW_KBTODO_EDIT(state, status){
-    state.kbTodo.isShowEdit = status;
-  },
-  SYS_SHOW_CONTAINER_EDIT(state, status){
-    state.schedule.isShowConEdit = status;
-  },
-  SYS_SHOW_STAFF_SELECT(state, status){
-    state.staff.isShowStaffEdit = status;
-  },
-  SYS_SHOW_SYSTEM_SELECT_DATE(state, status){
-    state.system.isShowDate = status;
-  },
-  SYS_SHOW_INBOX_LIST(){},
-  SYS_SHOW_SCHEDULE_LIST(){},
-  SYS_SHOW_KANBAN_LIST(){},
-  SYS_SHOW_KBTODO_LIST(){},
 
-  SYS_STAFF_LIST_READY(state, list){
-    state.staff.list = list;
+  /**
+   *
+   * @param state
+   * @param p.list
+   * @constructor
+   */
+  SYS_STF_LST_READY(state, p){
+    state.staff.list = p.list;
   },
-  SYS_SHOW_STAFF_EDIT(state, status){
-    state.staff.isShowStaffEdit = status;
+  /**
+   * 以openid作为key值进行缓存
+   * @param state
+   * @param p.key
+   * @param p.value
+   * @constructor
+   */
+  SYS_OPENID_CACHED(state, p){
+    state.openidCache[p.key] = p.value;
   },
-
-  SYS_OPENID_CACHE_SET(state, key, value){
-    state.openidCache[key] = value;
+  /**
+   * 以rsqid作为key值进行缓存
+   * @param state
+   * @param p.key
+   * @param p.value
+   * @constructor
+   */
+  SYS_RSQID_CACHED(state, p){
+    state.rsqidCache[p.key] = p.value;
   },
-  SYS_RSQID_CACHE_SET(state, key, value){
-    state.rsqidCache[key] = value;
-  },
-
-  SYS_SET_SHOW_NAV(state, isShow){
-    state.env.isShowNav = isShow;
+  /**
+   * 设置是否显示导航
+   * @param state
+   * @param p.isShow
+   * @constructor
+   */
+  SYS_NAV_SHOW(state, p){
+    state.env.isShowNav = p.isShow;
   },
 
   /* ----------------inbox----------------- */
-  INBOX_TODO_READY(state, items) {
-    state.inbox.items = items;
+  /**
+   *
+   * @param state
+   * @param p
+   * @constructor
+   */
+  INB_TODO_READY(state, p) {
+    state.inbox.items = p.items;
   },
-  INBOX_TODO_CREATED(state, item){
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  INB_TODO_CREATED(state, p){
     if(state.inbox.items){
-      state.inbox.items.unshift(item);
+      state.inbox.items.unshift(p.item);
     }
   },
   /* --------------------------------- */
 
   /* ----------------schedule----------------- */
-  SCHEDULE_TODO_READY(state, p) {
+  SCH_TODO_READY(state, p) {
     state.schedule.strCurrentDate = p.strCurrentDate;
     state.schedule.items = p.items;
   },
-  SCHEDULE_TODO_CACHE(state, p){
+  SCH_TODO_CACHED(state, p){
     state.schedule.dateItems[p.strCurrentDate] = p.items;
   },
-  DELETE_SCHEDULE_TODO_CACHE(state, strCurrentDate){
-    delete state.schedule.dateItems[strCurrentDate];
+  SCH_TODO_CACHE_DELETE(state, p){
+    delete state.schedule.dateItems[p.strCurrentDate];
   },
-  SCHEDULE_TODO_CREATED(state, item, list){
-    if(list instanceof Array){
-      list.unshift(item);
+  SCH_TODO_CREATED(state, p){
+    if(p.list instanceof Array){
+      p.list.unshift(p.item);
     }else{
-      state.schedule.items.unshift(item);
+      state.schedule.items.unshift(p.item);
     }
   },
-  SCHEDULE_LIST_TODO_CHECKED(state, p, item, status){
+  SCH_LIST_TODO_CHECKED(state, p){
     p.item.pIsDone = p.status;
   },
   /* --------------------------------- */
 
   /* ---------------todo收纳箱和日程页面的公共数据------------------ */
-  TODO_CURRENT_ITEM_SET(state, item) {
-    state.todo.currentTodo = item;
+  TD_CURRENT_TODO_SET(state, p) {
+    state.todo.currentTodo = p.item;
   },
-  TODO_GET(state, newTodo){
-    util.extendObject(state.todo.currentTodo, newTodo);
+  TD_TODO_GET(state, p){
+    util.extendObject(state.todo.currentTodo, p.todo);
   },
-  TODO_PROP_SET(state, props) {
+  TD_TODO_UPDATED(state, p) {
     let item = state.todo.currentTodo;
-    util.extendObject(item, props);
+    util.extendObject(item, p.todo);
   },
-  TODO_DELETED(state, item){
-    let items = item.pContainer == 'inbox' ? state.inbox.items : state.schedule.items;
-    let index = items.indexOf(item);
+  TD_TODO_DELETED(state, p){
+    let items = p.item.pContainer == 'inbox' ? state.inbox.items : state.schedule.items;
+    let index = items.indexOf(p.item);
     if(index > -1){
       items.splice(index, 1);
     }
   },
-  TODO_COMMENT_SAVED(state, comment){
-    state.todo.currentTodo.comments.push(comment);
+  TD_COMMENT_CREATED(state, p){
+    state.todo.currentTodo.comments.push(p.comment);
   },
   /* --------------------------------- */
 
   //-------------------------plan v2.0
 
-  PLAN_READY(state, commonPlans, starPlans){
-    state.plan.commonPlans = commonPlans;
-    state.plan.starPlans = starPlans;
+  PLN_KB_READY(state, p){
+    state.plan.commonPlans = p.commonPlans;
+    state.plan.starPlans = p.starPlans;
   },
 
   //-------------------------plan v2.0
 
-  PLAN_CURRENT_SET(state, item) {
-    item = item || {};
+  PLN_CURRENT_KB_SET(state, p) {
+    item = p.item || {};
     state.plan.currentPlan = item;
     state.plan.lastPlanCard = null;
   },
-  KANBAN_SHOW_EDIT(state, status) {
-    state.kanban.isShowEdit = status;
-  },
-  PLAN_CREATED(state, item){
-    if(item.starMark){
-      state.plan.starPlans.push(item);
+  PLN_KB_CREATED(state, p){
+    if(p.item.starMark){
+      state.plan.starPlans.push(p.item);
     }else{
-      state.plan.commonPlans.push(item);
+      state.plan.commonPlans.push(p.item);
     }
   },
-  PLAN_UPDATED(state, item){
-    util.extendObject(state.plan.currentPlan, item);
+  PLN_KB_UPDATED(state, p){
+    util.extendObject(state.plan.currentPlan, p.item);
   },
-  PLAN_DELETED(state){
+  PLN_KB_DELETED(state){
     let item = state.plan.currentPlan;
     let list;
     if(item.starMark){
@@ -170,69 +198,121 @@ export default {
     }
     state.plan.lastPlanCard = null;
   },
-  TOGGLE_PLAN_STAR(state, plan, isStar){
-    plan.starMark = isStar;
-    var orgList = isStar ? state.plan.commonPlans : state.plan.starPlans;
-    var targetList = (!isStar) ? state.plan.commonPlans : state.plan.starPlans;
+  PLN_KB_STAR_TOGGLE(state, p){
+    p.plan.starMark = p.isStar;
+    var orgList = p.isStar ? state.plan.commonPlans : state.plan.starPlans;
+    var targetList = (!p.isStar) ? state.plan.commonPlans : state.plan.starPlans;
     //  从旧列表中删除
-    var orgIndex = orgList.indexOf(plan);
+    var orgIndex = orgList.indexOf(p.plan);
     orgList.splice(orgIndex, 1);
-    util.insertOrderList(targetList, plan, function(cur, obj){
+    util.insertOrderList(targetList, p.plan, function(cur, obj){
       return obj.dateCreated < cur.dateCreated;
     });
     //  寻找新列表的添加顺，排序顺序，根据时间排序
 
   },
-  PLAN_DETAIL_EXIST(state){},
-  PLAN_DETAIL_READY(state, oldKanban, kanbanWithDetail){
-    util.extendObject(oldKanban, kanbanWithDetail);
+  PLN_KB_DETAIL_EXIST(state){},
+  PLN_KB_DETAIL_READY(state, p){
+    util.extendObject(p.plan, p.planWithDetail);
   },
-  PLAN_TODO_CURRENT_SET(state, item){
-    state.planTodo.currentTodo = item;
+  PLN_CURRENT_TODO_UPDATED(state, p){
+    state.planTodo.currentTodo = p.item;
   },
   // KBTODO_SHOW_EDIT(state, status){
   // 	state.kbTodo.isShowEdit = status;
   // },
-  PLAN_CARD_CREATED(state, plan, kc){
-    var cardList = plan.kanbanCardList;
-    cardList.push(kc);
+  /**
+   *
+   * @param state
+   * @param p.plan
+   * @param p.planCard
+   * @constructor
+   */
+  PLN_KBCARD_CREATED(state, p){
+    var cardList = p.plan.kanbanCardList;
+    cardList.push(p.planCard);
   },
-  PLAN_CARD_UPDATED(state, props){
-    let kc = util.findById(state.plan.currentPlan.kanbanCardList, props.id);
+  /**
+   *
+   * @param state
+   * @param p.item 新的plan card
+   * @constructor
+   */
+  PLN_KBCARD_UPDATED(state, p){
+    let kc = util.findById(state.plan.currentPlan.kanbanCardList, p.item.id);
     if(kc){
-      util.extendObject(kc, props);
+      util.extendObject(kc, p.item);
     }
   },
-  PLAN_CARD_DELETED(state, props){
-    util.deleteById(state.plan.currentPlan.kanbanCardList, props.id);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  PLN_KBCARD_DELETED(state, p){
+    util.deleteById(state.plan.currentPlan.kanbanCardList, p.item.id);
     var lastCard = state.plan.lastPlanCard;
-    if(lastCard && props.id == lastCard.id ){
+    if(lastCard && p.item.id == lastCard.id ){
       state.plan.lastPlanCard = null;
     }
   },
-  PLAN_TODO_CREATED(state, kt){
+  /**
+   *
+   * @param state
+   * @param p
+   * @constructor
+   */
+  PLN_TODO_CREATED(state, p){
     let cardList = state.plan.currentPlan.kanbanCardList;
-    let card = util.findById(cardList, kt.kanbanCardId);
+    let card = util.findById(cardList, p.item.kanbanCardId);
     if(!card.kanbanItemList){
       card.kanbanItemList = [];
     }
-    card.kanbanItemList.push(kt);
+    card.kanbanItemList.push(p.item);
     state.plan.lastPlanCard = card;
   },
-  PLAN_TODO_GET(state, newTodo){
-    util.extendObject(state.planTodo.currentTodo, newTodo);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  PLN_TODO_UPDATED(state, p){
+    var item = p.item || state.planTodo.currentTodo;
+    util.extendObject(item, p.newItem);
   },
-  PLAN_TODO_PROP_SET(state, item, props){
-    util.extendObject(item, props);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  PLN_TODO_DELETED(state, p){
+    let card = util.findById(state.plan.currentPlan.kanbanCardList, p.item.kanbanCardId);
+    util.deleteById(card.kanbanItemList, p.item.id);
   },
-  PLAN_TODO_DELETED(state, props){
-    let card = util.findById(state.plan.currentPlan.kanbanCardList, props.kanbanCardId);
-    util.deleteById(card.kanbanItemList, props.id);
+  /**
+   *
+   * @param state
+   * @param p.item todo comment
+   * @constructor
+   */
+  PLN_TODO_COMMENT_CREATED(state, p){
+    state.planTodo.currentTodo.commentList.push(p.item);
   },
-  PLAN_TODO_COMMENT_SAVED(state, comment){
-    state.planTodo.currentTodo.commentList.push(comment);
-  },
-  PLAN_TODO_MOVE(state, newTodo, orgCard, targetCard){
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @param p.sourceCard
+   * @param p.targetCard
+   * @constructor
+   */
+  PLN_TODO_MOVE(state, p){
+    var newTodo = p.item,
+      orgCard = p.sourceCard,
+      targetCard = p.targetCard;
     var current = state.planTodo.currentTodo;
     util.extendObject(current, newTodo);
     let index = orgCard.kanbanItemList.indexOf(current);
@@ -242,31 +322,54 @@ export default {
     });
 
   },
-  KBTODO_LIST_TODO_CHECKED(state, item, status){
-    item.isDone = status;
-  },
-  PLAN_TODO_RECEIVER_SET(state, todo){
-    util.extendObject(state.planTodo.currentTodo, todo);
-  },
 
   //  文集相关
-  DOC_SET_READY(state, list){
-    state.doc.docSetList = list;
+  /**
+   *
+   * @param state
+   * @param p.list
+   * @constructor
+   */
+  DOC_DSET_READY(state, p){
+    state.doc.docSetList = p.list;
   },
-  DOC_SET_CREATED(state, item){
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_DSET_CREATED(state, p){
     var dsList = state.doc.docSetList;
     if(null == dsList){
       dsList = [];
     }
-    dsList.push(item);
+    dsList.push(p.item);
   },
-  DOC_SET_CURRENT_SET(state, item){
-    state.doc.currentDocSet = item;
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_CURRENT_DSET_SET(state, p){
+    state.doc.currentDocSet = p.item;
   },
-  DOC_SET_UPDATED(state, item){
-    util.extendObject(state.doc.currentDocSet, item);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_DSET_UPDATED(state, p){
+    util.extendObject(state.doc.currentDocSet, p.item);
   },
-  DOC_SET_DELETED(state){
+  /**
+   *
+   * @param state
+   * @constructor
+   */
+  DOC_DSET_DELETED(state){
     let item = state.doc.currentDocSet;
     let list = state.doc.docSetList;
     let index = list.indexOf(item);
@@ -274,36 +377,95 @@ export default {
       list.splice(index, 1);
     }
   },
-  DOC_SET_DETAIL_EXIST(state, item){},
-  DOC_SET_DETAIL_READY(state, oldDS, newDS){
-    util.extendObject(oldDS, newDS);
+  /**
+   *
+   * @param state
+   * @constructor
+   */
+  DOC_DSET_DETAIL_EXIST(state){},
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @param p.newItem
+   * @constructor
+   */
+  DOC_DSET_DETAIL_READY(state, p){
+    util.extendObject(p.item, p.newItem);
   },
+  /**
+   *
+   * @param state
+   * @constructor
+   */
   DOC_NOTE_LIST_RESET(state){
     state.doc.currentDocNoteList = null;
   },
-  //  将list存入cache中
-  DOC_NOTE_LIST_SAVE_CACHE(state, docSet, list){
+  /**
+   * 将list存入cache中
+   * @param state
+   * @param p.docSet
+   * @param p.list
+   * @constructor
+   */
+  DOC_NOTE_LIST_CACHED(state, p){
+    var docSet = p.docSet,
+      list = p.list;
     state.doc.docNoteListMap[docSet.id] = list;
     if(!state.doc.docNoteListStatusMap[docSet.id]){
       state.doc.docNoteListStatusMap[docSet.id] = {};
     }
   },
-  //  设置当前的currentDocNoteList
-  DOC_NOTE_LIST_READY(state, docSet, list){
-    state.doc.currentDocNoteList = list;
+  /**
+   * 设置当前的currentDocNoteList
+   * @param state
+   * @param p.list
+   * @constructor
+   */
+  DOC_NOTE_LIST_READY(state, p){
+    state.doc.currentDocNoteList = p.list;
   },
-  DOC_NOTE_LIST_LOAD_ALL(state, docSet, list){
-    state.doc.docNoteListStatusMap[docSet.id].isLoadAll = true;
+  /**
+   *
+   * @param state
+   * @param p.docSet
+   * @constructor
+   */
+  DOC_NOTE_LIST_FINISHED(state, dp){
+    state.doc.docNoteListStatusMap[p.docSet.id].isLoadAll = true;
   },
-  DOC_NOTE_CURRENT_SET(state, docNote){
-    state.doc.currentDocNote = docNote;
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_CURRENT_NOTE_SET(state, p){
+    state.doc.currentDocNote = p.item;
   },
-  DOC_NOTE_CREATED(state, item){
-    state.doc.currentDocNoteList.unshift(item);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_NOTE_CREATED(state, p){
+    state.doc.currentDocNoteList.unshift(p.item);
   },
-  DOC_NOTE_UPDATED(state, item){
-    util.extendObject(state.doc.currentDocNote, item);
+  /**
+   *
+   * @param state
+   * @param p.item
+   * @constructor
+   */
+  DOC_NOTE_UPDATED(state, p){
+    util.extendObject(state.doc.currentDocNote, p.item);
   },
+  /**
+   * 删除笔记
+   * @param state
+   * @constructor
+   */
   DOC_NOTE_DELETED(state){
     let item = state.doc.currentDocNote;
     let list = state.doc.currentDocNoteList;
