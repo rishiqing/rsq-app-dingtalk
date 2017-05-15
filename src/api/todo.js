@@ -11,7 +11,7 @@ export default {
 	 */
 	getInboxTodos(){
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.GET_INBOX_TODOS))
+			Vue.http.get(mapping.GET_INBOX_TODOS)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -28,7 +28,7 @@ export default {
 		params.isGetDelay = true;
 		let path = mapping.GET_SCHEDULE_TODOS + '?' + util.combineUrlParams(params);
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -40,7 +40,7 @@ export default {
 	getTodo(params){
 		var path = util.replaceUrlParams(mapping.GET_TODO, params);
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -51,7 +51,7 @@ export default {
 	},
 	postNewTodo(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_TODO), props)
+			Vue.http.post(mapping.POST_NEW_TODO, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -64,7 +64,7 @@ export default {
 		var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -77,7 +77,7 @@ export default {
 		var path = util.replaceUrlParams(mapping.DELETE_TODO, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -88,7 +88,7 @@ export default {
 	},
 	postComment(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_TODO_COMMENT), props)
+			Vue.http.post(mapping.POST_TODO_COMMENT, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {

@@ -44,5 +44,34 @@ export default {
       .catch((err) => {
         rsqadmg.log(JSON.stringify(err));
       });
+  },
+
+  /**
+   * 根据date日期获取当天的日程，如果date为空，则获取今天的日程，流程如下：
+   * 1  查找dateItems中是否有以date为key值的items，如果有，则直接读取
+   * 2  如果dateItems中没有，则调用api从服务器上读取
+   * @param dispatch
+   * @param state
+   * @param date
+   */
+  fetchScheduleItems ({ commit, state }, strDate) {
+    if(strDate instanceof Date){
+      strDate = moment(strDate).format('YYYY-MM-DD');
+    }
+    let strCurrentDate = strDate || moment().format('YYYY-MM-DD');
+    let dateItems = state.schedule.dateItems;
+    console.log('dateItems[strCurrentDate]:' + strCurrentDate);
+    if(dateItems[strCurrentDate]){
+      return Promise.resolve().then(()=>{
+        commit('SCHEDULE_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]});
+      });
+    }else{
+      return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
+        .then((todos) => {
+          let reverseTodo = todos.reverse();
+          commit('SCHEDULE_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo});
+          commit('SCHEDULE_TODO_CACHE', {strCurrentDate: strCurrentDate, items: reverseTodo});
+        });
+    }
   }
 }

@@ -54,3 +54,11 @@ In this case the loader will discard the source map enterily for performance rea
 See https://github.com/postcss/postcss-loader#sourcemap for more information.
 
 暂时先将config/index.js中的dev.cssSourceMap设置为true
+
+### .vue文件中无法使用scss的问题
+
+.vue文件的style标签中无法使用scss相关的import等语法，具体原因待研究。
+而在.postcsssr.js中配置了postcss的相关插件后，.vue文件的style标签就可以正常使用了！
+
+### mutation中的参数问题
+vue2.0中，mutation的payload需要是一个对象，而不能同时传入多个参数！需要统一测试修改！

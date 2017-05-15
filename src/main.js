@@ -2,8 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'as/css/index.scss'
 
+import 'as/css/frm-main.scss'
+import 'as/js/frm-main.js'
+
+import 'as/css/layer.scss'
+import 'as/js/layer.js'
+
 import 'as/js/rsqAdapterManager.js'
-import 'as/js/rsqDdmAdapter.js'
+import 'as/js/rsqWebAdapter.js'
 // xss漏洞
 import 'as/js/xssFilter.js'
 
@@ -21,16 +27,25 @@ Vue.use(VueTouch)
 
 Vue.config.productionTip = false
 
-store.state.env.isAddNav = true
-store.state.env.dType = 'm'
+window.rsqadmg.exec('auth', {
+  success: function (rsqUser, authUser) {
+    store.state.loginUser = {
+      rsqUser: rsqUser,
+      authUser: authUser
+    }
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+    store.state.env.isAddNav = true
+    store.state.env.dType = 'm'
+
+    /* eslint-disable no-new */
+    new Vue({
+      el: '#app',
+      router,
+      store,
+      template: '<App/>',
+      components: { App }
+    })
+  }
 })
 
 // 获取到签名之后再启动vue.js

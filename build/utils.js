@@ -2,15 +2,15 @@ var path = require('path')
 var config = require('../config')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-var postcssOptions = {
-  plugins: (loader) => [
-    require('postcss-import')({ root: loader.resourcePath }),
-    // require('cssnext')(),
-    require('autoprefixer')({ browsers: ['last 2 versions'] }),
-    require('precss')(),
-    // require('cssnano')()
-  ]
-}
+// var postcssOptions = {
+//   plugins: (loader) => [
+//     require('postcss-import')({ root: loader.resourcePath })
+//     // require('cssnext')(),
+//     require('autoprefixer')({ browsers: ['last 2 versions'] }),
+//     require('precss')(),
+//     // require('cssnano')()
+//   ]
+// }
 
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
@@ -61,7 +61,7 @@ exports.cssLoaders = function (options) {
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     //  使用postcss来解析scss文件
-    scss: generateLoaders('postcss', postcssOptions),
+    scss: generateLoaders('postcss'),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }

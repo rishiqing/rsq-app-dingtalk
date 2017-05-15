@@ -11,7 +11,7 @@ export default {
 	 */
 	getDocs(){
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.GET_DOC_SET_LIST))
+			Vue.http.get(mapping.GET_DOC_SET_LIST)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -27,7 +27,7 @@ export default {
 	 */
 	postNewDocSet(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_DOC_SET), props)
+			Vue.http.post(mapping.POST_NEW_DOC_SET, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -46,7 +46,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.GET_DOC_SET_DETAIL, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -63,7 +63,7 @@ export default {
 		let path = mapping.GET_DOC_NOTE_LIST + '?' + util.combineUrlParams(props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -76,7 +76,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.PUT_DOC_SET, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -89,7 +89,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.DELETE_DOC_SET, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -105,7 +105,7 @@ export default {
 	 */
 	postNewDocNote(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_DOC_NOTE), props)
+			Vue.http.post(mapping.POST_DOC_NOTE, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -123,7 +123,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.PUT_DOC_NOTE, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -141,7 +141,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.DELETE_DOC_NOTE, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(() => {
 					resolve();
 				}, err => {

@@ -84,12 +84,12 @@ export default {
   /* --------------------------------- */
 
   /* ----------------schedule----------------- */
-  SCHEDULE_TODO_READY(state, strCurrentDate, items) {
-    state.schedule.strCurrentDate = strCurrentDate;
-    state.schedule.items = items;
+  SCHEDULE_TODO_READY(state, p) {
+    state.schedule.strCurrentDate = p.strCurrentDate;
+    state.schedule.items = p.items;
   },
-  SCHEDULE_TODO_CACHE(state, strCurrentDate, items){
-    state.schedule.dateItems[strCurrentDate] = items;
+  SCHEDULE_TODO_CACHE(state, p){
+    state.schedule.dateItems[p.strCurrentDate] = p.items;
   },
   DELETE_SCHEDULE_TODO_CACHE(state, strCurrentDate){
     delete state.schedule.dateItems[strCurrentDate];
@@ -101,8 +101,8 @@ export default {
       state.schedule.items.unshift(item);
     }
   },
-  SCHEDULE_LIST_TODO_CHECKED(state, item, status){
-    item.pIsDone = status;
+  SCHEDULE_LIST_TODO_CHECKED(state, p, item, status){
+    p.item.pIsDone = p.status;
   },
   /* --------------------------------- */
 

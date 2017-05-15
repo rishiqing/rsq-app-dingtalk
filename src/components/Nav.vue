@@ -41,7 +41,7 @@
 		  count () {
 		    return this.$store.getters.getCount;
       },
-      currentPath (state) {
+      currentPath () {
         return this.$store.state.sys.currentPath.split('?')[0];
       }
     },

@@ -11,7 +11,7 @@ export default {
 	 */
 	getPlans(){
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.GET_PLANS))
+			Vue.http.get(mapping.GET_PLANS)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -27,7 +27,7 @@ export default {
 	 */
 	postNewPlan(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_PLAN), props)
+			Vue.http.post(mapping.POST_NEW_PLAN, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -45,7 +45,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.PUT_PLAN, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -63,7 +63,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.DELETE_PLAN, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -78,7 +78,7 @@ export default {
 	 */
 	putPlanStar(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.PUT_PLAN_STAR), props)
+			Vue.http.put(mapping.PUT_PLAN_STAR, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -95,7 +95,7 @@ export default {
 		let path = mapping.DELETE_PLAN_STAR + '?' + util.combineUrlParams(props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -113,7 +113,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.GET_PLAN_DETAIL, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -129,7 +129,7 @@ export default {
 	 */
 	postNewPlanCard(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_PLAN_CARD), props)
+			Vue.http.post(mapping.POST_NEW_PLAN_CARD, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -147,7 +147,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.PUT_PLAN_CARD, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -165,7 +165,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.DELETE_PLAN_CARD, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.delete(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -182,7 +182,7 @@ export default {
 	getPlanTodo(props){
 		var path = util.replaceUrlParams(mapping.GET_PLAN_TODO, props);
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, path))
+			Vue.http.get(path)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -198,7 +198,7 @@ export default {
 	 */
 	postNewPlanTodo(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_PLAN_TODO), props)
+			Vue.http.post(mapping.POST_NEW_PLAN_TODO, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -216,7 +216,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.PUT_PLAN_TODO, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.put(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.put(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -234,7 +234,7 @@ export default {
 		let path = util.replaceUrlParams(mapping.DELETE_PLAN_TODO, props);
 
 		return new Promise((resolve, reject) => {
-			Vue.http.delete(url.resolve(RSQ_BACK_SERVER_ADDR, path), props)
+			Vue.http.delete(path, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -250,7 +250,7 @@ export default {
 	 */
 	postComment(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_PLAN_TODO_COMMENT), props)
+			Vue.http.post(mapping.POST_PLAN_TODO_COMMENT, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -268,7 +268,7 @@ export default {
 	postPlanTodoMove(props){
 		var formData = util.combineUrlParams(props);
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_PLAN_TODO_MOVE), formData, {
+			Vue.http.post(mapping.POST_PLAN_TODO_MOVE, formData, {
 				headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
 			})
 				.then(res => {

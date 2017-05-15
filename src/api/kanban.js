@@ -7,7 +7,7 @@ import util from 'ut/jsUtil';
 export default {
 	getKanbans(){
 		return new Promise((resolve, reject) => {
-			Vue.http.get(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.GET_KANBANS))
+			Vue.http.get(mapping.GET_KANBANS)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -18,7 +18,7 @@ export default {
 	},
 	postNewKanban(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_KANBAN), props)
+			Vue.http.post(mapping.POST_NEW_KANBAN, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -68,7 +68,7 @@ export default {
 	},
 	postNewKanbanCard(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_KANBAN_CARD), props)
+			Vue.http.post(mapping.POST_NEW_KANBAN_CARD, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
@@ -117,7 +117,7 @@ export default {
 	},
 	postNewKanbanTodo(props){
 		return new Promise((resolve, reject) => {
-			Vue.http.post(url.resolve(RSQ_BACK_SERVER_ADDR, mapping.POST_NEW_KANBAN_TODO), props)
+			Vue.http.post(mapping.POST_NEW_KANBAN_TODO, props)
 				.then(res => {
 					resolve(res.json());
 				}, err => {
