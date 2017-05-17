@@ -19,18 +19,18 @@ export default {
   //     return state.plan.currentPlan.kanbanCardList[length-1];
   //   }
   // },
-  // dType: state => {
-  //   return state.env.dType;
-  // },
+  dType: state => {
+    return state.env.dType;
+  },
   // planTemplate: state => {
   //   return state.defaultValue.planTemplate;
   // },
   // docSetTemplate: state => {
   //   return state.defaultValue.docSetTemplate;
   // },
-  // loginUser: state => {
-  //   return state.loginUser;
-  // },
+  loginUser: state => {
+    return state.loginUser;
+  },
   // staffList: state => {
   //   return state.staff.list;
   // },

@@ -6,6 +6,8 @@ import api from '@/api'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
+import InboxTodoNew from 'com/sche/TodoNew'
+// import InboxTodoEdit from 'com/sche/TodoEdit'
 import Plan from 'com/plan/Main'
 import Doc from 'com/doc/Main'
 import Me from 'com/me/Main'
@@ -22,29 +24,44 @@ const router = new Router({
       path: '/sche',
       name: 'sche',
       component: Sche,
-      meta: {
-        requireAuth: true
-      }
+      meta: {requireAuth: true}
     },
     {
       path: '/inbox',
       name: 'inbox',
-      component: Inbox
+      component: Inbox,
+      meta: {requireAuth: true}
+    },
+    // {
+    //   path: '/todo/:todoId',
+    //   name: 'todoEdit',
+    //   component: InboxTodoEdit,
+    //   meta: {requireAuth: true}
+    // },
+    {
+      //  todoType用来表示是收纳箱新建todo还是日程新建todo，"inbox" or "schedule"
+      path: '/todo/new/:todoType',
+      name: 'todoNew',
+      component: InboxTodoNew,
+      meta: {requireAuth: true}
     },
     {
       path: '/plan',
       name: 'plan',
-      component: Plan
+      component: Plan,
+      meta: {requireAuth: true}
     },
     {
       path: '/doc',
       name: 'doc',
-      component: Doc
+      component: Doc,
+      meta: {requireAuth: true}
     },
     {
       path: '/me',
       name: 'me',
-      component: Me
+      component: Me,
+      meta: {requireAuth: true}
     },
     {
       path: '/login',

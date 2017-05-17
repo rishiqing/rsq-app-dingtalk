@@ -52,7 +52,7 @@ rsqAdapterManager.register({
 		}, function(result){
 			var resJson = JSON.parse(result);
 			if(resJson.success){
-				rsqChk(params.success, [{rsqUser: resJson, appUser: {}}]);
+				rsqChk(params.success, [resJson, {}]);
 			}else{
 				alert('验证失败：username:' + sign.rsqUsername + ',password:' + sign.rsqSecret);
 				rsqChk(params.error, [resJson]);

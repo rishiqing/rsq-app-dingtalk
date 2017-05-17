@@ -50,7 +50,15 @@
 //        this.$store.dispatch('requestCount', 'aloha')
 				this.$router.replace(page);
 			},
-      createNew(){}
+      createNew(){
+        if(this.currentPath == '/sche'){
+          this.$router.push('/todo/new/schedule');
+        }else if (this.currentPath == '/plan'){
+          this.$router.push('/plan/new');
+        }else if (this.currentPath == '/doc'){
+          this.$router.push('/docSet/new');
+        }
+      }
 		}
 	};
 </script>

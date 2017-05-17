@@ -116,7 +116,6 @@ export default {
     }
     let strCurrentDate = strDate || moment().format('YYYY-MM-DD');
     let dateItems = state.schedule.dateItems;
-    console.log('dateItems[strCurrentDate]:' + strCurrentDate);
     if(dateItems[strCurrentDate]){
       return Promise.resolve().then(()=>{
         commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]});
