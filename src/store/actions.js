@@ -135,12 +135,13 @@ export default {
    * @param state
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
-  submitCreateTodoItem ({ commit, state }, props, todoType) {
+  submitCreateTodoItem ({ dispatch }, p) {
     // var str = '', todoList = '', mu = '';
+    var props = p.props, todoType = p.todoType;
     if(todoType == 'schedule'){
-      return createScheduleItem({ commit, state }, props);
+      return dispatch('createScheduleItem', props);
     }else{
-      return createInboxItem({ commit, state }, props);
+      return dispatch('createInboxItem', props);
     }
     // props['pContainer'] = str;
     // props['displayOrder'] = util.getNextOrder(todoList, 'pDisplayOrder');

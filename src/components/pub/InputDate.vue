@@ -49,15 +49,12 @@
 				}
 				var that = this;
 				var defDate = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate);
-				SelectDate.show({
+        SelectDate.show({
 					type: defDate.dateType,
 					selectNumDate: defDate.dateResult,
 					success: function(result){
 						var resObj = dateUtil.frontend2backend(result.type, result.selectNumDate, that.itemSep);
-						that.itemStartDate = resObj.startDate;
-						that.itemEndDate = resObj.endDate;
-						that.itemDates = resObj.dates;
-						that.$emit('date-changed');
+						that.$emit('date-changed', resObj);
 					}
 				});
 			}

@@ -11,9 +11,7 @@ var selectMember = null;
  */
 function getSelectMemberModal(){
 	if(!selectMember){
-		selectMember = new SelectMember({
-			el: document.createElement('div')
-		});
+		selectMember = new SelectMember();
 	}
 	return selectMember;
 }
@@ -34,6 +32,7 @@ function show(options){
 
 	//  append to body
 	Vue.nextTick(function(){
+	  vm.$mount();
     document.body.appendChild(vm.$el);
 	});
 }
