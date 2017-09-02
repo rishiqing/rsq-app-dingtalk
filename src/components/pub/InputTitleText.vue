@@ -3,8 +3,9 @@
 		<div class="itm-inner">
 			<div class="itm-title" :style="[paddingObject]">
 				<input type="text" placeholder="请输入标题"
-				       v-model="itemTitle"
-				       @input="inputChange"
+				       ref="input"
+               :value="value"
+				       @input="inputChange($event.target.value)"
 				       @blur="inputBlur">
 			</div>
 			<v-touch class="itm-icons itm-front-icons u-abs-left"
@@ -35,19 +36,20 @@
 		},
 		props: {
 			isCheckable: Boolean,
-			itemTitle: String,
+			value: String,
 			itemChecked: Boolean
 		},
 		methods: {
 			inputBlur(){
-				this.$dispatch('text-blur', this.itemTitle);
+				this.$emit('text-blur', this.value);
 			},
-			inputChange(){
-				this.$dispatch('text-change', this.itemTitle);
+			inputChange(value){
+        this.$refs.input.value = value;
+				this.$emit('input', value);
 			},
 			clickCheckOut(){
 				this.itemChecked = !this.itemChecked;
-				this.$dispatch('click-checkout', !this.itemChecked);
+				this.$emit('click-checkout', !this.itemChecked);
 			}
 		}
 	};

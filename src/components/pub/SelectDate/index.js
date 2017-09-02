@@ -11,9 +11,7 @@ var selectDate = null;
  */
 function getSelectDateModal(){
 	if(!selectDate){
-		selectDate = new SelectDate({
-			el: document.createElement('div')
-		});
+		selectDate = new SelectDate();
 	}
 	return selectDate;
 }
@@ -21,7 +19,6 @@ function getSelectDateModal(){
 function show(options){
 	options = options || {};
 	var vm = getSelectDateModal();
-
 	vm.currentDate = options.currentDate || new Date();
 	vm.type = options.type || 'single';
 	vm.selectNumDate = options.selectNumDate || [];
@@ -31,6 +28,7 @@ function show(options){
 	vm.$on('self-close', close);
 	//  append to body
 	Vue.nextTick(function(){
+    vm.$mount();
     document.body.appendChild(vm.$el);
 	});
 }

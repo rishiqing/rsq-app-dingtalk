@@ -10,15 +10,16 @@
 			<r-input-title
 					slot="slotTitle"
 					:is-checkable="false"
-					:item-title.sync="editItem.pTitle"
+          v-model="editItem.pTitle"
 			></r-input-title>
 			<r-input-date
 					slot="slotDate"
-					:item-start-date.sync="editItem.startDate"
-					:item-end-date.sync="editItem.endDate"
-					:item-dates.sync="editItem.dates"
+					:item-start-date="editItem.startDate"
+					:item-end-date="editItem.endDate"
+					:item-dates="editItem.dates"
 					:item-sep="'/'"
           v-if="todoType == 'schedule'"
+          @date-changed="saveDate"
 			></r-input-date>
 			<r-input-member
 					slot="slotMember"
@@ -55,6 +56,7 @@
 //			var now = dateUtil.dateNum2Text(new Date().getTime());
 			return{
 				editItem:{
+				  pTitle: '',
 					dates: null,
 					startDate: null,
 					endDate: null
@@ -79,24 +81,40 @@
 			'r-input-date': InputDate
 		},
     beforeRouteEnter(to, from, next){
+		  next();
 		  // beforeRouteEnter中不能获取到this，因为this还没有创建，只能通过next获取
-      next(vm => {
-        if('schedule' == vm.todoType){
-          var currentVal = moment(vm.currentDate, 'YYYY-MM-DD').valueOf();
-          var strDate = dateUtil.dateNum2Text(currentVal);
-
-          vm.editItem.startDate = strDate;
-          vm.editItem.endDate = strDate;
-        }
-      });
+//      next(vm => {
+//        if('schedule' == vm.todoType){
+//          var currentVal = moment(vm.currentDate, 'YYYY-MM-DD').valueOf();
+//          var strDate = dateUtil.dateNum2Text(currentVal);
+//
+//          vm.editItem.startDate = strDate;
+//          vm.editItem.endDate = strDate;
+//          console.log('----this.editItem:' + JSON.stringify(vm.editItem));
+//        }
+//      });
     },
 		methods:{
+      initData(){
+        if('schedule' == this.$route.params.todoType){
+          var currentVal = moment(this.currentDate, 'YYYY-MM-DD').valueOf();
+          var strDate = dateUtil.dateNum2Text(currentVal);
+
+          this.editItem.startDate = strDate;
+          this.editItem.endDate = strDate;
+        }
+      },
 			//  从startDate endDate dates三个字段中转换成用户前台显示的date结构
 			getPlanedTime(){
 				var ei = this.editItem;
 				var result = dateUtil.backend2frontend(ei.dates, ei.startDate, ei.endDate);
 				return (result && result.dateResult) ? result.dateResult[0] : null;
 			},
+      saveDate({startDate, endDate, dates}){
+        this.editItem.startDate = startDate;
+        this.editItem.endDate = endDate;
+        this.editItem.dates = dates;
+      },
 			saveMember(selList){
 				var idArray = util.extractProp(selList, 'rsqUserId');
 				this.editItem.receiverIds = idArray.join(',');
@@ -105,15 +123,13 @@
 				if(!this.editItem.pTitle){
 					return rsqadmg.execute('alert', {message: '请填写任务名称'});
 				}
-				//  根据有无日期来确定是日程中的任务还是收纳箱任务
-//				alert(JSON.stringify(this.getPlanedTime()));
-//				return;
 
 				var isInbox = false;
-				if((!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)){
-					isInbox = true;
-				}
-
+        console.log('===this.editItem:' + JSON.stringify(this.editItem))
+				if((!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)) {
+          isInbox = true;
+        }
+        console.log('isInbox:===' + isInbox);
 				if(!isInbox){
 					var planTime = this.getPlanedTime();
 //					if(!planTime){
@@ -126,7 +142,7 @@
 				rsqadmg.execute('showLoader', {text: '创建中...'});
 
 				var that = this;
-				this.$store.dispatch('submitCreateTodoItem', this.editItem, isInbox?'inbox':'schedule')
+				this.$store.dispatch('submitCreateTodoItem', {props: this.editItem, todoType: isInbox?'inbox':'schedule'})
 						.then(function(){
 							rsqadmg.exec('hideLoader');
 							rsqadmg.execute('toast', {message: '创建成功'});
@@ -135,6 +151,7 @@
 			}
 		},
 		mounted(){
+		  this.initData();
 			rsqadmg.execute('setTitle', {title: '新任务'});
 			var btnParams;
 			var that = this;
