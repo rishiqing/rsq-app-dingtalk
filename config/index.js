@@ -1,7 +1,8 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+var ip = require('ip')
 
-var devPort = 8080;
+var devPort = 8090;
 
 module.exports = {
   build: {
@@ -43,10 +44,10 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: true,
     // 日事清api的后台地址
-    apiServer: 'http://dd.rsq.etoutiao.cn',
+    apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth',
+    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'http://localhost:' + (process.env.PORT || devPort)
+    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort)
   }
 }

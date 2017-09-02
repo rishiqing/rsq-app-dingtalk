@@ -27,8 +27,7 @@ module.exports = {
       'api': resolve('src/api'),
       'com': resolve('src/components'),
       'ut': resolve('src/utils'),
-      'as': resolve('src/assets'),
-      'vx': resolve('src/vuex')
+      'as': resolve('src/assets')
     }
   },
   module: {

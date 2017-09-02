@@ -61,10 +61,8 @@ rsqadmg.store = {
 rsqAdapterManager.register({
 	auth: function(params){
 		//  先取签名
-		// alert('before sign----');
 		rsqadmg.execute('sign', {
 				success: function(res){
-					// alert('after sign----' + JSON.stringify(res));
 					// var json = JSON.stringify(res);
 					// 再进行jssdk初始化
 					rsqadmg.execute('init', {
@@ -74,8 +72,6 @@ rsqAdapterManager.register({
 						"nonceStr": res.nonce,
 						"signature": res.signature,
 						success: function(authUser){
-							// alert('after init----' + JSON.stringify(authUser));
-
 							// var authUser = authResult.user;
 							//  从authServer获取到用户数据后进行登录
 							rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
@@ -100,6 +96,7 @@ rsqAdapterManager.register({
 	sign: function(params){
 		var currentUrl = window.location.href.split('#')[0];
 		var pa = rsqadmg.store.app;
+    console.log(rsqConfig.authServer + 'get_js_config')
 		rsqAdapterManager.ajax.get(rsqConfig.authServer + 'get_js_config', {
 			url: currentUrl,
 			corpid: pa.corpid,
@@ -110,7 +107,7 @@ rsqAdapterManager.register({
 		});
 	},
 	init: function(params){
-		dd.config({
+    dd.config({
 			"agentId": params.agentId,
 			"corpId": rsqadmg.store.app.corpid,
 			"timeStamp": params.timeStamp,

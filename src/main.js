@@ -2,14 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'as/css/index.scss'
 
-import 'as/css/frm-main.scss'
-import 'as/js/frm-main.js'
-
-import 'as/css/layer.scss'
-import 'as/js/layer.js'
+// import 'as/css/frm-main.scss'
+// import 'as/js/frm-main.js'
+//
+// import 'as/css/layer.scss'
+// import 'as/js/layer.js'
 
 import 'as/js/rsqAdapterManager.js'
-import 'as/js/rsqWebAdapter.js'
+import 'as/js/rsqDdmAdapter.js'
 // xss漏洞
 import 'as/js/xssFilter.js'
 
