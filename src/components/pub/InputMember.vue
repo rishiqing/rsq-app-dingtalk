@@ -1,13 +1,11 @@
 <template>
 	<div class="itm-outer">
 		<v-touch class="itm-inner" @tap="showMemberEdit">
-			<div class="itm-title">
-				{{indexTitle}}
+			<div class="chengyuan">
+        {{indexTitle}}
 			</div>
-			<div class="itm-icons itm-front-icons u-abs-left">
-				<i class="icon icon-person"></i>
-			</div>
-			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList && selectedLocalList.length > 0">
+
+			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length<=3">
 				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
 				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
 				<div class="itm-icon-img-wrap">
@@ -15,15 +13,31 @@
 					        :key="item.rsqUserId"
 					        :src="item.avatar"
 					        :username="item.name"></avatar>
+
 				</div>
 			</div>
-			<div class="itm-icons itm-rear-icons u-abs-right" v-else>
-				<i class="icon icon-add icon-large is-active"></i>
-			</div>
+      <div class="itm-icons itm-rear-icons u-abs-right" v-else>
+        <i class="icon icon-add icon-large is-active"></i>
+        <avatar v-for="item in selecteditems()"
+                :key="item.rsqUserId"
+                :src="item.avatar"
+                :username="item.name">
+
+        </avatar>
+
+      </div>
 		</v-touch>
 	</div>
 </template>
-<style lang="scss">
+<style lang="">
+  .chengyuan{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    line-height: 21px;
+    line-height: 45px;
+    margin-left: 9px;
+  }
 
 </style>
 <script>
@@ -50,6 +64,9 @@
     computed: {
       loginUser (){
         return this.$store.getters.loginUser;
+      },
+      selecteditems(){
+        return this.selectedLocalList.slice(0,3)
       }
     },
 		components: {

@@ -36,8 +36,8 @@ div.div-editable.editable-blank {
 
 /* float button */
 .float-action-button {
-    position: fixed;width: 56px;height:56px;left:50%;margin-left: -28px;bottom: 34px;line-height: 52px;
-    border-radius: 50%;text-align: center;
+    position: fixed;
+    border-radius: 50%;
 }
 
 .text-grey {color: #999;}
@@ -71,7 +71,7 @@ div.div-editable.editable-blank {
 }
 .itm-outer {position: relative;box-sizing: border-box;width:100%;padding: 0 16px;}
 .itm-inner {position: relative;}
-.itm-title {height:56px;line-height:56px;overflow: hidden;}
+.itm-title {height:45px;line-height:45px;overflow: hidden;}
 .itm-title-main {}
 .itm-title.itm-title-lines {line-height:40px;}
 .itm-title-lines .itm-title-sub {font-size: 13px;color:$mainColor;position: absolute;left: 40px;top: 24px;}
@@ -131,11 +131,11 @@ div.div-editable.editable-blank {
 .kb-item:first-child {padding-top: 8px;}
 .kb-item:last-child {padding-bottom: 8px;}
 
-.itm-lst--kanban .itm-title {padding-left: 56px;}
+.itm-lst--kanban{padding-left: 56px;}
 
 .itm-lst--kc {padding-bottom: 100px;}
 /* .itm-lst--kc .itm-lst {padding: 0 10px;} */
-.itm-lst--kc .itm-title {padding-left: 40px;}
+.itm-lst--kc  {padding-left: 40px;}
 .itm-lst--kc .kb-item:last-child .itm-inner {border-bottom: none;}
 
 .itm-lst--docset {padding-bottom: 100px;}
@@ -232,7 +232,7 @@ input[type="button"].cmt-send-btn-submit {
 
 /* 含有一半border */
 .itm--part-line .itm-outer {padding-right:0;}
-.itm--part-line .itm-inner {padding-right: 16px;}
+.itm--part-line  {padding-right: 16px;}
 .itm--part-line .u-abs-right {right:16px;}
 
 

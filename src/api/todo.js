@@ -54,7 +54,9 @@ export default {
 			Vue.http.post(mapping.POST_NEW_TODO, props)
 				.then(res => {
 					resolve(res.json());
+					console.log("成功解析了")
 				}, err => {
+				  console.log("发请求解析错了")
 					rsqadmg.log(JSON.stringify(err));
 					reject(err);
 				})

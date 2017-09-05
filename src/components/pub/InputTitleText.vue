@@ -2,7 +2,7 @@
 	<div class="itm-outer">
 		<div class="itm-inner">
 			<div class="itm-title" :style="[paddingObject]">
-				<input type="text" placeholder="请输入标题"
+				<input type="text" placeholder="输入任务标题"
 				       ref="input"
                :value="value"
 				       @input="inputChange($event.target.value)"

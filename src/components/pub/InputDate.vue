@@ -1,20 +1,24 @@
 <template>
 	<div class="itm-outer">
 		<v-touch class="itm-inner" @tap="showDatePikcer">
-			<div class="itm-title">
+			<div class="riqi">
 				日期
 			</div>
-			<div class="itm-icons itm-front-icons u-abs-left">
-				<i class="icon icon-insert_invitation"></i>
-			</div>
+
 			<div class="itm-icons itm-rear-icons u-abs-right">
 				<span class="itm-note-text">{{ dateString }}</span>
 			</div>
 		</v-touch>
 	</div>
 </template>
-<style lang="scss">
-
+<style lang="">
+  .riqi{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    line-height: 21px;
+    line-height: 45px;
+  }
 </style>
 <script>
 

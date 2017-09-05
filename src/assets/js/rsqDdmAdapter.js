@@ -210,30 +210,50 @@ rsqAdapterManager.register({
 			}
 		});
 	},
-	setOptionButtons: function(params){
-		var items = params.btns.map(function(item){
-			return {
-				id: item.key,
-				text: item.name
-			}
-		});
-		dd.biz.navigation.setMenu({
-			// backgroundColor : "#ADD8E6",
-			items : items,
-			onSuccess: function(data) {
-				var btn = {};
-				params.btns.forEach(function(item){
-					if(item.key == data.id){
-						btn = item;
-					}
-				});
-				rsqChk(params.success, [btn]);
-			},
-			onFail: function(err) {
-				alert(JSON.stringify(err));
-			}
-		});
-	},
+  setOptionButtons: function(params){
+    if(params.hide){
+      dd.biz.navigation.setRight({
+        show: false,//控制按钮显示， true 显示， false 隐藏， 默认true
+        control: true,//是否控制点击事件，true 控制，false 不控制， 默认false
+        text: '隐藏',//控制显示文本，空字符串表示显示默认文本
+        onSuccess : function(result) {
+          //如果control为true，则onSuccess将在发生按钮点击事件被回调
+          rsqChk(params.success);
+        },
+        onFail : function(err) {
+          alert(JSON.stringify(err));
+        }
+      });
+    }else{
+      params.btns = params.btns || []
+      var items = params.btns.map(function(item){
+        return {
+          id: item.key,
+          text: item.name
+
+        }
+      });
+      dd.biz.navigation.setMenu({
+        // backgroundColor : "#ADD8E6",
+        items : items,
+        onSuccess: function(data) {
+          var btn = {};
+          params.btns.forEach(function(item){
+            if(item.key == data.id
+
+            ){
+              btn = item;
+            }
+          });
+          rsqChk(params.success, [btn]);
+        },
+        onFail: function(err) {
+          alert(JSON.stringify(err));
+        }
+      });
+    }
+  },
+
 	/**
 	 * alert提示框
 	 * @param params.title

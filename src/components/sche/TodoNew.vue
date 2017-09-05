@@ -156,7 +156,7 @@
 			var btnParams;
 			var that = this;
 			btnParams = {
-				btns: [{key: 'saveTodo', name: '保存'}],
+				btns: [{key: 'saveTodo', name: '完成'}],
 				success: function(res){
 					if(res.key == 'saveTodo'){
 						that.saveTodo();

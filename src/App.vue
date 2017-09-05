@@ -1,6 +1,8 @@
 <template>
   <div id="app" class="rsq-webview">
+
     <router-view></router-view>
+
     <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
   </div>
 </template>
@@ -23,3 +25,19 @@
     }
   }
 </script>
+<style>
+  .shouye{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #55A8FD;
+    letter-spacing: 0;
+
+  }
+
+
+
+
+</style>

@@ -54,7 +54,7 @@
 			}
 		},
 
-		compiled () {
+		mounted () {
 			this.$emit('avatar-initials', this.username, this.userInitial)
 		},
 

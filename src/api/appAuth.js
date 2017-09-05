@@ -12,10 +12,13 @@ export default {
 	 */
 	getOpenidMap(props){
 		return new Promise((resolve, reject) => {
-			var request = url.resolve(RSQ_AUTH_SERVER_ADDR, mapping.AUTH_TO_RSQID) + '?corpid=' + props.corpId;
+		  console.log("方法进来了")
+			var request = url.resolve(rsqConfig.authServer, mapping.AUTH_TO_RSQID) + '?corpid=' + props.corpId;
 			var params = props.idArray;
+      console.log("发送请求前")
 			Vue.http.post(request, JSON.stringify(params))
 				.then(res => {
+				  console.log("进入发送请求状态")
 					resolve(res.json());
 				}, err => {
 					rsqadmg.log(JSON.stringify(err));

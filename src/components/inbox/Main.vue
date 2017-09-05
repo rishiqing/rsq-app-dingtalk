@@ -1,14 +1,23 @@
 <template>
 	<div class="">
-    hello inbox index.vue
+    <input type="text">
+    <ul>
+    <li v-for="shouna in shounas">
+      {{shouna.text}}
+    </li>
+    </ul>
 	</div>
 </template>
 <script>
 export default {
   data () {
-    return {}
+    return {
+
+    }
   },
-  methods: {},
+  methods: {
+
+  },
   mounted () {
     this.$store.dispatch('setNav', true)
   }

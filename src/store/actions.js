@@ -101,6 +101,9 @@ export default {
   },
   // -----------------inbox actions end-------------------------
 
+
+
+
   // -----------------schedule actions start-------------------------
   /**
    * 根据date日期获取当天的日程，如果date为空，则获取今天的日程，流程如下：
@@ -137,11 +140,12 @@ export default {
    */
   submitCreateTodoItem ({ dispatch }, p) {
     // var str = '', todoList = '', mu = '';
+    //判断下是创建日程item还是收纳箱item
     var props = p.props, todoType = p.todoType;
     if(todoType == 'schedule'){
-      return dispatch('createScheduleItem', props);
+      dispatch('createScheduleItem', props);
     }else{
-      return dispatch('createInboxItem', props);
+      dispatch('createInboxItem', props);
     }
     // props['pContainer'] = str;
     // props['displayOrder'] = util.getNextOrder(todoList, 'pDisplayOrder');
@@ -159,19 +163,19 @@ export default {
    * @param props
    * @returns {*}
    */
-  createScheduleItem ({ commit, state }, props){
+  createScheduleItem ({ commit, state,dispatch }, props){
     //  暂时这么处理----日程任务默认为重要不紧急，后面加上选择优先级功能之后再修改
     props['pContainer'] = 'IU';
 
     var result = dateUtil.backend2frontend(props.dates, props.startDate, props.endDate);
-
+    console.log(result);
     switch(result.dateType){
       case 'single':
-        return createSingleScheduleItem({commit, state}, props, result);
+        dispatch('createSingleScheduleItem', {props:'props',result:'result'});
       case 'discrete':
-        return createDiscreteScheduleItem({commit, state}, props, result);
+       dispatch('createDiscreteScheduleItem', {props:'props',result:'result'});
       case 'range':
-        return createRangeScheduleItem({commit, state}, props, result);
+        dispatch('createRangeScheduleItem',{props:'props',result:'result'});
       default:
         break;
     }
@@ -197,9 +201,11 @@ export default {
    * @param props
    * @param dateStruct
    */
-  createSingleScheduleItem ({ commit, state }, props, dateStruct){
+  createSingleScheduleItem ({ commit, state }, {props,result}){
+    console.log("进来我这里了")
     var sche = state.schedule;
-    var scheDateStr = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD');
+    console.log(props+":"+result)
+    var scheDateStr = moment(result.dateResult[0]).format('YYYY-MM-DD');
     var itemCache = sche.dateItems;
 
     return fetchScheduleItems({ commit, state }, scheDateStr)
@@ -207,6 +213,7 @@ export default {
         props['pDisplayOrder'] = util.getNextOrder(itemCache[scheDateStr], 'pDisplayOrder');
         return api.todo.postNewTodo(props)
           .then((item) => {
+            console.log(item);
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[scheDateStr]});
           });
       }).catch(function(err){
@@ -1022,6 +1029,7 @@ export default {
     if(openidsNotInCache.length > 0){
       promise = api.appAuth.getOpenidMap({corpId: props.corpId, idArray: openidsNotInCache})
         .then(function(resp){
+          console.log("getOpenidMap没有问题")
           var mapList = resp.result;
           mapList.forEach(function(idMap){
             //  双向缓存

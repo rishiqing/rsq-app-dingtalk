@@ -9,10 +9,11 @@
       :is-checkable="true"
       v-if="items != null && items.length > 0"
     ></r-todo-item-list>
+
+
     <div class="itm-lst" v-else>
-      <div class="itm-outer">
-        <div class="itm-placeholder">当天没有日程安排</div>
-      </div>
+      <img src="../../assets/日程.png" alt="">
+      <p class="shouye">还没有日程，赶快去创建吧</p>
     </div>
     <!--<div class="float-action-button" v-touch:tap="showCreate">-->
     <!--<i class="icon icon-add"></i>-->
@@ -73,3 +74,18 @@
     }
   }
 </script>
+<style scoped>
+  .itm-lst{
+    text-align: center;
+  }
+  .shouye{
+    margin-top:15.7px;
+
+  }
+  img{
+    width: 70px;
+    height: 70px;
+    margin-top:137px ;
+  }
+
+</style>

@@ -11,7 +11,7 @@ import InboxTodoNew from 'com/sche/TodoNew'
 import Plan from 'com/plan/Main'
 import Doc from 'com/doc/Main'
 import Me from 'com/me/Main'
-
+import kefu from 'com/me/kefu'
 Vue.use(Router)
 
 const router = new Router({
@@ -30,6 +30,12 @@ const router = new Router({
       path: '/inbox',
       name: 'inbox',
       component: Inbox,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/me/kefu',
+      name: 'kefu',
+      component: kefu,
       meta: {requireAuth: true}
     },
     // {
