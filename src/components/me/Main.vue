@@ -4,9 +4,9 @@
     <div class="tupian">
     <avatar :src="loginUser.authUser.avatar"
             :username="loginUser.authUser.name"
-            :size="65"></avatar>
+            :size="73"></avatar>
     </div>
-    <p>李永州</p>
+    <p class="xingming">李永州</p>
   </div>
   <div class="bottom">
     <div>
@@ -61,7 +61,13 @@ export default {
 </script>
 <style scoped >
   @import "../../assets/fonts/icomoon2.css";
-
+  .xingming{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #FFFFFF;
+    letter-spacing: 0.36px;
+    padding-top: 15px;
+  }
 
 
 
@@ -102,7 +108,7 @@ export default {
     font-size: 17px;
     color: #222222;
     line-height: 22px;
-
+    font-weight: bold;
   }
   .bottom span{
     float: right;
@@ -120,7 +126,7 @@ export default {
     font-size: 15px;
     color: #55A8FD;
     letter-spacing: -0.36px;
-    margin-right: 15px;
+    padding-right: 9px;
   }
 
   .daxiao{

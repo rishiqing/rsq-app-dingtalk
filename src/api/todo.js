@@ -11,6 +11,7 @@ export default {
 	 */
 	getInboxTodos(){
 		return new Promise((resolve, reject) => {
+		  console.log("发送请求前")
 			Vue.http.get(mapping.GET_INBOX_TODOS)
 				.then(res => {
 					resolve(res.json());
@@ -38,6 +39,7 @@ export default {
 		});
 	},
 	getTodo(params){
+	  console.log("进来gettodo了")
 		var path = util.replaceUrlParams(mapping.GET_TODO, params);
 		return new Promise((resolve, reject) => {
 			Vue.http.get(path)
@@ -50,6 +52,7 @@ export default {
 		});
 	},
 	postNewTodo(props){
+	  console.log("进来postnewtodo了")
 		return new Promise((resolve, reject) => {
 			Vue.http.post(mapping.POST_NEW_TODO, props)
 				.then(res => {
@@ -64,10 +67,11 @@ export default {
 	},
 	putTodoProps(props){
 		var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props);
-
+    console.log("发送请求前props的值是"+props.pIsDone)
 		return new Promise((resolve, reject) => {
 			Vue.http.put(path, props)
 				.then(res => {
+				  console.log("发送请求成功")
 					resolve(res.json());
 				}, err => {
 					rsqadmg.log(JSON.stringify(err));

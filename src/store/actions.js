@@ -59,6 +59,7 @@ export default {
    * @param state
    */
   fetchInboxItems ({ commit, state }) {
+    console.log("获取收纳箱进来了")
     let items = state.inbox.items;
     if( items == null){
       return api.todo.getInboxTodos()
@@ -77,15 +78,16 @@ export default {
    * @param commit
    * @param state
    */
-  createInboxItem ({ commit, state }, props){
+  createInboxItem ({ commit, state ,dispatch}, props){
+    console.log("创建收纳箱进来了")
     var inbox = state.inbox;
     var mu = 'INB_TODO_CREATED';
-
+    var props=props.props;
     props['pContainer'] = 'inbox';
     var promise;
     //  如果inbox.items不存在，则从服务器先获取到inbox，然后获取inbox中任务的顺序，然后再保存
     if(!inbox.items){
-      promise = fetchInboxItems({ commit, state });
+      promise = dispatch('fetchInboxItems',{ commit, state });
     }else{
       promise = Promise.resolve();
     }
@@ -143,9 +145,9 @@ export default {
     //判断下是创建日程item还是收纳箱item
     var props = p.props, todoType = p.todoType;
     if(todoType == 'schedule'){
-      dispatch('createScheduleItem', props);
+      return dispatch('createScheduleItem', props);
     }else{
-      dispatch('createInboxItem', props);
+      return dispatch('createInboxItem', props);
     }
     // props['pContainer'] = str;
     // props['displayOrder'] = util.getNextOrder(todoList, 'pDisplayOrder');
@@ -166,16 +168,17 @@ export default {
   createScheduleItem ({ commit, state,dispatch }, props){
     //  暂时这么处理----日程任务默认为重要不紧急，后面加上选择优先级功能之后再修改
     props['pContainer'] = 'IU';
+    console.log("createScheduleItem进来了");
 
     var result = dateUtil.backend2frontend(props.dates, props.startDate, props.endDate);
     console.log(result);
     switch(result.dateType){
       case 'single':
-        dispatch('createSingleScheduleItem', {props:'props',result:'result'});
+        return dispatch('createSingleScheduleItem', {props:props,result:result});
       case 'discrete':
-       dispatch('createDiscreteScheduleItem', {props:'props',result:'result'});
+       return dispatch('createDiscreteScheduleItem', {props:props,result:result});
       case 'range':
-        dispatch('createRangeScheduleItem',{props:'props',result:'result'});
+       return  dispatch('createRangeScheduleItem',{props:props,result:result});
       default:
         break;
     }
@@ -201,19 +204,20 @@ export default {
    * @param props
    * @param dateStruct
    */
-  createSingleScheduleItem ({ commit, state }, {props,result}){
-    console.log("进来我这里了")
+  createSingleScheduleItem ({ commit, state ,dispatch}, {props,result}){
+    console.log("createSingleScheduleItem进来了")
     var sche = state.schedule;
-    console.log(props+":"+result)
+    console.log(result+":"+result.dateResult[0])
     var scheDateStr = moment(result.dateResult[0]).format('YYYY-MM-DD');
     var itemCache = sche.dateItems;
 
-    return fetchScheduleItems({ commit, state }, scheDateStr)
+     return dispatch('fetchScheduleItems', scheDateStr)
       .then(function(){
+        console.log("fetchScheduleItems进来了")
         props['pDisplayOrder'] = util.getNextOrder(itemCache[scheDateStr], 'pDisplayOrder');
         return api.todo.postNewTodo(props)
           .then((item) => {
-            console.log(item);
+            console.log("postNewTodo进来了"+item);
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[scheDateStr]});
           });
       }).catch(function(err){
@@ -283,10 +287,12 @@ export default {
    * @param state
    * @param item
    */
-  submitTodoFinish ({ commit, state}, item, status){
-    return api.todo.putTodoProps({id: item.id, pIsDone: status})
+  submitTodoFinish ({ commit, state}, p){
+    console.log("submitTodoFinish进来了,status的状态是"+p.status)
+    return api.todo.putTodoProps({id: p.item.id, pIsDone: p.status})
       .then(() => {
-        commit('SCH_LIST_TODO_CHECKED', {item: item, status: status});
+      console.log("putTodoProps已完成")
+        commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status});
       });
   },
   /**
@@ -296,6 +302,7 @@ export default {
    * @param item
    */
   setCurrentTodo ({ commit }, item) {
+    console.log("setcurrenttodo进来了")
     commit('TD_CURRENT_TODO_SET', {item: item});
   },
 

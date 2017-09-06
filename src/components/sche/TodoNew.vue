@@ -144,6 +144,7 @@
 				var that = this;
 				this.$store.dispatch('submitCreateTodoItem', {props: this.editItem, todoType: isInbox?'inbox':'schedule'})
 						.then(function(){
+						  console.log("马上就创建成功了")
 							rsqadmg.exec('hideLoader');
 							rsqadmg.execute('toast', {message: '创建成功'});
 							that.$router.replace(window.history.back());

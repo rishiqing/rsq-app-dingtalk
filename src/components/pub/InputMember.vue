@@ -5,7 +5,7 @@
         {{indexTitle}}
 			</div>
 
-			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length<=3">
+			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length<=3&&selectedLocalList.length>0">
 				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
 				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
 				<div class="itm-icon-img-wrap">
@@ -13,18 +13,20 @@
 					        :key="item.rsqUserId"
 					        :src="item.avatar"
 					        :username="item.name"></avatar>
+          <span>{{selectedLocalList.length}}人</span>
 
 				</div>
 			</div>
       <div class="itm-icons itm-rear-icons u-abs-right" v-else>
-        <i class="icon icon-add icon-large is-active"></i>
-        <avatar v-for="item in selecteditems()"
+        <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
+        <avatar v-for="item in selecteditems"
                 :key="item.rsqUserId"
                 :src="item.avatar"
                 :username="item.name">
 
         </avatar>
-
+        <span>{{selectedLocalList.length}}人</span>
+        </div>
       </div>
 		</v-touch>
 	</div>
@@ -66,7 +68,7 @@
         return this.$store.getters.loginUser;
       },
       selecteditems(){
-        return this.selectedLocalList.slice(0,3)
+        return this.selectedLocalList.slice(this.selectedLocalList.length-3)
       }
     },
 		components: {

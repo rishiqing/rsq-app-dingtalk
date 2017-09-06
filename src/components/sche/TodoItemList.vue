@@ -30,14 +30,17 @@
 		},
 		methods: {
 			showEdit(item){
+			  console.log("showedit进来了")
 				this.$store.dispatch('setCurrentTodo', item);
 				this.$router.push('/todo/' + item.id);
 			},
 			checkTodo(item, status){
-				this.$store.dispatch('submitTodoFinish',item, status)
+			  console.log("checktodo进来了，status的状态是"+status)
+				this.$store.dispatch('submitTodoFinish',{item:item,status:status})
 						.then(function(){
-							var str = status ? '任务已完成':'任务已重启';
-							rsqadmg.execute('toast', {message: str});
+						  console.log("后续工作都已完成")
+							//var str = status ? '任务已完成':'任务已重启';
+							//rsqadmg.execute('toast', {message: str});
 						});
 			}
 		}

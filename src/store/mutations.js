@@ -133,12 +133,14 @@ export default {
     }
   },
   SCH_LIST_TODO_CHECKED(state, p){
+    console.log("mutation进来了")
     p.item.pIsDone = p.status;
   },
   /* --------------------------------- */
 
   /* ---------------todo收纳箱和日程页面的公共数据------------------ */
   TD_CURRENT_TODO_SET(state, p) {
+    console.log("TD_CURRENT_TODO_SET进来了")
     state.todo.currentTodo = p.item;
   },
   TD_TODO_GET(state, p){

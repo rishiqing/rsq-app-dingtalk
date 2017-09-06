@@ -33,10 +33,12 @@
   }
   .top{
     background-image: linear-gradient(-90deg, #69ACEF 0%, #3E86D6 100%);
-    height: 400px;
+    height: 58%;
   }
   .top p{
-
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #FFFFFF;
     margin-top: 7.5px;
   }
   .kefu .top img{
