@@ -2,12 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'as/css/index.scss'
 
-// import 'as/css/frm-main.scss'
-// import 'as/js/frm-main.js'
-//
-// import 'as/css/layer.scss'
-// import 'as/js/layer.js'
-
 import 'as/js/rsqAdapterManager.js'
 import 'as/js/rsqDdmAdapter.js'
 // xss漏洞
@@ -47,30 +41,3 @@ window.rsqadmg.exec('auth', {
     })
   }
 })
-
-// 获取到签名之后再启动vue.js
-// window.rsqadmg.execute('auth', {
-//   success: function (rsqUser, authUser) {
-//     window.rsqadmg.log('success get signature')
-//     store.state.loginUser = {
-//       rsqUser: rsqUser,
-//       authUser: authUser
-//     }
-//     // 设置导航栏的样式
-//     store.state.env.isAddNav = true
-//     store.state.env.dType = 'm'
-//
-//     /* eslint-disable no-new */
-//     new Vue({
-//       el: '#app',
-//       router,
-//       store,
-//       template: '<App/>',
-//       components: { App }
-//     })
-//     // rsqadmg.exec('hideLoader');
-//   },
-//   error: function (err) {
-//     alert('权限验证失败---：' + JSON.stringify(err))
-//   }
-// })

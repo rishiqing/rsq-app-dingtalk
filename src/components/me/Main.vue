@@ -60,7 +60,6 @@ export default {
 }
 </script>
 <style scoped >
-  @import "../../assets/fonts/icomoon2.css";
   .xingming{
     font-family: PingFangSC-Regular;
     font-size: 15px;

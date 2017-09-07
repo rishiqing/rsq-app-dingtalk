@@ -1,5 +1,5 @@
 <style lang="scss">
-	
+
 </style>
 <template>
 	<div class="router-view">
@@ -14,11 +14,11 @@
 					@text-blur="titleBlur"
 					@click-checkout="finishChecked"
 			></r-input-title>
-			<r-input-note
-					slot="slotNote"
-					:item-note.sync="editItem.pNote"
-					@text-blur="noteBlur"
-			></r-input-note>
+			<!--<r-input-note-->
+					<!--slot="slotNote"-->
+					<!--:item-note.sync="editItem.pNote"-->
+					<!--@text-blur="noteBlur"-->
+			<!--&gt;</r-input-note>-->
 			<r-input-date
 					slot="slotDate"
 					:item-start-date.sync="editItem.startDate"
@@ -37,26 +37,26 @@
 					:disabled-rsq-ids="[]"
 					@member-changed="saveMember"
 			></r-input-member>
-			<r-comment-list
-					slot="slotComment"
-					:item-list="normalCommonList"
-					:todo-type="'todo'"
-			></r-comment-list>
+			<!--<r-comment-list-->
+					<!--slot="slotComment"-->
+					<!--:item-list="normalCommonList"-->
+					<!--:todo-type="'todo'"-->
+			<!--&gt;</r-comment-list>-->
 		</r-todo-edit>
 	</div>
 </template>
 <script>
-	import TodoEditView from 'comps/public/TodoEditView';
-	import InputTitleText from 'comps/public/InputTitleText';
-	import InputNoteText from 'comps/public/InputNoteText';
-	import InputDate from 'comps/public/InputDate';
-	import InputMember from 'comps/public/InputMember';
+	import TodoEditView from 'com/pub/TodoEditView';
+	import InputTitleText from 'com/pub/InputTitleText';
+//	import InputNoteText from 'com/pub/InputNoteText';
+	import InputDate from 'com/pub/InputDate';
+	import InputMember from 'com/pub/InputMember';
 
-	import CommentList from 'comps/public/CommentList';
+//	import CommentList from 'comps/public/CommentList';
 
-	import util from 'utils/jsUtil';
+	import util from 'ut/jsUtil';
 
-	import { getTodo, updateTodo, updateTodoDate, deleteTodo } from 'vuexx/actions';
+//	import { getTodo, updateTodo, updateTodoDate, deleteTodo } from 'vuexx/actions';
 
 	export default{
 		data(){
@@ -80,20 +80,20 @@
 			'r-todo-edit': TodoEditView,
 			'r-input-title': InputTitleText,
 			'r-input-date': InputDate,
-			'r-input-member': InputMember,
-			'r-input-note': InputNoteText,
-			'r-comment-list': CommentList
+			'r-input-member': InputMember
+//			'r-input-note': InputNoteText,
+//			'r-comment-list': CommentList
 		},
 		route: {
 			//  暂时采用同步的方式，只有当获取到了数据之后，才显示页面
-			waitForData: true,
-			//  本页面的状态数据
-			data(t){
-				rsqadmg.exec('showLoader');
-				return this.getTodo()
-						.then(function(){
-					rsqadmg.exec('hideLoader');
-				});
+//			waitForData: true,
+//			//  本页面的状态数据
+//			data(t){
+//				rsqadmg.exec('showLoader');
+//				return this.$store.dispatch('getTodo')
+//						.then(function(){
+//					rsqadmg.exec('hideLoader');
+//				});
 //				var that = this;
 //
 //				setTimeout(function(){
@@ -109,29 +109,29 @@
 //								rsqadmg.exec('hideLoader');
 //							});
 //				}, 0);
-			}
+//			}
 		},
-		vuex: {
-			actions: {
-				getTodo, updateTodo, updateTodoDate, deleteTodo
-			},
-			getters: {
-				currentDate(state){
-					return state.schedule.strCurrentDate;
-				},
-				currentTodo(state){
-					return state.todo.currentTodo || {};
-				},
-				joinUsers(state){
-					var todo = state.todo.currentTodo;
-					if(todo){
-						return util.getMapValuePropArray(todo.receiverUser, 'joinUser');
-					}else{
-						return [];
-					}
-				}
-			}
-		},
+//		vuex: {
+//			actions: {
+//				getTodo, updateTodo, updateTodoDate, deleteTodo
+//			},
+//			getters: {
+//				currentDate(state){
+//					return state.schedule.strCurrentDate;
+//				},
+//				currentTodo(state){
+//					return state.todo.currentTodo || {};
+//				},
+//				joinUsers(state){
+//					var todo = state.todo.currentTodo;
+//					if(todo){
+//						return util.getMapValuePropArray(todo.receiverUser, 'joinUser');
+//					}else{
+//						return [];
+//					}
+//				}
+//			}
+//		},
 		methods:{
 			titleBlur(){
 				var title = this.editItem.pTitle;
@@ -140,22 +140,22 @@
 				}
 				if(title != this.currentTodo.pTitle){
 					rsqadmg.exec('showLoader', {text: '保存中...'});
-					this.updateTodo(this.currentTodo, {pTitle: title})
-							.then(function(){
-								rsqadmg.exec('hideLoader');
-								rsqadmg.execute('toast', {message: '保存成功'});
-							});
+//					this.updateTodo(this.currentTodo, {pTitle: title})
+//							.then(function(){
+//								rsqadmg.exec('hideLoader');
+//								rsqadmg.execute('toast', {message: '保存成功'});
+//							});
 				}
 			},
 			noteBlur(){
 				var note = this.editItem.pNote;
 				if(note != this.currentTodo.pNote){
 					rsqadmg.execute('showLoader', {text: '保存中...'});
-					this.updateTodo(this.currentTodo, {pNote: note})
-							.then(function(){
-								rsqadmg.exec('hideLoader');
-								rsqadmg.execute('toast', {message: '保存成功'});
-							});
+//					this.updateTodo(this.currentTodo, {pNote: note})
+//							.then(function(){
+//								rsqadmg.exec('hideLoader');
+//								rsqadmg.execute('toast', {message: '保存成功'});
+//							});
 				}
 			},
 			updateDate(){
@@ -176,11 +176,11 @@
 					this.editItem.dates == null){
 					paramObj['pContainer'] = 'inbox';
 				}
-				this.updateTodoDate(this.currentTodo, paramObj)
-						.then(function(){
-							rsqadmg.exec('hideLoader');
-							rsqadmg.execute('toast', {message: '保存成功'});
-						});
+//				this.updateTodoDate(this.currentTodo, paramObj)
+//						.then(function(){
+//							rsqadmg.exec('hideLoader');
+//							rsqadmg.execute('toast', {message: '保存成功'});
+//						});
 			},
 			saveMember(selList){
 				var oldArray = this.joinUsers.map(function(obj){
@@ -190,23 +190,23 @@
 				var compRes = util.compareList(oldArray, idArray);
 				rsqadmg.execute('showLoader', {text: '保存中...'});
 				var that = this;
-				this.updateTodo(this.currentTodo, {
-					receiverIds: idArray.join(','),
-					addJoinUsers: compRes.addList.join(','),
-					deleteJoinUsers: compRes.delList.join(',')
-				}).then(function(){
-					rsqadmg.exec('hideLoader');
-					rsqadmg.execute('toast', {message: '保存成功'});
-				});
+//				this.updateTodo(this.currentTodo, {
+//					receiverIds: idArray.join(','),
+//					addJoinUsers: compRes.addList.join(','),
+//					deleteJoinUsers: compRes.delList.join(',')
+//				}).then(function(){
+//					rsqadmg.exec('hideLoader');
+//					rsqadmg.execute('toast', {message: '保存成功'});
+//				});
 			},
 			finishChecked(){
 				var status = this.editItem.pIsDone;
 				if(status !=this.currentTodo.isDone){
-					this.updateTodo(this.currentTodo, {pIsDone: status})
-							.then(function(){
-								var str = status ? '任务已完成':'任务已重启';
-								rsqadmg.execute('toast', {message: str});
-							});
+//					this.updateTodo(this.currentTodo, {pIsDone: status})
+//							.then(function(){
+//								var str = status ? '任务已完成':'任务已重启';
+//								rsqadmg.execute('toast', {message: str});
+//							});
 				}
 			},
 			deleteCurrentTodo(){
@@ -215,12 +215,12 @@
 					message: '确定要删除此任务？',
 					success: function(){
 						rsqadmg.execute('showLoader', {text: '删除中...'});
-						that.deleteTodo(that.currentTodo)
-								.then(function(){
-									rsqadmg.exec('hideLoader');
-									rsqadmg.execute('toast', {message: '删除成功'});
-									that.$router.replace(window.history.back());
-								});
+//						that.deleteTodo(that.currentTodo)
+//								.then(function(){
+//									rsqadmg.exec('hideLoader');
+//									rsqadmg.execute('toast', {message: '删除成功'});
+//									that.$router.replace(window.history.back());
+//								});
 					}
 				});
 			}

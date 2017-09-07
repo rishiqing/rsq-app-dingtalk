@@ -3,10 +3,7 @@ import VueResource from 'vue-resource';
 
 import todo from './todo';
 import system from './system';
-import kanban from './kanban';
-import plan from './plan';
 import appAuth from './appAuth';
-import doc from './doc';
 
 Vue.use(VueResource);
 
@@ -17,8 +14,5 @@ Vue.http.options.root = rsqConfig.apiServer;
 export default {
 	todo,
 	system,
-	kanban,
-	plan,
-	appAuth,
-	doc
+	appAuth
 }

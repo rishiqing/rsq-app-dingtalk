@@ -57,8 +57,6 @@
 	};
 </script>
 <style scoped>
-  @import "../assets/css/variables.scss";
-  @import "../assets/fonts/icomoon2.css";
   .c-bottom-nav {
     position: fixed;bottom:0;left:0;right:0;height:49px;
     background: #fff;
