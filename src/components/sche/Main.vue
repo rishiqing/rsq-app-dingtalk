@@ -21,10 +21,9 @@
   </div>
 </template>
 <script>
-  import Calendar from 'com/sche/Calendar';
-  import TodoItemList from 'com/sche/TodoItemList';
-
-  import moment from 'moment';
+  import Calendar from 'com/sche/Calendar'
+  import TodoItemList from 'com/sche/TodoItemList'
+  import moment from 'moment'
 
   export default {
     name: 'ScheduleView',
@@ -35,13 +34,13 @@
     },
     computed: {
       dateSelect () {
-        var strDate = this.$store.state.schedule.strCurrentDate;
-        return  strDate? moment(strDate, 'YYYY-MM-DD').toDate() : new Date();
+        var strDate = this.$store.state.schedule.strCurrentDate
+        return strDate ? moment(strDate, 'YYYY-MM-DD').toDate() : new Date()
       },
-      items(){
-        return this.$store.state.schedule.items;
+      items () {
+        return this.$store.state.schedule.items
       },
-      itemCount(){
+      itemCount () {
         return this.$store.state.schedule.items ? this.$store.state.schedule.items.length : -1
       }
     },
@@ -50,26 +49,26 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
-      fetchItems(strDate){
+      fetchItems (strDate) {
         this.$store.dispatch('fetchScheduleItems', strDate)
       },
-      showCreate(){
-        this.$router.push('/todo/new/schedule');
+      showCreate () {
+        this.$router.push('/todo/new/schedule')
       }
     },
     mounted () {
-      rsqadmg.exec('setTitle', {title: this.titleName});
-      var btnParams;
-      var that = this;
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      var btnParams
+      var that = this
       btnParams = {
         btns: [{key: 'toInbox', name: '收纳箱'}],
-        success: function(res){
-          if(res.key == 'toInbox'){
-            that.$router.push('/inbox');
+        success (res) {
+          if (res.key === 'toInbox') {
+            that.$router.push('/inbox')
           }
         }
-      };
-      rsqadmg.execute('setOptionButtons', btnParams);
+      }
+      window.rsqadmg.execute('setOptionButtons', btnParams)
       this.$store.dispatch('setNav', true)
     }
   }

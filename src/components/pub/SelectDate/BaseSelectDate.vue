@@ -88,193 +88,188 @@
 
 </style>
 <script>
-  import dateUtil from 'ut/dateUtil';
+  import dateUtil from 'ut/dateUtil'
 
   export default{
-    data(){
-      return{
+    data () {
+      return {
         compId: 'SYSTEM_SELECT_DATE',
-        weeks:['日', '一', '二', '三', '四', '五', '六'],
-        months:['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
-        currentDate: new Date(),  //表示当前显示的月份，决定了当前显示哪个月份的日历
+        weeks: ['日', '一', '二', '三', '四', '五', '六'],
+        months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+        currentDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
         days: [],
 
-        type: '',  //single单日期, range起止日期, discrete, 离散间隔日期
-        selectNumDate: null,  //表示当前选中的日期
-        success: function(){},
-        cancel: function(){}
-      };
+        type: '',  //  single单日期, range起止日期, discrete, 离散间隔日期
+        selectNumDate: null,  //  表示当前选中的日期
+        success: function () {},
+        cancel: function () {}
+      }
     },
     computed: {
-      selectDateText(){
-        return dateUtil.formatDateDisplay(this.type, this.selectNumDate);
+      selectDateText () {
+        return dateUtil.formatDateDisplay(this.type, this.selectNumDate)
       }
     },
     methods: {
-      selfClose(){
-        window.onpopstate = null;
-        this.cancel.call(this);
-        this.$emit('self-close');
+      selfClose () {
+        window.onpopstate = null
+        this.cancel()
+        this.$emit('self-close')
       },
-      tapEmpty(e){
-        this.selectNumDate = [];
-        this.clearSelected();
-        e.preventDefault();
+      tapEmpty (e) {
+        this.selectNumDate = []
+        this.clearSelected()
+        e.preventDefault()
       },
-      tapBackToday(e){
-        var nowDate = dateUtil.clearTime(new Date());
-        this.currentDate = nowDate;
-        this.selectNumDate = [nowDate.getTime()];
-        this.resetMonth();
-        e.preventDefault();
+      tapBackToday (e) {
+        var nowDate = dateUtil.clearTime(new Date())
+        this.currentDate = nowDate
+        this.selectNumDate = [nowDate.getTime()]
+        this.resetMonth()
+        e.preventDefault()
       },
-      tapConfirm(e){
-        var isNotNull = this.selectNumDate && this.selectNumDate.length > 0;
+      tapConfirm (e) {
+        var isNotNull = this.selectNumDate && this.selectNumDate.length > 0
 
-        this.success.call(this, {
+        this.success({
           type: isNotNull ? this.type : null,
-          selectNumDate: isNotNull ? this.selectNumDate.sort(function(a,b){return a > b ? 1 : -1;}) : null
-        });
-        this.selfClose();
+          selectNumDate: isNotNull ? this.selectNumDate.sort(function (a, b) { return a > b ? 1 : -1 }) : null
+        })
+        this.selfClose()
 
-//				this.saveTempDatePicker({
-//					currentDate: isNotNull ? this.currentDate : null,
+//                this.saveTempDatePicker({
+//                    currentDate: isNotNull ? this.currentDate : null,
 //
-//				});
-        e.preventDefault();
+//                })
+        e.preventDefault()
       },
-      tapChangeType(e, type){
-        this.resetType(type);
-        e.preventDefault();
+      tapChangeType (e, type) {
+        this.resetType(type)
+        e.preventDefault()
       },
-      tapChangeMonth(e, offset){
-        this.resetMonth(offset);
-        e.preventDefault();
+      tapChangeMonth (e, offset) {
+        this.resetMonth(offset)
+        e.preventDefault()
       },
-      tapDay(e, day){
-        this.toggleSelect(day);
-        e.preventDefault();
+      tapDay (e, day) {
+        this.toggleSelect(day)
+        e.preventDefault()
       },
-      tapCloseModal(e){
-        this.selfClose();
-        e.preventDefault();
+      tapCloseModal (e) {
+        this.selfClose()
+        e.preventDefault()
       },
-
-
-      resetType(type, params){
-        params = params || {};
-        this.type = type || 'single';
-        this.selectNumDate = params.selectNumDate || [];
-        this.resetMonth();
+      resetType (type, params) {
+        params = params || {}
+        this.type = type || 'single'
+        this.selectNumDate = params.selectNumDate || []
+        this.resetMonth()
       },
-      resetMonth(offset){
-        if(offset){
-          this.currentDate = dateUtil.firstDayOfMonth(this.currentDate, offset);
+      resetMonth (offset) {
+        if (offset) {
+          this.currentDate = dateUtil.firstDayOfMonth(this.currentDate, offset)
         }
-        this.days = dateUtil.getMonthDays(this.currentDate);
-        this.selectDays();
+        this.days = dateUtil.getMonthDays(this.currentDate)
+        this.selectDays()
       },
-      toggleSelect(day){
-        switch(this.type){
+      toggleSelect (day) {
+        switch (this.type) {
           case 'single':
-            this.selectSingle(day);
-            break;
+            this.selectSingle(day)
+            break
           case 'range':
-            this.selectRange(day);
-            break;
+            this.selectRange(day)
+            break
           case 'discrete':
-            this.selectDiscrete(day);
-            break;
+            this.selectDiscrete(day)
+            break
           default:
-            break;
+            break
         }
       },
-      selectSingle(obj){
-        this.clearSelected();
-        obj.isSelected = !obj.isSelected;
-        if(obj.isSelected){
-          this.selectNumDate = [obj.date.getTime()];
-        }else{
-          this.selectNumDate.pop();
+      selectSingle (obj) {
+        this.clearSelected()
+        obj.isSelected = !obj.isSelected
+        if (obj.isSelected) {
+          this.selectNumDate = [obj.date.getTime()]
+        } else {
+          this.selectNumDate.pop()
         }
       },
-      selectRange(obj){
-        var val = obj.date.getTime();
+      selectRange (obj) {
+        var val = obj.date.getTime()
         //  如果之前选择过range，则重置选择
-        if(this.selectNumDate.length >= 2){
-          this.selectNumDate = [];
-          this.clearSelected();
+        if (this.selectNumDate.length >= 2) {
+          this.selectNumDate = []
+          this.clearSelected()
         }
-        if(this.selectNumDate.length == 0){
-          this.selectNumDate = [val];
-          obj.isSelected = true;
-        }else{
+        if (this.selectNumDate.length === 0) {
+          this.selectNumDate = [val]
+          obj.isSelected = true
+        } else {
           //  length 为1
-          var fun = val > this.selectNumDate[0] ? 'push' : 'unshift';
-          this.selectNumDate[fun](val);
-          this.selectDays();
+          var fun = val > this.selectNumDate[0] ? 'push' : 'unshift'
+          this.selectNumDate[fun](val)
+          this.selectDays()
         }
       },
-      selectDiscrete(obj){
-        obj.isSelected = !obj.isSelected;
-        if(obj.isSelected){
-          this.selectNumDate.push(obj.date.getTime());
-        }else{
-          var index = this.selectNumDate.indexOf(obj.date.getTime());
-          if(index > -1){
-            this.selectNumDate.splice(index, 1);
+      selectDiscrete (obj) {
+        obj.isSelected = !obj.isSelected
+        if (obj.isSelected) {
+          this.selectNumDate.push(obj.date.getTime())
+        } else {
+          var index = this.selectNumDate.indexOf(obj.date.getTime())
+          if (index > -1) {
+            this.selectNumDate.splice(index, 1)
           }
         }
       },
-      clearSelected(){
-        this.days.forEach(function(array){
-          array.forEach(function(obj){
-            obj.isSelected = false;
-          });
-        });
+      clearSelected () {
+        this.days.forEach(function (array) {
+          array.forEach(function (obj) {
+            obj.isSelected = false
+          })
+        })
       },
-      selectDays(){
-        if(this.selectNumDate.length == 0){
-          return;
+      selectDays () {
+        if (this.selectNumDate.length === 0) {
+          return
         }
-        var self = this;
-        this.days.forEach(function(array){
-          array.forEach(function(obj){
-            obj.isSelected = self.isInSelect(self.type, obj.date, self.selectNumDate);
-          });
-        });
+        var self = this
+        this.days.forEach(function (array) {
+          array.forEach(function (obj) {
+            obj.isSelected = self.isInSelect(self.type, obj.date, self.selectNumDate)
+          })
+        })
       },
-      isInSelect(type, date, selectNumDate){
-        var numDate = date.getTime();
-        switch(type){
+      isInSelect (type, date, selectNumDate) {
+        var numDate = date.getTime()
+        switch (type) {
           case 'single':
           case 'discrete':
-            return selectNumDate.indexOf(numDate) != -1;
-            break;
+            return selectNumDate.indexOf(numDate) !== -1
           case 'range':
-            var start = selectNumDate[0],end = selectNumDate[1];
-            if(start && end){
-              return numDate >= start && numDate <=end;
-            }else{
-              return start == numDate || end == numDate;
+            var start = selectNumDate[0]
+            var end = selectNumDate[1]
+            if (start && end) {
+              return numDate >= start && numDate <= end
+            } else {
+              return start === numDate || end === numDate
             }
-            break;
           default:
-            return false;
-            break;
+            return false
         }
       }
     },
-    mounted(){
-      var that = this;
+    mounted () {
+      var that = this
       that.resetType(that.type, {
         selectNumDate: that.selectNumDate || []
-      });
+      })
       //  如果通过任意方式跳出页面了，那么关闭当前选择框
-      window.onpopstate = function(){
-        that.selfClose();
+      window.onpopstate = function () {
+        that.selfClose()
       }
-
     }
-  };
+  }
 </script>

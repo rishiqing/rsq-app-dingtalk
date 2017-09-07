@@ -34,29 +34,27 @@
 <script>
   import Avatar from 'com/pub/TextAvatar'
 
-export default {
-  data () {
-    return {}
-  },
-  computed: {
-    loginUser () {
-      return this.$store.state.loginUser
+  export default {
+    data () {
+      return {}
+    },
+    computed: {
+      loginUser () {
+        return this.$store.state.loginUser
+      }
+    },
+    components: {
+      'avatar': Avatar
+    },
+    methods: {
+      gotokefu () {
+        this.$router.push('/me/kefu')
+      }
+    },
+    mounted () {
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+      this.$store.dispatch('setNav', true)
     }
-  },
-  components: {
-    'avatar': Avatar
-  },
-  methods: {
-    gotokefu(){
-
-  this.$router.push('/me/kefu');
-
-    }
-  },
-  mounted () {
-    rsqadmg.exec('setOptionButtons', {hide: true})
-    this.$store.dispatch('setNav', true)
-  }
 }
 </script>
 <style scoped >

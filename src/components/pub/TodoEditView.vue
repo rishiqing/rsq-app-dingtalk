@@ -41,22 +41,21 @@
 
 </style>
 <script>
-	export default{
-		data(){
-			return{};
-		},
-		props: {
-			isCheckable: Boolean,
-			isShowNote: {
-				type: Boolean,
-				default: true
-			}
-		},
-		methods: {
-		},
-		components:{},
-		ready: function(){
-
-		}
-	};
+  export default {
+    data () {
+      return {}
+    },
+    props: {
+      isCheckable: Boolean,
+      isShowNote: {
+        type: Boolean,
+        default: true
+      }
+    },
+    methods: {
+    },
+    components: {},
+    ready () {
+    }
+  }
 </script>

@@ -21,36 +21,36 @@
 
 </style>
 <script>
-	export default{
-		data(){
-			return{};
-		},
-		computed: {
-			paddingObject(){
-				if(!this.isCheckable){
-					return {'padding-left': '0'};
-				}else{
-					return {};
-				}
-			}
-		},
-		props: {
-			isCheckable: Boolean,
-			value: String,
-			itemChecked: Boolean
-		},
-		methods: {
-			inputBlur(){
-				this.$emit('text-blur', this.value);
-			},
-			inputChange(value){
-        this.$refs.input.value = value;
-				this.$emit('input', value);
-			},
-			clickCheckOut(){
-				this.itemChecked = !this.itemChecked;
-				this.$emit('click-checkout', !this.itemChecked);
-			}
-		}
-	};
+  export default {
+    data () {
+      return {}
+    },
+    computed: {
+      paddingObject () {
+        if (!this.isCheckable) {
+          return {'padding-left': '0'}
+        } else {
+          return {}
+        }
+      }
+    },
+    props: {
+      isCheckable: Boolean,
+      value: String,
+      itemChecked: Boolean
+    },
+    methods: {
+      inputBlur () {
+        this.$emit('text-blur', this.value)
+      },
+      inputChange (value) {
+        this.$refs.input.value = value
+        this.$emit('input', value)
+      },
+      clickCheckOut () {
+        this.itemChecked = !this.itemChecked
+        this.$emit('click-checkout', !this.itemChecked)
+      }
+    }
+  }
 </script>

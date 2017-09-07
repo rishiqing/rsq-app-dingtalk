@@ -1,6 +1,5 @@
 <template>
   <div class="kefu">
-
     <div class="top">
       <img src="../../assets/共创群二维码@3x.png" alt="">
       <p>加入日事清钉钉用户群</p>
@@ -10,17 +9,9 @@
       <div class="xian"></div>
       <p class="sec">长按识别二维码</p>
     </div>
-
-
-
-
   </div>
-
 </template>
 <script>
-
-
-
 </script>
 <style scoped>
   .xian{

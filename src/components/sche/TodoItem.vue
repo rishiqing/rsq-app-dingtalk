@@ -21,38 +21,39 @@
 	.contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
 </style>
 <script>
-	export default{
-		name: 'TodoItem',
-		data(){
-			return{};
-		},
-		props: {
-			//item: Object,
-      item:{
-        pIsDone:false,
+  export default {
+    name: 'TodoItem',
+    data () {
+      return {}
+    },
+    props: {
+      //  item: Object,
+      item: {
+        pIsDone: false
       },
-			isCheckable: Boolean
-		},
-		computed: {
-			isIE(){return this.item.pContainer == 'IE';},
-			isIU(){return this.item.pContainer == 'IU';},
-			isUE(){return this.item.pContainer == 'UE';},
-			isUU(){return this.item.pContainer == 'UU';},
-      tian(){
-			  var nowday=new Date().getDate()
+      isCheckable: Boolean
+    },
+    computed: {
+      isIE () { return this.item.pContainer === 'IE' },
+      isIU () { return this.item.pContainer === 'IU' },
+      isUE () { return this.item.pContainer === 'UE' },
+      isUU () { return this.item.pContainer === 'UU' },
+      tian () {
+//        var nowday = new Date().getDate()
       }
-		},
-		methods: {
-			clickItem: function(e){//这个是点击跳到编辑界面
-				if(e.target.className.indexOf('jsItemCheckbox') == -1){
-					this.$emit('todo-item-click', this.item);
-					e.preventDefault();
-				}
-			},
-			clickCheckOut: function(e){
-				this.$emit('todo-item-check', this.item, !this.item.pIsDone);
-				e.preventDefault();
-			}
-		}
-	};
+    },
+    methods: {
+      clickItem (e) {
+        //  这个是点击跳到编辑界面
+        if (e.target.className.indexOf('jsItemCheckbox') === -1) {
+          this.$emit('todo-item-click', this.item)
+          e.preventDefault()
+        }
+      },
+      clickCheckOut (e) {
+        this.$emit('todo-item-check', this.item, !this.item.pIsDone)
+        e.preventDefault()
+      }
+    }
+  }
 </script>

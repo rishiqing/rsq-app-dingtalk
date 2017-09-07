@@ -16,32 +16,32 @@
 	</div>
 </template>
 <script>
-	export default{
-		data(){
-			return{};
-		},
-		props: {
-			days: Array,
-			barIndex: Number,
-			highlightDay: Date
-		},
-		computed: {
-			barOffsetStyle(){
-				return (this.barIndex * 100) + '%';
-			}
-		},
-		components:{},
-		methods: {
-			isHighLight(date){
-				return this.highlightDay!=null && date.getTime() == this.highlightDay.getTime();
-			},
-			calDayclick(date){
-				if(date.getTime() != this.highlightDay.getTime()){
-					this.$emit('click-cal-bar-day', date);
-				}
-			}
-		}
-	};
+  export default {
+    data () {
+      return {}
+    },
+    props: {
+      days: Array,
+      barIndex: Number,
+      highlightDay: Date
+    },
+    computed: {
+      barOffsetStyle () {
+        return (this.barIndex * 100) + '%'
+      }
+    },
+    components: {},
+    methods: {
+      isHighLight (date) {
+        return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
+      },
+      calDayclick (date) {
+        if (date.getTime() !== this.highlightDay.getTime()) {
+          this.$emit('click-cal-bar-day', date)
+        }
+      }
+    }
+  }
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';

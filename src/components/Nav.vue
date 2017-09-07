@@ -26,35 +26,35 @@
 	</div>
 </template>
 <script>
-	export default{
-		name: 'Nav',
-		data(){
-			return{};
-		},
+  export default {
+    name: 'Nav',
+    data () {
+      return {}
+    },
     computed: {
-		  count () {
-		    return this.$store.getters.getCount;
+      count () {
+        return this.$store.getters.getCount
       },
       currentPath () {
-        return this.$store.state.sys.currentPath.split('?')[0];
+        return this.$store.state.sys.currentPath.split('?')[0]
       }
     },
-		methods: {
-			reload(page){
+    methods: {
+      reload (page) {
 //        this.$store.dispatch('requestCount', 'aloha')
-				this.$router.replace(page);
-			},
-      createNew(){
-        if(this.currentPath == '/sche'){
-          this.$router.push('/todo/new/schedule');
-        }else if (this.currentPath == '/plan'){
-          this.$router.push('/plan/new');
-        }else if (this.currentPath == '/doc'){
-          this.$router.push('/docSet/new');
+        this.$router.replace(page)
+      },
+      createNew () {
+        if (this.currentPath === '/sche') {
+          this.$router.push('/todo/new/schedule')
+        } else if (this.currentPath === '/plan') {
+          this.$router.push('/plan/new')
+        } else if (this.currentPath === '/doc') {
+          this.$router.push('/docSet/new')
         }
       }
-		}
-	};
+    }
+  }
 </script>
 <style scoped>
   .c-bottom-nav {
