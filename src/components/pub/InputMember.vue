@@ -19,7 +19,7 @@
 			</div>
       <div class="itm-icons itm-rear-icons u-abs-right" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
-        <avatar v-for="item in selecteditems"
+        <avatar v-for="item in selectedItems"
                 :key="item.rsqUserId"
                 :src="item.avatar"
                 :username="item.name">
@@ -67,7 +67,7 @@
       loginUser () {
         return this.$store.getters.loginUser
       },
-      selecteditems () {
+      selectedItems () {
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
       }
     },
@@ -140,7 +140,11 @@
         var corpId = that.loginUser.authUser.corpId
         var loadTimes = 0
         var maxQuery = 3
+        if (ids.length === 0 && disabledIds.length === 0 && selectedRsqIds.length === 0) {
+          return
+        }
         window.rsqadmg.exec('showLoader')
+        console.log('corpId:' + corpId + ',ids:' + ids + ',disabledIds:' + disabledIds + ',selectedRsqIds:' + selectedRsqIds)
         this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
             .then(function (idMap) {
               loadTimes += 1

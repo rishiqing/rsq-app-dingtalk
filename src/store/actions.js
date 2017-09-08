@@ -332,16 +332,11 @@ export default {
     //  如果id存在，则ajax更新
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
-      .then((todo) => {
+      .then((resTodo) => {
         //  处理缓存数据
         var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
         var targetDateStruct = dateUtil.backend2frontend(editItem.dates, editItem.startDate, editItem.endDate)
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
-
-        // alert('sourceDateStruct:' + JSON.stringify(sourceDateStruct))
-        // alert('targetDateStruct:' + JSON.stringify(targetDateStruct))
-        // alert('curArrayIndex' + curArrayIndex)
-        // alert(dateUtil.isInDateStruct(curArrayIndex, targetDateStruct))
 
         if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
           commit('TD_TODO_DELETED', {item: todo})
@@ -349,7 +344,7 @@ export default {
         dispatch('invalidateDateItems', targetDateStruct, curArrayIndex)
         dispatch('invalidateDateItems', sourceDateStruct, curArrayIndex)
 
-        commit('TD_TODO_UPDATED', {todo: todo})
+        commit('TD_TODO_UPDATED', {todo: resTodo})
       })
   },
   /**
@@ -414,10 +409,13 @@ export default {
    * 1  将其他日期的缓存数据清除
    * @param commit
    * @param state
+   * @param dispatch
+   * @param p
+   * @param p.todo
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
-  deleteTodo ({ commit, state, dispatch }, todo) {
-    //  如果id不存在，则批量保持currentItem中的属性
+  deleteTodo ({ commit, state, dispatch }, p) {
+    var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
       .then((res) => {
         commit('TD_TODO_DELETED', {item: todo})

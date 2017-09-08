@@ -49,7 +49,6 @@
         this.$emit('text-change', value)
       },
       clickCheckOut () {
-        this.itemChecked = !this.itemChecked
         this.$emit('click-checkout', !this.itemChecked)
       }
     }

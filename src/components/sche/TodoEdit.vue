@@ -26,16 +26,16 @@
 					:item-sep="'/'"
           @date-changed="updateDate"
 			></r-input-date>
-			<!--<r-input-member-->
-					<!--slot="slotMember"-->
-					<!--:is-native="true"-->
-					<!--:index-title="'成员'"-->
-					<!--:select-title="'请选择成员'"-->
-					<!--:user-rsq-ids="[]"-->
-					<!--:selected-rsq-ids="joinUsers"-->
-					<!--:disabled-rsq-ids="[]"-->
-					<!--@member-changed="saveMember"-->
-			<!--&gt;</r-input-member>-->
+			<r-input-member
+					slot="slotMember"
+					:is-native="true"
+					:index-title="'成员'"
+					:select-title="'请选择成员'"
+					:user-rsq-ids="[]"
+					:selected-rsq-ids="joinUsers"
+					:disabled-rsq-ids="[]"
+					@member-changed="saveMember"
+			></r-input-member>
 			<!--<r-comment-list-->
 					<!--slot="slotComment"-->
 					<!--:item-list="normalCommonList"-->
@@ -60,6 +60,18 @@
       }
     },
     computed: {
+      currentTodo () {
+        return this.$store.state.todo.currentTodo || {}
+      },
+      joinUsers () {
+//        var todo = this.$store.state.todo.currentTodo
+        var todo = this.editItem
+        if (todo) {
+          return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
+        } else {
+          return []
+        }
+      },
       normalCommonList () {
         var list = this.editItem.comments
         if (list) {
@@ -134,7 +146,7 @@
         return this.$store.dispatch('getTodo')
             .then(item => {
               console.log('item----%o', item)
-              this.editItem = item
+              util.extendObject(this.editItem, item)
               window.rsqadmg.exec('hideLoader')
             })
       },
@@ -189,57 +201,59 @@
             })
       },
       saveMember (selList) {
-//        var oldArray = this.joinUsers.map(function (obj) {
-//          return obj['id'] + ''
-//        })
-//        var idArray = util.extractProp(selList, 'rsqUserId')
-//        var compRes = util.compareList(oldArray, idArray)
+        var oldArray = this.joinUsers.map(function (obj) {
+          return obj['id'] + ''
+        })
+        var idArray = util.extractProp(selList, 'rsqUserId')
+        var compRes = util.compareList(oldArray, idArray)
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-//        var that = this
-//        this.updateTodo(this.currentTodo, {
-//          receiverIds: idArray.join(','),
-//          addJoinUsers: compRes.addList.join(','),
-//          deleteJoinUsers: compRes.delList.join(',')
-//        }).then(function() {
-//          window.rsqadmg.exec('hideLoader')
-//          window.rsqadmg.execute('toast', {message: '保存成功'})
-//        })
+        this.$store.dispatch('updateTodo', {editItem: {
+          receiverIds: idArray.join(','),
+          addJoinUsers: compRes.addList.join(','),
+          deleteJoinUsers: compRes.delList.join(',')
+        }}).then(() => {
+          window.rsqadmg.exec('hideLoader')
+          window.rsqadmg.execute('toast', {message: '保存成功'})
+        })
       },
-      finishChecked () {
-        var status = this.editItem.pIsDone
-        if (status !== this.currentTodo.isDone) {
-//          this.updateTodo(this.currentTodo, {pIsDone: status})
-//              .then(function() {
-//                var str = status ? '任务已完成':'任务已重启'
-//                window.rsqadmg.execute('toast', {message: str})
-//              })
+      finishChecked (status) {
+//        var status = this.editItem.pIsDone
+        console.log('----status----====' + status)
+        if (status !== this.editItem.isDone) {
+          this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
+              .then(() => {
+                this.editItem.pIsDone = status
+                var str = status ? '任务已完成' : '任务已重启'
+                window.rsqadmg.execute('toast', {message: str})
+              })
         }
       },
       deleteCurrentTodo () {
-//        var that = this
+        var that = this
         window.rsqadmg.exec('confirm', {
           message: '确定要删除此任务？',
           success () {
             window.rsqadmg.execute('showLoader', {text: '删除中...'})
-//            that.deleteTodo(that.currentTodo)
-//                .then(function() {
-//                  window.rsqadmg.exec('hideLoader')
-//                  window.rsqadmg.execute('toast', {message: '删除成功'})
-//                  that.$router.replace(window.history.back())
-//                })
+            that.$store.dispatch('deleteTodo', {todo: that.currentTodo})
+                .then(() => {
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '删除成功'})
+                  that.$router.replace(window.history.back())
+                })
           }
         })
       }
     },
     mounted () {
       this.initData()
+      var that = this
 //      util.extendObject(this.editItem, this.currentTodo)
       window.rsqadmg.execute('setTitle', {title: '任务'})
       window.rsqadmg.execute('setOptionButtons', {
         btns: [{key: 'deleteTodo', name: '删除'}],
         success (res) {
           if (res.key === 'deleteTodo') {
-            this.deleteCurrentTodo()
+            that.deleteCurrentTodo()
           }
         }
       })
