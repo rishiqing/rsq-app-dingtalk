@@ -4,10 +4,11 @@
 			<tr>
 				<td class="cal-weekday"
 				    v-for="day in days"
-            :key="day.date"
+            :key="day.date.getTime()"
 				    >
-					<v-touch class="cal-day" @tap="calDayclick(day.date)"
+					<v-touch class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
+            <!--{{day.date.getDate()}}-->
             {{day.date.getDate()}}
           </v-touch>
         </td>
@@ -35,7 +36,7 @@
       isHighLight (date) {
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
       },
-      calDayclick (date) {
+      calDayClick (date) {
         if (date.getTime() !== this.highlightDay.getTime()) {
           this.$emit('click-cal-bar-day', date)
         }
@@ -63,7 +64,8 @@
   .cal-weekday {}
   .cal-day {margin:0 auto;width:30px;height:30px;line-height:30px;}
   .cal-day--focus {
-    background:$mainColor;color:$bgColor;
+    background:$mainColor;
+    color:$bgColor;
     border-radius: 50%;
   }
 </style>

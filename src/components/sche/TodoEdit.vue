@@ -1,5 +1,4 @@
 <style lang="scss">
-
 </style>
 <template>
 	<div class="router-view">
@@ -9,8 +8,8 @@
 			<r-input-title
 					slot="slotTitle"
 					:is-checkable="true"
-					:item-title.sync="editItem.pTitle"
-					:item-checked.sync="editItem.pIsDone"
+					:item-title="editItem.pTitle"
+					:item-checked="editItem.pIsDone"
 					@text-blur="titleBlur"
 					@click-checkout="finishChecked"
 			></r-input-title>
@@ -21,22 +20,22 @@
 			<!--&gt;</r-input-note>-->
 			<r-input-date
 					slot="slotDate"
-					:item-start-date.sync="editItem.startDate"
-					:item-end-date.sync="editItem.endDate"
-					:item-dates.sync="editItem.dates"
+					:item-start-date="editItem.startDate"
+					:item-end-date="editItem.endDate"
+					:item-dates="editItem.dates"
 					:item-sep="'/'"
-			        @date-changed="updateDate"
+          @date-changed="updateDate"
 			></r-input-date>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'成员'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUsers"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
+			<!--<r-input-member-->
+					<!--slot="slotMember"-->
+					<!--:is-native="true"-->
+					<!--:index-title="'成员'"-->
+					<!--:select-title="'请选择成员'"-->
+					<!--:user-rsq-ids="[]"-->
+					<!--:selected-rsq-ids="joinUsers"-->
+					<!--:disabled-rsq-ids="[]"-->
+					<!--@member-changed="saveMember"-->
+			<!--&gt;</r-input-member>-->
 			<!--<r-comment-list-->
 					<!--slot="slotComment"-->
 					<!--:item-list="normalCommonList"-->
@@ -51,8 +50,8 @@
 //  import InputNoteText from 'com/pub/InputNoteText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
-//  import CommentList from 'comps/public/CommentList'
   import util from 'ut/jsUtil'
+//  import CommentList from 'comps/public/CommentList'
 
   export default {
     data () {
@@ -80,7 +79,8 @@
 //      'r-input-note': InputNoteText,
 //      'r-comment-list': CommentList
     },
-    route: {
+    beforeRouteEnter (to, from, next) {
+      next()
       //  暂时采用同步的方式，只有当获取到了数据之后，才显示页面
 //      waitForData: true,
 //      //  本页面的状态数据
@@ -129,18 +129,27 @@
 //      }
 //    },
     methods: {
-      titleBlur () {
-        var title = this.editItem.pTitle
-        if (!title) {
+      initData () {
+        window.rsqadmg.exec('showLoader')
+        return this.$store.dispatch('getTodo')
+            .then(item => {
+              console.log('item----%o', item)
+              this.editItem = item
+              window.rsqadmg.exec('hideLoader')
+            })
+      },
+      titleBlur (newTitle) {
+        if (!newTitle) {
           return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
         }
-        if (title !== this.currentTodo.pTitle) {
+        if (newTitle !== this.editItem.pTitle) {
           window.rsqadmg.exec('showLoader', {text: '保存中...'})
-//          this.updateTodo(this.currentTodo, {pTitle: title})
-//              .then(function() {
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
-//              })
+          this.$store.dispatch('updateTodo', {editItem: {pTitle: newTitle}})
+              .then(() => {
+                this.editItem.pTitle = newTitle
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '保存成功'})
+              })
         }
       },
       noteBlur () {
@@ -154,29 +163,30 @@
 //              })
         }
       },
-      updateDate () {
-        //  如果未发生改变则不保存
-        if (this.currentTodo.startDate === this.editItem.startDate &&
-          this.currentTodo.endDate === this.editItem.endDate &&
-          this.currentTodo.dates === this.editItem.dates) {
+      updateDate (result) {
+//        //  如果未发生改变则不保存
+        if (result.startDate === this.editItem.startDate &&
+          result.endDate === this.editItem.endDate &&
+          result.dates === this.editItem.dates) {
           return
         }
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-        var paramObj = {
-          startDate: this.editItem.startDate,
-          endDate: this.editItem.endDate,
-          dates: this.editItem.dates
+//        var paramObj = {
+//          startDate: this.editItem.startDate,
+//          endDate: this.editItem.endDate,
+//          dates: this.editItem.dates
+//        }
+        if (result.startDate == null &&
+          result.endDate == null &&
+          result.dates == null) {
+          result['pContainer'] = 'inbox'
         }
-        if (this.editItem.startDate == null &&
-          this.editItem.endDate == null &&
-          this.editItem.dates == null) {
-          paramObj['pContainer'] = 'inbox'
-        }
-//        this.updateTodoDate(this.currentTodo, paramObj)
-//            .then(function() {
-//              window.rsqadmg.exec('hideLoader')
-//              window.rsqadmg.execute('toast', {message: '保存成功'})
-//            })
+        this.$store.dispatch('updateTodoDate', {editItem: result})
+            .then(() => {
+              util.extendObject(this.editItem, result)
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
+            })
       },
       saveMember (selList) {
 //        var oldArray = this.joinUsers.map(function (obj) {
@@ -222,16 +232,14 @@
       }
     },
     mounted () {
-      util.extendObject(this.editItem, this.currentTodo)
+      this.initData()
+//      util.extendObject(this.editItem, this.currentTodo)
       window.rsqadmg.execute('setTitle', {title: '任务'})
-      var that = this
       window.rsqadmg.execute('setOptionButtons', {
         btns: [{key: 'deleteTodo', name: '删除'}],
-        success: function (res) {
-          if (res.key === 'newTodo') {
-            that.$router.replace(window.history.back())
-          } else if (res.key === 'deleteTodo') {
-            that.deleteCurrentTodo()
+        success (res) {
+          if (res.key === 'deleteTodo') {
+            this.deleteCurrentTodo()
           }
         }
       })

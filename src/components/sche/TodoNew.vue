@@ -10,7 +10,8 @@
 			<r-input-title
 					slot="slotTitle"
 					:is-checkable="false"
-          v-model="editItem.pTitle"
+          :item-title="editItem.pTitle"
+          @text-change="saveTitle"
 			></r-input-title>
 			<r-input-date
 					slot="slotDate"
@@ -32,13 +33,6 @@
 					@member-changed="saveMember"
 			></r-input-member>
 		</r-todo-edit>
-		<div class="bottom-fixed" v-if="dType == 'p'">
-			<div class="clickable itm-outer itm-bordered">
-				<v-touch class="itm-inner" @tap="saveTodo">
-					<div class="itm-title itm-title--center is-active">创建任务</div>
-				</v-touch>
-			</div>
-		</div>
 	</div>
 </template>
 <script>
@@ -52,7 +46,6 @@
 
   export default {
     data () {
-//      var now = dateUtil.dateNum2Text(new Date().getTime())
       return {
         editItem: {
           pTitle: '',
@@ -66,11 +59,12 @@
       todoType () {
         return this.$route.params.todoType
       },
-      dType () {
-        return this.$store.getters.dType
-      },
       currentDate () {
         return this.$store.state.schedule.strCurrentDate
+      },
+      isInbox () {
+        //  所有日期属性均为date，判断当前新建的item为收纳箱任务
+        return (!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)
       }
     },
     components: {
@@ -82,16 +76,6 @@
     beforeRouteEnter (to, from, next) {
       next()
       // beforeRouteEnter中不能获取到this，因为this还没有创建，只能通过next获取
-//      next(vm => {
-//        if('schedule' == vm.todoType) {
-//          var currentVal = moment(vm.currentDate, 'YYYY-MM-DD').valueOf()
-//          var strDate = dateUtil.dateNum2Text(currentVal)
-//
-//          vm.editItem.startDate = strDate
-//          vm.editItem.endDate = strDate
-//          console.log('----this.editItem:' + JSON.stringify(vm.editItem))
-//        }
-//      })
     },
     methods: {
       initData () {
@@ -109,6 +93,9 @@
         var result = dateUtil.backend2frontend(ei.dates, ei.startDate, ei.endDate)
         return (result && result.dateResult) ? result.dateResult[0] : null
       },
+      saveTitle (newTitle) {
+        this.editItem.pTitle = newTitle
+      },
       saveDate ({startDate, endDate, dates}) {
         this.editItem.startDate = startDate
         this.editItem.endDate = endDate
@@ -122,16 +109,11 @@
         if (!this.editItem.pTitle) {
           return window.rsqadmg.execute('alert', {message: '请填写任务名称'})
         }
-
-        var isInbox = false
-        if ((!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)) {
-          isInbox = true
-        }
-        if (!isInbox) {
+        if (!this.isInbox) {
           var planTime = this.getPlanedTime()
-//          if(!planTime) {
-//            return window.rsqadmg.execute('alert', {message: '请选择任务日期'})
-//          }
+          if (!planTime) {
+            return window.rsqadmg.execute('alert', {message: '请选择任务日期'})
+          }
           //  坑爹啊。。。格式不统一，需要做额外的hack
           this.editItem.pPlanedTime = dateUtil.dateNum2Text(planTime, '-') + ' 00:00:00'
         }
@@ -139,7 +121,7 @@
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
 
         var that = this
-        this.$store.dispatch('submitCreateTodoItem', {props: this.editItem, todoType: isInbox ? 'inbox' : 'schedule'})
+        this.$store.dispatch('submitCreateTodoItem', {newItem: this.editItem, todoType: this.isInbox ? 'inbox' : 'schedule'})
             .then(function () {
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '创建成功'})

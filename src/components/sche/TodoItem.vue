@@ -3,7 +3,9 @@
 		<v-touch class="itm-outer" @tap="clickItem($event)">
 			<!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
 			<div class="itm-inner">
-				<div class="itm-title" v-model="tian" :class="{'u-padding-left-40': isCheckable, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">{{ item.pTitle }} 延期{{tian}}天</div>
+				<div class="itm-title" :class="{'u-padding-left-40': isCheckable, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">
+          {{ item.pTitle }}<span :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
+        </div>
 				<v-touch class="itm-icons u-abs-left jsItemCheckbox" v-if="isCheckable" @tap="clickCheckOut">
 					<i class="jsItemCheckbox icon"
 					   :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
@@ -27,10 +29,7 @@
       return {}
     },
     props: {
-      //  item: Object,
-      item: {
-        pIsDone: false
-      },
+      item: Object,
       isCheckable: Boolean
     },
     computed: {
@@ -38,9 +37,8 @@
       isIU () { return this.item.pContainer === 'IU' },
       isUE () { return this.item.pContainer === 'UE' },
       isUU () { return this.item.pContainer === 'UU' },
-      tian () {
-//        var nowday = new Date().getDate()
-      }
+      delayDays () { return this.item.delayDays },
+      isDelay () { return this.delayDays > 0 }
     },
     methods: {
       clickItem (e) {
@@ -54,6 +52,8 @@
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
         e.preventDefault()
       }
+    },
+    mounted () {
     }
   }
 </script>

@@ -3,10 +3,10 @@
 		<div class="itm-inner">
 			<div class="itm-title" :style="[paddingObject]">
 				<input type="text" placeholder="输入任务标题"
-				       ref="input"
-               :value="value"
+               ref="titleInput"
+               :value="itemTitle"
 				       @input="inputChange($event.target.value)"
-				       @blur="inputBlur">
+				       @blur="inputBlur($event.target.value)">
 			</div>
 			<v-touch class="itm-icons itm-front-icons u-abs-left"
 			     v-if="isCheckable"
@@ -36,16 +36,17 @@
     },
     props: {
       isCheckable: Boolean,
-      value: String,
+      itemTitle: String,
       itemChecked: Boolean
     },
     methods: {
-      inputBlur () {
-        this.$emit('text-blur', this.value)
+      inputBlur (value) {
+        this.$refs.titleInput.value = value
+        this.$emit('text-blur', value)
       },
       inputChange (value) {
-        this.$refs.input.value = value
-        this.$emit('input', value)
+        this.$refs.titleInput.value = value
+        this.$emit('text-change', value)
       },
       clickCheckOut () {
         this.itemChecked = !this.itemChecked

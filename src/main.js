@@ -29,7 +29,6 @@ window.rsqadmg.exec('auth', {
     }
 
     store.state.env.isAddNav = true
-    store.state.env.dType = 'p'
 
     /* eslint-disable no-new */
     new Vue({

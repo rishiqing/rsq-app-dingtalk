@@ -9,8 +9,6 @@
       :is-checkable="true"
       v-if="items != null && items.length > 0"
     ></r-todo-item-list>
-
-
     <div class="itm-lst" v-else>
       <img src="../../assets/日程.png" alt="">
       <p class="shouye">还没有日程，赶快去创建吧</p>
@@ -39,9 +37,6 @@
       },
       items () {
         return this.$store.state.schedule.items
-      },
-      itemCount () {
-        return this.$store.state.schedule.items ? this.$store.state.schedule.items.length : -1
       }
     },
     components: {
@@ -51,9 +46,6 @@
     methods: {
       fetchItems (strDate) {
         this.$store.dispatch('fetchScheduleItems', strDate)
-      },
-      showCreate () {
-        this.$router.push('/todo/new/schedule')
       }
     },
     mounted () {
@@ -86,5 +78,4 @@
     height: 70px;
     margin-top:137px ;
   }
-
 </style>

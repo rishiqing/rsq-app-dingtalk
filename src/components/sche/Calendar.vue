@@ -4,7 +4,6 @@
 	     @panend="onPanEnd"
 	     @pancancel="onPanEnd"
        :pan-options="{ direction: 'horizontal', threshold: 10 }">
-
 	<!--<div class="cal-title z-index-3xs">-->
 			<!--<span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>-->
 			<!--<span>{{focusDate ? focusDate.getFullYear() : ''}}</span>-->
@@ -57,8 +56,7 @@
     props: {
       defaultSelectDate: Date
     },
-    computed: {
-    },
+    computed: {},
     components: {
       'r-cal-bar': CalendarBar
     },
