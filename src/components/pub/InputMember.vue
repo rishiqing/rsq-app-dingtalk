@@ -2,10 +2,10 @@
 	<div class="itm-outer">
 		<v-touch class="itm-inner" @tap="showMemberEdit">
 			<div class="chengyuan">
-        {{indexTitle}}
+        {{indexTitle}}-{{selectedLocalList.length}}
 			</div>
 
-			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length<=3&&selectedLocalList.length>0">
+			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
 				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
 				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
 				<div class="itm-icon-img-wrap">
@@ -71,6 +71,17 @@
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
       }
     },
+    watch: {
+      userRsqIds (newList) {
+        this.fetchIds(newList, 'localList')
+      },
+      selectedRsqIds (newList) {
+        this.fetchIds(newList, 'selectedLocalList')
+      },
+      disabledRsqIds (newList) {
+        this.fetchIds(newList, 'disabledLocalList')
+      }
+    },
     components: {
       'avatar': Avatar
     },
@@ -130,6 +141,20 @@
           }
         })
       },
+      fetchIds (sourceList, targetListName) {
+        if (!sourceList || sourceList.length === 0) {
+          return
+        }
+        var ids = util.extractProp(sourceList, 'id')
+        var corpId = this.loginUser.authUser.corpId
+        window.rsqadmg.exec('showLoader')
+        this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
+          .then(idMap => {
+            //  TODO:
+            this[targetListName] = util.getMapValuePropArray(idMap)
+            window.rsqadmg.exec('hideLoader')
+          })
+      },
       prepareIds () {
         //  将rsqUserId转换为userId
         var that = this
@@ -176,7 +201,7 @@
 //      this.$on('todo-data-ready', function() {
 //        that.prepareIds()
 //      })
-      this.prepareIds()
+//      this.prepareIds()
     }
   }
 </script>

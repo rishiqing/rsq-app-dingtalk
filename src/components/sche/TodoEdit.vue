@@ -56,22 +56,23 @@
   export default {
     data () {
       return {
-        editItem: {}
+        editItem: {},
+        joinUsers: []
       }
     },
     computed: {
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
       },
-      joinUsers () {
+//      joinUsers () {
 //        var todo = this.$store.state.todo.currentTodo
-        var todo = this.editItem
-        if (todo) {
-          return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
-        } else {
-          return []
-        }
-      },
+//        var todo = this.editItem
+//        if (todo) {
+//          return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
+//        } else {
+//          return []
+//        }
+//      },
       normalCommonList () {
         var list = this.editItem.comments
         if (list) {
@@ -93,53 +94,7 @@
     },
     beforeRouteEnter (to, from, next) {
       next()
-      //  暂时采用同步的方式，只有当获取到了数据之后，才显示页面
-//      waitForData: true,
-//      //  本页面的状态数据
-//      data(t) {
-//        window.rsqadmg.exec('showLoader')
-//        return this.$store.dispatch('getTodo')
-//            .then(function() {
-//          window.rsqadmg.exec('hideLoader')
-//        })
-//        var that = this
-//
-//        setTimeout(function() {
-//          window.rsqadmg.exec('showLoader')
-//          return that.getTodo()
-//              .then(function() {
-//                var newItem = {}
-//                util.extendObject(newItem, that.currentTodo)
-//                t.next({editItem: newItem})
-//                that.$nextTick(function() {
-//                  that.$broadcast('todo-data-ready')
-//                })
-//                window.rsqadmg.exec('hideLoader')
-//              })
-//        }, 0)
-//      }
     },
-//    vuex: {
-//      actions: {
-//        getTodo, updateTodo, updateTodoDate, deleteTodo
-//      },
-//      getters: {
-//        currentDate(state) {
-//          return state.schedule.strCurrentDate
-//        },
-//        currentTodo(state) {
-//          return state.todo.currentTodo || {}
-//        },
-//        joinUsers(state) {
-//          var todo = state.todo.currentTodo
-//          if (todo) {
-//            return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
-//          } else {
-//            return []
-//          }
-//        }
-//      }
-//    },
     methods: {
       initData () {
         window.rsqadmg.exec('showLoader')
@@ -147,6 +102,8 @@
             .then(item => {
               console.log('item----%o', item)
               util.extendObject(this.editItem, item)
+              this.joinUsers = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
+              console.log('===============++++' + JSON.stringify(this.joinUsers))
               window.rsqadmg.exec('hideLoader')
             })
       },
@@ -217,7 +174,6 @@
         })
       },
       finishChecked (status) {
-//        var status = this.editItem.pIsDone
         console.log('----status----====' + status)
         if (status !== this.editItem.isDone) {
           this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
