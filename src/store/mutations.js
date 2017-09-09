@@ -158,6 +158,15 @@ export default {
   },
   TD_COMMENT_CREATED (state, p) {
     state.todo.currentTodo.comments.push(p.comment)
+  },
+  TD_DATE_HAS_TD_CACHE (state, p) {
+    var daysHasTodo = p.daysHasTodo
+    for (var d = p.startDate.getTime(); d <= p.endDate.getTime(); d += 24 * 3600 * 1000) {
+      state.dayHasTodoCache[String(d)] = daysHasTodo.indexOf(d) !== -1
+    }
+  },
+  TD_DATE_HAS_TD_CACHE_DELETE (state, p) {
+    delete state.dayHasTodoCache[p.numDate]
   }
   /* --------------------------------- */
 }

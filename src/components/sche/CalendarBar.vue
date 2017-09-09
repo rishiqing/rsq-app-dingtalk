@@ -6,10 +6,10 @@
 				    v-for="day in days"
             :key="day.date.getTime()"
 				    >
+          <div class="cal-day-tag" :class="{'tag-active': day.showTag}"></div>
 					<v-touch class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
-            <!--{{day.date.getDate()}}-->
-            {{day.date.getDate()}}
+            {{dateText(day)}}
           </v-touch>
         </td>
 			</tr>
@@ -24,7 +24,8 @@
     props: {
       days: Array,
       barIndex: Number,
-      highlightDay: Date
+      highlightDay: Date,
+      todayValue: Number
     },
     computed: {
       barOffsetStyle () {
@@ -33,6 +34,10 @@
     },
     components: {},
     methods: {
+      dateText (day) {
+        //  如果是当天，则显示“今”这个字
+        return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
+      },
       isHighLight (date) {
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
       },
@@ -61,7 +66,9 @@
     width: 100%;
     height: 100%;
   }
-  .cal-weekday {}
+  .cal-weekday {position:relative;}
+  .cal-day-tag {position:absolute;top:0;right: 10px;border-radius:50%;}
+  .tag-active {width:4px;height:4px;background:#00f;}
   .cal-day {margin:0 auto;width:30px;height:30px;line-height:30px;}
   .cal-day--focus {
     background:$mainColor;

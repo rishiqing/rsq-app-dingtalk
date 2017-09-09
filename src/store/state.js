@@ -76,5 +76,7 @@ export default {
   //  openid对应的rsqid的缓存
   openidCache: {},
   //  rsqid对应的openid的缓存
-  rsqidCache: {}
+  rsqidCache: {},
+  //  每一天是否含有todo的cache，以date.getTime()的Number类型作为key值，true和false作为value值
+  dayHasTodoCache: {}
 }

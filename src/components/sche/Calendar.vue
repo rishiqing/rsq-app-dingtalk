@@ -29,6 +29,7 @@
             :days="days"
             :bar-index="index"
             :highlight-day="selectDate"
+            :today-value="todayValue"
             @click-cal-bar-day="triggerSelectDate"
 					></r-cal-bar>
 				</div>
@@ -54,9 +55,23 @@
       }
     },
     props: {
-      defaultSelectDate: Date
+      defaultSelectDate: Date,
+      showHasTodoTag: {
+        type: Boolean,
+        default: true
+      }
     },
-    computed: {},
+    computed: {
+      isToday () {
+        if (!this.selectDate) {
+          return false
+        }
+        return this.selectDate.getTime() === this.todayValue
+      },
+      todayValue () {
+        return this.clearTime(new Date()).getTime()
+      }
+    },
     components: {
       'r-cal-bar': CalendarBar
     },
@@ -70,12 +85,6 @@
         this.focusDate = today
         this.resetBar()
         this.triggerSelectDate(today)
-      },
-      isToday () {
-        if (!this.selectDate) {
-          return false
-        }
-        return this.selectDate.getTime() === this.clearTime(new Date()).getTime()
       },
       resetDays (focusDate) {
         return [
@@ -123,6 +132,7 @@
         this.daysArray = this.resetDays(this.focusDate)
         this.easeTrans = false
         this.translateX = 'translateX(0)'
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
       }
     },
     mounted () {

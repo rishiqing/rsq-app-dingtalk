@@ -2,6 +2,7 @@
   <div class="router-view content--cal">
     <r-calendar
       @click-cal-day="fetchItems"
+      @after-cal-swipe="fetchDatesHasTodo"
       :default-select-date="dateSelect"
     ></r-calendar>
     <r-todo-item-list
@@ -46,6 +47,21 @@
     methods: {
       fetchItems (strDate) {
         this.$store.dispatch('fetchScheduleItems', strDate)
+      },
+      fetchDatesHasTodo (p) {
+        //  给日期加角标，值计算p.daysArray中的中间一个数组
+        var weekArray = p.daysArray[1]
+
+        this.$store.dispatch('getDatesHasTodo', {
+          startDate: weekArray[0].date,
+          endDate: weekArray[weekArray.length - 1].date})
+          .then(res => {
+            weekArray.forEach(day => {
+              if (res.indexOf(String(day.date.getTime())) !== -1) {
+                this.$set(day, 'showTag', true)
+              }
+            })
+          })
       }
     },
     mounted () {

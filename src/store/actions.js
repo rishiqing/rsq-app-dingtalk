@@ -219,6 +219,7 @@ export default {
           .then((item) => {
             //  清除缓存，强制从服务器获取数据
             dateStruct.dateResult.forEach(valDate => {
+              commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: valDate})
               return commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(valDate).format('YYYY-MM-DD')})
             })
           })
@@ -249,6 +250,7 @@ export default {
             var i = dateStruct.dateResult[0]
             //  清除缓存，强制从服务器获取数据
             for (; i <= dateStruct.dateResult[1]; i = i + 24 * 3600 * 1000) {
+              commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: i})
               commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(i).format('YYYY-MM-DD')})
             }
           })
@@ -369,6 +371,7 @@ export default {
           // alert('timeNum:' + timeNum + ',exceptDateNum:' + exceptDateNum)
           if (timeNum !== exceptDateNum) {
             commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(timeNum, '-')})
+            commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: String(timeNum)})
           }
         })
         break
@@ -376,6 +379,7 @@ export default {
         var i = dateStruct.dateResult[0]
         for (; i <= dateStruct.dateResult[1]; i = i + 24 * 3600 * 1000) {
           commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(i, '-')})
+          commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: String(i)})
         }
         break
       default:
@@ -425,6 +429,47 @@ export default {
 
         dispatch('invalidateDateItems', sourceDateStruct, curArrayIndex)
       })
+  },
+  /**
+   * 获取是否当天有日程
+   * @param commit
+   * @param state
+   * @param p
+   */
+  getDatesHasTodo ({ commit, state }, p) {
+    var hasCache = true
+    var start = p.startDate.getTime()
+    var end = p.endDate.getTime()
+    //  如果start和end中有一天没有缓存，那么就强制从服务器读取缓存
+    for (var d = start; d <= end; d += 24 * 3600 * 1000) {
+      if (!state.dayHasTodoCache.hasOwnProperty(String(d))) {
+        hasCache = false
+        break
+      }
+    }
+    var promise
+    if (hasCache) {
+      promise = Promise.resolve()
+    } else {
+      promise = api.todo.getDatesHasTodo(p)
+        .then(result => {
+          p.daysHasTodo = result.date.split(',').map(text => {
+            return moment(text).valueOf()
+          })
+          commit('TD_DATE_HAS_TD_CACHE', p)
+        })
+    }
+    return promise.then(() => {
+      var cache = state.dayHasTodoCache
+      var resultArray = []
+      for (var d = start; d <= end; d += 24 * 3600 * 1000) {
+        var strDate = String(d)
+        if (cache[strDate]) {
+          resultArray.push(strDate)
+        }
+      }
+      return resultArray
+    })
   },
 /* ---------------------------------- */
 

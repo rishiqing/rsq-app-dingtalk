@@ -14,6 +14,7 @@ export default {
   'DELETE_TODO': 'task/rsqTodoData/:id',
   'GET_TODO': 'task/rsqTodoData/:id',
   'GET_SCHEDULE_TODOS': 'task/mainTodoList/getPeriodTodos',
+  'POST_DATES_HAS_TODO': 'task/v2/todo/getDatesHasTodo',
 
   'GET_STAFF_LIST': 'task/rsqCommonUser/getAllCompanyUserList',
   'GET_TODO_TITLE': 'task/rsqTodoTitle/getAllTodoTitleList',
