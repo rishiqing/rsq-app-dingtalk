@@ -56,11 +56,10 @@ export default {
       return api.todo.getInboxTodos()
         .then((todos) => {
           commit('INB_TODO_READY', {items: todos.reverse()})
+          return state.inbox.items
         })
     } else {
-      return Promise.resolve().then(() => {
-        commit('INB_TODO_READY', {items: items})
-      })
+      return Promise.resolve(items)
     }
   },
   /**
@@ -68,27 +67,27 @@ export default {
    * 典型场景：在日程页面创建了一条日期为空的任务，会自动放到收纳箱中
    * @param commit
    * @param state
+   * @param dispatch
    * @param p
    * @param p.newItem
    * @param p.todoType
    */
-  createInboxItem ({commit, state, dispatch}, props) {
+  createInboxItem ({commit, state, dispatch}, p) {
     var inbox = state.inbox
-    var mu = 'INB_TODO_CREATED'
-    var params = props.props
-    params['pContainer'] = 'inbox'
+    var newItem = p.newItem
+    newItem['pContainer'] = 'inbox'
     var promise
     //  如果inbox.items不存在，则从服务器先获取到inbox，然后获取inbox中任务的顺序，然后再保存
     if (!inbox.items) {
-      promise = dispatch('fetchInboxItems', { commit, state })
+      promise = dispatch('fetchInboxItems')
     } else {
       promise = Promise.resolve()
     }
-    return promise.then(() => {
-      params['pDisplayOrder'] = util.getNextOrder(inbox.items, 'pDisplayOrder')
-      return api.todo.postNewTodo(params)
+    return promise.then((items) => {
+      newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
+      return api.todo.postNewTodo(newItem)
         .then((item) => {
-          commit(mu, {item: item})
+          commit('INB_TODO_CREATED', {item: item})
         })
     }).catch(err => {
       alert('error:' + JSON.stringify(err))

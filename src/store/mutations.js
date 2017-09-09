@@ -108,9 +108,10 @@ export default {
    * @constructor
    */
   INB_TODO_CREATED (state, p) {
-    if (state.inbox.items) {
-      state.inbox.items.unshift(p.item)
+    if (!state.inbox.items) {
+      state.inbox.items = []
     }
+    state.inbox.items.unshift(p.item)
   },
   /* --------------------------------- */
 

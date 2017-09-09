@@ -119,7 +119,6 @@
         }
 
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
-
         var that = this
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.editItem, todoType: this.isInbox ? 'inbox' : 'schedule'})
             .then(function () {
