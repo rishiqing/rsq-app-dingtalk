@@ -32,7 +32,7 @@
 					:index-title="'成员'"
 					:select-title="'请选择成员'"
 					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUsers"
+					:selected-rsq-ids="joinUserRsqIds"
 					:disabled-rsq-ids="[]"
 					@member-changed="saveMember"
 			></r-input-member>
@@ -57,7 +57,7 @@
     data () {
       return {
         editItem: {},
-        joinUsers: []
+        joinUserRsqIds: []
       }
     },
     computed: {
@@ -100,10 +100,11 @@
         window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('getTodo')
             .then(item => {
-              console.log('item----%o', item)
               util.extendObject(this.editItem, item)
-              this.joinUsers = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
-              console.log('===============++++' + JSON.stringify(this.joinUsers))
+              var joinUserArray = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
+              this.joinUserRsqIds = joinUserArray.map(obj => {
+                return obj['id'] + ''
+              })
               window.rsqadmg.exec('hideLoader')
             })
       },
@@ -157,24 +158,21 @@
               window.rsqadmg.execute('toast', {message: '保存成功'})
             })
       },
-      saveMember (selList) {
-        var oldArray = this.joinUsers.map(function (obj) {
-          return obj['id'] + ''
-        })
-        var idArray = util.extractProp(selList, 'rsqUserId')
-        var compRes = util.compareList(oldArray, idArray)
-        window.rsqadmg.execute('showLoader', {text: '保存中...'})
-        this.$store.dispatch('updateTodo', {editItem: {
+      saveMember (idArray) {
+        var compRes = util.compareList(this.joinUserRsqIds, idArray)
+        var params = {
           receiverIds: idArray.join(','),
           addJoinUsers: compRes.addList.join(','),
           deleteJoinUsers: compRes.delList.join(',')
-        }}).then(() => {
+        }
+        window.rsqadmg.execute('showLoader', {text: '保存中...'})
+        this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
+          this.joinUserRsqIds = idArray
           window.rsqadmg.exec('hideLoader')
           window.rsqadmg.execute('toast', {message: '保存成功'})
         })
       },
       finishChecked (status) {
-        console.log('----status----====' + status)
         if (status !== this.editItem.isDone) {
           this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
               .then(() => {

@@ -28,7 +28,7 @@
 					:index-title="'成员'"
 					:select-title="'请选择成员'"
 					:user-rsq-ids="[]"
-					:selected-rsq-ids="[]"
+					:selected-rsq-ids="joinUserRsqIds"
 					:disabled-rsq-ids="[]"
 					@member-changed="saveMember"
 			></r-input-member>
@@ -40,7 +40,6 @@
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
-  import util from 'ut/jsUtil'
   import dateUtil from 'ut/dateUtil'
   import moment from 'moment'
 
@@ -52,7 +51,8 @@
           dates: null,
           startDate: null,
           endDate: null
-        }
+        },
+        joinUserRsqIds: []
       }
     },
     computed: {
@@ -101,8 +101,8 @@
         this.editItem.endDate = endDate
         this.editItem.dates = dates
       },
-      saveMember (selList) {
-        var idArray = util.extractProp(selList, 'rsqUserId')
+      saveMember (idArray) {
+        this.joinUserRsqIds = idArray
         this.editItem.receiverIds = idArray.join(',')
       },
       saveTodo () {
