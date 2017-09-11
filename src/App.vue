@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="rsq-webview">
-    <img src="./assets/img/todo-empty.png" alt="">
     <router-view></router-view>
     <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
   </div>
