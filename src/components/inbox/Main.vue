@@ -50,7 +50,7 @@
       this.fetchItems()
       window.rsqadmg.exec('setTitle', {title: this.titleName})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
-      this.$store.dispatch('setNav', true)
+      this.$store.dispatch('setNav', {isShow: true})
     }
   }
 </script>

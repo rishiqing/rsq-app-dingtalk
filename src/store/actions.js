@@ -8,24 +8,26 @@ export default {
   /**
    * 设置是否显示底部导航栏
    * @param commit
-   * @param isShow
+   * @param p
+   * @param p.isShow
    */
-  setNav ({ commit }, isShow) {
-    commit('SYS_NAV_SHOW', {isShow: isShow})
+  setNav ({ commit }, p) {
+    commit('SYS_NAV_SHOW', p)
   },
   /**
    * 登录方法
    * @param commit
-   * @param state
-   * @param username
-   * @param password
+   * @param p
+   * @param p.username
+   * @param p.password
    */
   login ({ commit }, p) {
     return api.system.login(p)
-      .then((user) => {
+      .then(user => {
         commit('SYS_USR_LOGIN', {user: user})
-      }, (err) => {
-        window.rsqadmg.log(JSON.stringify(err))
+      })
+      .catch((err) => {
+        alert(JSON.stringify(err))
       })
   },
 /**
@@ -35,12 +37,11 @@ export default {
  */
   logout ({ commit }) {
     return api.system.logout()
-      .then((result) => {
-        window.rsqadmg.log('logout res:' + JSON.stringify(result))
+      .then(() => {
         commit('SYS_USR_LOGOUT')
       })
       .catch((err) => {
-        window.rsqadmg.log(JSON.stringify(err))
+        alert(JSON.stringify(err))
       })
   },
 
@@ -54,7 +55,7 @@ export default {
     let items = state.inbox.items
     if (items == null) {
       return api.todo.getInboxTodos()
-        .then((todos) => {
+        .then(todos => {
           commit('INB_TODO_READY', {items: todos.reverse()})
           return state.inbox.items
         })
@@ -83,14 +84,14 @@ export default {
     } else {
       promise = Promise.resolve()
     }
-    return promise.then((items) => {
+    return promise.then(items => {
       newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
       return api.todo.postNewTodo(newItem)
-        .then((item) => {
+        .then(item => {
           commit('INB_TODO_CREATED', {item: item})
         })
     }).catch(err => {
-      alert('error:' + JSON.stringify(err))
+      alert(JSON.stringify(err))
     })
   },
   // -----------------inbox actions end-------------------------
@@ -102,21 +103,21 @@ export default {
    * 2  如果dateItems中没有，则调用api从服务器上读取
    * @param commit
    * @param state
-   * @param date
+   * @param strDate
    */
-  fetchScheduleItems ({ commit, state }, strDate) {
+  fetchScheduleItems ({ commit, state }, { strDate }) {
     if (strDate instanceof Date) {
       strDate = moment(strDate).format('YYYY-MM-DD')
     }
     let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
-    let dateItems = state.schedule.dateItems
+    let dateItems = state.dateTodosCache
     if (dateItems[strCurrentDate]) {
       return Promise.resolve().then(() => {
         commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
       })
     } else {
       return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
-        .then((todos) => {
+        .then(todos => {
           let reverseTodo = todos.reverse()
           commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
           commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
@@ -129,7 +130,6 @@ export default {
    * @param p
    * @param p.newItem
    * @param p.todoType
-   * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
   submitCreateTodoItem ({ dispatch }, p) {
     //  判断下是创建日程item还是收纳箱item
@@ -148,7 +148,6 @@ export default {
    * @param p
    * @param p.newItem
    * @param p.todoType
-   * @returns {*}
    */
   createScheduleItem ({ commit, state, dispatch }, p) {
     //  暂时这么处理----日程任务默认为重要紧急，后面加上选择优先级功能之后再修改
@@ -168,7 +167,6 @@ export default {
         break
     }
   },
-
   /**
    * 单日逻辑：
    * 1  如果选择的日期中的任务列表存在于缓存中，那么从缓存中读取displayOrder
@@ -180,22 +178,19 @@ export default {
    * @param newItem
    * @param dateStruct
    */
-  createSingleScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
-    var sche = state.schedule
-    var scheDateStr = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    var itemCache = sche.dateItems
-
+  createSingleScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
+    var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    var itemCache = state.dateTodosCache
     //  读取顺序号
-    return dispatch('fetchScheduleItems', scheDateStr)
+    return dispatch('fetchScheduleItems', { strDate })
       .then(() => {
-        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[scheDateStr], 'pDisplayOrder')
-        console.log('-----displayOrder----' + newItem['pDisplayOrder'])
+        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
-          .then((item) => {
-            commit('SCH_TODO_CREATED', {item: item, list: itemCache[scheDateStr]})
+          .then(item => {
+            commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
           })
       }).catch(err => {
-        alert('error:' + JSON.stringify(err))
+        alert(JSON.stringify(err))
       })
   },
   /**
@@ -208,15 +203,13 @@ export default {
    * @param dateStruct
    */
   createDiscreteScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
-    var sche = state.schedule
-    var scheDateStr = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    var itemCache = sche.dateItems
-
-    return dispatch('fetchScheduleItems', scheDateStr)
+    var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    var itemCache = state.dateTodosCache
+    return dispatch('fetchScheduleItems', { strDate })
       .then(() => {
-        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[scheDateStr], 'pDisplayOrder')
+        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
-          .then((item) => {
+          .then(item => {
             //  清除缓存，强制从服务器获取数据
             dateStruct.dateResult.forEach(valDate => {
               commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: valDate})
@@ -224,7 +217,7 @@ export default {
             })
           })
       }).catch(err => {
-        alert('error:' + JSON.stringify(err))
+        alert(JSON.stringify(err))
       })
   },
   /**
@@ -238,15 +231,14 @@ export default {
    * @returns {*}
    */
   createRangeScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
-    var sche = state.schedule
-    var scheDateStr = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    var itemCache = sche.dateItems
+    var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    var itemCache = state.dateTodosCache
 
-    return dispatch('fetchScheduleItems', scheDateStr)
+    return dispatch('fetchScheduleItems', { strDate })
       .then(() => {
-        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[scheDateStr], 'pDisplayOrder')
+        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
-          .then((item) => {
+          .then(item => {
             var i = dateStruct.dateResult[0]
             //  清除缓存，强制从服务器获取数据
             for (; i <= dateStruct.dateResult[1]; i = i + 24 * 3600 * 1000) {
@@ -255,7 +247,7 @@ export default {
             }
           })
       }).catch(err => {
-        alert('error:' + JSON.stringify(err))
+        alert(JSON.stringify(err))
       })
   },
   // -----------------schedule actions end-------------------------
@@ -283,22 +275,19 @@ export default {
   setCurrentTodo ({ commit }, item) {
     commit('TD_CURRENT_TODO_SET', {item: item})
   },
-
   /**
    * 首先检查schedule的items中是否已经获取到todo的详细信息，如果没有获取过，则请求服务器获取
    * 当获取到item的详细信息时，item会添加cDetail标记，表示已经获取过，下次将不会再获取细节信息
    * @param commit
+   * @param state
    * @param p
    * @param p.todo
-   * @returns {Promise.<TResult>|*|Promise|Function|any}
    */
   getTodo ({ commit, state }, p) {
     let todo = p ? p.todo : state.todo.currentTodo
-    // let list = todo.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
-    // let orgTodo = util.findById(list, todo.id)
     if (!todo.cDetail) {
       return api.todo.getTodo(todo)
-        .then((result) => {
+        .then(result => {
           result.cDetail = true
           commit('TD_TODO_GET', {todo: result})
           return result
@@ -333,17 +322,19 @@ export default {
     //  如果id存在，则ajax更新
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
-      .then((resTodo) => {
+      .then(resTodo => {
         //  处理缓存数据
         var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
         var targetDateStruct = dateUtil.backend2frontend(editItem.dates, editItem.startDate, editItem.endDate)
-        var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+        var curArrayIndex = todo.pContainer === 'inbox'
+          ? 0
+          : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
         if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
           commit('TD_TODO_DELETED', {item: todo})
         }
-        dispatch('invalidateDateItems', targetDateStruct, curArrayIndex)
-        dispatch('invalidateDateItems', sourceDateStruct, curArrayIndex)
+        dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
+        dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
 
         commit('TD_TODO_UPDATED', {todo: resTodo})
       })
@@ -359,7 +350,7 @@ export default {
    * @param dateStruct
    * @param exceptDateNum
    */
-  invalidateDateItems ({ commit, state }, dateStruct, exceptDateNum) {
+  invalidateDateItems ({ commit, state }, {dateStruct, exceptDateNum}) {
     if (dateStruct.dateType == null && exceptDateNum !== 0) {
       state.inbox.items = null
       return
@@ -368,7 +359,6 @@ export default {
       case 'single':
       case 'discrete':
         dateStruct.dateResult.forEach(timeNum => {
-          // alert('timeNum:' + timeNum + ',exceptDateNum:' + exceptDateNum)
           if (timeNum !== exceptDateNum) {
             commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(timeNum, '-')})
             commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: String(timeNum)})
@@ -403,7 +393,7 @@ export default {
     //  如果id存在，则ajax更新
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
-      .then((todo) => {
+      .then(todo => {
         commit('TD_TODO_UPDATED', {todo: todo})
       })
   },
@@ -420,14 +410,13 @@ export default {
   deleteTodo ({ commit, state, dispatch }, p) {
     var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
-      .then((res) => {
+      .then(() => {
         commit('TD_TODO_DELETED', {item: todo})
-
         //  清除缓存数据
         var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
-        dispatch('invalidateDateItems', sourceDateStruct, curArrayIndex)
+        dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
       })
   },
   /**
@@ -476,7 +465,7 @@ export default {
   fetchStaffList ({ commit, state }) {
     if (state.staff.list == null) {
       return api.system.fetchStaffList()
-        .then((list) => {
+        .then(list => {
           commit('SYS_STF_LST_READY', {list: list})
         })
     } else {
@@ -487,15 +476,16 @@ export default {
    * 根据传入的openid获取相应的rsqid，首先从缓存中读取，如果缓存中不存在，则从服务器读取
    * @param commit
    * @param state
-   * @param props.idArray
-   * @param props.corpId
+   * @param p
+   * @param p.idArray
+   * @param p.corpId
    */
-  fetchRsqidFromUserid ({ commit, state }, props) {
+  fetchRsqidFromUserid ({ commit, state }, p) {
     var openidsNotInCache = []
     var result = {}
     var cache = state.openidCache
     var promise
-    props.idArray.forEach(userId => {
+    p.idArray.forEach(userId => {
       if (cache[userId]) {
         result[userId] = cache[userId]
       } else {
@@ -503,7 +493,7 @@ export default {
       }
     })
     if (openidsNotInCache.length > 0) {
-      promise = api.appAuth.getOpenidMap({corpId: props.corpId, idArray: openidsNotInCache})
+      promise = api.appAuth.getOpenidMap({corpId: p.corpId, idArray: openidsNotInCache})
         .then(resp => {
           var mapList = resp.result
           mapList.forEach(idMap => {
@@ -521,18 +511,20 @@ export default {
       return result
     })
   },
-
   /**
    * 根据传入的rsqid获取相应的openid，首先从缓存中读取，如果缓存中不存在，则从服务器读取
    * @param commit
    * @param state
+   * @param p
+   * @param p.idArray
+   * @param p.corpId
    */
-  fetchUseridFromRsqid ({ commit, state }, props) {
+  fetchUseridFromRsqid ({ commit, state }, p) {
     var idsNotInCache = []
     var result = {}
     var cache = state.rsqidCache
     var promise
-    props.idArray.forEach(openid => {
+    p.idArray.forEach(openid => {
       if (cache[openid]) {
         result[openid] = cache[openid]
       } else {
@@ -540,7 +532,7 @@ export default {
       }
     })
     if (idsNotInCache.length > 0) {
-      promise = api.appAuth.getRsqidMap({corpId: props.corpId, idArray: idsNotInCache})
+      promise = api.appAuth.getRsqidMap({corpId: p.corpId, idArray: idsNotInCache})
         .then(resp => {
           var mapList = resp.result
           mapList.forEach(idMap => {

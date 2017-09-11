@@ -27,15 +27,14 @@ var proxyTable = config.dev.proxyTable
 var app = express()
 var compiler = webpack(webpackConfig)
 
-console.log('webpackConfig.output.publicPath:' + webpackConfig.output.publicPath)
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
 })
-
+console.log('config.dev.hotPath:' + config.dev.hotPath)
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
   log: () => {},
-  path: "/__wallace_hmr"
+  path: config.dev.hotPath
 })
 // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function (compilation) {

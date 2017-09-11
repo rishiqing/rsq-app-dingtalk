@@ -63,6 +63,10 @@ const router = new Router({
   ]
 })
 
+/**
+ * 在路由切换时判断切换到的页面是否需要权限验证
+ * 如果需要权限验证，那么就判断用户信息是否存在，如果不存在，就读取用户信息
+ */
 router.beforeEach((to, from, next) => {
   store.state.env.isShowNav = false
   store.state.sys.currentPath = to.path

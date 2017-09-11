@@ -43,7 +43,7 @@
 
 </style>
 <script>
-  import Promise from 'es6-promise'
+  import { Promise } from 'es6-promise'
   import util from 'ut/jsUtil'
   import SelectMember from 'com/pub/SelectMember'
   import Avatar from 'com/pub/TextAvatar'

@@ -11,7 +11,7 @@
       v-if="items != null && items.length > 0"
     ></r-todo-item-list>
     <div class="itm-lst" v-else>
-      <img src="../../assets/日程.png" alt="">
+      <img src="../../assets/img/todo-empty.png" alt="">
       <p class="shouye">还没有日程，赶快去创建吧</p>
     </div>
     <!--<div class="float-action-button" v-touch:tap="showCreate">-->
@@ -46,7 +46,7 @@
     },
     methods: {
       fetchItems (strDate) {
-        this.$store.dispatch('fetchScheduleItems', strDate)
+        this.$store.dispatch('fetchScheduleItems', { strDate })
       },
       fetchDatesHasTodo (p) {
         //  给日期加角标，值计算p.daysArray中的中间一个数组
@@ -77,7 +77,7 @@
         }
       }
       window.rsqadmg.execute('setOptionButtons', btnParams)
-      this.$store.dispatch('setNav', true)
+      this.$store.dispatch('setNav', {isShow: true})
     }
   }
 </script>

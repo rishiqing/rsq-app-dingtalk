@@ -1,7 +1,7 @@
 <template>
   <div class="kefu">
     <div class="top">
-      <img src="../../assets/共创群二维码@3x.png" alt="">
+      <img src="../../assets/img/group-code.png" alt="">
       <p>加入日事清钉钉用户群</p>
     </div>
     <div class="bot">

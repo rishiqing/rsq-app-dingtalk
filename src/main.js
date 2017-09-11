@@ -8,8 +8,8 @@ import 'as/js/rsqDdmAdapter.js'
 import 'as/js/xssFilter.js'
 
 // 全局添加Promise垫片，防止不支持promise的浏览器中出现bug
-import Promise from 'es6-promise'
-Promise.polyfill()
+import Pro from 'es6-promise'
+Pro.polyfill()
 
 import Vue from 'vue'
 import VueTouch from 'vue-touch'
