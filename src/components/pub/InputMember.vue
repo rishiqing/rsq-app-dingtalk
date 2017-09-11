@@ -5,7 +5,7 @@
         {{indexTitle}}
 			</div>
 
-			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length<=3&&selectedLocalList.length>0">
+			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
 				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
 				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
 				<div class="itm-icon-img-wrap">
@@ -19,7 +19,7 @@
 			</div>
       <div class="itm-icons itm-rear-icons u-abs-right" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
-        <avatar v-for="item in selecteditems"
+        <avatar v-for="item in selectedItems"
                 :key="item.rsqUserId"
                 :src="item.avatar"
                 :username="item.name">
@@ -43,6 +43,7 @@
 
 </style>
 <script>
+  import { Promise } from 'es6-promise'
   import util from 'ut/jsUtil'
   import SelectMember from 'com/pub/SelectMember'
   import Avatar from 'com/pub/TextAvatar'
@@ -67,8 +68,19 @@
       loginUser () {
         return this.$store.getters.loginUser
       },
-      selecteditems () {
+      selectedItems () {
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
+      }
+    },
+    watch: {
+      userRsqIds (ids) {
+        this.fetchUserIds(ids, 'localList')
+      },
+      selectedRsqIds (ids) {
+        this.fetchUserIds(ids, 'selectedLocalList')
+      },
+      disabledRsqIds (ids) {
+        this.fetchUserIds(ids, 'disabledLocalList')
       }
     },
     components: {
@@ -93,16 +105,19 @@
           disabledIds: disabledArray || [], //  不能选的人
           success (res) {
 //            var list = res; //返回选中的成员列表[{openid:'联系人openid',name:'联系人姓名',headImg:'联系人头像url'}]
-//            console.log('---:list:' + JSON.stringify(res))
 //              that.memberList = res
+            if (res.length === 0) {
+              return this.$emit('member-changed', [])
+            }
 
             var idArray = util.extractProp(res, 'emplId')
             window.rsqadmg.exec('showLoader')
             that.$store.dispatch('fetchRsqidFromUserid', {corpId: corpId, idArray: idArray})
                 .then(function (idMap) {
                   window.rsqadmg.exec('hideLoader')
-                  that.selectedLocalList = util.getMapValuePropArray(idMap)
-                  that.$emit('member-changed', that.selectedLocalList)
+                  var userArray = util.getMapValuePropArray(idMap)
+                  var rsqIdArray = util.extractProp(userArray, 'rsqUserId')
+                  that.$emit('member-changed', rsqIdArray)
                 })
           }
         })
@@ -130,49 +145,20 @@
           }
         })
       },
-      prepareIds () {
-        //  将rsqUserId转换为userId
-        var that = this
-//        alert(this.selectedRsqIds)
-        var ids = util.extractProp(this.userRsqIds, 'id')
-        var disabledIds = util.extractProp(this.disabledRsqIds, 'id')
-        var selectedRsqIds = util.extractProp(this.selectedRsqIds, 'id')
-        var corpId = that.loginUser.authUser.corpId
-        var loadTimes = 0
-        var maxQuery = 3
+      fetchUserIds (ids, targetListName) {
+        if (!ids || ids.length === 0) {
+          this[targetListName] = []
+          return Promise.resolve()
+        }
+        var corpId = this.loginUser.authUser.corpId
         window.rsqadmg.exec('showLoader')
-        this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
-            .then(function (idMap) {
-              loadTimes += 1
-              if (loadTimes >= maxQuery) {
-                window.rsqadmg.exec('hideLoader')
-              }
-              that.localList = util.getMapValuePropArray(idMap)
-            })
-        this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: disabledIds})
-            .then(function (idMap) {
-              loadTimes += 1
-              if (loadTimes >= maxQuery) {
-                window.rsqadmg.exec('hideLoader')
-              }
-              that.disabledLocalList = util.getMapValuePropArray(idMap)
-            })
-        this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: selectedRsqIds})
-            .then(function (idMap) {
-              loadTimes += 1
-              if (loadTimes >= maxQuery) {
-                window.rsqadmg.exec('hideLoader')
-              }
-              that.selectedLocalList = util.getMapValuePropArray(idMap)
-            })
+        return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
+          .then(idMap => {
+            this[targetListName] = util.getMapValuePropArray(idMap)
+            window.rsqadmg.exec('hideLoader')
+          })
       }
     },
-    mounted () {
-//      var that = this
-//      this.$on('todo-data-ready', function() {
-//        that.prepareIds()
-//      })
-      this.prepareIds()
-    }
+    mounted () {}
   }
 </script>

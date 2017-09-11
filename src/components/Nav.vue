@@ -7,22 +7,16 @@
 					<span class="wenzi-ri ">日程</span>
 				</v-touch>
 			</div>
-
       <v-touch class="float-action-button" @tap="createNew">
         <i class="icon2-add-circle jiahao" ></i>
       </v-touch>
-
 			<div class="nav-item u-pull-right">
 				<v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
           <i class="icon2-member wo"></i>
-
 					<span class="wenzi-wo">我</span>
-
 				</v-touch>
 			</div>
-
 		</div>
-
 	</div>
 </template>
 <script>
@@ -41,17 +35,10 @@
     },
     methods: {
       reload (page) {
-//        this.$store.dispatch('requestCount', 'aloha')
         this.$router.replace(page)
       },
       createNew () {
-        if (this.currentPath === '/sche') {
-          this.$router.push('/todo/new/schedule')
-        } else if (this.currentPath === '/plan') {
-          this.$router.push('/plan/new')
-        } else if (this.currentPath === '/doc') {
-          this.$router.push('/docSet/new')
-        }
+        this.$router.push('/todo/new/schedule')
       }
     }
   }
@@ -65,7 +52,6 @@
   .c-bottom-nav .float-action-button {
     width: 29.6px;
     height: 29.6px;
-
     margin-top: 10.4px;
     margin-bottom: 9px;
     display: flex;
@@ -109,16 +95,12 @@
     margin-left: 6px;
     margin-top: 3px;
   }
-
   .c-bottom-nav .nav-item {
     width: 21%;
   }
-
   .row{
     width: 375px;
     height: 49px;
     background: #FDFDFF;
   }
-
-
 </style>

@@ -1,62 +1,83 @@
 <template>
 	<div class="">
-    <input type="text" PLACEHOLDER="在这里输入"  v-model="editItem.pTitle">
-    <button @click="getInboxItem"></button>
-    <ul>
-    <li v-for="shouna in inboxitems">
-      {{shouna}}
-    </li>
-    </ul>
+    <div class="input-panel">
+      <input class="input-title" type="text" placeholder="在这里输入" v-model="inputTitle">
+      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
+        <input value="创建" />
+      </v-touch>
+    </div>
+    <div class="margin-block"></div>
+    <r-todo-item-list
+      :items="items"
+      :is-checkable="false"
+      v-if="items != null && items.length > 0"
+    ></r-todo-item-list>
 	</div>
 </template>
 <script>
-  import dateUtil from 'ut/dateUtil'
+  import TodoItemList from 'com/sche/TodoItemList'
+
   export default {
     data () {
       return {
-        editItem: {
-          pTitle: '',
-          dates: null,
-          startDate: null,
-          endDate: null
-        }
+        titleName: '收纳箱',
+        inputTitle: ''
       }
     },
-    methods: {
-      getPlanedTime () {
-        var ei = this.editItem
-        var result = dateUtil.backend2frontend(ei.dates, ei.startDate, ei.endDate)
-        return (result && result.dateResult) ? result.dateResult[0] : null
-      },
-      getInboxItem () {
-//        var planTime = this.getPlanedTime()
-  //          if(!planTime) {
-  //            return window.rsqadmg.execute('alert', {message: '请选择任务日期'})
-  //          }
-        //  坑爹啊。。。格式不统一，需要做额外的hack
-       // this.editItem.pPlanedTime = dateUtil.dateNum2Text(planTime, '-') + ' 00:00:00'
-        this.$store.dispatch('createInboxItem', {props: this.editItem})
-          .then(function () {
-            window.rsqadmg.exec('hideLoader')
-            window.rsqadmg.execute('toast', {message: '创建成功'})
-//            that.$router.replace(window.history.back())
-          })
-      }
-    },
-
     computed: {
-      inboxitems () {
+      items () {
         return this.$store.state.inbox.items
       }
     },
+    components: {
+      'r-todo-item-list': TodoItemList
+    },
+    methods: {
+      fetchItems () {
+        this.$store.dispatch('fetchInboxItems')
+      },
+      saveTodo () {
+        window.rsqadmg.execute('showLoader', {text: '创建中...'})
+        this.$store.dispatch('submitCreateTodoItem', {newItem: {pTitle: this.inputTitle}, todoType: 'inbox'})
+          .then(() => {
+            this.inputTitle = ''
+            window.rsqadmg.exec('hideLoader')
+            window.rsqadmg.execute('toast', {message: '创建成功'})
+          })
+      }
+    },
     mounted () {
-      this.$store.dispatch('setNav', true)
+      this.fetchItems()
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+      this.$store.dispatch('setNav', {isShow: true})
     }
   }
 </script>
 <style>
-  button{
-    width: 20px;
-    height: 20px;
+  .margin-block {
+    height: 50px;
+  }
+  .input-panel {
+    position: fixed;
+    top:0;height: 50px;width:100%;z-index:99999;
+  }
+  .input-title {
+    box-sizing: border-box;
+    width: 80%;height:100%;
+    padding: 10px;
+  }
+  .btn-create {
+    position: fixed;
+    width: 20%;
+    right:0;top:0;height:50px;
+  }
+  .btn-create input {
+    width: 80%;
+    text-align: center;
+    height: 100%;
+    box-sizing: border-box;
+    border: none;
+    color: #00f;
   }
 </style>

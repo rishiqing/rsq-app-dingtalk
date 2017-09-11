@@ -16,14 +16,13 @@
   import TodoItem from 'com/sche/TodoItem'
 
   export default {
+    data () {
+      return {}
+    },
     name: 'TodoItemList',
-
     props: {
       items: Array,
       isCheckable: Boolean    //  是否显示完成复选框
-    },
-    data () {
-      return {}
     },
     components: {
       'r-todo-item': TodoItem

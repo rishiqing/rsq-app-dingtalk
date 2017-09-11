@@ -6,7 +6,7 @@
             :username="loginUser.authUser.name"
             :size="73"></avatar>
     </div>
-    <p class="xingming">李永州</p>
+    <p class="xingming">{{loginUser.authUser.name}}</p>
   </div>
   <div class="bottom">
     <div>
@@ -36,7 +36,9 @@
 
   export default {
     data () {
-      return {}
+      return {
+        titleName: '我'
+      }
     },
     computed: {
       loginUser () {
@@ -52,8 +54,9 @@
       }
     },
     mounted () {
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
-      this.$store.dispatch('setNav', true)
+      this.$store.dispatch('setNav', {isShow: true})
     }
 }
 </script>
@@ -65,9 +68,6 @@
     letter-spacing: 0.36px;
     padding-top: 15px;
   }
-
-
-
   .top{
     text-align: center;
     height: 200px;

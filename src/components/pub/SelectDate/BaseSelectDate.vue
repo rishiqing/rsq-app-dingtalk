@@ -48,7 +48,7 @@
                   </thead>
                   <tbody>
                   <tr v-for="weekArray in days">
-                    <v-touch tag="td" v-for="day in weekArray" :key="day.date"
+                    <v-touch tag="td" v-for="day in weekArray" :key="day.date.getTime()"
                              @tap="tapDay($event, day)">
                       <div class="dp-day"
                            :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected}">

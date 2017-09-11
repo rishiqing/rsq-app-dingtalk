@@ -1,5 +1,4 @@
 <style lang="scss">
-
 </style>
 <template>
 	<div class="router-view">
@@ -9,8 +8,8 @@
 			<r-input-title
 					slot="slotTitle"
 					:is-checkable="true"
-					:item-title.sync="editItem.pTitle"
-					:item-checked.sync="editItem.pIsDone"
+					:item-title="editItem.pTitle"
+					:item-checked="editItem.pIsDone"
 					@text-blur="titleBlur"
 					@click-checkout="finishChecked"
 			></r-input-title>
@@ -21,11 +20,11 @@
 			<!--&gt;</r-input-note>-->
 			<r-input-date
 					slot="slotDate"
-					:item-start-date.sync="editItem.startDate"
-					:item-end-date.sync="editItem.endDate"
-					:item-dates.sync="editItem.dates"
+					:item-start-date="editItem.startDate"
+					:item-end-date="editItem.endDate"
+					:item-dates="editItem.dates"
 					:item-sep="'/'"
-			        @date-changed="updateDate"
+          @date-changed="updateDate"
 			></r-input-date>
 			<r-input-member
 					slot="slotMember"
@@ -33,7 +32,7 @@
 					:index-title="'成员'"
 					:select-title="'请选择成员'"
 					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUsers"
+					:selected-rsq-ids="joinUserRsqIds"
 					:disabled-rsq-ids="[]"
 					@member-changed="saveMember"
 			></r-input-member>
@@ -51,16 +50,29 @@
 //  import InputNoteText from 'com/pub/InputNoteText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
-//  import CommentList from 'comps/public/CommentList'
   import util from 'ut/jsUtil'
+//  import CommentList from 'comps/public/CommentList'
 
   export default {
     data () {
       return {
-        editItem: {}
+        editItem: {},
+        joinUserRsqIds: []
       }
     },
     computed: {
+      currentTodo () {
+        return this.$store.state.todo.currentTodo || {}
+      },
+//      joinUsers () {
+//        var todo = this.$store.state.todo.currentTodo
+//        var todo = this.editItem
+//        if (todo) {
+//          return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
+//        } else {
+//          return []
+//        }
+//      },
       normalCommonList () {
         var list = this.editItem.comments
         if (list) {
@@ -80,67 +92,34 @@
 //      'r-input-note': InputNoteText,
 //      'r-comment-list': CommentList
     },
-    route: {
-      //  暂时采用同步的方式，只有当获取到了数据之后，才显示页面
-//      waitForData: true,
-//      //  本页面的状态数据
-//      data(t) {
-//        window.rsqadmg.exec('showLoader')
-//        return this.$store.dispatch('getTodo')
-//            .then(function() {
-//          window.rsqadmg.exec('hideLoader')
-//        })
-//        var that = this
-//
-//        setTimeout(function() {
-//          window.rsqadmg.exec('showLoader')
-//          return that.getTodo()
-//              .then(function() {
-//                var newItem = {}
-//                util.extendObject(newItem, that.currentTodo)
-//                t.next({editItem: newItem})
-//                that.$nextTick(function() {
-//                  that.$broadcast('todo-data-ready')
-//                })
-//                window.rsqadmg.exec('hideLoader')
-//              })
-//        }, 0)
-//      }
+    beforeRouteEnter (to, from, next) {
+      next()
     },
-//    vuex: {
-//      actions: {
-//        getTodo, updateTodo, updateTodoDate, deleteTodo
-//      },
-//      getters: {
-//        currentDate(state) {
-//          return state.schedule.strCurrentDate
-//        },
-//        currentTodo(state) {
-//          return state.todo.currentTodo || {}
-//        },
-//        joinUsers(state) {
-//          var todo = state.todo.currentTodo
-//          if (todo) {
-//            return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
-//          } else {
-//            return []
-//          }
-//        }
-//      }
-//    },
     methods: {
-      titleBlur () {
-        var title = this.editItem.pTitle
-        if (!title) {
+      initData () {
+        window.rsqadmg.exec('showLoader')
+        return this.$store.dispatch('getTodo')
+            .then(item => {
+              util.extendObject(this.editItem, item)
+              var joinUserArray = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
+              this.joinUserRsqIds = joinUserArray.map(obj => {
+                return obj['id'] + ''
+              })
+              window.rsqadmg.exec('hideLoader')
+            })
+      },
+      titleBlur (newTitle) {
+        if (!newTitle) {
           return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
         }
-        if (title !== this.currentTodo.pTitle) {
+        if (newTitle !== this.editItem.pTitle) {
           window.rsqadmg.exec('showLoader', {text: '保存中...'})
-//          this.updateTodo(this.currentTodo, {pTitle: title})
-//              .then(function() {
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
-//              })
+          this.$store.dispatch('updateTodo', {editItem: {pTitle: newTitle}})
+              .then(() => {
+                this.editItem.pTitle = newTitle
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '保存成功'})
+              })
         }
       },
       noteBlur () {
@@ -154,83 +133,80 @@
 //              })
         }
       },
-      updateDate () {
-        //  如果未发生改变则不保存
-        if (this.currentTodo.startDate === this.editItem.startDate &&
-          this.currentTodo.endDate === this.editItem.endDate &&
-          this.currentTodo.dates === this.editItem.dates) {
+      updateDate (result) {
+//        //  如果未发生改变则不保存
+        if (result.startDate === this.editItem.startDate &&
+          result.endDate === this.editItem.endDate &&
+          result.dates === this.editItem.dates) {
           return
         }
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-        var paramObj = {
-          startDate: this.editItem.startDate,
-          endDate: this.editItem.endDate,
-          dates: this.editItem.dates
+//        var paramObj = {
+//          startDate: this.editItem.startDate,
+//          endDate: this.editItem.endDate,
+//          dates: this.editItem.dates
+//        }
+        if (result.startDate == null &&
+          result.endDate == null &&
+          result.dates == null) {
+          result['pContainer'] = 'inbox'
         }
-        if (this.editItem.startDate == null &&
-          this.editItem.endDate == null &&
-          this.editItem.dates == null) {
-          paramObj['pContainer'] = 'inbox'
-        }
-//        this.updateTodoDate(this.currentTodo, paramObj)
-//            .then(function() {
-//              window.rsqadmg.exec('hideLoader')
-//              window.rsqadmg.execute('toast', {message: '保存成功'})
-//            })
+        this.$store.dispatch('updateTodoDate', {editItem: result})
+            .then(() => {
+              util.extendObject(this.editItem, result)
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
+            })
       },
-      saveMember (selList) {
-//        var oldArray = this.joinUsers.map(function (obj) {
-//          return obj['id'] + ''
-//        })
-//        var idArray = util.extractProp(selList, 'rsqUserId')
-//        var compRes = util.compareList(oldArray, idArray)
+      saveMember (idArray) {
+        var compRes = util.compareList(this.joinUserRsqIds, idArray)
+        var params = {
+          receiverIds: idArray.join(','),
+          addJoinUsers: compRes.addList.join(','),
+          deleteJoinUsers: compRes.delList.join(',')
+        }
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-//        var that = this
-//        this.updateTodo(this.currentTodo, {
-//          receiverIds: idArray.join(','),
-//          addJoinUsers: compRes.addList.join(','),
-//          deleteJoinUsers: compRes.delList.join(',')
-//        }).then(function() {
-//          window.rsqadmg.exec('hideLoader')
-//          window.rsqadmg.execute('toast', {message: '保存成功'})
-//        })
+        this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
+          this.joinUserRsqIds = idArray
+          window.rsqadmg.exec('hideLoader')
+          window.rsqadmg.execute('toast', {message: '保存成功'})
+        })
       },
-      finishChecked () {
-        var status = this.editItem.pIsDone
-        if (status !== this.currentTodo.isDone) {
-//          this.updateTodo(this.currentTodo, {pIsDone: status})
-//              .then(function() {
-//                var str = status ? '任务已完成':'任务已重启'
-//                window.rsqadmg.execute('toast', {message: str})
-//              })
+      finishChecked (status) {
+        if (status !== this.editItem.isDone) {
+          this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
+              .then(() => {
+                this.editItem.pIsDone = status
+                var str = status ? '任务已完成' : '任务已重启'
+                window.rsqadmg.execute('toast', {message: str})
+              })
         }
       },
       deleteCurrentTodo () {
-//        var that = this
+        var that = this
         window.rsqadmg.exec('confirm', {
           message: '确定要删除此任务？',
           success () {
             window.rsqadmg.execute('showLoader', {text: '删除中...'})
-//            that.deleteTodo(that.currentTodo)
-//                .then(function() {
-//                  window.rsqadmg.exec('hideLoader')
-//                  window.rsqadmg.execute('toast', {message: '删除成功'})
-//                  that.$router.replace(window.history.back())
-//                })
+            that.$store.dispatch('deleteTodo', {todo: that.currentTodo})
+                .then(() => {
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '删除成功'})
+                  that.$router.replace(window.history.back())
+                })
           }
         })
       }
     },
     mounted () {
-      util.extendObject(this.editItem, this.currentTodo)
-      window.rsqadmg.execute('setTitle', {title: '任务'})
+      this.initData()
       var that = this
+//      util.extendObject(this.editItem, this.currentTodo)
+      window.rsqadmg.execute('setTitle', {title: '任务'})
       window.rsqadmg.execute('setOptionButtons', {
         btns: [{key: 'deleteTodo', name: '删除'}],
-        success: function (res) {
-          if (res.key === 'newTodo') {
-            that.$router.replace(window.history.back())
-          } else if (res.key === 'deleteTodo') {
+        success (res) {
+          if (res.key === 'deleteTodo') {
             that.deleteCurrentTodo()
           }
         }

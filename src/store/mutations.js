@@ -30,12 +30,10 @@ import util from 'ut/jsUtil'
  * CACHED
  */
 export default {
-  increment  (state, p) {
-    state.count ++
-  },
   /**
    * 登录后设置全局loginUser
    * @param state
+   * @param p
    * @param p.user
    * @constructor
    */
@@ -50,11 +48,10 @@ export default {
   SYS_USR_LOGOUT (state) {
     state.loginUser = null
   },
-  //  section show and hide
-
   /**
    *
    * @param state
+   * @param p
    * @param p.list
    * @constructor
    */
@@ -64,6 +61,7 @@ export default {
   /**
    * 以openid作为key值进行缓存
    * @param state
+   * @param p
    * @param p.key
    * @param p.value
    * @constructor
@@ -74,6 +72,7 @@ export default {
   /**
    * 以rsqid作为key值进行缓存
    * @param state
+   * @param p
    * @param p.key
    * @param p.value
    * @constructor
@@ -84,6 +83,7 @@ export default {
   /**
    * 设置是否显示导航
    * @param state
+   * @param p
    * @param p.isShow
    * @constructor
    */
@@ -104,27 +104,60 @@ export default {
   /**
    *
    * @param state
+   * @param p
    * @param p.item
    * @constructor
    */
   INB_TODO_CREATED (state, p) {
-    if (state.inbox.items) {
-      state.inbox.items.unshift(p.item)
+    if (!state.inbox.items) {
+      state.inbox.items = []
     }
+    state.inbox.items.unshift(p.item)
   },
   /* --------------------------------- */
 
   /* ----------------schedule----------------- */
+  /**
+   * 指定日期的todo成功获取到
+   * @param state
+   * @param p
+   * @param p.strCurrentDate
+   * @param p.items
+   * @constructor
+   */
   SCH_TODO_READY (state, p) {
     state.schedule.strCurrentDate = p.strCurrentDate
     state.schedule.items = p.items
   },
+  /**
+   * 缓存todo
+   * @param state
+   * @param p
+   * @param p.strCurrentDate
+   * @param p.items
+   * @constructor
+   */
   SCH_TODO_CACHED (state, p) {
-    state.schedule.dateItems[p.strCurrentDate] = p.items
+    state.dateTodosCache[p.strCurrentDate] = p.items
   },
+  /**
+   * 清除缓存
+   * @param state
+   * @param p
+   * @param p.strCurrentDate
+   * @constructor
+   */
   SCH_TODO_CACHE_DELETE (state, p) {
-    delete state.schedule.dateItems[p.strCurrentDate]
+    delete state.dateTodosCache[p.strCurrentDate]
   },
+  /**
+   * 新建todo
+   * @param state
+   * @param p
+   * @param p.list
+   * @param p.item
+   * @constructor
+   */
   SCH_TODO_CREATED (state, p) {
     if (p.list instanceof Array) {
       p.list.unshift(p.item)
@@ -132,22 +165,58 @@ export default {
       state.schedule.items.unshift(p.item)
     }
   },
+  /**
+   * 勾选todo
+   * @param state
+   * @param p
+   * @param p.item
+   * @param p.status
+   * @constructor
+   */
   SCH_LIST_TODO_CHECKED (state, p) {
     p.item.pIsDone = p.status
   },
   /* --------------------------------- */
 
   /* ---------------todo收纳箱和日程页面的公共数据------------------ */
+  /**
+   * 设置当前的todo
+   * @param state
+   * @param p
+   * @param p.item
+   * @constructor
+   */
   TD_CURRENT_TODO_SET (state, p) {
     state.todo.currentTodo = p.item
   },
+  /**
+   * 获取到todo的detail之后，需要将todo的详情设置到currentTodo上
+   * @param state
+   * @param p
+   * @param p.todo
+   * @constructor
+   */
   TD_TODO_GET (state, p) {
     util.extendObject(state.todo.currentTodo, p.todo)
   },
+  /**
+   * 更新todo
+   * @param state
+   * @param p
+   * @param p.todo
+   * @constructor
+   */
   TD_TODO_UPDATED (state, p) {
     let item = state.todo.currentTodo
     util.extendObject(item, p.todo)
   },
+  /**
+   * 删除todo
+   * @param state
+   * @param p
+   * @param p.item
+   * @constructor
+   */
   TD_TODO_DELETED (state, p) {
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
     let index = items.indexOf(p.item)
@@ -155,6 +224,37 @@ export default {
       items.splice(index, 1)
     }
   },
+  /**
+   * 缓存日程是否含有todo
+   * @param state
+   * @param p
+   * @param p.daysHasTodo
+   * @param p.startDate
+   * @param p.endDate
+   * @constructor
+   */
+  TD_DATE_HAS_TD_CACHE (state, p) {
+    var daysHasTodo = p.daysHasTodo
+    for (var d = p.startDate.getTime(); d <= p.endDate.getTime(); d += 24 * 3600 * 1000) {
+      state.dayHasTodoCache[String(d)] = daysHasTodo.indexOf(d) !== -1
+    }
+  },
+  /**
+   * 清除日程是否含有todo
+   * @param state
+   * @param p
+   * @param p.numDate
+   * @constructor
+   */
+  TD_DATE_HAS_TD_CACHE_DELETE (state, p) {
+    delete state.dayHasTodoCache[p.numDate]
+  },
+  /**
+   * 新建评论
+   * @param state
+   * @param p
+   * @constructor
+   */
   TD_COMMENT_CREATED (state, p) {
     state.todo.currentTodo.comments.push(p.comment)
   }

@@ -2,7 +2,7 @@
 
 ## 分支说明
 
-* v1.0.0：基于vue1.0版本的uigit 
+* v1.0.0：基于vue1.0版本的uigit
 * v1.1.0：新版本UI + 笔记
 * v2.0.0：基于vue2.0版本，包括了新UI和笔记功能
 
@@ -68,3 +68,12 @@ See https://github.com/postcss/postcss-loader#sourcemap for more information.
 
 ### mutation中的参数问题
 vue2.0中，mutation的payload需要是一个对象，而不能同时传入多个参数！需要统一测试修改！
+
+## 多人开发流程
+目前由于钉钉方的限制，一个微应用只能有一个地址，因此一个微应用难以多人开发，目前多人开发采用同一个套件下新建多个微应用的方式
+
+1. 新建后台。由于一个java后台只能服务一个微应用，因此，需要在原来的基础上新建并启动一个新后台，服务微应用。并做好后台的映射
+2. 修改配置config/index.js
+  - hotPath: 开发时前端打包文件的热加载hmr路径，默认为"/__webpack_hmr"，不同的开发者需要设置不同的path
+  - dev-server.js: 修改`'webpack-hot-middleware/client?path=/__wallace_hmr&noInfo=true&reload=true'`中的path为配置文件中的hotPath
+  - authServer: 后台地址，根据不同的path映射到不同的后台

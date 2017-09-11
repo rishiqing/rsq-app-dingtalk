@@ -84,6 +84,17 @@ export default {
         })
     })
   },
+  getDatesHasTodo (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.POST_DATES_HAS_TODO, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   postComment (props) {
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_TODO_COMMENT, props)
