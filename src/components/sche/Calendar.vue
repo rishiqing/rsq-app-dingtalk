@@ -151,8 +151,9 @@
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
 
-  .c-cal-main {position: relative;color:#999;font-size: 1.4rem;
-    height: 81px;background: $bgColor;margin-bottom:12px;
+  .c-cal-main {
+    position: relative;color:white;font-size: 1.4rem;
+    height: 81px;background: #458CDA;
     border-bottom: 0.5px solid #E4E4E4;
   }
   .cal-title {
@@ -163,19 +164,19 @@
   .cal-title-today {position:absolute;top:0;height:100%;left:50%;margin-left:65px;
     font-size: 1.8rem;font-weight: bold;}
   .cal-week-title {
-    position: absolute;top: 0px;left: 0;right: 0;width: 100%;
+    position: fixed;top: 0px;left: 0;right: 0;width: 100%;
     padding: 0;height: 31px;line-height: 30px;
-    margin-bottom: -1px;color:#999;background: $bgColor;font-size:1.2rem;
+    margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
   }
   .c-cal-main table {
     text-align: center;table-layout: fixed;
     width: 100%;height: 100%;margin: 0;
   }
   .c-cal-main td {}
-  .cal-weekday {}
+  .cal-weekday {font-size: 0.293rem }
   .cal-content {
-    position: absolute; top: 30px;left: 0;right: 0;padding:0;
-    width: 100%;height:40px;overflow: hidden;
+    position: fixed; top: 30px;left: 0;right: 0;padding:0;
+    width: 100%;height:40px;overflow: hidden;background: #458CDA;
   }
   .cal-outer {position:relative;width:100%;height:100%;overflow:hidden;}
   .cal-inner {

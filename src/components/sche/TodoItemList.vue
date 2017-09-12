@@ -1,5 +1,6 @@
 <template>
-	<ul class="itm-lst itm-lst--border itm-lst--margin">
+	<!--<ul class="itm-lst itm-lst&#45;&#45;border itm-lst&#45;&#45;margin">-->
+  <ul>
 		<r-todo-item
 				v-for="item in items"
         :item="item"
@@ -10,7 +11,17 @@
 		></r-todo-item>
 	</ul>
 </template>
-<style lang="scss">
+<style lang="scss" scoped="">
+  @import "icomoon2.css";
+  ul{
+    background-color: white;
+    border-bottom:1px solid #DADADA ;
+    border-top:1px solid #DADADA ;
+    padding-left: 3%;
+  }
+  li:last-child{
+    border-bottom: none;
+  }
 </style>
 <script>
   import TodoItem from 'com/sche/TodoItem'

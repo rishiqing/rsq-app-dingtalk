@@ -1,26 +1,61 @@
 <template>
-	<li class="c-todo-item u-cf">
-		<v-touch class="itm-outer" @tap="clickItem($event)">
+	<li class="">
+		<v-touch class="" @tap="clickItem($event)">
 			<!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
-			<div class="itm-inner">
-				<div class="itm-title" :class="{'u-padding-left-40': isCheckable, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">
-          {{ item.pTitle }}<span :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        </div>
-				<v-touch class="itm-icons u-abs-left jsItemCheckbox" v-if="isCheckable" @tap="clickCheckOut">
-					<i class="jsItemCheckbox icon"
+			<!--<div class="itm-inner">-->
+				<!--<div class="itm-title" :class="{'u-padding-left-40': isCheckable, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">-->
+          <span class="todo-content">{{ item.pTitle }}</span>
+          <!--<span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>-->
+        <!--</div>-->
+				<v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
+					<i class="icon2-check-box select"
 					   :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
 				</v-touch>
 
-        <div class="itm-icons itm-icons--white-bg u-abs-right">
-          <i class="icon icon-access_alarm" v-if="item.clockAlert"></i>
-          <i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>
-        </div>
-			</div>
+        <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
+          <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;<i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>&ndash;&gt;-->
+        <!--</div>-->
+			<!--</div>-->
 		</v-touch>
 	</li>
 </template>
 <style lang="scss" scope>
+  @import "icomoon2.css";
 	.contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
+  .todo-content{
+    margin-left: 0.8rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    display: block;
+
+  }
+  .delayer{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #FF7A7A;
+    letter-spacing: 0;
+  }
+  li{
+    padding:0;
+    line-height:1.612rem ;
+    height: 1.612rem;
+    position: relative;
+    border-bottom:1px solid #DADADA ;
+  }
+  .item-title{
+
+  }
+  .select{
+    font-size: 17px;
+    position: absolute;
+    top:0.55rem;
+    background: #FFFFFF;
+    border: 1px solid #69ACEF;
+    border-radius: 1px;
+  }
+
 </style>
 <script>
   export default {

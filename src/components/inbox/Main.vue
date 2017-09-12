@@ -1,11 +1,10 @@
 <template>
 	<div class="">
-    <div class="input-panel">
-      <input class="input-title" type="text" placeholder="在这里输入" v-model="inputTitle">
+      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" />
+        <input value="创建" class="create"/>
+
       </v-touch>
-    </div>
     <div class="margin-block"></div>
     <r-todo-item-list
       :items="items"
@@ -54,7 +53,36 @@
     }
   }
 </script>
-<style>
+<style scoped>
+  input::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #999999;
+    line-height: 22px;
+  }
+  .create{
+    display: block;
+    text-align: center;
+    border: 1px solid #55A8FD;
+    border-radius: 2px;
+    height: 0.666rem;
+    line-height: 0.76rem;
+    width:1.413rem;
+    font-size: 15px;
+    color:#55A8FD;
+    position: absolute;
+    top:0.8rem;
+    right:0.35rem;
+
+  }
+  .write{
+    height:1.226rem;
+    background: #FFFFFF;
+    border-bottom:1px solid #E3E3E3;
+    border-top:1px solid #E3E3E3;
+    margin-top: 0.574rem;
+    padding-left:0.3rem;
+  }
   .margin-block {
     height: 50px;
   }
@@ -72,12 +100,12 @@
     width: 20%;
     right:0;top:0;height:50px;
   }
-  .btn-create input {
-    width: 80%;
-    text-align: center;
-    height: 100%;
-    box-sizing: border-box;
-    border: none;
-    color: #00f;
-  }
+  /*.btn-create input {*/
+    /*width: 80%;*/
+    /*text-align: center;*/
+    /*height: 100%;*/
+    /*box-sizing: border-box;*/
+    /*border: none;*/
+    /*color: #00f;*/
+  /*}*/
 </style>

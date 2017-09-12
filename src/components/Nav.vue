@@ -1,23 +1,23 @@
 <template>
-	<div class="c-bottom-nav z-index-xxxl">
-		<div class="row">
-			<div class="nav-item u-pull-left">
-				<v-touch class="text-icon" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
+  <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
+			<div class="left">
+				<v-touch class="" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
           <i class="icon2-schedule richeng"></i>
-					<span class="wenzi-ri ">日程</span>
+					<p class="sche ">日程</p>
 				</v-touch>
 			</div>
-      <v-touch class="float-action-button" @tap="createNew">
-        <i class="icon2-add-circle jiahao" ></i>
+      <div class="mid">
+      <v-touch class="" @tap="createNew">
+        <i class="icon2-add-circle add" ></i>
       </v-touch>
-			<div class="nav-item u-pull-right">
+      </div>
+			<div class="right">
 				<v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
-          <i class="icon2-member wo"></i>
-					<span class="wenzi-wo">我</span>
+          <i class="icon2-member me"></i>
+          <p class="my">我</p>
 				</v-touch>
 			</div>
 		</div>
-	</div>
 </template>
 <script>
   export default {
@@ -44,63 +44,85 @@
   }
 </script>
 <style scoped>
-  .c-bottom-nav {
-    position: fixed;bottom:0;left:0;right:0;height:49px;
-    background: #fff;
-    box-shadow: $zDeepShadow2;
-  }
-  .c-bottom-nav .float-action-button {
-    width: 29.6px;
-    height: 29.6px;
-    margin-top: 10.4px;
-    margin-bottom: 9px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 172.5px;
-  }
-  .jiahao{
-     color:#4D93DE;
-    font-size: 29.6px;
-  }
-  .u-pull-left{
-    padding-top: 6.5px;
-    margin-left: 21%;
-  }
-  .u-pull-right{
-    padding-top: 8px;
-    padding-bottom: 5px;
-    margin-right: 8%;
-  }
+
+
+
+
   .richeng {
      font-size: 25px;
+  color:  #999999;;
   }
-  .wo{
+
+  .bot{
+    border-top:1px solid #CDCDCD;
+    height: 1.306rem;
+    background-color: #FDFDFF;;
+  }
+
+  .richeng{
     font-size: 22px;
+
   }
-  .wenzi-ri{
+  .sche{
     font-family: PingFangSC-Regular;
     font-size: 10px;
-    color: #55A8FD;
+    color: #999999;
     letter-spacing: 0;
-    display: block;
-    margin-left: 3px;
+    margin:0;
+    padding:0;
+    margin-top:-4px;
   }
-  .wenzi-wo{
+  .me{
+    font-size: 22px;
+    color:   #999999;;
+  }
+  .my{
     font-family: PingFangSC-Regular;
     font-size: 10px;
-    color: #55A8FD;
+    color: #999999;
     letter-spacing: 0;
+    margin: 0;
+    padding:0;
+    margin:0 auto;
+    margin-top:-5px;
+  }
+  .left{
+    position: absolute;
+    left: 2.053rem;
+    bottom:1px;
+    padding-bottom:5px;
+  }
+  .right{
+    text-align: center;
+    padding-bottom:5px;
+    position: absolute;
+    right: 2.11rem;
+    bottom:1px;
+  }
+  .mid{
+    text-align: center;
+    padding-top: 3px;
+
+
+  }
+  .add{
+    color:#4D93DE;
+    font-size: 29.6px;
+
+
+  }
+  .bot:after{
+    content:'';
     display: block;
-    margin-left: 6px;
-    margin-top: 3px;
+    clear: both;
   }
-  .c-bottom-nav .nav-item {
-    width: 21%;
+
+
+  img{
+    width: 1.866rem;
+    height: 1.866rem;
+    margin-top:3.653rem ;
   }
-  .row{
-    width: 375px;
-    height: 49px;
-    background: #FDFDFF;
-  }
+
+
 </style>
