@@ -66,13 +66,28 @@
     width: 100%;
     height: 100%;
   }
-  .cal-weekday {position:relative;}
-  .cal-day-tag {position:absolute;top:0;right: 10px;border-radius:50%;}
-  .tag-active {width:4px;height:4px;background:#00f;}
-  .cal-day {margin:0 auto;width:30px;height:30px;line-height:30px;}
+  .cal-weekday {
+    position:relative;
+    font-family: PingFangSC-Regular;
+    font-size: 11px;
+    color: #FFFFFF;
+    line-height: 12px;
+  }
+  .cal-day-tag {position:absolute;top:5px;right: 23px;border-radius:50%;}
+  .tag-active {width:4px;height:4px;background:#30FFA8;}
+  .cal-day {
+    margin:0 auto;
+    width:30px;
+    height:30px;
+    line-height:30px;
+    font-family: PingFangSC-Medium;
+    font-size: 15px;
+    color: #FFFFFF;
+  }
   .cal-day--focus {
-    background:$mainColor;
-    color:$bgColor;
+    background:white;
+    color:#479AEF;
     border-radius: 50%;
+    font-size: 17px;
   }
 </style>

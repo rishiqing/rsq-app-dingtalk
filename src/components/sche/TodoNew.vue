@@ -182,7 +182,7 @@
     },
     mounted () {
       this.initData()
-      window.rsqadmg.execute('setTitle', {title: '新任务'})
+      window.rsqadmg.execute('setTitle', {title: '新建任务'})
       var btnParams
       var that = this
       btnParams = {

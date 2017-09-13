@@ -18,7 +18,7 @@
               <p class="">DING</p>
               <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
             </div>
-            <input class="mui-switch" type="checkbox" checked>
+            <input class="mui-switch" type="checkbox">
           </div>
 					<!--<r-input-date></r-input-date>-->
 					<!--<r-input-member></r-input-member>-->

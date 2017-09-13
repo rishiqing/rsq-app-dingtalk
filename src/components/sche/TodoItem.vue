@@ -3,14 +3,17 @@
 		<v-touch class="" @tap="clickItem($event)">
 			<!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
 			<!--<div class="itm-inner">-->
-				<!--<div class="itm-title" :class="{'u-padding-left-40': isCheckable, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone}">-->
-          <span class="todo-content">{{ item.pTitle }}</span>
-          <!--<span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>-->
-        <!--</div>-->
+				<div class="title-todo" >
+          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">{{ item.pTitle }}</span>
+          <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
+        </div>
 				<v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
 					<i class="icon2-check-box select"
 					   :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
-				</v-touch>
+          <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
+          <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
+
+        </v-touch>
 
         <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
           <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
@@ -23,19 +26,48 @@
 <style lang="scss" scope>
   @import "icomoon2.css";
 	.contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
-  .todo-content{
+  .title-todo{
+    display: flex;
+    align-items: center;
+  }
+  .margin-left{
     margin-left: 0.8rem;
+  }
+  .todo-content{
+
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-    display: block;
 
+
+  }
+  .hide{
+    display: none;
+  }
+  .isdisplay{
+    display: block;
+    position:absolute;
+    top:0.45rem;
+    left: 0.13rem;
+    font-size: 15px;
+    color:#55A8FD;
+  }
+  .for-hide{
+    position: absolute;
+    top:0.52rem;
+    left: 0.39rem;
+    display: block;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border: 1px solid white;
   }
   .delayer{
     font-family: PingFangSC-Regular;
     font-size: 15px;
     color: #FF7A7A;
     letter-spacing: 0;
+    margin-left: 13px;
   }
   li{
     padding:0;
@@ -48,11 +80,11 @@
 
   }
   .select{
+    color:#69ACEF;
     font-size: 17px;
     position: absolute;
     top:0.55rem;
     background: #FFFFFF;
-    border: 1px solid #69ACEF;
     border-radius: 1px;
   }
 
@@ -80,11 +112,15 @@
         //  这个是点击跳到编辑界面
         if (e.target.className.indexOf('jsItemCheckbox') === -1) {
           this.$emit('todo-item-click', this.item)
+          console.log('编辑进来了')
+          e.stopPropagation()
           e.preventDefault()
         }
       },
       clickCheckOut (e) {
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
+        console.log('点击进来了')
+        e.stopPropagation()
         e.preventDefault()
       }
     },
