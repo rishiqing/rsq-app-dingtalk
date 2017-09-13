@@ -4,7 +4,6 @@
 	     @panend="onPanEnd"
 	     @pancancel="onPanEnd"
        :pan-options="{ direction: 'horizontal', threshold: 10 }">
-
 	<!--<div class="cal-title z-index-3xs">-->
 			<!--<span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>-->
 			<!--<span>{{focusDate ? focusDate.getFullYear() : ''}}</span>-->
@@ -30,6 +29,7 @@
             :days="days"
             :bar-index="index"
             :highlight-day="selectDate"
+            :today-value="todayValue"
             @click-cal-bar-day="triggerSelectDate"
 					></r-cal-bar>
 				</div>
@@ -38,109 +38,115 @@
 	</v-touch>
 </template>
 <script>
-	import CalendarBar from 'com/sche/CalendarBar';
+  import CalendarBar from 'com/sche/CalendarBar'
+  import dateUtil from 'ut/dateUtil'
 
-	import dateUtil from 'ut/dateUtil';
+  export default {
+    name: 'Calendar',
+    data () {
+      return {
+        daysArray: [], //  有当前月份（周）、前一个月份（周）、后一个月份（周）三个数组组成
+        focusDate: null,  //  每一个当前显示的月份（周）都需要有一个focusDate
+        selectDate: null,  //  当前选中（高亮显示）的日期
+        easeTrans: false,
+        translateX: 'translateX(0)',
+        weeks: ['日', '一', '二', '三', '四', '五', '六'],
+        months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
+      }
+    },
+    props: {
+      defaultSelectDate: Date,
+      showHasTodoTag: {
+        type: Boolean,
+        default: true
+      }
+    },
+    computed: {
+      isToday () {
+        if (!this.selectDate) {
+          return false
+        }
+        return this.selectDate.getTime() === this.todayValue
+      },
+      todayValue () {
+        return this.clearTime(new Date()).getTime()
+      }
+    },
+    components: {
+      'r-cal-bar': CalendarBar
+    },
+    methods: {
+      triggerSelectDate (date) {
+        this.selectDate = date
+        this.$emit('click-cal-day', date)
+      },
+      backToToday () {
+        var today = this.clearTime(new Date())
+        this.focusDate = today
+        this.resetBar()
+        this.triggerSelectDate(today)
+      },
+      resetDays (focusDate) {
+        return [
+          this.getWeekDays(this.firstDayOfWeek(focusDate, -1)),
+          this.getWeekDays(this.firstDayOfWeek(focusDate, 0)),
+          this.getWeekDays(this.firstDayOfWeek(focusDate, 1))
+        ]
+      },
+      clearTime (date) {
+        return new Date(date.setHours(0, 0, 0, 0))
+      },
+      getWeekDays (focusDate) {
+        return dateUtil.getWeekDays(focusDate)
+      },
+      firstDayOfWeek (date, offset) {
+        return dateUtil.firstDayOfWeek(date, offset)
+      },
+      onPanMove (ev) {
+        if (this.easeTrans) {
+          return
+        }
+        var delta = ev.deltaX
+        this.translateX = 'translateX(' + delta + 'px)'
+      },
+      onPanEnd (ev) {
+        if (this.easeTrans) {
+          return
+        }
+        this.easeTrans = true
 
-	export default {
-		name: 'Calendar',
-		data(){
-			return{
-				daysArray:[], //有当前月份（周）、前一个月份（周）、后一个月份（周）三个数组组成
-				focusDate: null,  //每一个当前显示的月份（周）都需要有一个focusDate
-				selectDate: null,  //当前选中（高亮显示）的日期
-				easeTrans: false,
-				translateX: 'translateX(0)',
-				weeks:['日', '一', '二', '三', '四', '五', '六'],
-				months:['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
-			};
-		},
-		props: {
-			defaultSelectDate: Date
-		},
-		computed: {
-		},
-		components:{
-			'r-cal-bar': CalendarBar
-		},
-		methods: {
-			triggerSelectDate(date){
-//				this.$broadcast('sche-clear-highlight-day');
-				this.selectDate = date;
-				this.$emit('click-cal-day', date);
-			},
-			backToToday(){
-				var today = this.clearTime(new Date());
-				this.focusDate = today;
-				this.resetBar();
-				this.triggerSelectDate(today);
-			},
-			isToday(){
-				if(!this.selectDate){
-					return false;
-				}
-				return this.selectDate.getTime() == this.clearTime(new Date()).getTime();
-			},
-			resetDays(focusDate){
-				return [
-						this.getWeekDays(this.firstDayOfWeek(focusDate, -1)),
-						this.getWeekDays(this.firstDayOfWeek(focusDate, 0)),
-						this.getWeekDays(this.firstDayOfWeek(focusDate, 1))
-				]
-			},
-			clearTime: function(date){
-				return new Date(date.setHours(0,0,0,0));
-			},
-			getWeekDays(focusDate){
-				return dateUtil.getWeekDays(focusDate);
-			},
-			firstDayOfWeek(date, offset){
-				return dateUtil.firstDayOfWeek(date, offset);
-			},
-			onPanMove(ev){
-				if(this.easeTrans){
-					return;
-				}
-				var delta = ev.deltaX;
-				this.translateX = 'translateX(' + delta + 'px)';
-			},
-			onPanEnd(ev){
-				if(this.easeTrans){
-					return;
-				}
-				this.easeTrans = true;
+        var delta = ev.deltaX
+        var direction
 
-				var delta = ev.deltaX;
-				var direction;
+        if (Math.abs(delta) > 20 && ev.type === 'panend') {
+          direction = delta > 0 ? 1 : -1
+          this.translateX = 'translateX(' + (direction * 100) + '%)'
+        } else {
+          direction = 0
+          this.translateX = 'translateX(0)'
+        }
 
-				if (Math.abs(delta) > 20 && ev.type == 'panend') {
-					direction = delta > 0 ? 1 : -1;
-					this.translateX = 'translateX(' + (direction * 100) + '%)';
-				}else{
-					direction = 0;
-					this.translateX = 'translateX(0)';
-				}
+        this.focusDate = this.firstDayOfWeek(this.focusDate, -direction)
+      },
+      resetBar () {
+        this.daysArray = this.resetDays(this.focusDate)
+        this.easeTrans = false
+        this.translateX = 'translateX(0)'
+        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
+      }
+    },
+    mounted () {
+      //  初始化工作
+      this.focusDate = this.defaultSelectDate
+      this.resetBar()
 
-				this.focusDate = this.firstDayOfWeek(this.focusDate, -direction);
-			},
-			resetBar(){
-				this.daysArray = this.resetDays(this.focusDate);
-				this.easeTrans = false;
-				this.translateX = 'translateX(0)';
-			}
-		},
-		mounted(){
-			//  初始化工作
-			this.focusDate = this.defaultSelectDate;
-			this.resetBar();
+      this.triggerSelectDate(this.defaultSelectDate)
 
-			this.triggerSelectDate(this.defaultSelectDate);
-
-			var ele = document.getElementById('hMoveBar');
-			ele.addEventListener('transitionend', this.resetBar);
-			ele.addEventListener('webkitTransitionEnd', this.resetBar);
-		}
-	};
+      var ele = document.getElementById('hMoveBar')
+      ele.addEventListener('transitionend', this.resetBar)
+      ele.addEventListener('webkitTransitionEnd', this.resetBar)
+    }
+  }
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';

@@ -1,12 +1,9 @@
 <template>
   <div id="app" class="rsq-webview">
-
     <router-view></router-view>
-
     <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
   </div>
 </template>
-
 <script>
   import Nav from 'com/Nav'
 

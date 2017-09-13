@@ -13,33 +13,31 @@
 <style lang="scss">
 </style>
 <script>
-	import TodoItem from 'com/sche/TodoItem';
+  import TodoItem from 'com/sche/TodoItem'
 
-	export default{
-		name: 'TodoItemList',
-
-		props: {
-			items: Array,
-			isCheckable: Boolean    //是否显示完成复选框
-		},
-		data(){
-			return{};
-		},
-		components:{
-			'r-todo-item': TodoItem
-		},
-		methods: {
-			showEdit(item){
-				this.$store.dispatch('setCurrentTodo', item);
-				this.$router.push('/todo/' + item.id);
-			},
-			checkTodo(item, status){
-				this.$store.dispatch('submitTodoFinish',item, status)
-						.then(function(){
-							var str = status ? '任务已完成':'任务已重启';
-							rsqadmg.execute('toast', {message: str});
-						});
-			}
-		}
-	};
+  export default {
+    data () {
+      return {}
+    },
+    name: 'TodoItemList',
+    props: {
+      items: Array,
+      isCheckable: Boolean    //  是否显示完成复选框
+    },
+    components: {
+      'r-todo-item': TodoItem
+    },
+    methods: {
+      showEdit (item) {
+        this.$store.dispatch('setCurrentTodo', item)
+        this.$router.push('/todo/' + item.id)
+      },
+      checkTodo (item, status) {
+        this.$store.dispatch('submitTodoFinish', {item: item, status: status})
+            .then(function () {
+//              rsqadmg.execute('toast', {message: str})
+            })
+      }
+    }
+  }
 </script>

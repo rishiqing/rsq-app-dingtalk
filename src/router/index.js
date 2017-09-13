@@ -7,9 +7,7 @@ import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
 import InboxTodoNew from 'com/sche/TodoNew'
-// import InboxTodoEdit from 'com/sche/TodoEdit'
-import Plan from 'com/plan/Main'
-import Doc from 'com/doc/Main'
+import InboxTodoEdit from 'com/sche/TodoEdit'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 Vue.use(Router)
@@ -38,29 +36,17 @@ const router = new Router({
       component: kefu,
       meta: {requireAuth: true}
     },
-    // {
-    //   path: '/todo/:todoId',
-    //   name: 'todoEdit',
-    //   component: InboxTodoEdit,
-    //   meta: {requireAuth: true}
-    // },
+    {
+      path: '/todo/:todoId',
+      name: 'todoEdit',
+      component: InboxTodoEdit,
+      meta: {requireAuth: true}
+    },
     {
       //  todoType用来表示是收纳箱新建todo还是日程新建todo，"inbox" or "schedule"
       path: '/todo/new/:todoType',
       name: 'todoNew',
       component: InboxTodoNew,
-      meta: {requireAuth: true}
-    },
-    {
-      path: '/plan',
-      name: 'plan',
-      component: Plan,
-      meta: {requireAuth: true}
-    },
-    {
-      path: '/doc',
-      name: 'doc',
-      component: Doc,
       meta: {requireAuth: true}
     },
     {
@@ -77,6 +63,10 @@ const router = new Router({
   ]
 })
 
+/**
+ * 在路由切换时判断切换到的页面是否需要权限验证
+ * 如果需要权限验证，那么就判断用户信息是否存在，如果不存在，就读取用户信息
+ */
 router.beforeEach((to, from, next) => {
   store.state.env.isShowNav = false
   store.state.sys.currentPath = to.path

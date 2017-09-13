@@ -28,23 +28,23 @@
 	}
 </style>
 <script>
-	export default{
-		data(){
-			return{
-				username: 'www123@qq.com',
-				password: '123456'
-			};
-		},
-		methods: {
-			doLogin(){
-				this.$store.dispatch('login', { username:this.username, password: this.password })
-						.then((res) => {
-							this.$router.replace('/');
-						});
-			},
-			doLogout(){
-				this.$store.dispatch('logout');
-			}
-		}
-	};
+  export default {
+    data () {
+      return {
+        username: 'www123@qq.com',
+        password: '123456'
+      }
+    },
+    methods: {
+      doLogin () {
+        this.$store.dispatch('login', { username: this.username, password: this.password })
+            .then((res) => {
+              this.$router.replace('/')
+            })
+      },
+      doLogout () {
+        this.$store.dispatch('logout')
+      }
+    }
+  }
 </script>

@@ -1,8 +1,7 @@
 <template>
   <div class="kefu">
-
     <div class="top">
-      <img src="../../assets/共创群二维码@3x.png" alt="">
+      <img src="../../assets/img/group-code.png" alt="">
       <p>加入日事清钉钉用户群</p>
     </div>
     <div class="bot">
@@ -10,17 +9,9 @@
       <div class="xian"></div>
       <p class="sec">长按识别二维码</p>
     </div>
-
-
-
-
   </div>
-
 </template>
 <script>
-
-
-
 </script>
 <style scoped>
   .xian{
@@ -33,10 +24,12 @@
   }
   .top{
     background-image: linear-gradient(-90deg, #69ACEF 0%, #3E86D6 100%);
-    height: 400px;
+    height: 58%;
   }
   .top p{
-
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #FFFFFF;
     margin-top: 7.5px;
   }
   .kefu .top img{

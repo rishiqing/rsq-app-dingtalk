@@ -4,9 +4,9 @@
     <div class="tupian">
     <avatar :src="loginUser.authUser.avatar"
             :username="loginUser.authUser.name"
-            :size="65"></avatar>
+            :size="73"></avatar>
     </div>
-    <p>李永州</p>
+    <p class="xingming">{{loginUser.authUser.name}}</p>
   </div>
   <div class="bottom">
     <div>
@@ -34,37 +34,40 @@
 <script>
   import Avatar from 'com/pub/TextAvatar'
 
-export default {
-  data () {
-    return {}
-  },
-  computed: {
-    loginUser () {
-      return this.$store.state.loginUser
+  export default {
+    data () {
+      return {
+        titleName: '我'
+      }
+    },
+    computed: {
+      loginUser () {
+        return this.$store.state.loginUser
+      }
+    },
+    components: {
+      'avatar': Avatar
+    },
+    methods: {
+      gotokefu () {
+        this.$router.push('/me/kefu')
+      }
+    },
+    mounted () {
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+      this.$store.dispatch('setNav', {isShow: true})
     }
-  },
-  components: {
-    'avatar': Avatar
-  },
-  methods: {
-    gotokefu(){
-
-  this.$router.push('/me/kefu');
-
-    }
-  },
-  mounted () {
-    rsqadmg.exec('setOptionButtons', {hide: true})
-    this.$store.dispatch('setNav', true)
-  }
 }
 </script>
 <style scoped >
-  @import "../../assets/fonts/icomoon2.css";
-
-
-
-
+  .xingming{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #FFFFFF;
+    letter-spacing: 0.36px;
+    padding-top: 15px;
+  }
   .top{
     text-align: center;
     height: 200px;
@@ -102,7 +105,7 @@ export default {
     font-size: 17px;
     color: #222222;
     line-height: 22px;
-
+    font-weight: bold;
   }
   .bottom span{
     float: right;
@@ -120,7 +123,7 @@ export default {
     font-size: 15px;
     color: #55A8FD;
     letter-spacing: -0.36px;
-    margin-right: 15px;
+    padding-right: 9px;
   }
 
   .daxiao{

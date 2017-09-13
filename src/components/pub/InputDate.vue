@@ -21,47 +21,46 @@
   }
 </style>
 <script>
+  import SelectDate from 'com/pub/SelectDate'
+  import dateUtil from 'ut/dateUtil'
 
-	import SelectDate from 'com/pub/SelectDate';
-
-	import dateUtil from 'ut/dateUtil';
-	export default{
-		data(){
-			return{};
-		},
-		props:{
-			itemStartDate: String,
-			itemEndDate: String,
-			itemDates: String,
-			itemSep: String
-		},
-		computed: {
-			dateString(){
-        if(!this.itemDates && !this.itemStartDate && !this.itemEndDate){
-					return '';
-				}
-				var parsed = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate);
-				var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult);
-        return result;
+  export default {
+    data () {
+      return {}
+    },
+    props: {
+      itemStartDate: String,
+      itemEndDate: String,
+      itemDates: String,
+      itemSep: String
+    },
+    computed: {
+      dateString () {
+        if (!this.itemDates && !this.itemStartDate && !this.itemEndDate) {
+          return ''
+        }
+        var parsed = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
+        var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
+        return result
       }
-		},
-		methods: {
-			showDatePikcer(){
-				// 显示之前先将所有获得焦点的元素失去焦点
-				if(document.activeElement){
-					document.activeElement.blur();
-				}
-				var that = this;
-				var defDate = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate);
+    },
+    methods: {
+      showDatePikcer () {
+        // 显示之前先将所有获得焦点的元素失去焦点
+        if (document.activeElement) {
+          document.activeElement.blur()
+        }
+        var that = this
+        var defDate = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
         SelectDate.show({
-					type: defDate.dateType,
-					selectNumDate: defDate.dateResult,
-					success: function(result){
-						var resObj = dateUtil.frontend2backend(result.type, result.selectNumDate, that.itemSep);
-						that.$emit('date-changed', resObj);
-					}
-				});
-			}
-		}
-	};
+          type: defDate.dateType,
+          selectNumDate: defDate.dateResult,
+          success: function (result) {
+            var resObj = dateUtil.frontend2backend(result.type, result.selectNumDate, that.itemSep)
+            that.$emit('date-changed', resObj)
+          }
+        })
+      }
+    }
+  }
 </script>

@@ -9,8 +9,8 @@ module.exports = {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/dingtalk',
+    assetsSubDirectory: './',
+    assetsPublicPath: '/dingtalk/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -34,7 +34,7 @@ module.exports = {
     env: require('./dev.env'),
     port: devPort,
     autoOpenBrowser: true,
-    assetsSubDirectory: 'static',
+    assetsSubDirectory: 'static/',
     assetsPublicPath: '/',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
@@ -43,11 +43,12 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: true,
+    hotPath: '/__wallace_hmr',
     // 日事清api的后台地址
     apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
+    authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
-    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort)
+    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/'
   }
 }

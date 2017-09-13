@@ -2,6 +2,7 @@
   <div class="router-view content--cal">
     <r-calendar
       @click-cal-day="fetchItems"
+      @after-cal-swipe="fetchDatesHasTodo"
       :default-select-date="dateSelect"
     ></r-calendar>
     <r-todo-item-list
@@ -9,10 +10,8 @@
       :is-checkable="true"
       v-if="items != null && items.length > 0"
     ></r-todo-item-list>
-
-
     <div class="itm-lst" v-else>
-      <img src="../../assets/日程.png" alt="">
+      <img src="../../assets/img/todo-empty.png" alt="">
       <p class="shouye">还没有日程，赶快去创建吧</p>
     </div>
     <!--<div class="float-action-button" v-touch:tap="showCreate">-->
@@ -21,10 +20,9 @@
   </div>
 </template>
 <script>
-  import Calendar from 'com/sche/Calendar';
-  import TodoItemList from 'com/sche/TodoItemList';
-
-  import moment from 'moment';
+  import Calendar from 'com/sche/Calendar'
+  import TodoItemList from 'com/sche/TodoItemList'
+  import moment from 'moment'
 
   export default {
     name: 'ScheduleView',
@@ -35,14 +33,11 @@
     },
     computed: {
       dateSelect () {
-        var strDate = this.$store.state.schedule.strCurrentDate;
-        return  strDate? moment(strDate, 'YYYY-MM-DD').toDate() : new Date();
+        var strDate = this.$store.state.schedule.strCurrentDate
+        return strDate ? moment(strDate, 'YYYY-MM-DD').toDate() : new Date()
       },
-      items(){
-        return this.$store.state.schedule.items;
-      },
-      itemCount(){
-        return this.$store.state.schedule.items ? this.$store.state.schedule.items.length : -1
+      items () {
+        return this.$store.state.schedule.items
       }
     },
     components: {
@@ -50,27 +45,39 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
-      fetchItems(strDate){
-        this.$store.dispatch('fetchScheduleItems', strDate)
+      fetchItems (strDate) {
+        this.$store.dispatch('fetchScheduleItems', { strDate })
       },
-      showCreate(){
-        this.$router.push('/todo/new/schedule');
+      fetchDatesHasTodo (p) {
+        //  给日期加角标，值计算p.daysArray中的中间一个数组
+        var weekArray = p.daysArray[1]
+
+        this.$store.dispatch('getDatesHasTodo', {
+          startDate: weekArray[0].date,
+          endDate: weekArray[weekArray.length - 1].date})
+          .then(res => {
+            weekArray.forEach(day => {
+              if (res.indexOf(String(day.date.getTime())) !== -1) {
+                this.$set(day, 'showTag', true)
+              }
+            })
+          })
       }
     },
     mounted () {
-      rsqadmg.exec('setTitle', {title: this.titleName});
-      var btnParams;
-      var that = this;
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      var btnParams
+      var that = this
       btnParams = {
         btns: [{key: 'toInbox', name: '收纳箱'}],
-        success: function(res){
-          if(res.key == 'toInbox'){
-            that.$router.push('/inbox');
+        success (res) {
+          if (res.key === 'toInbox') {
+            that.$router.push('/inbox')
           }
         }
-      };
-      rsqadmg.execute('setOptionButtons', btnParams);
-      this.$store.dispatch('setNav', true)
+      }
+      window.rsqadmg.execute('setOptionButtons', btnParams)
+      this.$store.dispatch('setNav', {isShow: true})
     }
   }
 </script>
@@ -87,5 +94,4 @@
     height: 70px;
     margin-top:137px ;
   }
-
 </style>

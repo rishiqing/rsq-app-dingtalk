@@ -61,93 +61,92 @@
 	}
 </style>
 <script>
-	import util from 'ut/jsUtil';
-	import Avatar from 'com/pub/TextAvatar';
+  import Avatar from 'com/pub/TextAvatar'
 
-	export default{
-		data(){
-			return{
-				btnText: '',
-				maximum: 0,    //最多选择的用户数量
-				memberList: [],    //所有用户的列表
-				selectedList: [],  //默认选中的用户列表
-				disabledIdList: [],  //不可更改选择状态的用户id列表
-				success: function(){},  //点击确定按钮的回调
-				cancel: function(){},  //点击取消按钮的回调
-				localList: [],
-				memberName: '',
-				selectCount: 0
-			};
-		},
+  export default{
+    data () {
+      return {
+        btnText: '',
+        maximum: 0,    //  最多选择的用户数量
+        memberList: [],    //  所有用户的列表
+        selectedList: [],  //  默认选中的用户列表
+        disabledIdList: [],  //  不可更改选择状态的用户id列表
+        success: function () {},  //  点击确定按钮的回调
+        cancel: function () {},  //  点击取消按钮的回调
+        localList: [],
+        memberName: '',
+        selectCount: 0
+      }
+    },
     computed: {
-      filteredUsers(){
-        var self = this;
+      filteredUsers () {
+        var self = this
         return self.localList.filter(function (staff) {
           return staff.name.indexOf(self.memberName) !== -1
         })
       }
     },
-		components:{
-			'avatar': Avatar
-		},
-		methods: {
-			selfClose(e){
-				window.onpopstate = null;
-				this.cancel.call(this);
-				this.$emit('self-close');
-				e.preventDefault();
-			},
-			makeLocalList(){
-				var selectIds = this.selectedList.map(function(obj){
-					return obj.userId;
-				});
-				var ct = 0;
-				var list = this.memberList.map(function(mem){
-					var isSelect = (selectIds.indexOf(mem.userId) != -1);
-					if(isSelect){
-						ct += 1;
-					}
-					return {
-						id: mem.userId,
-						isSelected: isSelect,
-						name: mem.name,
-						avatar: mem.avatar,
-						orgUser: mem
-					}
-				});
-				this.selectCount = ct;
-				return list;
-			},
-			toggleSelect(mem){
-				if(this.disabledIdList.indexOf(mem.id) != -1){
-					return;
-				}
-				var c = this.selectCount + (mem.isSelected ? -1 : 1);
-				if( c >= this.maximum || c < 0){
-					return rsqadmg.exec('alert', {message: '超出最大数量限制'});
-				}
-				this.selectCount = c;
-				mem.isSelected = !mem.isSelected;
-			},
-			confirmSelect(e){
-				var arr = [];
-				this.localList.forEach(function(mem){
-					if(mem.isSelected){
-						arr.push(mem.orgUser);
-					}
-				});
-				this.success.call(this, arr);
-				this.selfClose();
-				e.preventDefault();
-			}
-		},
-		attached(){
-			this.localList = this.makeLocalList();
-			var that = this;
-			//  如果通过任意方式跳出页面了，那么关闭当前选择框
-			window.onpopstate = function(){
-				that.selfClose();
-			}
-		}
-	};
+    components: {
+      'avatar': Avatar
+    },
+    methods: {
+      selfClose (e) {
+        window.onpopstate = null
+        this.cancel()
+        this.$emit('self-close')
+        e.preventDefault()
+      },
+      makeLocalList () {
+        var selectIds = this.selectedList.map(function (obj) {
+          return obj.userId
+        })
+        var ct = 0
+        var list = this.memberList.map(function (mem) {
+          var isSelect = (selectIds.indexOf(mem.userId) !== -1)
+          if (isSelect) {
+            ct += 1
+          }
+          return {
+            id: mem.userId,
+            isSelected: isSelect,
+            name: mem.name,
+            avatar: mem.avatar,
+            orgUser: mem
+          }
+        })
+        this.selectCount = ct
+        return list
+      },
+      toggleSelect (mem) {
+        if (this.disabledIdList.indexOf(mem.id) !== -1) {
+          return
+        }
+        var c = this.selectCount + (mem.isSelected ? -1 : 1)
+        if (c >= this.maximum || c < 0) {
+          return window.rsqadmg.exec('alert', {message: '超出最大数量限制'})
+        }
+        this.selectCount = c
+        mem.isSelected = !mem.isSelected
+      },
+      confirmSelect (e) {
+        var arr = []
+        this.localList.forEach(function (mem) {
+          if (mem.isSelected) {
+            arr.push(mem.orgUser)
+          }
+        })
+        this.success(arr)
+        this.selfClose()
+        e.preventDefault()
+      }
+    },
+    attached () {
+      this.localList = this.makeLocalList()
+      var that = this
+      //  如果通过任意方式跳出页面了，那么关闭当前选择框
+      window.onpopstate = function () {
+        that.selfClose()
+      }
+    }
+  }
 </script>
