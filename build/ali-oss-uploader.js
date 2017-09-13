@@ -3,7 +3,7 @@ var path = require('path')
 var url = require('url')
 var OSS = require('ali-oss')
 var readdir = require('recursive-readdir')
-var secret = require('../secret/secret.json')
+var secret = require('../secret/secret.js')
 var STS = OSS.STS;
 var co = require('co')
 var sts = new STS({
@@ -21,8 +21,6 @@ var argv = process.argv
 if(argv.length < 3){
   return console.log(chalk.white.bgRed(' ERROR '), chalk.red('wrong number of argument, please add the upload directory'))
 }
-console.log(__dirname)
-
 var uploadDir = path.resolve(argv[2])
 
 co(function* () {
