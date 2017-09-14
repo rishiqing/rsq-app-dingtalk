@@ -1,6 +1,6 @@
 <template>
   <div class="outertime">
-    <v-touch class="" @tap="showTimePikcer">
+    <v-touch class="" @tap="showTimePicker">
       <span class="date">时间</span>
       <!--<span class="now">{{ dateString }}</span>-->
       <span class="now">全天</span>
@@ -47,10 +47,12 @@
     data () {
       return {}
     },
+    props: {
+      item: Object
+    },
     methods: {
       showTimePicker () {
-        console.log('进来了')
-        this.$router.push('/pub/time')
+        this.$router.push('/todoEdit/time')
       }
     }
   }

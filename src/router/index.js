@@ -9,6 +9,8 @@ import Inbox from 'com/inbox/Main'
 import TodoNew from 'com/sche/TodoNew'
 import TodoEdit from 'com/sche/TodoEdit'
 import TodoEditSubTodo from 'com/pub/TodoEditSubTodo'
+import TodoEditTime from 'com/pub/TodoEditTime'
+import TodoEditAlert from 'com/pub/TodoEditAlert'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 import remind from 'com/pub/remind'
@@ -117,6 +119,18 @@ const router = new Router({
       name: 'todoEditSubTodo',
       component: TodoEditSubTodo,
       meta: {requireAuth: true}
+    },
+    {
+      path: '/todoEdit/time',
+      name: 'todoEditTime',
+      component: TodoEditTime,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/todoEdit/alert',
+      name: 'todoEditAlert',
+      component: TodoEditAlert,
+      meta: {requireAuth: false}
     },
     {
       //  todoType用来表示是收纳箱新建todo还是日程新建todo，"inbox" or "schedule"

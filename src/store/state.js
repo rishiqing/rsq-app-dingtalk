@@ -56,6 +56,21 @@ export default {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
     currentTodo: null
   },
+  /**
+   * 组件之间需要共享的临时数据
+   */
+  pub: {
+    /**
+     * 设置todo的时间
+     * {
+     *   isClose: true,  //是否开启Close，默认是关闭的
+     *   todo: {
+     *      "createTaskDate":"20170914","clock":{"startTime":"15:50","endTime":"15:55","alwaysAlert":true}
+     *    }
+     *  }
+     */
+    currentTodoTime: {}
+  },
   //  --------缓存相关--------
   /**
    * 日程缓存的列表，以日期作为key值

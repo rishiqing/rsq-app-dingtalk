@@ -28,6 +28,8 @@
   }
 </style>
 <script>
+  import eventBus from 'ut/eventBus'
+
   export default {
     data () {
       return {
@@ -37,14 +39,24 @@
     },
     methods: {
       doLogin () {
-        this.$store.dispatch('login', { username: this.username, password: this.password })
-            .then((res) => {
-              this.$router.replace('/')
-            })
+        this.$store.commit('PUB_SET_TODO_TIME', null)
+        this.$router.push('/todoEdit/time')
+//        this.$store.dispatch('login', { username: this.username, password: this.password })
+//            .then((res) => {
+//              this.$router.replace('/')
+//            })
       },
       doLogout () {
         this.$store.dispatch('logout')
       }
+    },
+    mounted () {
+      eventBus.$on('todo-edit-time-ready', result => {
+        alert(JSON.stringify(result))
+      })
+//      setTimeout(() => {
+//        this.doLogin()
+//      })
     }
   }
 </script>

@@ -225,5 +225,24 @@ export default {
       addList: addList,
       delList: deleteList
     }
+  },
+
+  /**
+   * 提醒时将code值转换为text, code为形如“begin_-5_min”的字符串
+   * @param code
+   */
+  alertCode2Text (code) {
+    var codeArr = code
+    if (typeof code === 'string') {
+      codeArr = code.split('_')
+    }
+    if (Number(codeArr[1]) === 0) {
+      return codeArr[0] === 'begin' ? '任务开始时' : '任务结束时'
+    }
+    var pre = codeArr[0] === 'begin' ? '开始' : '结束'
+    var num = Number(codeArr[1])
+    var numDir = num < 0 ? '前' : '后'
+    var last = codeArr[2] === 'min' ? '分钟' : '小时'
+    return pre + numDir + Math.abs(num) + last
   }
 }

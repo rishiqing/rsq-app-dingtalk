@@ -257,6 +257,22 @@ export default {
    */
   TD_COMMENT_CREATED (state, p) {
     state.todo.currentTodo.comments.push(p.comment)
+  },
+  /**
+   * 重置用于提醒的时间model
+   * @param state
+   * @param p
+   * @param p.todo  p.todo存在，则说明是编辑任务时设置的提醒
+   * @constructor
+   */
+  PUB_SET_TODO_TIME (state, p) {
+    if (p && p.todo) {
+      state.pub.currentTodoTime.isClose = !!p.isClose
+      state.pub.currentTodoTime.todo = p.todo
+    } else {
+      state.pub.currentTodoTime.isClose = true
+      state.pub.currentTodoTime.todo = null
+    }
   }
   /* --------------------------------- */
 }
