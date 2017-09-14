@@ -1,48 +1,133 @@
-<style lang="scss">
-
-</style>
 <template>
-	<div class="router-view">
-		<r-todo-edit
-				:is-checkable="true"
-				:is-show-note="false"
-				transition="right-slide">
-			<r-input-title
-					slot="slotTitle"
-					:is-checkable="false"
-          :item-title="editItem.pTitle"
-          @text-change="saveTitle"
-			></r-input-title>
-			<r-input-date
-					slot="slotDate"
-					:item-start-date="editItem.startDate"
-					:item-end-date="editItem.endDate"
-					:item-dates="editItem.dates"
-					:item-sep="'/'"
-          v-if="todoType == 'schedule'"
-          @date-changed="saveDate"
-			></r-input-date>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'成员'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUserRsqIds"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
-		</r-todo-edit>
-	</div>
+  <div class="router-view">
+    <div class="itm-edt z-index-xs">
+      <div class="content">
+        <div class="itm-edt-fields" style="padding-bottom: 80px;">
+          <div class="itm-group">
+            <r-input-title
+              :is-checkable="false"
+              :item-title="editItem.pTitle"
+              @text-change="saveTitle"
+            ></r-input-title>
+          </div>
+          <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
+            <!--<slot name="slotNote"></slot>-->
+          </div>
+          <div class="itm-group itm--edit-todo itm--part-line">
+            <!--<slot name="slotContainer"></slot>-->
+            <r-input-date
+              :item-start-date="editItem.startDate"
+              :item-end-date="editItem.endDate"
+              :item-dates="editItem.dates"
+              :item-sep="'/'"
+              v-if="todoType == 'schedule'"
+              @date-changed="saveDate"
+            ></r-input-date>
+            <r-input-time></r-input-time>
+            <r-input-member
+              :is-native="true"
+              :index-title="'执行人'"
+              :select-title="'请选择成员'"
+              :user-rsq-ids="[]"
+              :selected-rsq-ids="joinUserRsqIds"
+              :disabled-rsq-ids="[]"
+              @member-changed="saveMember"
+            ></r-input-member>
+            <div class="ding">
+              <div class="bottom">
+                <p class="">DING</p>
+                <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
+              </div>
+              <input class="mui-switch" type="checkbox">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+<style lang="scss" scoped>
+  p{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+  }
+  .bottom {
+    height: 2rem;
+    display: inline-block;
+    padding-left: 11px;
+    line-height: 0.1rem;
+    position: relative;
+    margin-top: 0.7rem;
+  }
+  .ding{
+    height:2rem;
+    line-height: 1rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    position:relative;
+  }
+  .message{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+  }
+  .mui-switch {
+    width: 52px;
+    height: 31px;
+    position: absolute;
+    top:0.55rem;
+    right:0.3rem;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none; }
+  .mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mui-switch:checked {
+    border-color: #67B2FE;
+    box-shadow: #67B2FE 0 0 0 16px inset;
+    background-color: #67B2FE; }
+  .mui-switch:checked:before {
+    left: 21px; }
+  .mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; }
+  .mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s; }
+  .mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #67B2FE;
+    transition: border-color 0.4s, background-color ease 0.4s; }
+</style>
 <script>
-  import PublicEditView from 'com/pub/TodoEditView'
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
   import dateUtil from 'ut/dateUtil'
   import moment from 'moment'
-
+  import InputTime from 'com/pub/InputTime'
   export default {
     data () {
       return {
@@ -68,7 +153,7 @@
       }
     },
     components: {
-      'r-todo-edit': PublicEditView,
+      'r-input-time': InputTime,
       'r-input-title': InputTitleText,
       'r-input-member': InputMember,
       'r-input-date': InputDate
@@ -130,7 +215,7 @@
     },
     mounted () {
       this.initData()
-      window.rsqadmg.execute('setTitle', {title: '新任务'})
+      window.rsqadmg.execute('setTitle', {title: '新建任务'})
       var btnParams
       var that = this
       btnParams = {

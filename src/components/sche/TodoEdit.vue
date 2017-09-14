@@ -1,55 +1,135 @@
-<style lang="scss">
-</style>
 <template>
-	<div class="router-view">
-		<r-todo-edit
-				:is-checkable="true"
-				transition="right-slide">
-			<r-input-title
-					slot="slotTitle"
-					:is-checkable="true"
-					:item-title="editItem.pTitle"
-					:item-checked="editItem.pIsDone"
-					@text-blur="titleBlur"
-					@click-checkout="finishChecked"
-			></r-input-title>
-			<!--<r-input-note-->
-					<!--slot="slotNote"-->
-					<!--:item-note.sync="editItem.pNote"-->
-					<!--@text-blur="noteBlur"-->
-			<!--&gt;</r-input-note>-->
-			<r-input-date
-					slot="slotDate"
-					:item-start-date="editItem.startDate"
-					:item-end-date="editItem.endDate"
-					:item-dates="editItem.dates"
-					:item-sep="'/'"
-          @date-changed="updateDate"
-			></r-input-date>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'成员'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUserRsqIds"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
-			<!--<r-comment-list-->
-					<!--slot="slotComment"-->
-					<!--:item-list="normalCommonList"-->
-					<!--:todo-type="'todo'"-->
-			<!--&gt;</r-comment-list>-->
-		</r-todo-edit>
-	</div>
+  <div class="router-view">
+    <div class="itm-edt z-index-xs">
+      <div class="content">
+        <div class="itm-edt-fields" style="padding-bottom: 80px;">
+          <div class="itm-group itm--edit-todo">
+            <r-input-title
+              :is-checkable="true"
+              :item-title="editItem.pTitle"
+              :item-checked="editItem.pIsDone"
+              @text-blur="titleBlur"
+              @click-checkout="finishChecked"
+            ></r-input-title>
+          </div>
+          <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
+            <!--<slot name="slotNote"></slot>-->
+          </div>
+          <div class="itm-group itm--edit-todo itm--part-line">
+            <!--<slot name="slotContainer"></slot>-->
+            <r-input-date
+              :item-start-date="editItem.startDate"
+              :item-end-date="editItem.endDate"
+              :item-dates="editItem.dates"
+              :item-sep="'/'"
+              @date-changed="updateDate"
+            ></r-input-date>
+            <r-input-member
+              :is-native="true"
+              :index-title="'成员'"
+              :select-title="'请选择成员'"
+              :user-rsq-ids="[]"
+              :selected-rsq-ids="joinUserRsqIds"
+              :disabled-rsq-ids="[]"
+              @member-changed="saveMember"
+            ></r-input-member>
+            <r-input-sub-todo
+              :item="currentTodo"
+            ></r-input-sub-todo>
+            <div class="ding">
+              <div class="bottom">
+                <p class="">DING</p>
+                <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
+              </div>
+              <input class="mui-switch" type="checkbox">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+<style scoped>
+  p{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+  }
+  .bottom {
+    height: 2rem;
+    display: inline-block;
+    padding-left: 11px;
+    line-height: 0.1rem;
+    position: relative;
+    margin-top: 0.7rem;
+  }
+  .ding{
+    height:2rem;
+    line-height: 1rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    position:relative;
+  }
+  .message{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+  }
+  .mui-switch {
+    width: 52px;
+    height: 31px;
+    position: absolute;
+    top:0.55rem;
+    right:0.1rem;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none; }
+  .mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mui-switch:checked {
+    border-color: #67B2FE;
+    box-shadow: #67B2FE 0 0 0 16px inset;
+    background-color: #67B2FE; }
+  .mui-switch:checked:before {
+    left: 21px; }
+  .mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; }
+  .mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s; }
+  .mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #67B2FE;
+    transition: border-color 0.4s, background-color ease 0.4s; }
+</style>
 <script>
-  import TodoEditView from 'com/pub/TodoEditView'
   import InputTitleText from 'com/pub/InputTitleText'
 //  import InputNoteText from 'com/pub/InputNoteText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
+  import InputSubTodo from 'com/pub/InputSubTodo'
   import util from 'ut/jsUtil'
 //  import CommentList from 'comps/public/CommentList'
 
@@ -85,10 +165,10 @@
       }
     },
     components: {
-      'r-todo-edit': TodoEditView,
       'r-input-title': InputTitleText,
       'r-input-date': InputDate,
-      'r-input-member': InputMember
+      'r-input-member': InputMember,
+      'r-input-sub-todo': InputSubTodo
 //      'r-input-note': InputNoteText,
 //      'r-comment-list': CommentList
     },

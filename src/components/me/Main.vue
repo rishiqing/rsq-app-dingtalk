@@ -11,7 +11,6 @@
   <div class="bottom">
     <div>
       <p>更新说明</p>
-
       <i class="icon2-arrow-right-small daxiao"></i>
     </div>
     <div>
@@ -67,37 +66,40 @@
     color: #FFFFFF;
     letter-spacing: 0.36px;
     padding-top: 15px;
+    margin-left: 7px;
   }
+
   .top{
     text-align: center;
     height: 200px;
     background-color:#3E86D6;
   }
   .top p{
-
     margin-top:5px;
-
   }
   .tupian{
     display: inline-block;
-    border: 2px solid #FFFFFF;
     margin:0 auto;
     border-radius: 100px;
     width: 65px;
     height: 65px;
     margin-top: 47px;
-
   }
   .bottom{
-
+    padding-left: 0.43rem;
     background: #FFFFFF;
-    height: 190px;
+    height: 5.069rem;
+    border-bottom: 0.5px solid #E3E3E3;
+    width: 100%;
   }
   .bottom>div{
-    padding-top: 16px ;
-    padding-left: 13px ;
-
+    height: 1.267rem;
+    line-height:1.267rem ;
+    border-bottom: 1px solid #E3E3E3;
     color:#E3E3E3;
+  }
+  .bottom div:last-child{
+    border-bottom: none;
   }
   .bottom p{
     display: inline-block;
@@ -109,8 +111,8 @@
   }
   .bottom span{
     float: right;
-    margin-right:10px;
-    margin-top:4px;
+    margin-right:0.32rem;
+    margin-top:0.548rem;
   }
   .bottom span:after{
     display: block;
@@ -130,10 +132,7 @@
     font-size: 20px;
     float: right;
     color:#999999;
-    margin-right: 10px;
-    margin-top: 5.5px;
-
+    margin-right: 0.3rem;
+    margin-top: 0.49rem;
   }
-
-
 </style>

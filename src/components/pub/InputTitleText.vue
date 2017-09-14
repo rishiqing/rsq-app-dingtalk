@@ -1,24 +1,80 @@
 <template>
-	<div class="itm-outer">
-		<div class="itm-inner">
-			<div class="itm-title" :style="[paddingObject]">
-				<input type="text" placeholder="输入任务标题"
+  <div class="">
+    <div class="">
+      <div class="" :style="[paddingObject]">
+        <input type="text" placeholder="输入任务标题"
                ref="titleInput"
                :value="itemTitle"
-				       @input="inputChange($event.target.value)"
-				       @blur="inputBlur($event.target.value)">
-			</div>
-			<v-touch class="itm-icons itm-front-icons u-abs-left"
-			     v-if="isCheckable"
-			     @tap="clickCheckOut">
-				<i class="icon"
-				   :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
-			</v-touch>
-		</div>
-	</div>
+               class="padding-left-input-"
+               @input="inputChange($event.target.value)"
+               @blur="inputBlur($event.target.value)"
+               :class="{'padding-left-input':isCheckable}">
+      </div>
+      <div class="padding-left-">
+      <v-touch class=""
+           v-if="isCheckable"
+           @tap="clickCheckOut">
+        <i class="icon2-check-box select-title"
+           :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
+        <div class="hide" :class="{'for-hide-title':itemChecked}"></div>
+        <i class="icon2-selected hide" :class="{'isdisplay-title':itemChecked}"></i>
+      </v-touch>
+      </div>
+    </div>
+  </div>
 </template>
-<style lang="scss">
-
+<style scoped>
+  .hide{
+    display: none;
+  }
+  .select-title{
+    color:#69ACEF;
+    font-size: 17px;
+    position: absolute;
+    top:0.55rem;
+    left:0.35rem;
+    background: #FFFFFF;
+    border-radius: 1px;
+  }
+  .isdisplay-title{
+    display: block;
+    position:absolute;
+    top:0.45rem;
+    left: 0.44rem;
+    font-size: 15px;
+    color:#55A8FD;
+  }
+  .for-hide-title{
+    position: absolute;
+    top:0.52rem;
+    left: 0.75rem;
+    display: block;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border: 1px solid white;
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Regular;
+    font-size: 19px;
+    color: #8C8C8C;
+    letter-spacing: 0;
+    padding-left: 0.3rem;
+  }
+  input[type='text']{
+    height:1.458rem;
+    background: #FFFFFF;
+    border-bottom:0.5px solid #DADADA ;
+    border-top:0.5px solid #DADADA ;
+    line-height:1.478rem ;
+    background: #FFFFFF;
+  }
+  .padding-left-input-{
+    padding-left:0.3rem;
+  }
+  .padding-left-input{
+    padding-left: 1.5rem;
+  }
 </style>
 <script>
   export default {

@@ -1,46 +1,78 @@
 <template>
-	<div class="itm-outer">
-		<v-touch class="itm-inner" @tap="showMemberEdit">
-			<div class="chengyuan">
+  <div class="outer">
+    <v-touch class="" @tap="showMemberEdit">
+      <div class="execute">
         {{indexTitle}}
-			</div>
-
-			<div class="itm-icons itm-rear-icons u-abs-right u-max-half-width" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
-				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
-				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
-				<div class="itm-icon-img-wrap">
-					<avatar v-for="item in selectedLocalList"
-					        :key="item.rsqUserId"
-					        :src="item.avatar"
-					        :username="item.name"></avatar>
-          <span>{{selectedLocalList.length}}人</span>
-
-				</div>
-			</div>
-      <div class="itm-icons itm-rear-icons u-abs-right" v-else>
+      </div>
+      <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
+        <!--<div v-for="item in localList">{{item.avatar}}</div>-->
+        <!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
+        <div class="itm-icon-img-wrap">
+          <avatar v-for="item in selectedLocalList"
+                  :key="item.rsqUserId"
+                  :src="item.avatar"
+                  :username="item.name"></avatar>
+        </div>
+        <span class="people">{{selectedLocalList.length}}人</span>
+        <i class="icon2-arrow-right-small arrow"></i>
+      </div>
+      <div class="" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
         <avatar v-for="item in selectedItems"
                 :key="item.rsqUserId"
                 :src="item.avatar"
                 :username="item.name">
-
         </avatar>
-        <span>{{selectedLocalList.length}}人</span>
         </div>
+        <span class="people">{{selectedLocalList.length}}人</span>
+        <i class="icon2-arrow-right-small arrow"></i>
       </div>
-		</v-touch>
-	</div>
+    </v-touch>
+  </div>
 </template>
-<style lang="">
-  .chengyuan{
+<style scoped>
+  .execute{
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-    line-height: 21px;
-    line-height: 45px;
-    margin-left: 9px;
+    letter-spacing: 0;
   }
-
+  .outer{
+    margin-top: 0.231rem;
+    border-bottom: 0.5px solid #E3E3E3;
+    border-top: 1px solid #E3E3E3;
+    position: relative;
+    height:1.3rem;
+    line-height: 1.3rem;
+    padding-left:3% ;
+    border-bottom:1px solid #E3E3E3;
+    width: 100%;
+  }
+  .people{
+    position:absolute;
+    top:0;
+    color: #999999;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #999999;
+    letter-spacing: 0;
+    right:0.85rem;
+  }
+  span{
+    display: block;
+    /*margin-bottom: 5px;*/
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    /*line-height: 1.458rem;*/
+  }
+  .arrow{
+    color: #999999;
+    font-size: 21px;
+    position: absolute;
+    top:0.35rem;
+    right: 0.1rem;
+  }
 </style>
 <script>
   import { Promise } from 'es6-promise'
