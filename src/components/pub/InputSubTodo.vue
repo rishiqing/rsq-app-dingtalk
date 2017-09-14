@@ -1,9 +1,8 @@
 <template>
   <div class="outertime">
-    <v-touch class="" @tap="showTimePikcer">
-      <span class="date">时间</span>
-      <!--<span class="now">{{ dateString }}</span>-->
-      <span class="now">全天</span>
+    <v-touch class="" @tap="showSubTodo">
+      <span class="date">子任务</span>
+      <span class="now"></span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -47,10 +46,12 @@
     data () {
       return {}
     },
+    props: {
+      item: Object
+    },
     methods: {
-      showTimePicker () {
-        console.log('进来了')
-        this.$router.push('/pub/time')
+      showSubTodo () {
+        this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }
   }

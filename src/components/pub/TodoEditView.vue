@@ -45,7 +45,6 @@
   </div>
 </template>
 <style >
-  @import "icomoon2.css";
   p{
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -71,7 +70,6 @@
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #999999;
-
   }
   .mui-switch {
     width: 52px;

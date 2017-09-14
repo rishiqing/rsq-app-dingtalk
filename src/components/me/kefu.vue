@@ -38,7 +38,7 @@
   }
   .kefu .top,.bot{
     text-align: center;
-}
+  }
   .kefu .bot p.fir{
     margin-top: 56px;
     font-family: PingFangSC-Regular;

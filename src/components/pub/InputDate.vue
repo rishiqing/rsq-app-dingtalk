@@ -9,7 +9,6 @@
   </div>
 </template>
 <style lang="" scoped>
-  @import "icomoon2.css";
   .outer-date{
     position: relative;
     height:1.3rem;
