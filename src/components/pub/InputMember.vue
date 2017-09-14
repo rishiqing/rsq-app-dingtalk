@@ -4,7 +4,6 @@
       <div class="execute">
         {{indexTitle}}
       </div>
-
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
         <!--<div v-for="item in localList">{{item.avatar}}</div>-->
         <!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
@@ -17,7 +16,6 @@
         <span class="people">{{selectedLocalList.length}}人</span>
         <i class="icon2-arrow-right-small arrow"></i>
       </div>
-
       <div class="" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
         <avatar v-for="item in selectedItems"
@@ -29,7 +27,6 @@
         <span class="people">{{selectedLocalList.length}}人</span>
         <i class="icon2-arrow-right-small arrow"></i>
       </div>
-
     </v-touch>
   </div>
 </template>
@@ -61,7 +58,6 @@
     color: #999999;
     letter-spacing: 0;
     right:0.85rem;
-
   }
   span{
     display: block;
@@ -70,7 +66,6 @@
     font-size: 17px;
     color: #333333;
     /*line-height: 1.458rem;*/
-
   }
   .arrow{
     color: #999999;
@@ -79,7 +74,6 @@
     top:0.35rem;
     right: 0.1rem;
   }
-
 </style>
 <script>
   import { Promise } from 'es6-promise'

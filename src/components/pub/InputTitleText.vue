@@ -24,59 +24,55 @@
   </div>
 </template>
 <style scoped>
-@import "icomoon2.css";
-.hide{
-  display: none;
-}
-.padding-left-{
-
-}
-.select-title{
-  color:#69ACEF;
-  font-size: 17px;
-  position: absolute;
-  top:0.55rem;
-  left:0.35rem;
-  background: #FFFFFF;
-  border-radius: 1px;
-}
-.isdisplay-title{
-  display: block;
-  position:absolute;
-  top:0.45rem;
-  left: 0.44rem;
-  font-size: 15px;
-  color:#55A8FD;
-}
-.for-hide-title{
-  position: absolute;
-  top:0.52rem;
-  left: 0.75rem;
-  display: block;
-  width: 2px;
-  height: 2px;
-  background-color: white;
-  border: 1px solid white;
-}
-input::-webkit-input-placeholder { /* WebKit browsers */
-  font-family: PingFangSC-Regular;
-  font-size: 19px;
-  color: #8C8C8C;
-  letter-spacing: 0;
-  padding-left: 0.3rem;
-}
-input[type='text']{
-  height:1.458rem;
-  background: #FFFFFF;
-  border-bottom:0.5px solid #DADADA ;
-  border-top:0.5px solid #DADADA ;
-  line-height:1.478rem ;
-  background: #FFFFFF;
-
-}
-.padding-left-input-{
-  padding-left:0.3rem;
-}
+  @import "icomoon2.css";
+  .hide{
+    display: none;
+  }
+  .select-title{
+    color:#69ACEF;
+    font-size: 17px;
+    position: absolute;
+    top:0.55rem;
+    left:0.35rem;
+    background: #FFFFFF;
+    border-radius: 1px;
+  }
+  .isdisplay-title{
+    display: block;
+    position:absolute;
+    top:0.45rem;
+    left: 0.44rem;
+    font-size: 15px;
+    color:#55A8FD;
+  }
+  .for-hide-title{
+    position: absolute;
+    top:0.52rem;
+    left: 0.75rem;
+    display: block;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border: 1px solid white;
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Regular;
+    font-size: 19px;
+    color: #8C8C8C;
+    letter-spacing: 0;
+    padding-left: 0.3rem;
+  }
+  input[type='text']{
+    height:1.458rem;
+    background: #FFFFFF;
+    border-bottom:0.5px solid #DADADA ;
+    border-top:0.5px solid #DADADA ;
+    line-height:1.478rem ;
+    background: #FFFFFF;
+  }
+  .padding-left-input-{
+    padding-left:0.3rem;
+  }
   .padding-left-input{
     padding-left: 1.5rem;
   }

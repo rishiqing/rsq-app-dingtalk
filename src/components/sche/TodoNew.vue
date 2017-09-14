@@ -19,9 +19,9 @@
           v-if="todoType == 'schedule'"
           @date-changed="saveDate"
       ></r-input-date>
-      <InputTime
+      <r-input-time
           slot="slotTime">
-      </InputTime>
+      </r-input-time>
       <r-input-member
           slot="slotMember"
           :is-native="true"
@@ -32,7 +32,6 @@
           :disabled-rsq-ids="[]"
           @member-changed="saveMember"
       ></r-input-member>
-
     </r-todo-edit>
   </div>
 </template>
@@ -119,7 +118,7 @@
       }
     },
     components: {
-      'InputTime': InputTime,
+      'r-input-time': InputTime,
       'r-todo-edit': PublicEditView,
       'r-input-title': InputTitleText,
       'r-input-member': InputMember,

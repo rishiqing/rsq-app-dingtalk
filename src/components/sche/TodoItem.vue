@@ -12,10 +12,9 @@
              :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
           <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
-
         </v-touch>
 
-        <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
+       <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
           <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
           <!--&lt;!&ndash;<i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>&ndash;&gt;-->
         <!--</div>-->
@@ -34,12 +33,9 @@
     margin-left: 0.8rem;
   }
   .todo-content{
-
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-
-
   }
   .hide{
     display: none;
@@ -76,9 +72,7 @@
     position: relative;
     border-bottom:1px solid #DADADA ;
   }
-  .item-title{
-
-  }
+  .item-title{}
   .select{
     color:#69ACEF;
     font-size: 17px;
@@ -87,7 +81,6 @@
     background: #FFFFFF;
     border-radius: 1px;
   }
-
 </style>
 <script>
   export default {

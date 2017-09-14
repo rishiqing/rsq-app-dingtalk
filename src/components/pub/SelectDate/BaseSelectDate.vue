@@ -78,7 +78,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <style lang="scss">
@@ -104,7 +103,6 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-
   }
   .date-norepeat{
     font-family: PingFangSC-Regular;
@@ -128,12 +126,10 @@
     font-family: PingFangSC-Regular;
     font-size: 19px;
     color: #3D3D3D;
-
   }
   .dp-title .icon {
     font-size: 0.6rem;
     color: #333333;
-
   }
   .dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}
   .dp-table {width:100%;height:240px;text-align: center;}
@@ -184,11 +180,9 @@
     font-size: 11px;
     color: #FF7A7A;
   }
-
 </style>
 <script>
   import dateUtil from 'ut/dateUtil'
-
   export default{
     data () {
       return {
@@ -197,7 +191,6 @@
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
         currentDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
         days: [],
-
         type: '',  //  single单日期, range起止日期, discrete, 离散间隔日期
         selectNumDate: null,  //  表示当前选中的日期
         success: function () {},

@@ -44,24 +44,17 @@
   }
 </script>
 <style scoped>
-
-
-
-
   .richeng {
-     font-size: 25px;
-  color:  #999999;;
+    font-size: 25px;
+    color:  #999999;;
   }
-
   .bot{
     border-top:1px solid #CDCDCD;
     height: 1.306rem;
     background-color: #FDFDFF;;
   }
-
   .richeng{
     font-size: 22px;
-
   }
   .sche{
     font-family: PingFangSC-Regular;
@@ -102,27 +95,19 @@
   .mid{
     text-align: center;
     padding-top: 3px;
-
-
   }
   .add{
     color:#4D93DE;
     font-size: 29.6px;
-
-
   }
   .bot:after{
     content:'';
     display: block;
     clear: both;
   }
-
-
   img{
     width: 1.866rem;
     height: 1.866rem;
     margin-top:3.653rem ;
   }
-
-
 </style>

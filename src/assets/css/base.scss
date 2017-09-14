@@ -24,7 +24,6 @@ html, body {
     position: fixed;left:0;right:0;bottom:0;
 }
 
-
 .div-editable {
     outline: none;
     padding: 15px 2px;
@@ -87,15 +86,12 @@ div.div-editable.editable-blank {
 .itm-icons.itm-icons--white-bg .icon {background: #fff;}
 .itm-front-icons {}
 .itm-rear-icons {}
-
-
 .itm-placeholder {height: 170px;text-align: center;line-height:170px;color:$textGrey;}
 .itm-avatar {width: 36px;height:36px;margin-top:3px;background-size: cover;border-radius: 2px;}
 .itm-avatar--round {border-radius: 50%;}
 .itm-avatar.itm-avatar--small {width: 32px;height:32px;margin-top:5px;}
 .itm-avatar-wrap--small {padding-top: 5px;}
 .itm-icon-img-wrap>* {
-
     display: inline-block;
     //vertical-align: middle;
     margin-right: 5px;
@@ -107,7 +103,6 @@ div.div-editable.editable-blank {
   left: 5.7rem;
 }
 .itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;display: inline-block}
-
 
 .itm-lst-title {position: relative;padding: 0 20px;}
 .itm-lst-title-text {height:34px;line-height: 34px;font-size:14px;}
@@ -123,9 +118,7 @@ div.div-editable.editable-blank {
     overflow: hidden;
     margin-bottom: 10px;
 }
-.itm-group > .itm-outer:last-child {
-
-}
+.itm-group > .itm-outer:last-child {}
 
 .itm-complex-title {padding: 16px 0;}
 .itm-complex-title-label {height: 32px;}
@@ -167,7 +160,6 @@ div.div-editable.editable-blank {
 .cmt .cmt-time, .cmt .cmt-name {font-size: 1.2rem;color: #a3a3a3;}
 .cmt .cmt-content {padding-top: 15px;}
 .cmt .btn-reply {position: absolute;right:0;top:10px;}
-
 
 .cmt-send-field {position: fixed;bottom:0;width:100%;z-index:999;background:#f6f6f6;
     overflow:hidden;box-sizing: border-box;padding: 15px;
@@ -251,7 +243,6 @@ input[type="button"].cmt-send-btn-submit {
 .itm--part-line .itm-outer {padding-right:0;}
 .itm--part-line  {padding-right: 16px;}
 .itm--part-line .u-abs-right {right:16px;}
-
 
 /* 个人中心 */
 .main-avatar {}

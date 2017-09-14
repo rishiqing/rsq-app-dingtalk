@@ -3,7 +3,6 @@
       <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <input value="创建" class="create"/>
-
       </v-touch>
     <div class="margin-block"></div>
     <r-todo-item-list

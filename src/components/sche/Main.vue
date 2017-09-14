@@ -100,7 +100,6 @@
     font-size: 15px;
     color: #55A8FD;
     letter-spacing: 0
-
   }
   img{
     width: 70px;
