@@ -36,7 +36,6 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @import "icomoon2.css";
   .mui-switch {
     width: 52px;
     height: 31px;

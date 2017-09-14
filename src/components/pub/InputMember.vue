@@ -31,7 +31,6 @@
   </div>
 </template>
 <style scoped>
-  @import "icomoon2.css";
   .execute{
     font-family: PingFangSC-Regular;
     font-size: 17px;

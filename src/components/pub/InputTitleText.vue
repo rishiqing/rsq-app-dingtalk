@@ -24,7 +24,6 @@
   </div>
 </template>
 <style scoped>
-  @import "icomoon2.css";
   .hide{
     display: none;
   }

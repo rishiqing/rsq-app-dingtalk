@@ -23,7 +23,6 @@
   </li>
 </template>
 <style lang="scss" scope>
-  @import "icomoon2.css";
   .contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
   .title-todo{
     display: flex;
@@ -105,14 +104,12 @@
         //  这个是点击跳到编辑界面
         if (e.target.className.indexOf('jsItemCheckbox') === -1) {
           this.$emit('todo-item-click', this.item)
-          console.log('编辑进来了')
           e.stopPropagation()
           e.preventDefault()
         }
       },
       clickCheckOut (e) {
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
-        console.log('点击进来了')
         e.stopPropagation()
         e.preventDefault()
       }

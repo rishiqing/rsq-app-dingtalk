@@ -82,7 +82,6 @@
   }
 </script>
 <style scoped>
-  @import "icomoon2.css";
   .itm-lst{
     text-align: center;
     background-color: #F8F8F8;

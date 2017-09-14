@@ -8,7 +8,6 @@
   </div>
 </template>
 <style lang="" scoped>
-  @import "icomoon2.css";
   .outertime{
     position: relative;
     height:1.3rem;
@@ -23,7 +22,6 @@
     position: absolute;
     top:0.35rem;
     right: 0.1rem;
-
   }
   .now {
     position: absolute;
@@ -33,7 +31,6 @@
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
-
   }
   span{
     display: block;
@@ -42,7 +39,5 @@
     font-size: 17px;
     color: #333333;
     /*line-height: 1.458rem;*/
-
   }
-
 </style>

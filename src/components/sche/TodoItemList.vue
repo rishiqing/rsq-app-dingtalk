@@ -11,8 +11,7 @@
     ></r-todo-item>
   </ul>
 </template>
-<style lang="scss" scoped="">
-  @import "icomoon2.css";
+<style lang="scss" scoped>
   ul{
     background-color: white;
     border-bottom:1px solid #DADADA ;
