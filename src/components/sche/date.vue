@@ -35,7 +35,6 @@
 
 </template>
 <style scoped>
-@import "../../../../rsq-app-dingtalk/src/assets/fonts/icomoon2.css";
 ul{
   border-bottom: 0.5px solid #E3E3E3;
   border-top: 0.5px solid #E3E3E3;

@@ -68,7 +68,6 @@
   </div>
 </template>
 <style scoped>
-  @import "../../../../rsq-app-dingtalk/src/assets/fonts/icomoon2.css";
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
     font-size: 17px;

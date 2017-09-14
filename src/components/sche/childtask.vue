@@ -29,7 +29,6 @@
 
 </template>
 <style scoped>
-  @import "../../../../rsq-app-dingtalk/src/assets/fonts/icomoon2.css";
   .select{
     font-size: 17px;
     position: absolute;

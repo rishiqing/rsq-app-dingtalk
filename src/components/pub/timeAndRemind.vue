@@ -23,7 +23,6 @@
 </template>
 <style scoped>
 
-  @import "../../../../rsq-app-dingtalk/src/components/pub/icomoon2.css";
   .mui-switch {
     width: 52px;
     height: 31px;

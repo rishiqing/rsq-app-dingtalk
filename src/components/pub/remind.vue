@@ -20,7 +20,6 @@
   </div>
 </template>
 <style scoped>
-  @import "../../../../rsq-app-dingtalk/src/components/pub/icomoon2.css";
   .remind{
     display: block;
     margin-left: 0.2rem;

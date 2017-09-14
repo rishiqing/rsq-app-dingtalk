@@ -21,7 +21,6 @@
   </div>
 </template>
 <style scoped>
-  @import "../../../../rsq-app-dingtalk/src/assets/fonts/icomoon2.css";
   .arrow{
     position: absolute;
     top:0.35rem;

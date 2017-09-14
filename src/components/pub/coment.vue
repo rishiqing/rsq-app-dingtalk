@@ -18,8 +18,6 @@
   </div>
 </template>
 <style scoped>
-
-@import "../../../../rsq-app-dingtalk/src/components/pub/icomoon2.css";
 li{
   position: relative;
   border-bottom: 0.5px solid #E3E3E3;
