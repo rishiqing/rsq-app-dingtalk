@@ -39,9 +39,9 @@
     letter-spacing: 0;
   }
   .outer{
-    margin-top: 0.231rem;
+    /*margin-top: 0.231rem;*/
     border-bottom: 0.5px solid #E3E3E3;
-    border-top: 1px solid #E3E3E3;
+    /*border-top: 1px solid #E3E3E3;*/
     position: relative;
     height:1.3rem;
     line-height: 1.3rem;

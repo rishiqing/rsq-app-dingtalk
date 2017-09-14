@@ -72,7 +72,6 @@
     position: absolute;
     top:0.8rem;
     right:0.35rem;
-
   }
   .write{
     height:1.226rem;

@@ -1,5 +1,3 @@
-<style lang="scss">
-</style>
 <template>
   <div class="router-view">
     <r-todo-edit
@@ -44,6 +42,8 @@
     </r-todo-edit>
   </div>
 </template>
+<style lang="scss">
+</style>
 <script>
   import TodoEditView from 'com/pub/TodoEditView'
   import InputTitleText from 'com/pub/InputTitleText'

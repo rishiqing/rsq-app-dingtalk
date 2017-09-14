@@ -2,7 +2,8 @@
   <div class="outertime">
     <v-touch class="" @tap="showTimePikcer">
       <span class="date">时间</span>
-      <span class="now">{{ dateString }}</span>
+      <!--<span class="now">{{ dateString }}</span>-->
+      <span class="now">全天</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -23,7 +24,6 @@
     position: absolute;
     top:0.35rem;
     right: 0.1rem;
-
   }
   .now {
     position: absolute;
@@ -33,7 +33,6 @@
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
-
   }
   span{
     display: block;
@@ -42,7 +41,19 @@
     font-size: 17px;
     color: #333333;
     /*line-height: 1.458rem;*/
-
   }
 
 </style>
+<script>
+  export default {
+    data () {
+      return {}
+    },
+    methods: {
+      showTimePicker () {
+        console.log('进来了')
+        this.$router.push('/pub/time')
+      }
+    }
+  }
+</script>

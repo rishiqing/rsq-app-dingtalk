@@ -10,6 +10,15 @@ import InboxTodoNew from 'com/sche/TodoNew'
 import InboxTodoEdit from 'com/sche/TodoEdit'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
+import remind from 'com/pub/remind'
+import timeAndRemind from 'com/pub/timeAndRemind'
+import childtask from 'com/sche/childtask'
+import scheDetail from 'com/sche/scheDetail'
+import timeOpen from 'com/pub/timeOpen'
+import repeat from 'com/sche/repeat'
+import date from 'com/sche/date'
+import coment from 'com/pub/coment'
+import time from 'com/pub/time'
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +31,66 @@ const router = new Router({
       path: '/sche',
       name: 'sche',
       component: Sche,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/coment',
+      name: 'coment',
+      component: coment,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/sche/date',
+      name: 'date',
+      component: date,
+      meta: {requireAuth: true}
+    },
+    // {
+    //   path: '/inbox/inboxNew',
+    //   name: 'inboxNew',
+    //   component: inboxNew,
+    //   meta: {requireAuth: true}
+    // },
+    {
+      path: '/sche/scheDetail',
+      name: 'scheDetail',
+      component: scheDetail,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/sche/repeat',
+      name: 'repeat',
+      component: repeat,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/timeAndRemind',
+      name: 'timeAndRemind',
+      component: timeAndRemind,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/remind',
+      name: 'remind',
+      component: remind,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/time',
+      name: 'time',
+      component: time,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/timeOpen',
+      name: 'timeOpen',
+      component: timeOpen,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/sche/childtask',
+      name: 'childtask',
+      component: childtask,
       meta: {requireAuth: true}
     },
     {

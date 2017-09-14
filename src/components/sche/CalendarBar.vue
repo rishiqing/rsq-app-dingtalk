@@ -51,7 +51,6 @@
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
-
   .cal-bar {
     position: absolute;
     width: 100%;

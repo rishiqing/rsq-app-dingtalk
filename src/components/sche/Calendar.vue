@@ -150,7 +150,6 @@
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
-
   .c-cal-main {
     position: relative;color:white;font-size: 1.4rem;
     height: 81px;background: #458CDA;

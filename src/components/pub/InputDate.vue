@@ -2,7 +2,8 @@
   <div class="outer-date">
     <v-touch class="" @tap="showDatePikcer">
       <span class="date">日期</span>
-      <span class="now">{{ dateString }}</span>
+      <!--<span class="now">{{ dateString }}</span>-->
+      <span class="now">今天</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
