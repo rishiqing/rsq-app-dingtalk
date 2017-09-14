@@ -1,41 +1,78 @@
 <template>
   <div class="router-view">
-    <r-todo-edit
-        :is-checkable="true"
-        :is-show-note="false"
-        transition="right-slide">
-      <r-input-title
-          slot="slotTitle"
-          :is-checkable="false"
-          :item-title="editItem.pTitle"
-          @text-change="saveTitle"
-      ></r-input-title>
-      <r-input-date
-          slot="slotDate"
-          :item-start-date="editItem.startDate"
-          :item-end-date="editItem.endDate"
-          :item-dates="editItem.dates"
-          :item-sep="'/'"
-          v-if="todoType == 'schedule'"
-          @date-changed="saveDate"
-      ></r-input-date>
-      <r-input-time
-          slot="slotTime">
-      </r-input-time>
-      <r-input-member
-          slot="slotMember"
-          :is-native="true"
-          :index-title="'执行人'"
-          :select-title="'请选择成员'"
-          :user-rsq-ids="[]"
-          :selected-rsq-ids="joinUserRsqIds"
-          :disabled-rsq-ids="[]"
-          @member-changed="saveMember"
-      ></r-input-member>
-    </r-todo-edit>
+    <div class="itm-edt z-index-xs">
+      <div class="content">
+        <div class="itm-edt-fields" style="padding-bottom: 80px;">
+          <div class="itm-group">
+            <r-input-title
+              :is-checkable="false"
+              :item-title="editItem.pTitle"
+              @text-change="saveTitle"
+            ></r-input-title>
+          </div>
+          <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
+            <!--<slot name="slotNote"></slot>-->
+          </div>
+          <div class="itm-group itm--edit-todo itm--part-line">
+            <!--<slot name="slotContainer"></slot>-->
+            <r-input-date
+              :item-start-date="editItem.startDate"
+              :item-end-date="editItem.endDate"
+              :item-dates="editItem.dates"
+              :item-sep="'/'"
+              v-if="todoType == 'schedule'"
+              @date-changed="saveDate"
+            ></r-input-date>
+            <r-input-time></r-input-time>
+            <r-input-member
+              :is-native="true"
+              :index-title="'执行人'"
+              :select-title="'请选择成员'"
+              :user-rsq-ids="[]"
+              :selected-rsq-ids="joinUserRsqIds"
+              :disabled-rsq-ids="[]"
+              @member-changed="saveMember"
+            ></r-input-member>
+            <div class="ding">
+              <div class="bottom">
+                <p class="">DING</p>
+                <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
+              </div>
+              <input class="mui-switch" type="checkbox">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
+  p{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+  }
+  .bottom {
+    height: 2rem;
+    display: inline-block;
+    padding-left: 11px;
+    line-height: 0.1rem;
+    position: relative;
+    margin-top: 0.7rem;
+  }
+  .ding{
+    height:2rem;
+    line-height: 1rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    position:relative;
+  }
+  .message{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+  }
   .mui-switch {
     width: 52px;
     height: 31px;
@@ -85,7 +122,6 @@
     transition: border-color 0.4s, background-color ease 0.4s; }
 </style>
 <script>
-  import PublicEditView from 'com/pub/TodoEditView'
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
@@ -118,7 +154,6 @@
     },
     components: {
       'r-input-time': InputTime,
-      'r-todo-edit': PublicEditView,
       'r-input-title': InputTitleText,
       'r-input-member': InputMember,
       'r-input-date': InputDate
