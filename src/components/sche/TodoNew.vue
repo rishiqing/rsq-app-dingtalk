@@ -1,40 +1,90 @@
-<style lang="scss">
-
-</style>
 <template>
-	<div class="router-view">
-		<r-todo-edit
-				:is-checkable="true"
-				:is-show-note="false"
-				transition="right-slide">
-			<r-input-title
-					slot="slotTitle"
-					:is-checkable="false"
+  <div class="router-view">
+    <r-todo-edit
+        :is-checkable="true"
+        :is-show-note="false"
+        transition="right-slide">
+      <r-input-title
+          slot="slotTitle"
+          :is-checkable="false"
           :item-title="editItem.pTitle"
           @text-change="saveTitle"
-			></r-input-title>
-			<r-input-date
-					slot="slotDate"
-					:item-start-date="editItem.startDate"
-					:item-end-date="editItem.endDate"
-					:item-dates="editItem.dates"
-					:item-sep="'/'"
+      ></r-input-title>
+      <r-input-date
+          slot="slotDate"
+          :item-start-date="editItem.startDate"
+          :item-end-date="editItem.endDate"
+          :item-dates="editItem.dates"
+          :item-sep="'/'"
           v-if="todoType == 'schedule'"
           @date-changed="saveDate"
-			></r-input-date>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'成员'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUserRsqIds"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
-		</r-todo-edit>
-	</div>
+      ></r-input-date>
+      <r-input-time
+          slot="slotTime">
+      </r-input-time>
+      <r-input-member
+          slot="slotMember"
+          :is-native="true"
+          :index-title="'执行人'"
+          :select-title="'请选择成员'"
+          :user-rsq-ids="[]"
+          :selected-rsq-ids="joinUserRsqIds"
+          :disabled-rsq-ids="[]"
+          @member-changed="saveMember"
+      ></r-input-member>
+    </r-todo-edit>
+  </div>
 </template>
+<style lang="scss" scoped>
+  @import "icomoon2.css";
+  .mui-switch {
+    width: 52px;
+    height: 31px;
+    position: absolute;
+    top:0.55rem;
+    right:0.3rem;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none; }
+  .mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mui-switch:checked {
+    border-color: #67B2FE;
+    box-shadow: #67B2FE 0 0 0 16px inset;
+    background-color: #67B2FE; }
+  .mui-switch:checked:before {
+    left: 21px; }
+  .mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; }
+  .mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s; }
+  .mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #67B2FE;
+    transition: border-color 0.4s, background-color ease 0.4s; }
+</style>
 <script>
   import PublicEditView from 'com/pub/TodoEditView'
   import InputTitleText from 'com/pub/InputTitleText'
@@ -42,7 +92,7 @@
   import InputMember from 'com/pub/InputMember'
   import dateUtil from 'ut/dateUtil'
   import moment from 'moment'
-
+  import InputTime from 'com/pub/InputTime'
   export default {
     data () {
       return {
@@ -68,6 +118,7 @@
       }
     },
     components: {
+      'r-input-time': InputTime,
       'r-todo-edit': PublicEditView,
       'r-input-title': InputTitleText,
       'r-input-member': InputMember,
@@ -130,7 +181,7 @@
     },
     mounted () {
       this.initData()
-      window.rsqadmg.execute('setTitle', {title: '新任务'})
+      window.rsqadmg.execute('setTitle', {title: '新建任务'})
       var btnParams
       var that = this
       btnParams = {

@@ -50,15 +50,15 @@
   </div>
 </template>
 <style lang="scss">
-	.expand-transition {
-		transition: all .3s ease;
-	}
-	.expand-enter {
-		transform: translateY(100%);
-	}
-	.expand-leave {
-		transform: translateY(100%);
-	}
+  .expand-transition {
+    transition: all .3s ease;
+  }
+  .expand-enter {
+    transform: translateY(100%);
+  }
+  .expand-leave {
+    transform: translateY(100%);
+  }
 </style>
 <script>
   import Avatar from 'com/pub/TextAvatar'

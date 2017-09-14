@@ -82,12 +82,24 @@
   }
 </script>
 <style scoped>
+  @import "icomoon2.css";
   .itm-lst{
     text-align: center;
+    background-color: #F8F8F8;
+  }
+  img{
+    width: 1.866rem;
+    height: 1.866rem;
+    margin-top:3.653rem ;
   }
   .shouye{
-    margin-top:15.7px;
-
+    padding: 0;
+    margin:0;
+    margin-top:0.418rem;
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #55A8FD;
+    letter-spacing: 0
   }
   img{
     width: 70px;

@@ -23,15 +23,9 @@
   }
 </script>
 <style>
-  .shouye{
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    font-family: PingFangSC-Regular;
-    font-size: 15px;
-    color: #55A8FD;
-    letter-spacing: 0;
-
+  .rsq-webview{
+    background-color: #F8F8F8;
+    height:100%;
   }
 
 

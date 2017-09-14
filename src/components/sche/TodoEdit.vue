@@ -1,48 +1,48 @@
 <style lang="scss">
 </style>
 <template>
-	<div class="router-view">
-		<r-todo-edit
-				:is-checkable="true"
-				transition="right-slide">
-			<r-input-title
-					slot="slotTitle"
-					:is-checkable="true"
-					:item-title="editItem.pTitle"
-					:item-checked="editItem.pIsDone"
-					@text-blur="titleBlur"
-					@click-checkout="finishChecked"
-			></r-input-title>
-			<!--<r-input-note-->
-					<!--slot="slotNote"-->
-					<!--:item-note.sync="editItem.pNote"-->
-					<!--@text-blur="noteBlur"-->
-			<!--&gt;</r-input-note>-->
-			<r-input-date
-					slot="slotDate"
-					:item-start-date="editItem.startDate"
-					:item-end-date="editItem.endDate"
-					:item-dates="editItem.dates"
-					:item-sep="'/'"
+  <div class="router-view">
+    <r-todo-edit
+        :is-checkable="true"
+        transition="right-slide">
+      <r-input-title
+          slot="slotTitle"
+          :is-checkable="true"
+          :item-title="editItem.pTitle"
+          :item-checked="editItem.pIsDone"
+          @text-blur="titleBlur"
+          @click-checkout="finishChecked"
+      ></r-input-title>
+      <!--<r-input-note-->
+          <!--slot="slotNote"-->
+          <!--:item-note.sync="editItem.pNote"-->
+          <!--@text-blur="noteBlur"-->
+      <!--&gt;</r-input-note>-->
+      <r-input-date
+          slot="slotDate"
+          :item-start-date="editItem.startDate"
+          :item-end-date="editItem.endDate"
+          :item-dates="editItem.dates"
+          :item-sep="'/'"
           @date-changed="updateDate"
-			></r-input-date>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'成员'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUserRsqIds"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
-			<!--<r-comment-list-->
-					<!--slot="slotComment"-->
-					<!--:item-list="normalCommonList"-->
-					<!--:todo-type="'todo'"-->
-			<!--&gt;</r-comment-list>-->
-		</r-todo-edit>
-	</div>
+      ></r-input-date>
+      <r-input-member
+          slot="slotMember"
+          :is-native="true"
+          :index-title="'成员'"
+          :select-title="'请选择成员'"
+          :user-rsq-ids="[]"
+          :selected-rsq-ids="joinUserRsqIds"
+          :disabled-rsq-ids="[]"
+          @member-changed="saveMember"
+      ></r-input-member>
+      <!--<r-comment-list-->
+          <!--slot="slotComment"-->
+          <!--:item-list="normalCommonList"-->
+          <!--:todo-type="'todo'"-->
+      <!--&gt;</r-comment-list>-->
+    </r-todo-edit>
+  </div>
 </template>
 <script>
   import TodoEditView from 'com/pub/TodoEditView'

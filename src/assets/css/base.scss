@@ -24,7 +24,6 @@ html, body {
     position: fixed;left:0;right:0;bottom:0;
 }
 
-
 .div-editable {
     outline: none;
     padding: 15px 2px;
@@ -40,7 +39,7 @@ div.div-editable.editable-blank {
     border-radius: 50%;
 }
 
-.text-grey {color: #999;}
+.text-grey {color: #999999;}
 .text-mid-line {text-decoration: line-through;}
 
 /* 通用list列表 */
@@ -87,8 +86,6 @@ div.div-editable.editable-blank {
 .itm-icons.itm-icons--white-bg .icon {background: #fff;}
 .itm-front-icons {}
 .itm-rear-icons {}
-
-
 .itm-placeholder {height: 170px;text-align: center;line-height:170px;color:$textGrey;}
 .itm-avatar {width: 36px;height:36px;margin-top:3px;background-size: cover;border-radius: 2px;}
 .itm-avatar--round {border-radius: 50%;}
@@ -96,11 +93,16 @@ div.div-editable.editable-blank {
 .itm-avatar-wrap--small {padding-top: 5px;}
 .itm-icon-img-wrap>* {
     display: inline-block;
-    vertical-align: middle;
+    //vertical-align: middle;
     margin-right: 5px;
+    float: right;
 }
-.itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;}
-
+.itm-icon-img-wrap {
+  position: absolute;
+  top: 0.3rem;
+  left: 5.7rem;
+}
+.itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;display: inline-block}
 
 .itm-lst-title {position: relative;padding: 0 20px;}
 .itm-lst-title-text {height:34px;line-height: 34px;font-size:14px;}
@@ -116,9 +118,7 @@ div.div-editable.editable-blank {
     overflow: hidden;
     margin-bottom: 10px;
 }
-.itm-group > .itm-outer:last-child {
-
-}
+.itm-group > .itm-outer:last-child {}
 
 .itm-complex-title {padding: 16px 0;}
 .itm-complex-title-label {height: 32px;}
@@ -160,7 +160,6 @@ div.div-editable.editable-blank {
 .cmt .cmt-time, .cmt .cmt-name {font-size: 1.2rem;color: #a3a3a3;}
 .cmt .cmt-content {padding-top: 15px;}
 .cmt .btn-reply {position: absolute;right:0;top:10px;}
-
 
 .cmt-send-field {position: fixed;bottom:0;width:100%;z-index:999;background:#f6f6f6;
     overflow:hidden;box-sizing: border-box;padding: 15px;
@@ -205,18 +204,28 @@ input[type="button"].cmt-send-btn-submit {
 .modal-content.content--kb-edit {width: 80%;}
 .modal-header {position: relative;color: #fff;}
 .modal-header-bg {background-size: cover; background-position: center;width: 100%;height: 120px;}
-.modal-btn-right-top {position: absolute;
+.modal-btn-right-top {
+  position: absolute;
     right: 10px;
     top: 10px;
-    font-size: 3.2rem;}
+    font-size: 1.2rem;}
 .modal-header-title {position: absolute;left: 10%;width: 80%;bottom: 10%;}
-.modal-header-title-text {display: inline;padding: 5px;background: rgba(0,0,0,0.26);color: #fff;border-radius: 3px;}
+.modal-header-title-text {
+  display: inline;
+  padding: 5px;
+  background: rgba(0,0,0,0.26);
+  color: #fff;
+  border-radius: 3px;
+  font-family: PingFangSC-Regular;
+  color: #000000;
+  letter-spacing: -0.46px;
+}
 .modal-body, .modal-footer {padding: 20px;text-align: left;}
 
 .content--con-edit .modal-header-bg {background: $mainColor;}
 .content--con-edit .modal-header-title-text {
     display:block;width: 100%;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;margin: 0;
-    background: transparent;font-size: 2.8rem;}
+    background: transparent;font-size: 1.4rem;}
 
 .bg-con-ie {background: red;}
 .bg-con-iu {background: orange;}
@@ -234,7 +243,6 @@ input[type="button"].cmt-send-btn-submit {
 .itm--part-line .itm-outer {padding-right:0;}
 .itm--part-line  {padding-right: 16px;}
 .itm--part-line .u-abs-right {right:16px;}
-
 
 /* 个人中心 */
 .main-avatar {}
