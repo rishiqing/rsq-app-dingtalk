@@ -54,7 +54,9 @@ export default {
    */
   todo: {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
-    currentTodo: null
+    currentTodo: {
+      subTodos: null
+    }
   },
   //  --------缓存相关--------
   /**

@@ -108,6 +108,10 @@ export default {
    * @param p.item
    * @constructor
    */
+  CHILDTASK_TODO_CREATED (state, p) {
+    state.todo.currentTodo.subTodos.unshift(p.item)
+    console.log(state.todo.currentTodo.subTodos)
+  },
   INB_TODO_CREATED (state, p) {
     if (!state.inbox.items) {
       state.inbox.items = []
@@ -218,6 +222,7 @@ export default {
    * @constructor
    */
   TD_TODO_DELETED (state, p) {
+    console.log('进入mutaitions-delete')
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
     let index = items.indexOf(p.item)
     if (index > -1) {

@@ -270,6 +270,7 @@
             window.rsqadmg.execute('showLoader', {text: '删除中...'})
             that.$store.dispatch('deleteTodo', {todo: that.currentTodo})
                 .then(() => {
+                  console.log('进入到最后了')
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
                   that.$router.replace(window.history.back())

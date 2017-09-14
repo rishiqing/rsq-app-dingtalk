@@ -20,6 +20,7 @@ import repeat from 'com/sche/repeat'
 import date from 'com/sche/date'
 import coment from 'com/pub/coment'
 import time from 'com/pub/time'
+import CreateSubTodo from 'com/pub/CreateSubTodo'
 Vue.use(Router)
 
 const router = new Router({
@@ -114,8 +115,20 @@ const router = new Router({
     },
     {
       path: '/todo/:todoId/subTodo',
-      name: 'todoEditSubTodo',
+      name: 'CreateSubTodo',
+      component: CreateSubTodo,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/todo/SubTodoEdit',
+      name: 'SubTodoEdit',
       component: TodoEditSubTodo,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/CreateSubTodo',
+      name: 'CreateSubTodo',
+      component: CreateSubTodo,
       meta: {requireAuth: true}
     },
     {

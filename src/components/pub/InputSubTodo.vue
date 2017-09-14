@@ -51,6 +51,7 @@
     },
     methods: {
       showSubTodo () {
+        console.log('进来了没有啊' + this.item.id)
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

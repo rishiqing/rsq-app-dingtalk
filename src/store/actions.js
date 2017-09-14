@@ -193,6 +193,33 @@ export default {
         alert(JSON.stringify(err))
       })
   },
+  createSubTodo ({ commit, state, dispatch }, p) {
+    console.log('进来了数据是' + p.newItem + p.todoId)
+    // var inbox = state.inbox
+    var name = p.newItem.pTitle
+    var todoId = 264466
+    // var kanbanItemId = 264466
+
+    // newItem['pContainer'] = 'inbox'
+    // var promise
+    // //  如果inbox.items不存在，则从服务器先获取到inbox，然后获取inbox中任务的顺序，然后再保存
+    // if (!inbox.items) {
+    //   promise = dispatch('fetchInboxItems')
+    // } else {
+    //   promise = Promise.resolve()
+    // }
+    // return promise.then(items => {
+    //   newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
+    return api.todo.postSubTodo({name: name, todoId: todoId})
+        .then(item => {
+          console.log('postsubtodo走完了')
+          console.log('返回来的值是什么啊' + item.name)
+          commit('CHILDTASK_TODO_CREATED', {item: item})
+        })
+    .catch(err => {
+      alert(JSON.stringify(err))
+    })
+  },
   /**
    * 多日逻辑：
    * 暂时读取第一天的顺序，然后保存，然后让缓存失效
@@ -267,7 +294,7 @@ export default {
       })
   },
   /**
-   * 设置inbox页面当前处于选中状态的item，该item将会被现实在edit子页面中
+   * 设置inbox页面当前处于选中状态的item，该item将会被显示在edit子页面中
    * 不采用promise的方式返回值
    * @param commit
    * @param item
@@ -408,9 +435,11 @@ export default {
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
   deleteTodo ({ commit, state, dispatch }, p) {
+    console.log('action-deleteTodo进来了')
     var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
       .then(() => {
+        console.log('api-delete已完成')
         commit('TD_TODO_DELETED', {item: todo})
         //  清除缓存数据
         var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)

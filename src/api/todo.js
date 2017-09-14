@@ -59,6 +59,18 @@ export default {
         })
     })
   },
+  postSubTodo (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.POST_SUB_TODO, props)
+        .then(res => {
+          console.log('postSubTodo进来了')
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   putTodoProps (props) {
     var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
     return new Promise((resolve, reject) => {
@@ -72,6 +84,7 @@ export default {
     })
   },
   deleteTodo (props) {
+    console.log('api-deletetodo进来了')
     var path = util.replaceUrlParams(mapping.DELETE_TODO, props)
 
     return new Promise((resolve, reject) => {

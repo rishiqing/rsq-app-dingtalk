@@ -9,6 +9,7 @@ export default {
   'POST_LOGIN': 'task/j_spring_security_check',
   'GET_LOGOUT': 'task/j_spring_security_logout',
   'GET_INBOX_TODOS': 'task/mainTodoList/getInboxTodos',
+  'POST_SUB_TODO': 'task/v2/subTodo',
   'POST_NEW_TODO': 'task/v2/todo',
   'PUT_TODO_PROP': 'task/rsqTodoData/:id',
   'DELETE_TODO': 'task/rsqTodoData/:id',
