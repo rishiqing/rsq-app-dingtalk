@@ -1,20 +1,20 @@
 <template>
-	<div class="cal-bar" :style="{'left': barOffsetStyle}">
-		<table class="cal-table">
-			<tr>
-				<td class="cal-weekday"
-				    v-for="day in days"
+  <div class="cal-bar" :style="{'left': barOffsetStyle}">
+    <table class="cal-table">
+      <tr>
+        <td class="cal-weekday"
+            v-for="day in days"
             :key="day.date.getTime()"
-				    >
+            >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag}"></div>
-					<v-touch class="cal-day" @tap="calDayClick(day.date)"
+          <v-touch class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
           </v-touch>
         </td>
-			</tr>
-		</table>
-	</div>
+      </tr>
+    </table>
+  </div>
 </template>
 <script>
   export default {

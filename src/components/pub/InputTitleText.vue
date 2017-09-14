@@ -1,27 +1,27 @@
 <template>
-	<div class="">
-		<div class="">
-			<div class="" :style="[paddingObject]">
-				<input type="text" placeholder="输入任务标题"
+  <div class="">
+    <div class="">
+      <div class="" :style="[paddingObject]">
+        <input type="text" placeholder="输入任务标题"
                ref="titleInput"
                :value="itemTitle"
                class="padding-left-input-"
-				       @input="inputChange($event.target.value)"
-				       @blur="inputBlur($event.target.value)"
+               @input="inputChange($event.target.value)"
+               @blur="inputBlur($event.target.value)"
                :class="{'padding-left-input':isCheckable}">
-			</div>
+      </div>
       <div class="padding-left-">
-			<v-touch class=""
-			     v-if="isCheckable"
-			     @tap="clickCheckOut">
-				<i class="icon2-check-box select-title"
-				   :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
+      <v-touch class=""
+           v-if="isCheckable"
+           @tap="clickCheckOut">
+        <i class="icon2-check-box select-title"
+           :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
         <div class="hide" :class="{'for-hide-title':itemChecked}"></div>
         <i class="icon2-selected hide" :class="{'isdisplay-title':itemChecked}"></i>
-			</v-touch>
+      </v-touch>
       </div>
-		</div>
-	</div>
+    </div>
+  </div>
 </template>
 <style scoped>
 @import "icomoon2.css";

@@ -1,29 +1,29 @@
 <template>
-	<v-touch class="c-cal-main"
-	     @panstart="onPanMove" @panmove="onPanMove"
-	     @panend="onPanEnd"
-	     @pancancel="onPanEnd"
+  <v-touch class="c-cal-main"
+       @panstart="onPanMove" @panmove="onPanMove"
+       @panend="onPanEnd"
+       @pancancel="onPanEnd"
        :pan-options="{ direction: 'horizontal', threshold: 10 }">
-	<!--<div class="cal-title z-index-3xs">-->
-			<!--<span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>-->
-			<!--<span>{{focusDate ? focusDate.getFullYear() : ''}}</span>-->
-			<!--<span class="cal-title-today"-->
-			      <!--v-touch:tap="backToToday"-->
-			      <!--v-show="!isToday()">今</span>-->
-		<!--</div>-->
-		<div class="cal-week-title z-index-2xs">
-			<table>
-				<tr>
-					<td class="cal-weekday" v-for="week in weeks">{{week}}</td>
-				</tr>
-			</table>
-		</div>
-		<div class="cal-content z-index-2xs">
-			<div class="cal-outer">
-				<div class="cal-inner" id="hMoveBar"
-				     :style="{'transform': translateX}"
-				     :class="{'animate': easeTrans }">
-					<r-cal-bar
+  <!--<div class="cal-title z-index-3xs">-->
+      <!--<span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>-->
+      <!--<span>{{focusDate ? focusDate.getFullYear() : ''}}</span>-->
+      <!--<span class="cal-title-today"-->
+            <!--v-touch:tap="backToToday"-->
+            <!--v-show="!isToday()">今</span>-->
+    <!--</div>-->
+    <div class="cal-week-title z-index-2xs">
+      <table>
+        <tr>
+          <td class="cal-weekday" v-for="week in weeks">{{week}}</td>
+        </tr>
+      </table>
+    </div>
+    <div class="cal-content z-index-2xs">
+      <div class="cal-outer">
+        <div class="cal-inner" id="hMoveBar"
+             :style="{'transform': translateX}"
+             :class="{'animate': easeTrans }">
+          <r-cal-bar
             v-for="(days, index) in daysArray"
             :key="index"
             :days="days"
@@ -31,11 +31,11 @@
             :highlight-day="selectDate"
             :today-value="todayValue"
             @click-cal-bar-day="triggerSelectDate"
-					></r-cal-bar>
-				</div>
-			</div>
-		</div>
-	</v-touch>
+          ></r-cal-bar>
+        </div>
+      </div>
+    </div>
+  </v-touch>
 </template>
 <script>
   import CalendarBar from 'com/sche/CalendarBar'

@@ -1,22 +1,22 @@
 <template>
-	<div class="outer">
-		<v-touch class="" @tap="showMemberEdit">
-			<div class="execute">
+  <div class="outer">
+    <v-touch class="" @tap="showMemberEdit">
+      <div class="execute">
         {{indexTitle}}
-			</div>
+      </div>
 
-			<div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
-				<!--<div v-for="item in localList">{{item.avatar}}</div>-->
-				<!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
-				<div class="itm-icon-img-wrap">
-					<avatar v-for="item in selectedLocalList"
-					        :key="item.rsqUserId"
-					        :src="item.avatar"
-					        :username="item.name"></avatar>
+      <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
+        <!--<div v-for="item in localList">{{item.avatar}}</div>-->
+        <!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
+        <div class="itm-icon-img-wrap">
+          <avatar v-for="item in selectedLocalList"
+                  :key="item.rsqUserId"
+                  :src="item.avatar"
+                  :username="item.name"></avatar>
         </div>
         <span class="people">{{selectedLocalList.length}}人</span>
         <i class="icon2-arrow-right-small arrow"></i>
-			</div>
+      </div>
 
       <div class="" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
@@ -30,8 +30,8 @@
         <i class="icon2-arrow-right-small arrow"></i>
       </div>
 
-		</v-touch>
-	</div>
+    </v-touch>
+  </div>
 </template>
 <style scoped>
   @import "icomoon2.css";

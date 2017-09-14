@@ -1,11 +1,11 @@
 <template>
-	<div class="outer-date">
-		<v-touch class="" @tap="showDatePikcer">
+  <div class="outer-date">
+    <v-touch class="" @tap="showDatePikcer">
       <span class="date">日期</span>
       <span class="now">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
-		</v-touch>
-	</div>
+    </v-touch>
+  </div>
 </template>
 <style lang="" scoped>
   @import "icomoon2.css";

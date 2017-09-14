@@ -1,40 +1,40 @@
 <template>
-	<div class="router-view">
-		<r-todo-edit
-				:is-checkable="true"
-				:is-show-note="false"
-				transition="right-slide">
-			<r-input-title
-					slot="slotTitle"
-					:is-checkable="false"
+  <div class="router-view">
+    <r-todo-edit
+        :is-checkable="true"
+        :is-show-note="false"
+        transition="right-slide">
+      <r-input-title
+          slot="slotTitle"
+          :is-checkable="false"
           :item-title="editItem.pTitle"
           @text-change="saveTitle"
-			></r-input-title>
-			<r-input-date
-					slot="slotDate"
-					:item-start-date="editItem.startDate"
-					:item-end-date="editItem.endDate"
-					:item-dates="editItem.dates"
-					:item-sep="'/'"
+      ></r-input-title>
+      <r-input-date
+          slot="slotDate"
+          :item-start-date="editItem.startDate"
+          :item-end-date="editItem.endDate"
+          :item-dates="editItem.dates"
+          :item-sep="'/'"
           v-if="todoType == 'schedule'"
           @date-changed="saveDate"
-			></r-input-date>
+      ></r-input-date>
       <InputTime
           slot="slotTime">
       </InputTime>
-			<r-input-member
-					slot="slotMember"
-					:is-native="true"
-					:index-title="'执行人'"
-					:select-title="'请选择成员'"
-					:user-rsq-ids="[]"
-					:selected-rsq-ids="joinUserRsqIds"
-					:disabled-rsq-ids="[]"
-					@member-changed="saveMember"
-			></r-input-member>
+      <r-input-member
+          slot="slotMember"
+          :is-native="true"
+          :index-title="'执行人'"
+          :select-title="'请选择成员'"
+          :user-rsq-ids="[]"
+          :selected-rsq-ids="joinUserRsqIds"
+          :disabled-rsq-ids="[]"
+          @member-changed="saveMember"
+      ></r-input-member>
 
-		</r-todo-edit>
-	</div>
+    </r-todo-edit>
+  </div>
 </template>
 <style lang="scss" scoped>
   @import "icomoon2.css";

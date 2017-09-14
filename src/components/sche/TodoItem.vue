@@ -1,15 +1,15 @@
 <template>
-	<li class="">
-		<v-touch class="" @tap="clickItem($event)">
-			<!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
-			<!--<div class="itm-inner">-->
-				<div class="title-todo" >
+  <li class="">
+    <v-touch class="" @tap="clickItem($event)">
+      <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
+      <!--<div class="itm-inner">-->
+        <div class="title-todo" >
           <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">{{ item.pTitle }}</span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         </div>
-				<v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
-					<i class="icon2-check-box select"
-					   :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
+        <v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
+          <i class="icon2-check-box select"
+             :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
           <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
 
@@ -19,13 +19,13 @@
           <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
           <!--&lt;!&ndash;<i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>&ndash;&gt;-->
         <!--</div>-->
-			<!--</div>-->
-		</v-touch>
-	</li>
+      <!--</div>-->
+    </v-touch>
+  </li>
 </template>
 <style lang="scss" scope>
   @import "icomoon2.css";
-	.contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
+  .contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
   .title-todo{
     display: flex;
     align-items: center;

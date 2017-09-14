@@ -1,15 +1,15 @@
 <template>
-	<!--<ul class="itm-lst itm-lst&#45;&#45;border itm-lst&#45;&#45;margin">-->
+  <!--<ul class="itm-lst itm-lst&#45;&#45;border itm-lst&#45;&#45;margin">-->
   <ul>
-		<r-todo-item
-				v-for="item in items"
+    <r-todo-item
+        v-for="item in items"
         :item="item"
         :is-checkable="isCheckable"
-				@todo-item-click="showEdit"
-				@todo-item-check="checkTodo"
+        @todo-item-click="showEdit"
+        @todo-item-check="checkTodo"
         :key="item.id"
-		></r-todo-item>
-	</ul>
+    ></r-todo-item>
+  </ul>
 </template>
 <style lang="scss" scoped="">
   @import "icomoon2.css";

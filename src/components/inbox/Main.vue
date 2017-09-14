@@ -1,5 +1,5 @@
 <template>
-	<div class="">
+  <div class="">
       <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <input value="创建" class="create"/>
@@ -11,7 +11,7 @@
       :is-checkable="false"
       v-if="items != null && items.length > 0"
     ></r-todo-item-list>
-	</div>
+  </div>
 </template>
 <script>
   import TodoItemList from 'com/sche/TodoItemList'

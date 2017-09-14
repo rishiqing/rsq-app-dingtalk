@@ -1,23 +1,23 @@
 <template>
   <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
-			<div class="left">
-				<v-touch class="" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
+      <div class="left">
+        <v-touch class="" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
           <i class="icon2-schedule richeng"></i>
-					<p class="sche ">日程</p>
-				</v-touch>
-			</div>
+          <p class="sche ">日程</p>
+        </v-touch>
+      </div>
       <div class="mid">
       <v-touch class="" @tap="createNew">
         <i class="icon2-add-circle add" ></i>
       </v-touch>
       </div>
-			<div class="right">
-				<v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
+      <div class="right">
+        <v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
           <i class="icon2-member me"></i>
           <p class="my">我</p>
-				</v-touch>
-			</div>
-		</div>
+        </v-touch>
+      </div>
+    </div>
 </template>
 <script>
   export default {

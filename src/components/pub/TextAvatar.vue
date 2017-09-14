@@ -1,16 +1,16 @@
 <template>
-	<div><div class="avatar" :style="style">
-		<span v-if="!this.src">{{ userInitial }}</span>
-	</div></div>
-	<!--<div>-->
-		<!--<div class="avatar" style="font:'9px/100px Helvetica, Arial, sans-serif';font-weight:'bold';color:#fff;background-color:#cddc39;line-height:24px;width:24px;height:24px;text-align:center;vertical-align:middle;">-->
-			<!--<span>WM</span>-->
-		<!--</div>-->
-	<!--</div>-->
-	<!--<div>-->
-		<!--<div class="avatar" style="background:url(http://static.dingtalk.com/media/lADOD3zI380B080B0w_467_467.jpg) no-repeat;background-size:24px 24px;background-origin:'content-box';width:24px;height:24px;text-align:center;vertical-align:middle;">-->
-		<!--</div>-->
-	<!--</div>-->
+  <div><div class="avatar" :style="style">
+    <span v-if="!this.src">{{ userInitial }}</span>
+  </div></div>
+  <!--<div>-->
+    <!--<div class="avatar" style="font:'9px/100px Helvetica, Arial, sans-serif';font-weight:'bold';color:#fff;background-color:#cddc39;line-height:24px;width:24px;height:24px;text-align:center;vertical-align:middle;">-->
+      <!--<span>WM</span>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div>-->
+    <!--<div class="avatar" style="background:url(http://static.dingtalk.com/media/lADOD3zI380B080B0w_467_467.jpg) no-repeat;background-size:24px 24px;background-origin:'content-box';width:24px;height:24px;text-align:center;vertical-align:middle;">-->
+    <!--</div>-->
+  <!--</div>-->
 </template>
 <script>
   export default{
