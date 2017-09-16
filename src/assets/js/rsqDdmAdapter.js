@@ -116,17 +116,6 @@ rsqAdapterManager.register({
       jsApiList: [
         'runtime.info',
         'biz.chat.pickConversation',
-        'device.notification.confirm',
-        'device.notification.alert',
-        'device.notification.prompt',
-        'device.notification.showPreloader',
-        'device.notification.hidePreloader',
-        'device.notification.toast',
-        'device.notification.actionSheet',
-        'biz.navigation.setTitle',
-        'biz.navigation.setMenu',
-        'biz.util.chosen',
-        'biz.util.datepicker',
         'biz.customContact.choose',
         'biz.customContact.multipleChoose',
         'biz.chat.open',
@@ -496,5 +485,23 @@ rsqAdapterManager.register({
         alert(JSON.stringify(err));
       }
     })
+  },
+  timePicker: function(params){
+    var strInit = params.strInit || '00:00'
+    dd.biz.util.timepicker({
+      format: 'HH:mm',
+      value: strInit, //默认显示时间  0.0.3
+      onSuccess : function(res) {
+        rsqChk(params.success, [res]);
+        //onSuccess将在点击完成之后回调
+        /*{
+                     value: "10:00"
+                 }
+                 */
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    })
   }
-});
+})

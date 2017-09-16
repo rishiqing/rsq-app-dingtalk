@@ -266,13 +266,18 @@ export default {
    * @constructor
    */
   PUB_SET_TODO_TIME (state, p) {
+    var obj
     if (p && p.todo) {
-      state.pub.currentTodoTime.isClose = !!p.isClose
-      state.pub.currentTodoTime.todo = p.todo
+      obj = {
+        isClose: !!p.isClose,
+        todo: p.todo
+      }
     } else {
-      state.pub.currentTodoTime.isClose = true
-      state.pub.currentTodoTime.todo = null
+      obj = {
+        todo: null
+      }
     }
+    state.pub.currentTodoTime = obj
   }
   /* --------------------------------- */
 }

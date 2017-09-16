@@ -3,7 +3,7 @@
     <v-touch class="" @tap="showTimePicker">
       <span class="date">时间</span>
       <!--<span class="now">{{ dateString }}</span>-->
-      <span class="now">全天</span>
+      <span class="now">{{timeValue}}</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -47,11 +47,21 @@
     data () {
       return {}
     },
+    computed: {
+      timeValue () {
+        return '全天'
+      }
+    },
     props: {
       item: Object
     },
     methods: {
       showTimePicker () {
+        var todo = null
+        if (this.item) {
+          todo = this.item
+        }
+        this.$store.commit('PUB_SET_TODO_TIME', todo)
         this.$router.push('/todoEdit/time')
       }
     }
