@@ -1,4 +1,5 @@
 import util from 'ut/jsUtil'
+import dateUtil from 'ut/dateUtil'
 
 /**
  * mutation命名规则：
@@ -278,6 +279,18 @@ export default {
       }
     }
     state.pub.currentTodoTime = obj
+  },
+  PUB_SET_TODO_REPEAT (state, p) {
+    p = p || {}
+    var obj = {
+      numBaseDate: p.numBaseDate || dateUtil.clearTime(new Date()).getTime()
+    }
+    if (p && p.todo) {
+      obj.todo = p.todo
+    } else {
+      obj.todo = null
+    }
+    state.pub.currentTodoRepeat = obj
   }
   /* --------------------------------- */
 }

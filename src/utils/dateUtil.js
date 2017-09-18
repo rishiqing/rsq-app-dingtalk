@@ -236,9 +236,76 @@ export default {
     }
     return result
   },
-
   monthName (date) {
     var array = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
     return array[date.getMonth()]
+  },
+  dayName (date) {
+    var index = date
+    if (date instanceof Date) {
+      index = date.getDay()
+    }
+    var array = ['日', '一', '二', '三', '四', '五', '六']
+    return array[index]
+  },
+  repeatCycleName (code) {
+    var map = {
+      noRepeat: '不重复',
+      userRepeat: '自定义重复',
+      everyDay: '每天重复',
+      everyWeek: '每周重复',
+      everyMonth: '每月重复',
+      everyYear: '每年重复',
+      weekday: '工作日重复（周一至周五）'
+    }
+    return map[code]
+  },
+  /**
+   * 判断是否是工作日重复
+   * @param todo
+   * @returns {string}
+   */
+  repeatWeekdayText (todo) {
+    var text = ''
+    if (todo.type === 'everyWeek') {
+      let valArr = todo.baseTime.split(',').map(str => {
+        return this.dateText2Num(str)
+      }).sort()
+      let isWeekday = true
+      for (var i = 0; i < valArr.length; i++) {
+        if (new Date(valArr[i]).getDay() !== (i + 1)) {
+          isWeekday = false
+          break
+        }
+      }
+      text = isWeekday ? '工作日重复（周一至周五）' : ''
+    }
+    return text
+  },
+  /**
+   * 将todo设置的重复转换成文字描述
+   * @param type：重复类型："everyDay", "everyWeek", "everyMonth", "everyYear"
+   * @param baseTimeArr, 重复的时间mills值组成的数组
+   */
+  repeatDayText (type, baseTimeArr) {
+    var text
+    switch (type) {
+      case 'everyWeek':
+        text = '每周' + baseTimeArr.map(val => { return this.dayName(new Date(val)) }).join('、')
+        break
+      case 'everyMonth':
+        text = '每月' + baseTimeArr.map(val => { return new Date(val).getDate() }).join('、') + '日'
+        break
+      case 'everyYear':
+        text = '每年' + baseTimeArr.map(val => {
+          const d = new Date(val)
+          return (d.getMonth() + 1) + '月' + d.getDate() + '号'
+        }).join('、')
+        break
+      default:
+        text = ''
+        break
+    }
+    return text
   }
 }

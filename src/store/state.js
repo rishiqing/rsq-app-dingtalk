@@ -69,7 +69,17 @@ export default {
      *    }
      *  }
      */
-    currentTodoTime: {}
+    currentTodoTime: {},
+    /**
+     * 设置repeat
+     * {
+     *   numBaseDate:
+     *   todo: {
+     *     alwaysRepeat: true, repeatType: 'everyWeek', repeatBaseTime: '', repeatOverDate: ''
+     *   }
+     * }
+     */
+    currentTodoRepeat: {}
   },
   //  --------缓存相关--------
   /**

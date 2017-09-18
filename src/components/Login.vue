@@ -39,8 +39,9 @@
     },
     methods: {
       doLogin () {
-        this.$store.commit('PUB_SET_TODO_TIME', null)
-        this.$router.push('/todoEdit/time')
+        this.$store.commit('SCH_TODO_READY', {strCurrentDate: '2017-09-16', items: []})
+        this.$store.commit('PUB_SET_TODO_REPEAT', null)
+        this.$router.push('/todoEdit/repeat')
 //        this.$store.dispatch('login', { username: this.username, password: this.password })
 //            .then((res) => {
 //              this.$router.replace('/')
@@ -51,12 +52,12 @@
       }
     },
     mounted () {
-      eventBus.$on('todo-edit-time-ready', result => {
+      eventBus.$on('todo-edit-repeat-ready', result => {
         alert(JSON.stringify(result))
       })
-//      setTimeout(() => {
-//        this.doLogin()
-//      })
+      setTimeout(() => {
+        this.doLogin()
+      })
     }
   }
 </script>

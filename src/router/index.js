@@ -11,6 +11,7 @@ import TodoEdit from 'com/sche/TodoEdit'
 import TodoEditSubTodo from 'com/pub/TodoEditSubTodo'
 import TodoEditTime from 'com/pub/TodoEditTime'
 import TodoEditAlert from 'com/pub/TodoEditAlert'
+import TodoEditRepeat from 'com/pub/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 import remind from 'com/pub/remind'
@@ -28,7 +29,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/sche'
+      redirect: '/login'
     },
     {
       path: '/sche',
@@ -130,6 +131,12 @@ const router = new Router({
       path: '/todoEdit/alert',
       name: 'todoEditAlert',
       component: TodoEditAlert,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/todoEdit/repeat',
+      name: 'todoEditRepeat',
+      component: TodoEditRepeat,
       meta: {requireAuth: false}
     },
     {
