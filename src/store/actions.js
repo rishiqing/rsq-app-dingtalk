@@ -194,7 +194,7 @@ export default {
       })
   },
   createSubTodo ({ commit, state, dispatch }, p) {
-    console.log('进来了数据是' + p.newItem + p.todoId)
+    // console.log('进来了数据是' + p.newItem + p.todoId)
     // var inbox = state.inbox
     var name = p.newItem.pTitle
     var todoId = 264466
@@ -212,8 +212,8 @@ export default {
     //   newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
     return api.todo.postSubTodo({name: name, todoId: todoId})
         .then(item => {
-          console.log('postsubtodo走完了')
-          console.log('返回来的值是什么啊' + item.name)
+          // console.log('postsubtodo走完了')
+          // console.log('返回来的值是什么啊' + item.name)
           commit('CHILDTASK_TODO_CREATED', {item: item})
         })
     .catch(err => {
@@ -291,6 +291,13 @@ export default {
     return api.todo.putTodoProps({id: p.item.id, pIsDone: p.status})
       .then(() => {
         commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
+      })
+  },
+  submitSubTodoFinish ({ commit }, p) {
+    console.log('submitSubTodoFinish进来了')
+    return api.todo.putSubTodoProps({id: p.item.id, pIsDone: p.status})
+      .then(() => {
+        commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
       })
   },
   /**
@@ -416,12 +423,49 @@ export default {
   updateTodo ({ commit, state }, p) {
     //  p.todo不存在，则默认读取currentTodo
     var todo = p.todo || state.todo.currentTodo
-    var editItem = p.editItem
+    // var items = p.items
     //  如果id存在，则ajax更新
+    var editItem = p.editItem
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
       .then(todo => {
         commit('TD_TODO_UPDATED', {todo: todo})
+      })
+  },
+  updateSubTodo ({ commit, state }, p) {
+    //  p.todo不存在，则默认读取currentTodo
+    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    // var id = state.todo.currentTodo.subTodos[0].id
+    // var id = p.item.id
+    p.item.name = p.name
+    var item = p.item
+    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
+    //  如果id存在，则ajax更新
+    // var editItem = p.editItem
+    // console.log('todo的id是' + id)
+    // editItem['id'] = id
+    return api.todo.putSubTodoProps(item)
+      .then(subTodo => {
+        // console.log('返回来的subTodo是' + subTodo.name)
+        commit('TD_SUBTODO_UPDATED', { subTodo: subTodo, item: item })
+      })
+  },
+  updateSubTodoCheck ({ commit, state }, p) {
+    //  p.todo不存在，则默认读取currentTodo
+    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    // var id = state.todo.currentTodo.subTodos[0].id
+    // var id = p.item.id
+    p.item.name = p.name
+    var item = p.item
+    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
+    //  如果id存在，则ajax更新
+    // var editItem = p.editItem
+    // console.log('todo的id是' + id)
+    // editItem['id'] = id
+    return api.todo.putSubTodoProps(item)
+      .then(subTodo => {
+        // console.log('返回来的subTodo是' + subTodo.name)
+        commit('TD_SUBTODO_UPDATED', { subTodo: subTodo, item: item })
       })
   },
   /**
@@ -446,6 +490,21 @@ export default {
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
         dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
+      })
+  },
+  deleteSubTodo ({ commit, state, dispatch }, p) {
+    console.log('action-deleteSubTodo进来了')
+    // var todo = p.todo || state.todo.currentTodo
+    var item = p.item
+    return api.todo.deleteSubTodo(item)
+      .then(() => {
+        console.log('api-delete已完成')
+        commit('TD_SUBTODO_DELETE', {item: item})
+        //  清除缓存数据
+        // var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
+        // var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+
+        // dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
       })
   },
   /**

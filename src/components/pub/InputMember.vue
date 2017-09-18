@@ -39,14 +39,14 @@
   }
   .outer{
     /*margin-top: 0.231rem;*/
-    border-bottom: 0.5px solid #E3E3E3;
-    /*border-top: 1px solid #E3E3E3;*/
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
     position: relative;
     height:1.3rem;
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
     width: 100%;
+    margin-top: 0.231rem;
   }
   .people{
     position:absolute;

@@ -2,8 +2,8 @@
   <div class="outer-date">
     <v-touch class="" @tap="showDatePikcer">
       <span class="date">日期</span>
-      <!--<span class="now">{{ dateString }}</span>-->
-      <span class="now">今天</span>
+      <span class="now">{{ dateString }}</span>
+      <!--<span class="now">今天</span>-->
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -14,7 +14,7 @@
     height:1.3rem;
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
+    border-bottom:1px solid #E0E0E0;
     width: 100%;
   }
   .arrow{
@@ -62,8 +62,17 @@
           return ''
         }
         var parsed = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
+        // console.log(parsed.currentDate)
         var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
-        return result
+        var now = new Date()
+        var month = now.getMonth() + 1
+        var day = now.getDate()
+        var newdate = month + '月' + day + '日'
+        if (newdate === result) {
+          return '今天'
+        } else {
+          return result
+        }
       }
     },
     methods: {

@@ -63,7 +63,7 @@ export default {
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_SUB_TODO, props)
         .then(res => {
-          console.log('postSubTodo进来了')
+          // console.log('postSubTodo进来了')
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))
@@ -73,6 +73,33 @@ export default {
   },
   putTodoProps (props) {
     var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
+    console.log('props是' + props.name + ':' + props.id + '请求路径是' + path)
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  putSubTodoProps (props) {
+    var path = util.replaceUrlParams(mapping.POST_SUBTODO_PROP, props)
+    console.log('props的isdone是' + props.pIsDone + ':' + props.id + '请求路径是' + path)
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  putSubTodoPropsCheck (props) {
+    var path = util.replaceUrlParams(mapping.POST_SUBTODO_PROP, props)
+    console.log('props是' + props.item.id + ':' + props.status + '请求路径是' + path)
     return new Promise((resolve, reject) => {
       Vue.http.put(path, props)
         .then(res => {
@@ -87,6 +114,19 @@ export default {
     console.log('api-deletetodo进来了')
     var path = util.replaceUrlParams(mapping.DELETE_TODO, props)
 
+    return new Promise((resolve, reject) => {
+      Vue.http.delete(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  deleteSubTodo (props) {
+    console.log('api-deletesubtodo进来了')
+    var path = util.replaceUrlParams(mapping.DELETE_SUB_TODO, props)
     return new Promise((resolve, reject) => {
       Vue.http.delete(path)
         .then(res => {

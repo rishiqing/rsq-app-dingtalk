@@ -1,30 +1,29 @@
 <template>
   <div class="">
-    <div class="top" v-if="seen">
+    <div class="topSubtodo" v-if="seen">
       <v-touch @tap="change"><i class="icon2-add-circle add"></i></v-touch>
       <span>新建子任务</span>
     </div>
-    <div v-else>
+    <div v-else class="anotherTop">
       <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <input value="创建" class="create"/>
       </v-touch>
     </div>
     <div class="margin-block"></div>
-    <ul>
-    <li v-for="item in items">
+    <ul class="list" v-if="">
+    <li v-for="item in items" v-if="items">
       <v-touch class="" @tap="clickItem($event)">
         <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
         <!--<div class="itm-inner">-->
-        <div class="title-todo" >
-          <input class="todo-content" value=hh :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">
-          <span>{{item.name}}</span>
-        </div>
-        <v-touch class="" v-if="" @tap="clickCheckOut">
-          <i class="icon2-check-box select"
-             :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
-          <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
-          <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
+        <!--<div class="title-todo" >-->
+         <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
+                  ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
+        <!--</div>-->
+        <v-touch class="" v-if="" @tap="clickCheckOut(item)">
+          <i class="icon2-check-box select-sub"></i>
+          <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
+          <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
         </v-touch>
 
         <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
@@ -45,7 +44,8 @@
       return {
         titleName: '子任务',
         inputTitle: '',
-        seen: true
+        seen: true,
+        judge: false
       }
     },
     computed: {
@@ -63,6 +63,62 @@
       change () {
         this.seen = false
       },
+      judgeable () {
+        if (this.items) {
+          this.judge = true
+        }
+      },
+      inputBlur (value, item) {
+        this.$refs.titleInput.value = value
+        if (!value) {
+          var that = this
+          // this.deleteCurrentSubTodo(item)
+          // return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
+          window.rsqadmg.exec('confirm', {
+            message: '确定要删除此任务？',
+            success () {
+              window.rsqadmg.execute('showLoader', {text: '删除中...'})
+              that.$store.dispatch('deleteSubTodo', {item: item})
+                .then(() => {
+                  console.log('进入到最后了')
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '删除成功'})
+                  this.$router.replace(window.history.back())
+                })
+            }
+          })
+        } else {
+          // console.log('新的value是' + value)
+          if (value !== this.items[0].name) {
+            window.rsqadmg.exec('showLoader', {text: '保存中...'})
+            this.$store.dispatch('updateSubTodo', {item: item, name: value})
+              .then(() => {
+                // this.items.name = value
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '保存成功'})
+              })
+          }
+        }
+      },
+      deleteCurrentSubTodo (item) {
+        // var that = this
+        window.rsqadmg.exec('confirm', {
+          message: '确定要删除此任务？',
+          success () {
+            window.rsqadmg.execute('showLoader', {text: '删除中...'})
+            this.$store.dispatch('deleteSubTodo', {item: item})
+              .then(() => {
+                console.log('进入到最后了')
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '删除成功'})
+                this.$router.replace(window.history.back())
+              })
+          }
+        })
+      },
+      inputChange (value) {
+        this.$refs.titleInput.value = value
+      },
       fetchItems () {
         this.$store.dispatch('fetchInboxItems')
       },
@@ -76,11 +132,12 @@
           })
       },
       clickItem () {
-        this.$store.dispatch('setCurrentTodo', this.items)
-        this.$router.push('/todo/SubTodoEdit')
+//        this.$store.dispatch('setCurrentTodo', this.items)
+//        this.$router.push('/todo/SubTodoEdit')
       },
-      clickCheckOut (item, status) {
-        this.$store.dispatch('submitTodoFinish', {item: this.items, status: this.items.pIsDone})
+      clickCheckOut (item) {
+        console.log('进来了clickCheckOut')
+        this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
             .then(function () {
 //              rsqadmg.execute('toast', {message: str})
             })
@@ -101,15 +158,27 @@
     color: #999999;
     line-height: 22px;
   }
-  input{
-    border:none;
-    line-height: 1.226rem;;
+  .select-sub{
+    position: absolute;
+    top: 0.4rem;
   }
-  .top{
+  .list{
+    background-color: white;
+  }
+  .list-below{
+    border:none;
+    line-height: 1.126rem;
+    margin-left: 0.8rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    /*color: #222222;*/
+  }
+  .topSubtodo{
+    position:fixed;
     background-color: white;
     position: relative;
     line-height: 1.226rem;;
-    margin-top:0.266rem;
+    top:0.266rem;
     padding-left:5%
   }
   .add{
@@ -120,6 +189,9 @@
     color:white;
     border: 1px solid #55A8FD;
     border-radius: 50%;
+  }
+  .title-todo input{
+    border: none;
   }
   .top{
     border-bottom:1px solid #DADADA ;
@@ -147,7 +219,7 @@
   }
   ul{
     position: relative;
-    margin-top:0.266rem;
+    margin-top:0.966rem;
     border-bottom:1px solid #DADADA ;
     border-top:1px solid #DADADA ;
     padding-left: 5%;
@@ -159,21 +231,24 @@
     padding:0;
     position: relative;
     border-bottom:1px solid #DADADA ;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #222222;
   }
   li:last-child{
     border: none;
   }
-  .isdisplay{
+  .isdisplay-sub{
     display: block;
     position:absolute;
-    top:0.45rem;
+    top:0.25rem;
     left: 0.13rem;
     font-size: 15px;
     color:#55A8FD;
   }
-  .for-hide{
+  .for-hide-sub{
     position: absolute;
-    top:0.52rem;
+    top:0.36rem;
     left: 0.39rem;
     display: block;
     width: 2px;
@@ -192,16 +267,19 @@
     font-size: 15px;
     color:#55A8FD;
     position: absolute;
-    top:0.8rem;
+    top:0.5rem;
     right:0.35rem;
+    z-index:2
   }
   .write{
     height:1.226rem;
     background: #FFFFFF;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
-    margin-top: 0.574rem;
+    top: 0.266rem;
     padding-left:0.3rem;
+    position: fixed;
+    /*z-index: 1;*/
   }
   .margin-block {
     height: 50px;

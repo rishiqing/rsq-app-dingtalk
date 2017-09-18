@@ -70,19 +70,21 @@
     font-size: 15px;
     color:#55A8FD;
     position: absolute;
-    top:0.8rem;
+    top:1rem;
     right:0.35rem;
   }
   .write{
-    height:1.226rem;
+    height:1.612rem;
+    position: fixed;
     background: #FFFFFF;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
     margin-top: 0.574rem;
     padding-left:0.3rem;
+    margin-bottom: 0.224rem;
   }
   .margin-block {
-    height: 50px;
+    height: 100px;
   }
   .input-panel {
     position: fixed;

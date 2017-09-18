@@ -2,7 +2,7 @@
   <div class="outertime">
     <v-touch class="" @tap="showSubTodo">
       <span class="date">子任务</span>
-      <span class="now"></span>
+      <span class="now">{{subtodoString}}</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -49,9 +49,30 @@
     props: {
       item: Object
     },
+    computed: {
+      subtodoString () {
+        var finishcount = 0
+        var unfinishcount = 0
+        var result = null
+        var subtodo = this.item.subTodos
+        if (!subtodo) {
+          return ''
+        } else {
+          for (var i = 0; i < subtodo.length; i++) {
+            if (subtodo[i].isDone) {
+              finishcount++
+            } else {
+              unfinishcount++
+            }
+          }
+          result = finishcount + '条已完成' + unfinishcount + '条未完成'
+          return result
+        }
+      }
+    },
     methods: {
       showSubTodo () {
-        console.log('进来了没有啊' + this.item.id)
+        // console.log('进来了没有啊' + this.item.id)
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

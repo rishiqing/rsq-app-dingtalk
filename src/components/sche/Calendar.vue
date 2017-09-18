@@ -172,7 +172,10 @@
     width: 100%;height: 100%;margin: 0;
   }
   .c-cal-main td {}
-  .cal-weekday {font-size: 0.293rem }
+  .cal-weekday {
+    font-size: 0.293rem;
+    font-family: PingFangSC-Medium;
+  }
   .cal-content {
     position: fixed; top: 30px;left: 0;right: 0;padding:0;
     width: 100%;height:40px;overflow: hidden;background: #458CDA;

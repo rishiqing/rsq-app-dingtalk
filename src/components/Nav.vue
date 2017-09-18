@@ -55,6 +55,7 @@
   }
   .richeng{
     font-size: 22px;
+    color: #999999;
   }
   .sche{
     font-family: PingFangSC-Regular;

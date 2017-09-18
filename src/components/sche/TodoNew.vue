@@ -78,7 +78,7 @@
     height: 31px;
     position: absolute;
     top:0.55rem;
-    right:0.3rem;
+    right:0.01rem;
     border: 1px solid #dfdfdf;
     background-color: #fdfdfd;
     box-shadow: #dfdfdf 0 0 0 0 inset;

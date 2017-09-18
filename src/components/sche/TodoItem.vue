@@ -4,7 +4,7 @@
       <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
       <!--<div class="itm-inner">-->
         <div class="title-todo" >
-          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">{{ item.pTitle }}</span>
+          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable,'real-width':isMaxlength(item)}">{{ item.pTitle }}</span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         </div>
         <v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
@@ -31,9 +31,20 @@
   .margin-left{
     margin-left: 0.8rem;
   }
+  .real-width{
+    width:70%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap
+  }
   .todo-content{
+    display: flex;
+    align-items: center;
     font-family: PingFangSC-Regular;
     font-size: 17px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap;
     color: #333333;
   }
   .hide{
@@ -69,11 +80,11 @@
     line-height:1.612rem ;
     height: 1.612rem;
     position: relative;
-    border-bottom:1px solid #DADADA ;
+    border-bottom:1px solid #E0E0E0 ;
   }
   .item-title{}
   .select{
-    color:#69ACEF;
+    color:#b9b9bc;
     font-size: 17px;
     position: absolute;
     top:0.55rem;
@@ -100,17 +111,25 @@
       isDelay () { return this.delayDays > 0 }
     },
     methods: {
+      isMaxlength (item) {
+        if (item.pTitle.length > 10) {
+          return true
+        } else {
+          return false
+        }
+      },
       clickItem (e) {
         //  这个是点击跳到编辑界面
+        // console.log(this.item.pTitle.length)
         if (e.target.className.indexOf('jsItemCheckbox') === -1) {
           this.$emit('todo-item-click', this.item)
-          e.stopPropagation()
+          // e.stopPropagation()
           e.preventDefault()
         }
       },
       clickCheckOut (e) {
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
-        e.stopPropagation()
+        // e.stopPropagation()
         e.preventDefault()
       }
     },

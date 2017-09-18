@@ -43,6 +43,7 @@
         this.$router.push('/todo/' + item.id)
       },
       checkTodo (item, status) {
+        console.log('这就是checktodo的参数' + item + ' ' + status)
         this.$store.dispatch('submitTodoFinish', {item: item, status: status})
             .then(function () {
 //              rsqadmg.execute('toast', {message: str})

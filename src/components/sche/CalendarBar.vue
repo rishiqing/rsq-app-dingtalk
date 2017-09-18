@@ -67,7 +67,7 @@
   }
   .cal-weekday {
     position:relative;
-    font-family: PingFangSC-Regular;
+    font-family: PingFangSC-Medium;
     font-size: 11px;
     color: #FFFFFF;
     line-height: 12px;

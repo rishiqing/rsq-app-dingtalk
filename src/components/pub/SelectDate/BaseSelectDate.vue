@@ -68,7 +68,7 @@
             </div>
           </div>
           <!--<div class="modal-footer">-->
-            <!--<v-touch tag="input" class="u-full-width" type="button" value="确定" @tap="tapConfirm($event)" />-->
+            <v-touch tag="input" class="u-full-width" type="button" value="确定" @tap="tapConfirm($event)" />
             <div class="date-footer">
               <span class="date-repeat">重复</span>
               <span class="date-norepeat">不重复</span>
