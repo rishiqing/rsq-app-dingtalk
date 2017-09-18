@@ -74,6 +74,13 @@ export default {
     return obj
   },
   /**
+   * 从obj深克隆一个对象出来
+   * @param obj
+   */
+  deepClone (obj) {
+    return JSON.parse(JSON.stringify(obj))
+  },
+  /**
    * 根据array中object的id查找元素
    * @param array
    * @param id

@@ -29,7 +29,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/sche'
     },
     {
       path: '/sche',

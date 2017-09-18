@@ -28,7 +28,7 @@
   }
 </style>
 <script>
-  import eventBus from 'ut/eventBus'
+//  import eventBus from 'ut/eventBus'
 
   export default {
     data () {
@@ -39,9 +39,13 @@
     },
     methods: {
       doLogin () {
-        this.$store.commit('SCH_TODO_READY', {strCurrentDate: '2017-09-16', items: []})
-        this.$store.commit('PUB_SET_TODO_REPEAT', null)
-        this.$router.push('/todoEdit/repeat')
+//        this.$store.commit('SCH_TODO_READY', {strCurrentDate: '2017-09-16', items: []})
+//        this.$store.commit('PUB_SET_TODO_REPEAT', null)
+        this.$store.commit('PUB_SET_TODO_TIME', {
+          isAllDay: true,
+          todo: null
+        })
+        this.$router.push('/todoEdit/time')
 //        this.$store.dispatch('login', { username: this.username, password: this.password })
 //            .then((res) => {
 //              this.$router.replace('/')
@@ -49,15 +53,19 @@
       },
       doLogout () {
         this.$store.dispatch('logout')
+      },
+      eventHandler (result) {
+        alert(JSON.stringify(result))
       }
     },
     mounted () {
-      eventBus.$on('todo-edit-repeat-ready', result => {
-        alert(JSON.stringify(result))
-      })
+//      eventBus.$on('todo-edit-time-ready', this.eventHandler)
       setTimeout(() => {
         this.doLogin()
       })
+    },
+    beforeDestroy () {
+//      eventBus.$off('todo-edit-time-ready', this.eventHandler)
     }
   }
 </script>

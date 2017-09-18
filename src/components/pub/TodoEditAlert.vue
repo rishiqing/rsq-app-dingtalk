@@ -81,7 +81,6 @@
 
 </style>
 <script>
-  import eventBus from 'ut/eventBus'
   import jsUtil from 'ut/jsUtil'
 
   export default {
@@ -102,26 +101,24 @@
       }
     },
     computed: {
-      todoTime () {
-        return this.$store.state.pub.currentTodoTime
+      todoAlert () {
+        return this.$store.state.pub.currentTodoAlert
       }
     },
     methods: {
       initData () {
         var hasAlert = false
-        if (this.todoTime && this.todoTime.todo && this.todoTime.todo.clock) {
-          var passedAlertArray = this.todoTime.todo.clock.alert
-          if (passedAlertArray) {
-            passedAlertArray.forEach(remoteAlert => {
-              var localAlert = this.alertList.find(localAlert => {
-                return [localAlert.point, localAlert.num, localAlert.unit].join('_') === remoteAlert.schedule
-              })
-              if (localAlert) {
-                hasAlert = true
-                localAlert.selected = true
-              }
+        var passedAlertArray = this.todoAlert.alert
+        if (passedAlertArray) {
+          passedAlertArray.forEach(remoteAlert => {
+            var localAlert = this.alertList.find(localAlert => {
+              return [localAlert.point, localAlert.num, localAlert.unit].join('_') === remoteAlert.schedule
             })
-          }
+            if (localAlert) {
+              hasAlert = true
+              localAlert.selected = true
+            }
+          })
         }
         this.notUseAlert = !hasAlert
       },
@@ -157,6 +154,9 @@
           }).map(sel => {
             return this.parseAlertData(sel)
           })
+      },
+      saveTodoAlert () {
+        this.$store.commit('PUB_SET_TODO_ALERT', {alert: this.getResult()})
       }
     },
     mounted () {
@@ -165,9 +165,7 @@
       window.rsqadmg.exec('setOptionButtons', {hide: true})
     },
     beforeRouteLeave (to, from, next) {
-      if (to.name === 'todoEditTime') {
-        eventBus.$emit('todo-edit-alert-ready', this.getResult())
-      }
+      this.saveTodoAlert()
       next()
     }
   }

@@ -43,13 +43,18 @@
   }
 </style>
 <script>
+  import converter from 'ut/converter'
+
   export default {
     data () {
       return {}
     },
     computed: {
       timeValue () {
-        return '全天'
+        return this.todoTime.isAllDay ? '全天' : this.todoTime.startTime + '-' + this.todoTime.endTime
+      },
+      todoTime () {
+        return converter.todo2TodoTime(this.item)
       }
     },
     props: {
@@ -57,13 +62,10 @@
     },
     methods: {
       showTimePicker () {
-        var todo = null
-        if (this.item) {
-          todo = this.item
-        }
-        this.$store.commit('PUB_SET_TODO_TIME', todo)
+        this.$store.commit('PUB_SET_TODO_TIME', this.todoTime)
         this.$router.push('/todoEdit/time')
       }
-    }
+    },
+    mounted () {}
   }
 </script>

@@ -126,6 +126,8 @@
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
   import dateUtil from 'ut/dateUtil'
+  import jsUtil from 'ut/jsUtil'
+  import converter from 'ut/converter'
   import moment from 'moment'
   import InputTime from 'com/pub/InputTime'
   export default {
@@ -150,6 +152,9 @@
       isInbox () {
         //  所有日期属性均为date，判断当前新建的item为收纳箱任务
         return (!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)
+      },
+      currentTime () {
+        return this.$store.pub.currentTodoTime
       }
     },
     components: {
@@ -201,6 +206,11 @@
           }
           //  坑爹啊。。。格式不统一，需要做额外的hack
           this.editItem.pPlanedTime = dateUtil.dateNum2Text(planTime, '-') + ' 00:00:00'
+          this.editItem.createTaskDate = dateUtil.dateNum2Text(planTime)
+        }
+        //  保存时间
+        if (!this.currentTime.isAllDay) {
+          jsUtil.extendObject(this.editItem, converter.todoTime2Todo(this.currentTime))
         }
 
         window.rsqadmg.execute('showLoader', {text: '创建中...'})

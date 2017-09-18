@@ -21,30 +21,30 @@ Vue.use(VueTouch)
 
 Vue.config.productionTip = false
 
-// window.rsqadmg.exec('auth', {
-//   success: function (rsqUser, authUser) {
-//     store.state.loginUser = {
-//       rsqUser: rsqUser,
-//       authUser: authUser
-//     }
-//
-//     store.state.env.isAddNav = true
-//
-//     /* eslint-disable no-new */
-//     new Vue({
-//       el: '#app',
-//       router,
-//       store,
-//       template: '<App/>',
-//       components: { App }
-//     })
-//   }
-// })
+window.rsqadmg.exec('auth', {
+  success: function (rsqUser, authUser) {
+    store.state.loginUser = {
+      rsqUser: rsqUser,
+      authUser: authUser
+    }
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: { App }
+    store.state.env.isAddNav = true
+
+    /* eslint-disable no-new */
+    new Vue({
+      el: '#app',
+      router,
+      store,
+      template: '<App/>',
+      components: { App }
+    })
+  }
 })
+
+// new Vue({
+//   el: '#app',
+//   router,
+//   store,
+//   template: '<App/>',
+//   components: { App }
+// })

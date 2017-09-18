@@ -61,15 +61,22 @@ export default {
    */
   pub: {
     /**
-     * 设置todo的时间
+     * todo时间的全局对象
      * {
-     *   isClose: true,  //是否开启Close，默认是关闭的
+     *   isAllDay: true,  //是否开启全天
      *   todo: {
      *      "createTaskDate":"20170914","clock":{"startTime":"15:50","endTime":"15:55","alwaysAlert":true}
      *    }
      *  }
      */
     currentTodoTime: {},
+    /**
+     * 提醒的全局对象
+     * {
+     *   alert: []
+     * }
+     */
+    currentTodoAlert: {},
     /**
      * 设置repeat
      * {

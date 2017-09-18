@@ -213,8 +213,6 @@
       },
       tapConfirm (e) {
         this.success({
-          type: isNotNull ? this.type : null,
-          selectNumDate: isNotNull ? this.selectNumDate.sort(function (a, b) { return a > b ? 1 : -1 }) : null
         })
         this.selfClose()
         e.preventDefault()

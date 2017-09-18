@@ -4,11 +4,11 @@
       <li>
         <span>全天</span>
         <div class="switch-wrapper">
-          <input class="mui-switch" type="checkbox" v-model="localTodoTime.isClose">
+          <input class="mui-switch" type="checkbox" v-model="localTodoTime.isAllDay">
         </div>
       </li>
     </ul>
-    <ul class="sec" :class="{'is-text-disabled': localTodoTime.isClose}">
+    <ul class="sec" :class="{'is-text-disabled': localTodoTime.isAllDay}">
       <v-touch tag="li" @tap="setStartTime">
         <span class="list-key">开始时间</span>
         <span class="list-value">{{localClock.startTime}}</span>
@@ -20,7 +20,7 @@
         <i class="icon2-arrow-right-small arrow"></i>
       </v-touch>
     </ul>
-    <ul class="last" :class="{'is-text-disabled': localTodoTime.isClose}">
+    <ul class="last" :class="{'is-text-disabled': localTodoTime.isAllDay}">
       <v-touch tag="li" @tap="setAlert">
         <span class="list-key">提醒</span>
         <span class="list-value">{{alertText}}</span>
@@ -129,7 +129,6 @@
 
 </style>
 <script>
-  import eventBus from 'ut/eventBus'
   import moment from 'moment'
   import jsUtil from 'ut/jsUtil'
 
@@ -139,7 +138,7 @@
         autoStart: true,
         autoEnd: true,
         localTodoTime: {
-          isClose: true,
+          isAllDay: true,
           todo: {
             clock: {
               startTime: null,
@@ -181,19 +180,13 @@
     },
     methods: {
       initData () {
-        if (this.todoTime.todo) {
-//          var defaultClockTime =
-          this.localTodoTime = this.todoTime
+        if (this.todoTime.todo.id) {
           this.autoStart = this.autoEnd = false
-//          if(!this.localClock){
-//            this.localTodoTime.todo.clock =
-//          }
         }
+        this.localTodoTime = jsUtil.deepClone(this.todoTime)
+
         //  自动调整时间
         this.autoChangeTime()
-        eventBus.$on('todo-edit-alert-ready', selected => {
-          this.$set(this.localClock.alert, selected)
-        })
       },
       /**
        * 在用户修改具体时间前自动调整起止时间间隔1小时
@@ -203,23 +196,23 @@
         //  开始时间和结束时间都是自动调整，那么就设置为当前时间
         if (this.autoStart && this.autoEnd) {
           base = moment()
-          this.$set(this.localClock.startTime, base.format('HH:mm'))
-          this.$set(this.localClock.endTime, base.add(1, 'h').format('HH:mm'))
+          this.$set(this.localClock, 'startTime', base.format('HH:mm'))
+          this.$set(this.localClock, 'endTime', base.add(1, 'h').format('HH:mm'))
         } else {
           //  如果是自动调整开始时间，那么将开始时间调整至结束时间前1小时
           if (this.autoStart) {
             base = moment(this.localClock.endTime, 'HH:mm')
-            this.$set(this.localClock.startTime, base.minus(1, 'h').format('HH:mm'))
+            this.$set(this.localClock, 'startTime', base.minus(1, 'h').format('HH:mm'))
           }
           //  如果是自动调整结束时间，那么将结束时间调整至开始时间后1小时
           if (this.autoEnd) {
             base = moment(this.localClock.startTime, 'HH:mm')
-            this.$set(this.localClock.endTime, base.add(1, 'h').format('HH:mm'))
+            this.$set(this.localClock, 'endTime', base.add(1, 'h').format('HH:mm'))
           }
         }
       },
       setStartTime () {
-        if (this.localTodoTime.isClose) return
+        if (this.localTodoTime.isAllDay) return
         var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: that.localClock.startTime,
@@ -231,7 +224,7 @@
         })
       },
       setEndTime () {
-        if (this.localTodoTime.isClose) return
+        if (this.localTodoTime.isAllDay) return
         var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: that.localClock.endTime,
@@ -243,42 +236,53 @@
         })
       },
       setAlert () {
-        if (this.localTodoTime.isClose) return
+        if (this.localTodoTime.isAllDay) return
 
-        this.$store.commit('PUB_SET_TODO_TIME', this.localTodoTime)
+        this.saveTodoTime()
+        this.$store.commit('PUB_SET_TODO_ALERT', this.localTodoTime.alert)
         this.$router.push('/todoEdit/alert')
       },
       checkWarn () {
-        if (moment().isAfter(moment(this.localClock.startTime, 'HH:mm'))) {
+        if (!this.localTodoTime.isAllDay && moment().isAfter(moment(this.localClock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
-      emitReady () {
-        eventBus.$emit('todo-edit-time-ready', this.localTodoTime)
+      saveTodoTime () {
+        this.$store.commit('PUB_SET_TODO_TIME', this.localTodoTime)
       }
     },
     mounted () {
       this.initData()
-      window.rsqadmg.execute('setTitle', {title: '设置时间'})
+      window.rsqadmg.exec('setTitle', {title: '设置时间'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
+      this.$store.dispatch('setNav', {isShow: false})
     },
     beforeRouteLeave (to, from, next) {
       if (to.name !== 'todoNew' && to.name !== 'todoEdit') next()
 
-      var that = this
-      var warn = this.checkWarn()
-      if (warn) {
-        window.rsqadmg.exec('confirm', {
-          message: warn,
-          success () {
-            that.emitReady()
-            next()
-          },
-          cancel () {}
-        })
-      } else {
-        that.emitReady()
-      }
+      this.saveTodoTime()
+      next()
+
+//      alert('------')
+//
+//
+//      var that = this
+//      var warn = this.checkWarn()
+//      if (warn) {
+//        window.rsqadmg.exec('confirm', {
+//          message: warn,
+//          success () {
+//            that.emitReady()
+//            next()
+//          },
+//          cancel () {
+//            next(false)
+//          }
+//        })
+//      } else {
+//        that.emitReady()
+//        next()
+//      }
     }
   }
 </script>
