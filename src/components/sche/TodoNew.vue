@@ -13,32 +13,36 @@
           <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
             <!--<slot name="slotNote"></slot>-->
           </div>
-          <div class="itm-group itm--edit-todo itm--part-line">
+          <div class="itm-group itm--edit-todo ">
             <!--<slot name="slotContainer"></slot>-->
-            <r-input-date
-              :item-start-date="editItem.startDate"
-              :item-end-date="editItem.endDate"
-              :item-dates="editItem.dates"
-              :item-sep="'/'"
-              v-if="todoType == 'schedule'"
-              @date-changed="saveDate"
-            ></r-input-date>
-            <r-input-time></r-input-time>
-            <r-input-member
-              :is-native="true"
-              :index-title="'执行人'"
-              :select-title="'请选择成员'"
-              :user-rsq-ids="[]"
-              :selected-rsq-ids="joinUserRsqIds"
-              :disabled-rsq-ids="[]"
-              @member-changed="saveMember"
-            ></r-input-member>
-            <div class="ding">
-              <div class="bottom">
-                <p class="">DING</p>
-                <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
+            <div class="firstGroup">
+              <r-input-date
+                :item-start-date="editItem.startDate"
+                :item-end-date="editItem.endDate"
+                :item-dates="editItem.dates"
+                :item-sep="'/'"
+                v-if="todoType == 'schedule'"
+                @date-changed="saveDate"
+              ></r-input-date>
+              <r-input-time></r-input-time>
+            </div>
+            <div class="secondGroup">
+              <r-input-member
+                :is-native="true"
+                :index-title="'执行人'"
+                :select-title="'请选择成员'"
+                :user-rsq-ids="[]"
+                :selected-rsq-ids="joinUserRsqIds"
+                :disabled-rsq-ids="[]"
+                @member-changed="saveMember"
+              ></r-input-member>
+              <div class="ding">
+                <div class="bottom">
+                  <p class="">DING</p>
+                  <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
+                </div>
+                <input class="mui-switch" type="checkbox">
               </div>
-              <input class="mui-switch" type="checkbox">
             </div>
           </div>
         </div>
@@ -51,6 +55,11 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
+  }
+  .secondGroup{
+    margin-top: 0.231rem;
+    border-top: 1px solid #E0E0E0;
+    width: 100%;
   }
   .bottom {
     height: 2rem;

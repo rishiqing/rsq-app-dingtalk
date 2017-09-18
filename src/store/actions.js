@@ -194,26 +194,9 @@ export default {
       })
   },
   createSubTodo ({ commit, state, dispatch }, p) {
-    // console.log('进来了数据是' + p.newItem + p.todoId)
-    // var inbox = state.inbox
     var name = p.newItem.pTitle
-    var todoId = 264466
-    // var kanbanItemId = 264466
-
-    // newItem['pContainer'] = 'inbox'
-    // var promise
-    // //  如果inbox.items不存在，则从服务器先获取到inbox，然后获取inbox中任务的顺序，然后再保存
-    // if (!inbox.items) {
-    //   promise = dispatch('fetchInboxItems')
-    // } else {
-    //   promise = Promise.resolve()
-    // }
-    // return promise.then(items => {
-    //   newItem['pDisplayOrder'] = util.getNextOrder(items, 'pDisplayOrder')
-    return api.todo.postSubTodo({name: name, todoId: todoId})
+    return api.todo.postSubTodo({name: name, todoId: p.todoId})
         .then(item => {
-          // console.log('postsubtodo走完了')
-          // console.log('返回来的值是什么啊' + item.name)
           commit('CHILDTASK_TODO_CREATED', {item: item})
         })
     .catch(err => {

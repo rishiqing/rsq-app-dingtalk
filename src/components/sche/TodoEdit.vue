@@ -126,12 +126,10 @@
 </style>
 <script>
   import InputTitleText from 'com/pub/InputTitleText'
-//  import InputNoteText from 'com/pub/InputNoteText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
   import InputSubTodo from 'com/pub/InputSubTodo'
   import util from 'ut/jsUtil'
-//  import CommentList from 'comps/public/CommentList'
 
   export default {
     data () {
@@ -221,11 +219,6 @@
           return
         }
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-//        var paramObj = {
-//          startDate: this.editItem.startDate,
-//          endDate: this.editItem.endDate,
-//          dates: this.editItem.dates
-//        }
         if (result.startDate == null &&
           result.endDate == null &&
           result.dates == null) {
@@ -282,7 +275,6 @@
     mounted () {
       this.initData()
       var that = this
-//      util.extendObject(this.editItem, this.currentTodo)
       window.rsqadmg.execute('setTitle', {title: '任务'})
       window.rsqadmg.execute('setOptionButtons', {
         btns: [{key: 'deleteTodo', name: '删除'}],

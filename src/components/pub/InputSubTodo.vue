@@ -25,7 +25,7 @@
   }
   .now {
     position: absolute;
-    top:0.04rem;
+    top:0.01rem;
     right: 0.88rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -34,11 +34,10 @@
   }
   span{
     display: block;
-    /*margin-bottom: 5px;*/
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-    /*line-height: 1.458rem;*/
+    border:1px solid red
   }
 </style>
 <script>
@@ -72,7 +71,6 @@
     },
     methods: {
       showSubTodo () {
-        // console.log('进来了没有啊' + this.item.id)
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

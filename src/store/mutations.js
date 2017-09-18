@@ -181,15 +181,6 @@ export default {
     p.item.pIsDone = p.status
   },
   SCH_LIST_SUBTODO_CHECKED (state, p) {
-    // let items = state.todo.currentTodo.subTodos
-    // for (var i = 0; i < items.length; i++) {
-    //   if (items[i].id === p.item.id) {
-    //     console.log('mutations里面的item是' + JSON.stringify(items[i]) + 'p.status是' + p.status)
-    //     items[i].isDone = p.status
-    //     console.log('state里面的item是' + JSON.stringify(state.todo.currentTodo.subTodos[0]))
-    //     break
-    //   }
-    // }
     p.item.isDone = p.status
   },
   /* --------------------------------- */
@@ -228,15 +219,12 @@ export default {
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos
-    // var specificItem = items.find((obj) => obj.id === p.item.id)
-    // var flag;
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
         util.extendObject(items[i], p.subTodo)
         break
       }
     }
-    // util.extendObject(specificItem, p.subTodo)
   },
   /**
    * 删除todo
@@ -246,18 +234,14 @@ export default {
    * @constructor
    */
   TD_TODO_DELETED (state, p) {
-    console.log('进入mutaitions-delete')
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
     let index = items.indexOf(p.item)
-    console.log('index是' + index)
     if (index > -1) {
       items.splice(index, 1)
     }
   },
   TD_SUBTODO_DELETE  (state, p) {
-    console.log('进入mutaitions-subdelete')
     let items = state.todo.currentTodo.subTodos
-    console.log(p.item.id)
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
         console.log(i)
@@ -266,9 +250,6 @@ export default {
         break
       }
     }
-    // let index = items.indexOf(p.item)
-    // if (index > -1) {
-    //    items.splice(index, 1)
   },
   /**
    * 缓存日程是否含有todo

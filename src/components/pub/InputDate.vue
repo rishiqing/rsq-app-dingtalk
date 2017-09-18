@@ -3,13 +3,14 @@
     <v-touch class="" @tap="showDatePikcer">
       <span class="date">日期</span>
       <span class="now">{{ dateString }}</span>
-      <!--<span class="now">今天</span>-->
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
 </template>
 <style lang="" scoped>
   .outer-date{
+    display: flex;
+    align-items: center;
     position: relative;
     height:1.3rem;
     line-height: 1.3rem;
@@ -33,13 +34,14 @@
     color: #999999;
     letter-spacing: 0;
   }
-  span{
-    display: block;
-    /*margin-bottom: 5px;*/
+  .date{
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-    /*line-height: 1.458rem;*/
+  }
+  span{
+    display: block;
+
   }
 </style>
 <script>
@@ -62,7 +64,6 @@
           return ''
         }
         var parsed = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
-        // console.log(parsed.currentDate)
         var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
         var now = new Date()
         var month = now.getMonth() + 1

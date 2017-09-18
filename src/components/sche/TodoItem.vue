@@ -1,8 +1,6 @@
 <template>
   <li class="">
     <v-touch class="" @tap="clickItem($event)">
-      <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
-      <!--<div class="itm-inner">-->
         <div class="title-todo" >
           <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable,'real-width':isMaxlength(item)}">{{ item.pTitle }}</span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
@@ -13,12 +11,6 @@
           <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
         </v-touch>
-
-       <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
-          <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
-          <!--&lt;!&ndash;<i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>&ndash;&gt;-->
-        <!--</div>-->
-      <!--</div>-->
     </v-touch>
   </li>
 </template>
@@ -112,18 +104,12 @@
     },
     methods: {
       isMaxlength (item) {
-        if (item.pTitle.length > 10) {
-          return true
-        } else {
-          return false
-        }
+        return item.pTitle.length > 10
       },
       clickItem (e) {
         //  这个是点击跳到编辑界面
-        // console.log(this.item.pTitle.length)
         if (e.target.className.indexOf('jsItemCheckbox') === -1) {
           this.$emit('todo-item-click', this.item)
-          // e.stopPropagation()
           e.preventDefault()
         }
       },

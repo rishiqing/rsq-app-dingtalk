@@ -1,7 +1,6 @@
 <template>
   <div class="">
     <div class="edit">
-      <!--<div class="" :style="[paddingObject]">-->
         <input type="text" placeholder="输入任务标题"
                ref="titleInput"
                :value="itemTitle"
@@ -9,7 +8,6 @@
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
                :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle)}">
-      <!--</div>-->
       <div class="padding-left-">
       <v-touch class=""
            v-if="isCheckable"
@@ -69,7 +67,7 @@
     font-size: 19px;
     color: #8C8C8C;
     letter-spacing: 0;
-    padding-left: 0.3rem;
+    padding-left: 0.1rem;
   }
   input[type='text']{
     height:1.458rem;
@@ -77,7 +75,6 @@
     border-bottom:0.5px solid #E0E0E0 ;
     border-top:0.5px solid #E0E0E0 ;
     line-height:1.458rem ;
-
   }
   .padding-left-input-{
     padding-left:0.3rem;
@@ -106,12 +103,9 @@
       itemChecked: Boolean
     },
     methods: {
-      isMaxlength (item) {
-        if (item.length > 15) {
-          return true
-        } else {
-          return false
-        }
+      isMaxlength (title) {
+        title = title || ''
+        return title.length > 15
       },
       inputBlur (value) {
         this.$refs.titleInput.value = value

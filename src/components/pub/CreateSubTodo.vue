@@ -13,24 +13,14 @@
     <div class="margin-block"></div>
     <ul class="list" v-if="">
     <li v-for="item in items" v-if="items">
-      <v-touch class="" @tap="clickItem($event)">
-        <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
-        <!--<div class="itm-inner">-->
-        <!--<div class="title-todo" >-->
+      <v-touch class="">
          <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
                   ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
-        <!--</div>-->
         <v-touch class="" v-if="" @tap="clickCheckOut(item)">
           <i class="icon2-check-box select-sub"></i>
           <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
         </v-touch>
-
-        <!--<div class="itm-icons itm-icons&#45;&#45;white-bg u-abs-right">-->
-        <!--&lt;!&ndash;<i class="icon icon-access_alarm" v-if="item.clockAlert"></i>&ndash;&gt;-->
-        <!--&lt;!&ndash;<i class="icon icon-move_to_inbox" v-if="item.senderTodo"></i>&ndash;&gt;-->
-        <!--</div>-->
-        <!--</div>-->
       </v-touch>
     </li>
     </ul>
@@ -38,7 +28,6 @@
 </template>
 <script>
   import TodoItemList from 'com/sche/TodoItemList'
-
   export default {
     data () {
       return {
@@ -63,17 +52,16 @@
       change () {
         this.seen = false
       },
-      judgeable () {
-        if (this.items) {
-          this.judge = true
-        }
-      },
+      // 留待以后使用
+//      judgeable () {
+//        if (this.items) {
+//          this.judge = true
+//        }
+//      },
       inputBlur (value, item) {
         this.$refs.titleInput.value = value
         if (!value) {
           var that = this
-          // this.deleteCurrentSubTodo(item)
-          // return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
           window.rsqadmg.exec('confirm', {
             message: '确定要删除此任务？',
             success () {
@@ -88,39 +76,18 @@
             }
           })
         } else {
-          // console.log('新的value是' + value)
-          if (value !== this.items[0].name) {
+          if (value !== item.name) {
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
-                // this.items.name = value
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '保存成功'})
               })
           }
         }
       },
-      deleteCurrentSubTodo (item) {
-        // var that = this
-        window.rsqadmg.exec('confirm', {
-          message: '确定要删除此任务？',
-          success () {
-            window.rsqadmg.execute('showLoader', {text: '删除中...'})
-            this.$store.dispatch('deleteSubTodo', {item: item})
-              .then(() => {
-                console.log('进入到最后了')
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '删除成功'})
-                this.$router.replace(window.history.back())
-              })
-          }
-        })
-      },
       inputChange (value) {
         this.$refs.titleInput.value = value
-      },
-      fetchItems () {
-        this.$store.dispatch('fetchInboxItems')
       },
       saveTodo () {
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
@@ -131,20 +98,13 @@
             window.rsqadmg.execute('toast', {message: '创建成功'})
           })
       },
-      clickItem () {
-//        this.$store.dispatch('setCurrentTodo', this.items)
-//        this.$router.push('/todo/SubTodoEdit')
-      },
       clickCheckOut (item) {
-        console.log('进来了clickCheckOut')
         this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
             .then(function () {
-//              rsqadmg.execute('toast', {message: str})
             })
       }
     },
     mounted () {
-      this.fetchItems()
       window.rsqadmg.exec('setTitle', {title: this.titleName})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
@@ -171,7 +131,6 @@
     margin-left: 0.8rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    /*color: #222222;*/
   }
   .topSubtodo{
     position:fixed;
@@ -202,7 +161,6 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #55A8FD;
-
   }
   span{
     display: block;
@@ -298,12 +256,4 @@
     width: 20%;
     right:0;top:0;height:50px;
   }
-  /*.btn-create input {*/
-  /*width: 80%;*/
-  /*text-align: center;*/
-  /*height: 100%;*/
-  /*box-sizing: border-box;*/
-  /*border: none;*/
-  /*color: #00f;*/
-  /*}*/
 </style>
