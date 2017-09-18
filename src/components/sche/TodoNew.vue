@@ -13,7 +13,7 @@
           <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
             <!--<slot name="slotNote"></slot>-->
           </div>
-          <div class="itm-group itm--edit-todo ">
+          <div class="itm--edit-todo ">
             <!--<slot name="slotContainer"></slot>-->
             <div class="firstGroup">
               <r-input-date
@@ -41,7 +41,7 @@
                   <p class="">DING</p>
                   <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
                 </div>
-                <input class="mui-switch" type="checkbox">
+                <input class="mui-switch" type="checkbox" >
               </div>
             </div>
           </div>
@@ -76,6 +76,8 @@
     font-size: 17px;
     color: #333333;
     position:relative;
+    background-color: white;
+    border-bottom: 1px solid #E0E0E0;
   }
   .message{
     font-family: PingFangSC-Regular;
@@ -87,7 +89,7 @@
     height: 31px;
     position: absolute;
     top:0.55rem;
-    right:0.01rem;
+    right:0.41rem;
     border: 1px solid #dfdfdf;
     background-color: #fdfdfd;
     box-shadow: #dfdfdf 0 0 0 0 inset;

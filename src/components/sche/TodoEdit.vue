@@ -15,7 +15,7 @@
           <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
             <!--<slot name="slotNote"></slot>-->
           </div>
-          <div class="itm-group itm--edit-todo itm--part-line">
+          <div class="itm--edit-todo ">
             <!--<slot name="slotContainer"></slot>-->
             <r-input-date
               :item-start-date="editItem.startDate"
@@ -70,6 +70,8 @@
     font-size: 17px;
     color: #333333;
     position:relative;
+    background-color: white;
+    border-bottom:1px solid #E0E0E0;
   }
   .message{
     font-family: PingFangSC-Regular;
@@ -81,7 +83,7 @@
     height: 31px;
     position: absolute;
     top:0.55rem;
-    right:0.1rem;
+    right:0.4rem;
     border: 1px solid #dfdfdf;
     background-color: #fdfdfd;
     box-shadow: #dfdfdf 0 0 0 0 inset;
@@ -141,6 +143,9 @@
     computed: {
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
+      },
+      isInbox () {
+        return this.currentTodo.pContainer === 'inbox'
       },
 //      joinUsers () {
 //        var todo = this.$store.state.todo.currentTodo
@@ -226,6 +231,7 @@
         }
         this.$store.dispatch('updateTodoDate', {editItem: result})
             .then(() => {
+              console.log('updateTodoDate已执行结束')
               util.extendObject(this.editItem, result)
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '保存成功'})
@@ -275,7 +281,7 @@
     mounted () {
       this.initData()
       var that = this
-      window.rsqadmg.execute('setTitle', {title: '任务'})
+      window.rsqadmg.execute('setTitle', {title: '详情'})
       window.rsqadmg.execute('setOptionButtons', {
         btns: [{key: 'deleteTodo', name: '删除'}],
         success (res) {

@@ -2,10 +2,10 @@
   <li class="">
     <v-touch class="" @tap="clickItem($event)">
         <div class="title-todo" >
-          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable,'real-width':isMaxlength(item)}">{{ item.pTitle }}</span>
+          <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         </div>
-        <v-touch class="" v-if="isCheckable" @tap="clickCheckOut">
+        <v-touch class="" v-if="isCheckable" @tap="clickCheckOut($event)">
           <i class="icon2-check-box select"
              :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
           <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
@@ -23,21 +23,18 @@
   .margin-left{
     margin-left: 0.8rem;
   }
-  .real-width{
+  .real-width-sche{
     width:70%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space:nowrap
   }
-  .todo-content{
+  .todo-content-sche{
     display: flex;
     align-items: center;
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space:nowrap;
-    color: #333333;
+    /*color: #333333;*/
   }
   .hide{
     display: none;
@@ -114,8 +111,11 @@
         }
       },
       clickCheckOut (e) {
+        e.stopPropagation()
+        e.cancelBubble = true
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
-        // e.stopPropagation()
+        e.stopPropagation()
+        e.cancelBubble = true
         e.preventDefault()
       }
     },

@@ -1,11 +1,15 @@
 <template>
   <div class="">
-    <div class="topSubtodo" v-if="seen">
-      <v-touch @tap="change"><i class="icon2-add-circle add"></i></v-touch>
-      <span>新建子任务</span>
+
+    <div class="topSubtodo" v-if="seen" >
+      <v-touch @tap="change">
+        <v-touch ><i class="icon2-add-circle add"></i></v-touch>
+        <span>新建子任务</span>
+      </v-touch>
     </div>
+
     <div v-else class="anotherTop">
-      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
+      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <input value="创建" class="create"/>
       </v-touch>
@@ -116,11 +120,12 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
-    line-height: 22px;
+    /*line-height: 22px;*/
   }
   .select-sub{
     position: absolute;
     top: 0.4rem;
+    color:#b9b9bc
   }
   .list{
     background-color: white;
@@ -131,14 +136,16 @@
     margin-left: 0.8rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
+    width: 90%;
   }
   .topSubtodo{
     position:fixed;
     background-color: white;
-    position: relative;
     line-height: 1.226rem;;
     top:0.266rem;
-    padding-left:5%
+    padding-left:5%;
+    width:100%;
+    z-index: 1;
   }
   .add{
     position: absolute;
@@ -177,7 +184,7 @@
   }
   ul{
     position: relative;
-    margin-top:0.966rem;
+    margin-top:0.666rem;
     border-bottom:1px solid #DADADA ;
     border-top:1px solid #DADADA ;
     padding-left: 5%;
@@ -224,7 +231,7 @@
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
-    position: absolute;
+    position: fixed;
     top:0.5rem;
     right:0.35rem;
     z-index:2
@@ -237,7 +244,8 @@
     top: 0.266rem;
     padding-left:0.3rem;
     position: fixed;
-    /*z-index: 1;*/
+    z-index: 1;
+    line-height: 1.226rem;
   }
   .margin-block {
     height: 50px;
@@ -250,10 +258,5 @@
     box-sizing: border-box;
     width: 80%;height:100%;
     padding: 10px;
-  }
-  .btn-create {
-    position: fixed;
-    width: 20%;
-    right:0;top:0;height:50px;
   }
 </style>

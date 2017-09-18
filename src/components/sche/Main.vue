@@ -28,7 +28,8 @@
     name: 'ScheduleView',
     data () {
       return {
-        titleName: '日程'
+        titleName: '日程',
+        currentDate: new Date()
       }
     },
     computed: {
@@ -38,6 +39,9 @@
       },
       items () {
         return this.$store.state.schedule.items
+      },
+      dateString () {
+        return this.currentDate.getFullYear() + '年' + (this.currentDate.getMonth() + 1) + '月'
       }
     },
     components: {
@@ -65,7 +69,7 @@
       }
     },
     mounted () {
-      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setTitle', {title: this.dateString})
       var btnParams
       var that = this
       btnParams = {

@@ -1,6 +1,6 @@
 <template>
   <div class="outer-date">
-    <v-touch class="" @tap="showDatePikcer">
+    <v-touch class=""  @tap="showDatePikcer">
       <span class="date">日期</span>
       <span class="now">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
@@ -16,19 +16,20 @@
     line-height: 1.3rem;
     padding-left:3% ;
     border-bottom:1px solid #E0E0E0;
-    width: 100%;
+    border-top:1px solid #E0E0E0;
+    background-color: white;
   }
   .arrow{
     color: #999999;
     font-size: 21px;
     position: absolute;
-    top:0.35rem;
-    right: 0.1rem;
+    top:0.38rem;
+    right: 0.3rem;
   }
   .now {
     position: absolute;
     top:0.04rem;
-    right: 0.88rem;
+    right: 0.94rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;

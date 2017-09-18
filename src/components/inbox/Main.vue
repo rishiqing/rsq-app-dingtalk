@@ -48,7 +48,7 @@
       this.fetchItems()
       window.rsqadmg.exec('setTitle', {title: this.titleName})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
-      this.$store.dispatch('setNav', {isShow: true})
+      this.$store.dispatch('setNav', {isShow: false})
     }
   }
 </script>
@@ -69,9 +69,10 @@
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
-    position: absolute;
+    position: fixed;
     top:1rem;
     right:0.35rem;
+    z-index: 2;
   }
   .write{
     height:1.612rem;
@@ -82,6 +83,7 @@
     margin-top: 0.574rem;
     padding-left:0.3rem;
     margin-bottom: 0.224rem;
+    z-index: 1;
   }
   .margin-block {
     height: 100px;
@@ -95,17 +97,4 @@
     width: 80%;height:100%;
     padding: 10px;
   }
-  .btn-create {
-    position: fixed;
-    width: 20%;
-    right:0;top:0;height:50px;
-  }
-  /*.btn-create input {*/
-    /*width: 80%;*/
-    /*text-align: center;*/
-    /*height: 100%;*/
-    /*box-sizing: border-box;*/
-    /*border: none;*/
-    /*color: #00f;*/
-  /*}*/
 </style>

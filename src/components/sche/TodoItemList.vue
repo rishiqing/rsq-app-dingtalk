@@ -38,7 +38,7 @@
     },
     methods: {
       showEdit (item) {
-        this.$store.dispatch('setCurrentTodo', item)
+        this.$store.dispatch('setCurrentTodo', item)// 设置当前todo不管是inbox的todo还是ssche的todo
         this.$router.push('/todo/' + item.id)
       },
       checkTodo (item, status) {

@@ -2,8 +2,8 @@
   <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
       <div class="left">
         <v-touch class="" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
-          <i class="icon2-schedule richeng"></i>
-          <p class="sche ">日程</p>
+          <i class="icon2-schedule richeng" :class="{'is-active': '/sche' == currentPath}"></i>
+          <p class="sche " :class="{'is-active': '/sche' == currentPath}">日程</p>
         </v-touch>
       </div>
       <div class="mid">
@@ -13,8 +13,8 @@
       </div>
       <div class="right">
         <v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
-          <i class="icon2-member me"></i>
-          <p class="my">我</p>
+          <i class="icon2-member me" :class="{'is-active': '/me' == currentPath}"></i>
+          <p class="my" :class="{'is-active': '/me' == currentPath}">我</p>
         </v-touch>
       </div>
     </div>
@@ -44,11 +44,17 @@
   }
 </script>
 <style scoped>
+  .is-active{
+    color:#55A8FD
+  }
   .richeng {
     font-size: 25px;
     color:  #999999;;
   }
   .bot{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-top:1px solid #CDCDCD;
     height: 1.306rem;
     background-color: #FDFDFF;;
@@ -94,6 +100,7 @@
     bottom:1px;
   }
   .mid{
+    display: inline-block;
     text-align: center;
     padding-top: 3px;
   }

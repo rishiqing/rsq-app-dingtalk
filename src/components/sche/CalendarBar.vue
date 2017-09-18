@@ -6,7 +6,7 @@
             v-for="day in days"
             :key="day.date.getTime()"
             >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag}"></div>
+          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           <v-touch class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}

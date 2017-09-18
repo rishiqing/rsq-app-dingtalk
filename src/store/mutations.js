@@ -110,7 +110,6 @@ export default {
    */
   CHILDTASK_TODO_CREATED (state, p) {
     state.todo.currentTodo.subTodos.unshift(p.item)
-    console.log(state.todo.currentTodo.subTodos)
   },
   INB_TODO_CREATED (state, p) {
     if (!state.inbox.items) {
