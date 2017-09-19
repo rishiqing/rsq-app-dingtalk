@@ -20,10 +20,11 @@
               :item-end-date="editItem.endDate"
               :item-dates="editItem.dates"
               :item-sep="'/'"
-              v-if="todoType == 'schedule'"
               @date-changed="saveDate"
             ></r-input-date>
-            <r-input-time></r-input-time>
+            <r-input-time
+              :item="editItem"
+            ></r-input-time>
             <r-input-member
               :is-native="true"
               :index-title="'执行人'"
@@ -128,23 +129,17 @@
   import dateUtil from 'ut/dateUtil'
   import jsUtil from 'ut/jsUtil'
   import converter from 'ut/converter'
-  import moment from 'moment'
   import InputTime from 'com/pub/InputTime'
   export default {
     data () {
       return {
-        editItem: {
-          pTitle: '',
-          dates: null,
-          startDate: null,
-          endDate: null
-        },
+        editItem: {},
         joinUserRsqIds: []
       }
     },
     computed: {
-      todoType () {
-        return this.$route.params.todoType
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
       },
       currentDate () {
         return this.$store.state.schedule.strCurrentDate
@@ -169,13 +164,7 @@
     },
     methods: {
       initData () {
-        if (this.$route.params.todoType === 'schedule') {
-          var currentVal = moment(this.currentDate, 'YYYY-MM-DD').valueOf()
-          var strDate = dateUtil.dateNum2Text(currentVal)
-
-          this.editItem.startDate = strDate
-          this.editItem.endDate = strDate
-        }
+        this.editItem = jsUtil.extendObject(this.currentTodo)
       },
       //  从startDate endDate dates三个字段中转换成用户前台显示的date结构
       getPlanedTime () {
@@ -215,7 +204,7 @@
 
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         var that = this
-        this.$store.dispatch('submitCreateTodoItem', {newItem: this.editItem, todoType: this.isInbox ? 'inbox' : 'schedule'})
+        this.$store.dispatch('submitCreateTodoItem', {newItem: this.editItem, todoType: 'schedule'})
             .then(function () {
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '创建成功'})

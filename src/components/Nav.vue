@@ -38,6 +38,7 @@
         this.$router.replace(page)
       },
       createNew () {
+        this.$store.dispatch('setCurrentTodo', this.$store.getters.defaultTodo)
         this.$router.push('/todo/new/schedule')
       }
     }
