@@ -20,6 +20,8 @@
     </div>
 </template>
 <script>
+  import def from 'ut/defaultUtil'
+
   export default {
     name: 'Nav',
     data () {
@@ -38,7 +40,7 @@
         this.$router.replace(page)
       },
       createNew () {
-        this.$store.dispatch('setCurrentTodo', this.$store.getters.defaultTodo)
+        this.$store.dispatch('setCurrentTodo', def.defaultTodo())
         this.$router.push('/todo/new/schedule')
       }
     }

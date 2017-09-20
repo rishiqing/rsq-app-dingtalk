@@ -108,7 +108,7 @@
     methods: {
       initData () {
         var hasAlert = false
-        var passedAlertArray = this.todoAlert.alert
+        var passedAlertArray = this.todoAlert.list
         if (passedAlertArray) {
           passedAlertArray.forEach(remoteAlert => {
             var localAlert = this.alertList.find(localAlert => {
@@ -156,7 +156,7 @@
           })
       },
       saveTodoAlert () {
-        this.$store.commit('PUB_SET_TODO_ALERT', {alert: this.getResult()})
+        this.$store.commit('PUB_TODO_ALERT_SET', {list: this.getResult()})
       }
     },
     mounted () {

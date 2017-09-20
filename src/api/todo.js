@@ -38,6 +38,7 @@ export default {
   },
   getTodo (params) {
     var path = util.replaceUrlParams(mapping.GET_TODO, params)
+    path = path + '?' + util.combineUrlParams(params)
     return new Promise((resolve, reject) => {
       Vue.http.get(path)
         .then(res => {
@@ -61,6 +62,7 @@ export default {
   },
   putTodoProps (props) {
     var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
+    alert('====path====' + path)
     return new Promise((resolve, reject) => {
       Vue.http.put(path, props)
         .then(res => {

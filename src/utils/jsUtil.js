@@ -74,6 +74,41 @@ export default {
     return obj
   },
   /**
+   * 使用递归深度克隆，function、不做考虑
+   * @param obj
+   * @param props
+   */
+  deepExtendObject (obj, props) {
+    window.alert('not implemented')
+    // if (props === null || props === undefined || typeof props !== 'object') {
+    //   obj = props
+    //   return
+    // }
+    // props = props || {}
+    // //  处理Array的情况
+    // if (props instanceof Array) {
+    //   var cloneA = [];
+    //   for (var i = 0; i < obj.length; ++i) {
+    //     cloneA[i] = cloneJSON(obj[i]);
+    //   }
+    //   return cloneA;
+    // }
+    // for (let prop in props) {
+    //   if (props.hasOwnProperty(prop)) {
+    //     Vue.set(obj, prop, props[prop])
+    //
+    //     if (obj[prop] === undefined) {
+    //
+    //       Vue.set(obj, prop, {})
+    //       this.deepExtendObject(obj[prop], props[prop])
+    //     } else {
+    //       obj[prop] = props[prop]
+    //     }
+    //   }
+    // }
+    // return obj
+  },
+  /**
    * 从obj深克隆一个对象出来
    * @param obj
    */
@@ -232,6 +267,14 @@ export default {
       addList: addList,
       delList: deleteList
     }
+  },
+  /**
+   * 比较obj1和obj2是否一样
+   * @param obj1
+   * @param obj2
+   */
+  objectEqual (obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2)
   },
 
   /**

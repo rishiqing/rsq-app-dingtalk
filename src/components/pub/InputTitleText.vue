@@ -97,11 +97,9 @@
     },
     methods: {
       inputBlur (value) {
-        this.$refs.titleInput.value = value
         this.$emit('text-blur', value)
       },
       inputChange (value) {
-        this.$refs.titleInput.value = value
         this.$emit('text-change', value)
       },
       clickCheckOut () {

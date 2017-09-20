@@ -24,6 +24,10 @@
               :item-sep="'/'"
               @date-changed="updateDate"
             ></r-input-date>
+            <r-input-time
+              :item-clock="editItem.clock"
+              v-if="editItem.pContainer !== 'inbox'"
+            ></r-input-time>
             <r-input-member
               :is-native="true"
               :index-title="'成员'"
@@ -128,6 +132,7 @@
   import InputTitleText from 'com/pub/InputTitleText'
 //  import InputNoteText from 'com/pub/InputNoteText'
   import InputDate from 'com/pub/InputDate'
+  import InputTime from 'com/pub/InputTime'
   import InputMember from 'com/pub/InputMember'
   import InputSubTodo from 'com/pub/InputSubTodo'
   import util from 'ut/jsUtil'
@@ -167,6 +172,7 @@
     components: {
       'r-input-title': InputTitleText,
       'r-input-date': InputDate,
+      'r-input-time': InputTime,
       'r-input-member': InputMember,
       'r-input-sub-todo': InputSubTodo
 //      'r-input-note': InputNoteText,
@@ -278,7 +284,7 @@
         })
       }
     },
-    mounted () {
+    created () {
       this.initData()
       var that = this
 //      util.extendObject(this.editItem, this.currentTodo)
@@ -291,6 +297,7 @@
           }
         }
       })
-    }
+    },
+    mounted () {}
   }
 </script>

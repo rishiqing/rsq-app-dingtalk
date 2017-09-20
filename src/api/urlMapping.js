@@ -10,9 +10,9 @@ export default {
   'GET_LOGOUT': 'task/j_spring_security_logout',
   'GET_INBOX_TODOS': 'task/mainTodoList/getInboxTodos',
   'POST_NEW_TODO': 'task/v2/todo',
-  'PUT_TODO_PROP': 'task/rsqTodoData/:id',
-  'DELETE_TODO': 'task/rsqTodoData/:id',
-  'GET_TODO': 'task/rsqTodoData/:id',
+  'PUT_TODO_PROP': 'task/v2/todo/:id',
+  'DELETE_TODO': 'task/v2/todo/:id',
+  'GET_TODO': 'task/v2/todo/:id',
   'GET_SCHEDULE_TODOS': 'task/mainTodoList/getPeriodTodos',
   'POST_DATES_HAS_TODO': 'task/v2/todo/getDatesHasTodo',
 

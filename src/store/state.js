@@ -54,7 +54,7 @@ export default {
    */
   todo: {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
-    currentTodo: null
+    currentTodo: {}
   },
   /**
    * 组件之间需要共享的临时数据
@@ -64,16 +64,14 @@ export default {
      * todo时间的全局对象
      * {
      *   isAllDay: true,  //是否开启全天
-     *   todo: {
-     *      "createTaskDate":"20170914","clock":{"startTime":"15:50","endTime":"15:55","alwaysAlert":true}
-     *    }
+     *   "clock":{"startTime":"15:50","endTime":"15:55","alwaysAlert":true}
      *  }
      */
     currentTodoTime: {},
     /**
      * 提醒的全局对象
      * {
-     *   alert: []
+     *   list: []
      * }
      */
     currentTodoAlert: {},

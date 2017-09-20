@@ -1,12 +1,11 @@
 <template>
-  <div class="outertime">
-    <v-touch class="" @tap="showTimePicker">
+  <v-touch class="outertime" @tap="gotoTodoTime">
+    <div class="">
       <span class="date">时间</span>
-      <!--<span class="now">{{ dateString }}</span>-->
       <span class="now">{{timeValue}}</span>
       <i class="icon2-arrow-right-small arrow"></i>
-    </v-touch>
-  </div>
+    </div>
+  </v-touch>
 </template>
 <style lang="" scoped>
   .outertime{
@@ -50,22 +49,26 @@
       return {}
     },
     computed: {
-      timeValue () {
-        return this.todoTime.isAllDay ? '全天' : this.todoTime.startTime + '-' + this.todoTime.endTime
+      isAllDay () {
+        return !this.itemClock || !this.itemClock.startTime
       },
-      todoTime () {
-        return converter.todo2TodoTime(this.item)
+      timeValue () {
+        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
       }
     },
     props: {
-      item: Object
+      itemClock: Object
     },
     methods: {
-      showTimePicker () {
-        this.$store.commit('PUB_SET_TODO_TIME', this.todoTime)
+      gotoTodoTime () {
+        this.$emit('time-tap')
+        var stateTodoTime = converter.todoTimeBack2Front({ clock: this.itemClock })
+        alert('====this.itemClock====' + JSON.stringify(this.itemClock))
+        alert('====stateTodoTime====' + JSON.stringify(stateTodoTime))
+        this.$store.commit('PUB_TODO_TIME_SET', {data: stateTodoTime})
         this.$router.push('/todoEdit/time')
       }
     },
-    mounted () {}
+    created () {}
   }
 </script>

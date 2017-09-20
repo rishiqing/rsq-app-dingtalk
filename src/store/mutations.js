@@ -191,6 +191,15 @@ export default {
     state.todo.currentTodo = p.item
   },
   /**
+   * 更新当前的todo
+   * @param state
+   * @param p
+   * @constructor
+   */
+  TD_CURRENT_TODO_UPDATE (state, p) {
+    util.extendObject(state.todo.currentTodo, p.item)
+  },
+  /**
    * 获取到todo的detail之后，需要将todo的详情设置到currentTodo上
    * @param state
    * @param p
@@ -266,13 +275,19 @@ export default {
    * @param p.todo  p.todo存在，则说明是编辑任务时设置的提醒
    * @constructor
    */
-  PUB_SET_TODO_TIME (state, p) {
-    state.pub.currentTodoTime = p
+  PUB_TODO_TIME_SET (state, p) {
+    state.pub.currentTodoTime = p.data
   },
-  PUB_SET_TODO_ALERT (state, p) {
-    state.pub.currentTodoAlert = p
+  PUB_TODO_TIME_UPDATE (state, p) {
+    state.pub.currentTodoTime = p.data
   },
-  PUB_SET_TODO_REPEAT (state, p) {
+  PUB_TODO_ALERT_SET (state, p) {
+    util.extendObject(state.pub.currentTodoAlert, p.data)
+  },
+  PUB_TODO_ALERT_UPDATE (state, p) {
+    util.extendObject(state.pub.currentTodoTime, p.data)
+  },
+  PUB_TODO_REPEAT_SET (state, p) {
     p = p || {}
     var obj = {
       numBaseDate: p.numBaseDate || dateUtil.clearTime(new Date()).getTime()

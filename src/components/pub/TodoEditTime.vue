@@ -131,30 +131,31 @@
 <script>
   import moment from 'moment'
   import jsUtil from 'ut/jsUtil'
+  import converter from 'ut/converter'
 
   export default {
     data () {
       return {
         autoStart: true,
         autoEnd: true,
-        localTodoTime: {
-          isAllDay: true,
-          todo: {
-            clock: {
-              startTime: null,
-              endTime: null,
-              alert: []
-            }
-          }
-        }
+        localTodoTime: {}
       }
     },
     computed: {
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
+      },
       todoTime () {
         return this.$store.state.pub.currentTodoTime
       },
       localClock () {
-        return this.localTodoTime.todo.clock
+        return this.localTodoTime.clock
+      },
+      todoAlert () {
+        var alertList = this.localClock.alert || []
+        return {
+          list: alertList
+        }
       },
       alertText () {
         try {
@@ -179,12 +180,17 @@
       }
     },
     methods: {
+      /**
+       * 初始化数据
+       */
       initData () {
-        if (this.todoTime.todo.id) {
-          this.autoStart = this.autoEnd = false
+        //  复制todoTime到本地
+        jsUtil.extendObject(this.localTodoTime, this.todoTime)
+        //  todoTime.startTime存在，说明之前设置过提醒，不再自动设置
+        if (this.localTodoTime.clock.startTime) {
+          this.autoStart = false
+          this.autoEnd = false
         }
-        this.localTodoTime = jsUtil.deepClone(this.todoTime)
-
         //  自动调整时间
         this.autoChangeTime()
       },
@@ -195,94 +201,140 @@
         var base
         //  开始时间和结束时间都是自动调整，那么就设置为当前时间
         if (this.autoStart && this.autoEnd) {
-          base = moment()
-          this.$set(this.localClock, 'startTime', base.format('HH:mm'))
-          this.$set(this.localClock, 'endTime', base.add(1, 'h').format('HH:mm'))
+          //  设置为延后2分钟
+          base = moment(new Date().getTime() + 2 * 60 * 1000)
+          this.localClock.startTime = base.format('HH:mm')
+          this.localClock.endTime = base.add(1, 'h').format('HH:mm')
         } else {
           //  如果是自动调整开始时间，那么将开始时间调整至结束时间前1小时
           if (this.autoStart) {
             base = moment(this.localClock.endTime, 'HH:mm')
-            this.$set(this.localClock, 'startTime', base.minus(1, 'h').format('HH:mm'))
+            this.localClock.startTime = base.subtract(1, 'h').format('HH:mm')
           }
           //  如果是自动调整结束时间，那么将结束时间调整至开始时间后1小时
           if (this.autoEnd) {
             base = moment(this.localClock.startTime, 'HH:mm')
-            this.$set(this.localClock, 'endTime', base.add(1, 'h').format('HH:mm'))
+            this.localClock.endTime = base.add(1, 'h').format('HH:mm')
           }
         }
       },
+      /**
+       * 设置开始时间
+       */
       setStartTime () {
         if (this.localTodoTime.isAllDay) return
         var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: that.localClock.startTime,
           success (result) {
-            that.$set(that.localClock.startTime, result[0].value)
+            that.localClock.startTime = result.value
             that.autoStart = false
             that.autoChangeTime()
           }
         })
       },
+      /**
+       * 设置结束时间
+       */
       setEndTime () {
         if (this.localTodoTime.isAllDay) return
         var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: that.localClock.endTime,
           success (result) {
-            that.$set(that.localClock.endTime, result[0].value)
+            that.localClock.endTime = result.value
             that.autoEnd = false
             that.autoChangeTime()
           }
         })
       },
+      /**
+       * 保存当前todoTime的数据并跳转到提醒页面
+       */
       setAlert () {
         if (this.localTodoTime.isAllDay) return
 
-        this.saveTodoTime()
-        this.$store.commit('PUB_SET_TODO_ALERT', this.localTodoTime.alert)
+        this.saveTodoTimeState()
+        this.$store.commit('PUB_TODO_ALERT_SET', {data: this.todoAlert})
         this.$router.push('/todoEdit/alert')
       },
+      /**
+       * 检查是提醒时间是否遭遇当前时间
+       */
       checkWarn () {
         if (!this.localTodoTime.isAllDay && moment().isAfter(moment(this.localClock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
-      saveTodoTime () {
-        this.$store.commit('PUB_SET_TODO_TIME', this.localTodoTime)
+      /**
+       * 检查用户是否更新过，
+       * currentTodo.id不存在（新建）：isAllDay为false即为modified
+       * currentTodo.id存在（更新）：比对localTodoTime和todoTime的每一项是否都一样
+       */
+      isModified () {
+        return !converter.compareTodoTime(this.todoTime, this.currentTodo)
+      },
+      /**
+       * 保存todoTime的状态到state中
+       */
+      saveTodoTimeState () {
+        alert('====TodoEditTime: this.localTodoTime====' + JSON.stringify(this.localTodoTime))
+        this.$store.commit('PUB_TODO_TIME_SET', {data: this.localTodoTime})
+      },
+      /**
+       * 提交todoTime的更新
+       * @param next
+       * @returns {Promise<U>|Promise.<TResult>|*|Thenable<U>}
+       */
+      submitTodo (next) {
+        if (this.isModified()) {
+          window.rsqadmg.exec('showLoader')
+          return this.$store.dispatch('updateTodoTime')
+            .then(() => {
+              window.rsqadmg.exec('hideLoader')
+              next()
+            })
+        } else {
+          next()
+        }
       }
     },
-    mounted () {
+    created () {
       this.initData()
       window.rsqadmg.exec('setTitle', {title: '设置时间'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
     },
+    mounted () {},
+    /**
+     * vue-router hook
+     * @param to
+     * @param from
+     * @param next
+     * @returns {*}
+     */
     beforeRouteLeave (to, from, next) {
-      if (to.name !== 'todoNew' && to.name !== 'todoEdit') next()
+      if (to.name !== 'todoNew' && to.name !== 'todoEdit') {
+        return next()
+      }
 
-      this.saveTodoTime()
-      next()
-
-//      alert('------')
-//
-//
-//      var that = this
-//      var warn = this.checkWarn()
-//      if (warn) {
-//        window.rsqadmg.exec('confirm', {
-//          message: warn,
-//          success () {
-//            that.emitReady()
-//            next()
-//          },
-//          cancel () {
-//            next(false)
-//          }
-//        })
-//      } else {
-//        that.emitReady()
-//        next()
-//      }
+      var that = this
+      var warn = this.checkWarn()
+      if (warn) {
+        window.rsqadmg.exec('confirm', {
+          message: warn,
+          success () {
+            that.saveTodoTimeState()
+            that.submitTodo(next)
+          },
+          cancel () {
+            next(false)
+          }
+        })
+      } else {
+        that.saveTodoTimeState()
+        that.submitTodo(next)
+      }
     }
   }
 </script>

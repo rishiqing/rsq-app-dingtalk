@@ -104,13 +104,11 @@
         //  这个是点击跳到编辑界面
         if (e.target.className.indexOf('jsItemCheckbox') === -1) {
           this.$emit('todo-item-click', this.item)
-          e.stopPropagation()
           e.preventDefault()
         }
       },
       clickCheckOut (e) {
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
-        e.stopPropagation()
         e.preventDefault()
       }
     },

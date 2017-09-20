@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise'
 import api from 'api/index'
 import util from 'ut/jsUtil'
 import dateUtil from 'ut/dateUtil'
+import converter from 'ut/converter'
 import moment from 'moment'
 
 export default {
@@ -275,6 +276,9 @@ export default {
   setCurrentTodo ({ commit }, item) {
     commit('TD_CURRENT_TODO_SET', {item: item})
   },
+  updateCurrentTodo ({ commit }, item) {
+    commit('TD_CURRENT_TODO_UPDATE', {item})
+  },
   /**
    * 首先检查schedule的items中是否已经获取到todo的详细信息，如果没有获取过，则请求服务器获取
    * 当获取到item的详细信息时，item会添加cDetail标记，表示已经获取过，下次将不会再获取细节信息
@@ -283,10 +287,14 @@ export default {
    * @param p
    * @param p.todo
    */
-  getTodo ({ commit, state }, p) {
+  getTodo ({ commit, state, getters }, p) {
     let todo = p ? p.todo : state.todo.currentTodo
+    var params = {
+      id: todo.id,
+      createTaskDate: getters.createTaskDate
+    }
     if (!todo.cDetail) {
-      return api.todo.getTodo(todo)
+      return api.todo.getTodo(params)
         .then(result => {
           result.cDetail = true
           commit('TD_TODO_GET', {todo: result})
@@ -386,16 +394,50 @@ export default {
    * @param p.editItem
    * @returns {Function|any|*|Promise.<TResult>|Promise}
    */
-  updateTodo ({ commit, state }, p) {
+  updateTodo ({ commit, state, dispatch }, p) {
     //  p.todo不存在，则默认读取currentTodo
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
     //  如果id存在，则ajax更新
     editItem['id'] = todo.id
+    alert('====updateTodo====' + JSON.stringify(editItem))
     return api.todo.putTodoProps(editItem)
       .then(todo => {
+        alert('====todo back====' + JSON.stringify(todo))
         commit('TD_TODO_UPDATED', {todo: todo})
       })
+  },
+  /**
+   * 更新todoTime，如果currentTodo.id存在，说明是更新todo，直接发送请求更新；
+   * 如果id不存在，说明是新建任务，保存到currentTodo中，跟新建任务的其他属性一同提交
+   * @param commit
+   * @param state
+   * @param dispatch
+   * @param p
+   * @returns {*}
+   */
+  updateTodoTime ({ commit, state, dispatch }, p) {
+    p = p || {}
+    var todo = p.todo || state.todo.currentTodo
+    var todoTime = state.pub.currentTodoTime
+    var params = converter.todoTimeFront2Back(todoTime)
+    alert('====updateTodoTime params====' + JSON.stringify(params))
+    var promise
+    //  TODO  如果this.currentTodo.id存在，则更新currentTodo
+    if (todo.id) {
+      var taskDate = todo.createTaskDate || moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').format('YYYYMMDD')
+      promise = dispatch('updateTodo', {
+        editItem: {
+          createTaskDate: taskDate,
+          clock: params.clock
+        }
+      })
+    } else {
+      promise = Promise.resolve().then(() => {
+        commit('TD_CURRENT_TODO_UPDATE', {item: params})
+      })
+    }
+    return promise
   },
   /**
    * 删除当前选中状态的item，删除后如果选择的日期不是单日，则还需要清理缓存数据，逻辑如下：
@@ -581,7 +623,7 @@ export default {
       // }
     // }
     // p.isClose = isClose
-    commit('PUB_SET_TODO_TIME', p)
+    commit('PUB_TODO_TIME_SET', p)
     return Promise.resolve()
     // var clock = p.clock ||
   }

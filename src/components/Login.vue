@@ -40,8 +40,8 @@
     methods: {
       doLogin () {
 //        this.$store.commit('SCH_TODO_READY', {strCurrentDate: '2017-09-16', items: []})
-//        this.$store.commit('PUB_SET_TODO_REPEAT', null)
-        this.$store.commit('PUB_SET_TODO_TIME', {
+//        this.$store.commit('PUB_TODO_REPEAT_SET', null)
+        this.$store.commit('PUB_TODO_TIME_SET', {
           isAllDay: true,
           todo: null
         })
