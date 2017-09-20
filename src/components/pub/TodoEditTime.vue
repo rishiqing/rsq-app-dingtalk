@@ -138,7 +138,14 @@
       return {
         autoStart: true,
         autoEnd: true,
-        localTodoTime: {}
+        localTodoTime: {
+          isAllDay: true,
+          clock: {
+            startTime: null,
+            endTime: null,
+            alert: []
+          }
+        }
       }
     },
     computed: {
@@ -150,12 +157,6 @@
       },
       localClock () {
         return this.localTodoTime.clock
-      },
-      todoAlert () {
-        var alertList = this.localClock.alert || []
-        return {
-          list: alertList
-        }
       },
       alertText () {
         try {
@@ -185,7 +186,10 @@
        */
       initData () {
         //  复制todoTime到本地
-        jsUtil.extendObject(this.localTodoTime, this.todoTime)
+        this.localTodoTime = {
+          isAllDay: this.todoTime.isAllDay,
+          clock: jsUtil.extendObject({}, this.todoTime.clock)
+        }
         //  todoTime.startTime存在，说明之前设置过提醒，不再自动设置
         if (this.localTodoTime.clock.startTime) {
           this.autoStart = false
@@ -255,7 +259,7 @@
         if (this.localTodoTime.isAllDay) return
 
         this.saveTodoTimeState()
-        this.$store.commit('PUB_TODO_ALERT_SET', {data: this.todoAlert})
+        this.$store.commit('PUB_TODO_ALERT_SET', {data: converter.todoAlertBack2Front(this.localClock)})
         this.$router.push('/todoEdit/alert')
       },
       /**
@@ -278,7 +282,6 @@
        * 保存todoTime的状态到state中
        */
       saveTodoTimeState () {
-        alert('====TodoEditTime: this.localTodoTime====' + JSON.stringify(this.localTodoTime))
         this.$store.commit('PUB_TODO_TIME_SET', {data: this.localTodoTime})
       },
       /**
@@ -314,7 +317,7 @@
      * @returns {*}
      */
     beforeRouteLeave (to, from, next) {
-      if (to.name !== 'todoNew' && to.name !== 'todoEdit') {
+      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'login') {
         return next()
       }
 

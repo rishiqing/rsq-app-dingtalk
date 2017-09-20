@@ -52,5 +52,35 @@ export default {
     } else {
       return jsUtil.objectEqual(time1.clock, time2.clock)
     }
+  },
+  /**
+   * 将todoAlert对象由后台对象转换为前台对象
+   * @param back 对象示例：{alert: []}
+   */
+  todoAlertBack2Front (back) {
+    if (!back || !back.alert || !back.startTime || !back.endTime) return null
+    var ruleList = []
+    var timeList = []
+    back.alert.forEach(b => {
+      if (b.isUserDefined) {
+        timeList.push({numTime: jsUtil.alertRule2Time(b.schedule, back.taskDate, back.startTime, back.endTime)})
+      } else {
+        ruleList.push(b)
+      }
+    })
+    return {
+      ruleList,
+      timeList
+    }
+  },
+  /**
+   * 将todoAlert对象由前台对象转换为后台对象
+   * @param front
+   */
+  todoAlertFront2Back (front, todoTime) {
+    var list = front.ruleList.slice()
+    front.timeList.forEach(t => {
+    })
+    return list
   }
 }

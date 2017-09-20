@@ -62,7 +62,6 @@ export default {
   },
   putTodoProps (props) {
     var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
-    alert('====path====' + path)
     return new Promise((resolve, reject) => {
       Vue.http.put(path, props)
         .then(res => {

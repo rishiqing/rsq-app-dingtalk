@@ -400,10 +400,8 @@ export default {
     var editItem = p.editItem
     //  如果id存在，则ajax更新
     editItem['id'] = todo.id
-    alert('====updateTodo====' + JSON.stringify(editItem))
     return api.todo.putTodoProps(editItem)
       .then(todo => {
-        alert('====todo back====' + JSON.stringify(todo))
         commit('TD_TODO_UPDATED', {todo: todo})
       })
   },
@@ -419,9 +417,11 @@ export default {
   updateTodoTime ({ commit, state, dispatch }, p) {
     p = p || {}
     var todo = p.todo || state.todo.currentTodo
+    var todoAlert = state.pub.currentTodoAlert
     var todoTime = state.pub.currentTodoTime
+    var alertParams = converter.todoAlertFront2Back(todoAlert, todoTime)
     var params = converter.todoTimeFront2Back(todoTime)
-    alert('====updateTodoTime params====' + JSON.stringify(params))
+    params.alert = alertParams
     var promise
     //  TODO  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {

@@ -3,21 +3,26 @@
     <ul class="top-ul">
       <v-touch tag="li" @tap="disableAlert">
         <span>不提醒</span>
-        <i class="icon2-selected finish" v-show="notUseAlert"></i>
+        <i class="icon2-selected finish" v-show="noAlert"></i>
       </v-touch>
     </ul>
     <ul class="alert-list">
-      <v-touch tag="li" @tap="selectAlert(alert)" v-for="alert in alertList" :key="alert.cid">
-        <span>{{parseCode(alert.point, alert.num, alert.unit)}}</span>
+      <v-touch tag="li" @tap="selectAlert(alert)" v-for="alert in localRuleList" :key="alert.cid">
+        <span>{{parseCode(alert.schedule)}}</span>
         <i class="icon2-selected finish" v-show="alert.selected"></i>
       </v-touch>
     </ul>
-    <!--<ul class="sec">-->
-      <!--<v-touch tag="li" @tap="show">-->
-        <!--<span class="remind">自定义提醒时间</span>-->
-        <!--<span class="time">14:22</span>-->
-      <!--</v-touch>-->
-    <!--</ul>-->
+    <ul class="alert-list">
+      <v-touch tag="li" @tap="selectAlert(alert)" v-for="alert in localTimeList" :key="alert.numTime">
+        <span>{{parseTime(alert.numTime)}}</span>
+        <i class="icon2-selected finish" v-show="alert.selected"></i>
+      </v-touch>
+    </ul>
+    <ul class="sec">
+      <v-touch tag="li" @tap="showTimePicker">
+        <span class="remind">自定义提醒时间</span>
+      </v-touch>
+    </ul>
   </div>
 </template>
 <style>
@@ -82,22 +87,25 @@
 </style>
 <script>
   import jsUtil from 'ut/jsUtil'
+  import moment from 'moment'
 
   export default {
     data () {
       return {
-        notUseAlert: true,
+        noAlert: true,
         //  系统的提醒时间
-        alertList: [
-          {cid: 0, point: 'begin', num: 0, unit: 'min', selected: false},
-          {cid: 1, point: 'begin', num: -5, unit: 'min', selected: false},
-          {cid: 2, point: 'begin', num: -15, unit: 'min', selected: false},
-          {cid: 3, point: 'begin', num: -30, unit: 'min', selected: false},
-          {cid: 4, point: 'begin', num: -1, unit: 'hour', selected: false},
-          {cid: 5, point: 'end', num: -1, unit: 'hour', selected: false}
+        //  {cid: 0, schedule: 'begin_0_min', selected: false}
+        localRuleList: [
+          {cid: 0, schedule: 'begin_0_min', selected: false},
+          {cid: 1, schedule: 'begin_-5_min', selected: false},
+          {cid: 2, schedule: 'begin_-15_min', selected: false},
+          {cid: 3, schedule: 'begin_-30_min', selected: false},
+          {cid: 4, schedule: 'begin_-1_hour', selected: false},
+          {cid: 5, schedule: 'end_-1_hour', selected: false}
         ],
         //  用户自定义的提醒时间
-        userAlertList: []
+        //  {numTime: 123214345453, selected: true}
+        localTimeList: []
       }
     },
     computed: {
@@ -107,65 +115,100 @@
     },
     methods: {
       initData () {
-        var hasAlert = false
-        var passedAlertArray = this.todoAlert.list
-        if (passedAlertArray) {
-          passedAlertArray.forEach(remoteAlert => {
-            var localAlert = this.alertList.find(localAlert => {
-              return [localAlert.point, localAlert.num, localAlert.unit].join('_') === remoteAlert.schedule
-            })
-            if (localAlert) {
-              hasAlert = true
+        //  设置默认值
+        this.initRuleList()
+        this.initTimeList()
+      },
+      initRuleList () {
+        var noAlert = true
+        this.todoAlert.ruleList.forEach(remoteAlert => {
+          for (let i = 0; i < this.localRuleList.length; i++) {
+            const localAlert = this.localRuleList[i]
+            if (localAlert.schedule === remoteAlert.schedule) {
+              noAlert = false
               localAlert.selected = true
+              break
             }
+          }
+        })
+        this.noAlert = noAlert
+      },
+      initTimeList () {
+        this.todoAlert.timeList.forEach(t => {
+          this.localTimeList.push({
+            numTime: t.numTime,
+            selected: true
           })
-        }
-        this.notUseAlert = !hasAlert
+        })
+      },
+      showTimePicker () {
+        window.rsqadmg.exec('timePicker', {
+          strInit: moment().format('HH:mm'),
+          success (result) {
+            var obj = {numTime: moment(result.value, 'HH:mm').valueOf, selected: false}
+            this.localTimeList.push(obj)
+            this.selectAlert(obj)
+          }
+        })
       },
       disableAlert () {
-        this.notUseAlert = !this.notUseAlert
-        if (this.notUseAlert) {
-          this.alertList.forEach(a => {
+        if (!this.noAlert) {
+          this.localRuleList.forEach(a => {
             a.selected = false
           })
+          this.localTimeList = []
         }
+        this.noAlert = true
       },
       selectAlert (a) {
         a.selected = !a.selected
         if (a.selected) {
-          this.notUseAlert = false
+          this.noAlert = false
         }
       },
-      parseCode (point, num, unit) {
-        return jsUtil.alertCode2Text([point, num, unit])
+      parseCode (schedule) {
+        return jsUtil.alertCode2Text(schedule.split('_'))
       },
-      parseUserDefined () {},
-      parseAlertData (obj) {
-        return {
-          id: obj.id,
-          schedule: obj.isUserDefined ? this.parseUserDefined(obj) : ([obj.point, obj.num, obj.unit].join('_')),
-          isUserDefined: !!obj.isUserDefined
-        }
+      parseTime (num) {
+        return moment(num).format('HH:mm')
       },
-      getResult () {
-        return this.alertList
+      getRuleList () {
+        return this.localRuleList
           .filter(a => {
             return a.selected
           }).map(sel => {
-            return this.parseAlertData(sel)
+            return {
+              id: sel.id,
+              schedule: sel.schedule,
+              isUserDefined: false
+            }
+          })
+      },
+      getTimeList () {
+        return this.localTimeList
+          .filter(a => {
+            return a.selected
+          }).map(sel => {
+            return {numTime: sel.numTime}
           })
       },
       saveTodoAlert () {
-        this.$store.commit('PUB_TODO_ALERT_SET', {list: this.getResult()})
+        this.$store.commit('PUB_TODO_ALERT_SET', {
+          data: {
+            ruleList: this.getRuleList(),
+            timeList: this.getTimeList()
+          }
+        })
       }
     },
-    mounted () {
+    created () {
       this.initData()
       window.rsqadmg.execute('setTitle', {title: '设置提醒'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
     },
     beforeRouteLeave (to, from, next) {
       this.saveTodoAlert()
+      this.saveTodoTime()
       next()
     }
   }

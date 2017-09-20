@@ -165,6 +165,8 @@
        */
       initData () {
         jsUtil.extendObject(this.editItem, this.currentTodo)
+        this.editItem.startDate = this.currentDate
+        this.editItem.endDate = this.currentDate
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构

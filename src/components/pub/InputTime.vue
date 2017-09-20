@@ -63,8 +63,6 @@
       gotoTodoTime () {
         this.$emit('time-tap')
         var stateTodoTime = converter.todoTimeBack2Front({ clock: this.itemClock })
-        alert('====this.itemClock====' + JSON.stringify(this.itemClock))
-        alert('====stateTodoTime====' + JSON.stringify(stateTodoTime))
         this.$store.commit('PUB_TODO_TIME_SET', {data: stateTodoTime})
         this.$router.push('/todoEdit/time')
       }

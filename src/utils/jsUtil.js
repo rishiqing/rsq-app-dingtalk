@@ -294,5 +294,16 @@ export default {
     var numDir = num < 0 ? '前' : '后'
     var last = codeArr[2] === 'min' ? '分钟' : '小时'
     return pre + numDir + Math.abs(num) + last
-  }
+  },
+  /**
+   * 将提醒的规则转换为具体的提醒时间
+   */
+  alertRule2Time (rule, baseDate, startTime, endTime) {
+    // var arr = rule.split('_')
+    // var baseTime = arr[0] === 'begin' ? start : end
+  },
+  /**
+   * 将提醒的时间转换为规则
+   */
+  alertTime2Rule (time, baseDate, startTime, endTime) {}
 }
