@@ -8,14 +8,23 @@
         <p class="popup-title">重复频率</p>
       </div>
       <div class="tab-panel">
-        <v-touch class="tab-bg u-pull-left" @tap="setTab('week')">
-          <span class="tab-left" :class="{'is-tab-active': tab === 'week'}">每周重复</span>
+        <v-touch class="tab-bg" @tap="setTab('day')">
+          <span class="tab-text" :class="{'is-tab-active': tab === 'day'}">每天</span>
         </v-touch>
-        <v-touch class="tab-bg u-pull-right" @tap="setTab('month')">
-          <span class="tab-right" :class="{'is-tab-active': tab === 'month'}">每月重复</span>
+        <v-touch class="tab-bg" @tap="setTab('week')">
+          <span class="tab-text" :class="{'is-tab-active': tab === 'week'}">每周</span>
+        </v-touch>
+        <v-touch class="tab-bg" @tap="setTab('month')">
+          <span class="tab-text" :class="{'is-tab-active': tab === 'month'}">每月</span>
+        </v-touch>
+        <v-touch class="tab-bg" @tap="setTab('year')">
+          <span class="tab-text" :class="{'is-tab-active': tab === 'year'}">每年</span>
         </v-touch>
       </div>
       <div class="body">
+        <div class="body-img" v-show="tab === 'day'">
+          <img src="../../../assets/img/repeat-day.png">
+        </div>
         <div class="body-list" v-show="tab === 'week'">
           <ul>
             <v-touch tag="li" v-for="d in days" :key="d.val" @tap="tapSelect(d)">
@@ -38,6 +47,9 @@
             </tr>
             </tbody>
           </table>
+        </div>
+        <div class="body-img" v-show="tab === 'year'">
+          <img src="../../../assets/img/repeat-year.png">
         </div>
       </div>
       <div class="footer">
@@ -65,13 +77,11 @@
     .popup-button {color: #007AFF;}
     .tab-panel {
       font-size: 0.4rem; color: #8C8C8C; height: 1.17rem; line-height: 1.17rem;
-      border-bottom: 1px solid #E0E0E0; overflow: hidden;
+      border-bottom: 1px solid #E0E0E0; overflow: hidden; padding: 0 1.2rem;
     }
     .tab-bg {
-      float: left; width: 50%; overflow: hidden;
+      float: left; width: 25%; overflow: hidden;text-align: center;
     }
-    .tab-left {float:right; padding-right: 0.5rem;}
-    .tab-right {float:left; padding-left: 0.5rem;}
     .is-tab-active {color: #55A8FD;}
     .body {height: 5.85rem;overflow: auto;}
     .body-list {font-size: 0.453rem; color: #333333;}
@@ -109,6 +119,13 @@
       top:0.33rem;
       color: #55A8FD;
       font-weight: bold;
+    }
+    .body-img {
+      position:relative; height:100%; text-align: center;
+    }
+    .body-img > img {
+      position: absolute;margin: auto;
+      top: 0;right: 0;left: 0;bottom: 0;
     }
   }
 </style>
@@ -179,20 +196,25 @@
       },
       selectedText () {
         var sel = this.getSelected()
-        if (sel.length === 0) return ''
 
         var valStr
-        if (this.tab === 'week') {
-          valStr = sel.map(d => {
-            return this.dayName[d.val]
-          }).join('，')
-          return '每周' + valStr + '重复'
-        } else {
-          valStr = sel.map(d => {
-            return d.text
-          }).join('，')
-          return '每月' + valStr + '号重复'
+        switch (this.tab) {
+          case 'day':
+            valStr = '每天重复'
+            break
+          case 'week':
+            valStr = sel.length === 0 ? '' : '每周' + sel.map(d => { return this.dayName[d.val] }).join('，') + '重复'
+            break
+          case 'month':
+            valStr = sel.length === 0 ? '' : '每月' + sel.map(d => { return d.text }).join('，') + '号重复'
+            break
+          case 'year':
+            valStr = '每年' + '' + '重复'
+            break
+          default:
+            break
         }
+        return valStr
       }
     },
     methods: {
