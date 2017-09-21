@@ -36,19 +36,5 @@ export default {
       comments: [],
       noteFiles: []
     }
-  },
-  defaultTodoClock () {
-    return {
-      startTime: null,
-      endTime: null,
-      alwaysAlert: true,
-      taskDate: store.getters.createTaskDate,
-      alert: []
-    }
-  },
-  defaultTodoAlert () {
-    return {
-      list: []
-    }
   }
 }

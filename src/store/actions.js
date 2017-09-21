@@ -2,7 +2,6 @@ import { Promise } from 'es6-promise'
 import api from 'api/index'
 import util from 'ut/jsUtil'
 import dateUtil from 'ut/dateUtil'
-import converter from 'ut/converter'
 import moment from 'moment'
 
 export default {
@@ -291,7 +290,7 @@ export default {
     let todo = p ? p.todo : state.todo.currentTodo
     var params = {
       id: todo.id,
-      createTaskDate: getters.createTaskDate
+      createTaskDate: getters.defaultTaskDate
     }
     if (!todo.cDetail) {
       return api.todo.getTodo(params)
@@ -394,7 +393,7 @@ export default {
    * @param p.editItem
    * @returns {Function|any|*|Promise.<TResult>|Promise}
    */
-  updateTodo ({ commit, state, dispatch }, p) {
+  updateTodo ({ commit, state }, p) {
     //  p.todo不存在，则默认读取currentTodo
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
@@ -414,27 +413,25 @@ export default {
    * @param p
    * @returns {*}
    */
-  updateTodoTime ({ commit, state, dispatch }, p) {
+  updateTodoTime ({ commit, state, getters, dispatch }, p) {
     p = p || {}
-    var todo = p.todo || state.todo.currentTodo
-    var todoAlert = state.pub.currentTodoAlert
-    var todoTime = state.pub.currentTodoTime
-    var alertParams = converter.todoAlertFront2Back(todoAlert, todoTime)
-    var params = converter.todoTimeFront2Back(todoTime)
-    params.alert = alertParams
+    var todo = state.todo.currentTodo
+    if (p.clock.alwaysAlert === undefined) {
+      p.clock.alwaysAlert = true
+    }
     var promise
-    //  TODO  如果this.currentTodo.id存在，则更新currentTodo
+    //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
-      var taskDate = todo.createTaskDate || moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').format('YYYYMMDD')
+      var taskDate = todo.createTaskDate || getters.defaultTaskDate
       promise = dispatch('updateTodo', {
         editItem: {
           createTaskDate: taskDate,
-          clock: params.clock
+          clock: p.clock
         }
       })
     } else {
       promise = Promise.resolve().then(() => {
-        commit('TD_CURRENT_TODO_UPDATE', {item: params})
+        commit('TD_CURRENT_TODO_UPDATE', {item: p})
       })
     }
     return promise
@@ -591,40 +588,5 @@ export default {
     return promise.then(() => {
       return result
     })
-  },
-
-  /**
-   * 设置当前的clock，根据传入的参数中p.clock是否存在，判断是在新建日程时候创建还是在编辑日程时创建
-   * @param commit
-   * @param state
-   * @param p
-   * @returns {Promise<R>|Promise.<T>|Promise<void>}
-   */
-  setCurrentClock ({ commit, state }, p) {
-    // p = p || {}
-    // var isClose = false
-    // if (!p.todo) {
-    //   isClose = true
-      // //  如果clock不存在，则设置默认的clock
-      // var now = new Date()
-      // var numDate = state.todo.strCurrentDate
-      //   ? dateUtil.dateText2Num(state.todo.strCurrentDate)
-      //   : dateUtil.clearTime(now).getTime()
-      // var startTime = moment().format('HH:mm')
-      // var endTime = moment().add(1, 'h').format('HH:mm')
-      //
-      // p.todo = {
-      //   createTaskDate: dateUtil.dateNum2Text(numDate),
-      //   clock: {
-      //     alwaysAlert: true,
-      //     startTime: startTime,
-      //     endTime: endTime
-      //   }
-      // }
-    // }
-    // p.isClose = isClose
-    commit('PUB_TODO_TIME_SET', p)
-    return Promise.resolve()
-    // var clock = p.clock ||
   }
 }

@@ -61,20 +61,12 @@ export default {
    */
   pub: {
     /**
-     * todo时间的全局对象
+     * 在设置提醒的时候，暂存时间页面的数据
      * {
-     *   isAllDay: true,  //是否开启全天
      *   "clock":{"startTime":"15:50","endTime":"15:55","alwaysAlert":true}
      *  }
      */
     currentTodoTime: {},
-    /**
-     * 提醒的全局对象
-     * {
-     *   list: []
-     * }
-     */
-    currentTodoAlert: {},
     /**
      * 设置repeat
      * {

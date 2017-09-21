@@ -74,41 +74,6 @@ export default {
     return obj
   },
   /**
-   * 使用递归深度克隆，function、不做考虑
-   * @param obj
-   * @param props
-   */
-  deepExtendObject (obj, props) {
-    window.alert('not implemented')
-    // if (props === null || props === undefined || typeof props !== 'object') {
-    //   obj = props
-    //   return
-    // }
-    // props = props || {}
-    // //  处理Array的情况
-    // if (props instanceof Array) {
-    //   var cloneA = [];
-    //   for (var i = 0; i < obj.length; ++i) {
-    //     cloneA[i] = cloneJSON(obj[i]);
-    //   }
-    //   return cloneA;
-    // }
-    // for (let prop in props) {
-    //   if (props.hasOwnProperty(prop)) {
-    //     Vue.set(obj, prop, props[prop])
-    //
-    //     if (obj[prop] === undefined) {
-    //
-    //       Vue.set(obj, prop, {})
-    //       this.deepExtendObject(obj[prop], props[prop])
-    //     } else {
-    //       obj[prop] = props[prop]
-    //     }
-    //   }
-    // }
-    // return obj
-  },
-  /**
    * 从obj深克隆一个对象出来
    * @param obj
    */
@@ -297,13 +262,27 @@ export default {
   },
   /**
    * 将提醒的规则转换为具体的提醒时间
+   * 将形如"begin_-5_min"这样的规则，在指定的startTime和endTime中转换为time的mills
    */
-  alertRule2Time (rule, baseDate, startTime, endTime) {
-    // var arr = rule.split('_')
-    // var baseTime = arr[0] === 'begin' ? start : end
+  alertRule2Time (rule, numStartTime, numEndTime) {
+    var arr = rule.split('_')
+    var baseTime = arr[0] === 'begin' ? numStartTime : numEndTime
+    var num = Number(arr[1])
+    var numUnit = arr[2] === 'min' ? 60 : 3600  //  min为60s，hour为3600s
+    return baseTime + num * numUnit * 1000
   },
   /**
-   * 将提醒的时间转换为规则
+   * 将提醒的时间转换为规则，只相对开始时间做解析
+   * 将time mills依据startTime转换为形如"begin_-5_min"这样的规则
    */
-  alertTime2Rule (time, baseDate, startTime, endTime) {}
+  alertTime2Rule (time, numStartTime, numEndTime) {
+    var pre = 'begin'
+    var num = (time - numStartTime) / (60 * 1000)
+    var unit = 'min'
+    if (Math.abs(num) > 60) {
+      unit = 'hour'
+      num /= 60
+    }
+    return pre + '_' + num + '_' + unit
+  }
 }

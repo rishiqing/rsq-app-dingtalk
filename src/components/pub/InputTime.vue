@@ -1,10 +1,8 @@
 <template>
   <v-touch class="outertime" @tap="gotoTodoTime">
-    <div class="">
-      <span class="date">时间</span>
-      <span class="now">{{timeValue}}</span>
-      <i class="icon2-arrow-right-small arrow"></i>
-    </div>
+    <span class="date">时间</span>
+    <span class="now">{{timeValue}}</span>
+    <i class="icon2-arrow-right-small arrow"></i>
   </v-touch>
 </template>
 <style lang="" scoped>
@@ -42,8 +40,6 @@
   }
 </style>
 <script>
-  import converter from 'ut/converter'
-
   export default {
     data () {
       return {}
@@ -62,8 +58,6 @@
     methods: {
       gotoTodoTime () {
         this.$emit('time-tap')
-        var stateTodoTime = converter.todoTimeBack2Front({ clock: this.itemClock })
-        this.$store.commit('PUB_TODO_TIME_SET', {data: stateTodoTime})
         this.$router.push('/todoEdit/time')
       }
     },

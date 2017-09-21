@@ -281,11 +281,11 @@ export default {
   PUB_TODO_TIME_UPDATE (state, p) {
     util.extendObject(state.pub.currentTodoTime, p.data)
   },
-  PUB_TODO_ALERT_SET (state, p) {
-    state.pub.currentTodoAlert = p.data
+  PUB_TODO_TIME_DELETE (state, p) {
+    state.pub.currentTodoTime = {}
   },
-  PUB_TODO_ALERT_UPDATE (state, p) {
-    util.extendObject(state.pub.currentTodoAlert, p.data)
+  PUB_TODO_TIME_CLOCK_UPDATE (state, p) {
+    util.extendObject(state.pub.currentTodoTime.clock, p.data)
   },
   PUB_TODO_REPEAT_SET (state, p) {
     p = p || {}

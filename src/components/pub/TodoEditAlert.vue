@@ -7,14 +7,14 @@
       </v-touch>
     </ul>
     <ul class="alert-list">
-      <v-touch tag="li" @tap="selectAlert(alert)" v-for="alert in localRuleList" :key="alert.cid">
+      <v-touch tag="li" @tap="selectAlert(alert)" v-for="(alert, index) in displayedRuleList" :key="index">
         <span>{{parseCode(alert.schedule)}}</span>
         <i class="icon2-selected finish" v-show="alert.selected"></i>
       </v-touch>
     </ul>
     <ul class="alert-list">
-      <v-touch tag="li" @tap="selectAlert(alert)" v-for="alert in localTimeList" :key="alert.numTime">
-        <span>{{parseTime(alert.numTime)}}</span>
+      <v-touch tag="li" @tap="selectAlert(alert)" v-for="(alert, index) in displayedTimeList" :key="index">
+        <span>{{parseTimeText(alert.numTime)}}-{{alert.selected}}</span>
         <i class="icon2-selected finish" v-show="alert.selected"></i>
       </v-touch>
     </ul>
@@ -95,22 +95,46 @@
         noAlert: true,
         //  系统的提醒时间
         //  {cid: 0, schedule: 'begin_0_min', selected: false}
-        localRuleList: [
-          {cid: 0, schedule: 'begin_0_min', selected: false},
-          {cid: 1, schedule: 'begin_-5_min', selected: false},
-          {cid: 2, schedule: 'begin_-15_min', selected: false},
-          {cid: 3, schedule: 'begin_-30_min', selected: false},
-          {cid: 4, schedule: 'begin_-1_hour', selected: false},
-          {cid: 5, schedule: 'end_-1_hour', selected: false}
+        displayedRuleList: [
+          {schedule: 'begin_0_min', selected: false},
+          {schedule: 'begin_-5_min', selected: false},
+          {schedule: 'begin_-15_min', selected: false},
+          {schedule: 'begin_-30_min', selected: false},
+          {schedule: 'begin_-1_hour', selected: false},
+          {schedule: 'end_-1_hour', selected: false}
         ],
         //  用户自定义的提醒时间
         //  {numTime: 123214345453, selected: true}
-        localTimeList: []
+        displayedTimeList: []
       }
     },
     computed: {
-      todoAlert () {
-        return this.$store.state.pub.currentTodoAlert
+      todoClock () {
+        return this.$store.state.pub.currentTodoTime.clock || {}
+      },
+      baseDate () {
+        return this.todoClock.taskDate || this.$store.getters.defaultTaskDate
+      },
+      numStartTime () {
+        return this.getNumDateTime(this.todoClock.startTime)
+      },
+      numEndTime () {
+        return this.getNumDateTime(this.todoClock.endTime)
+      },
+      alertList () {
+        return this.todoClock.alert || []
+      },
+      //  非用户自定义的rule
+      sysRuleList () {
+        return this.alertList.filter(a => {
+          return !a.isUserDefined
+        })
+      },
+      //  用户自定义的rule
+      userRuleList () {
+        return this.alertList.filter(a => {
+          return a.isUserDefined
+        })
       }
     },
     methods: {
@@ -121,9 +145,9 @@
       },
       initRuleList () {
         var noAlert = true
-        this.todoAlert.ruleList.forEach(remoteAlert => {
-          for (let i = 0; i < this.localRuleList.length; i++) {
-            const localAlert = this.localRuleList[i]
+        this.sysRuleList.forEach(remoteAlert => {
+          for (let i = 0; i < this.displayedRuleList.length; i++) {
+            const localAlert = this.displayedRuleList[i]
             if (localAlert.schedule === remoteAlert.schedule) {
               noAlert = false
               localAlert.selected = true
@@ -134,29 +158,33 @@
         this.noAlert = noAlert
       },
       initTimeList () {
-        this.todoAlert.timeList.forEach(t => {
-          this.localTimeList.push({
-            numTime: t.numTime,
-            selected: true
-          })
+        this.userRuleList.forEach(t => {
+          var obj = this.parseTimeObj(t)
+          this.displayedTimeList.push(obj)
+          this.selectAlert(obj)
         })
       },
       showTimePicker () {
+//        //  测试时使用，以后删除
+//        var time = moment().format('HH:mm')
+//        var obj = {numTime: this.getNumDateTime(time), selected: false}
+//        this.displayedTimeList.push(obj)
+//        this.selectAlert(obj)
         window.rsqadmg.exec('timePicker', {
           strInit: moment().format('HH:mm'),
           success (result) {
-            var obj = {numTime: moment(result.value, 'HH:mm').valueOf, selected: false}
-            this.localTimeList.push(obj)
+            var obj = {numTime: this.getNumDateTime(result.value), selected: false}
+            this.displayedTimeList.push(obj)
             this.selectAlert(obj)
           }
         })
       },
       disableAlert () {
         if (!this.noAlert) {
-          this.localRuleList.forEach(a => {
+          this.displayedRuleList.forEach(a => {
             a.selected = false
           })
-          this.localTimeList = []
+          this.displayedTimeList = []
         }
         this.noAlert = true
       },
@@ -169,34 +197,84 @@
       parseCode (schedule) {
         return jsUtil.alertCode2Text(schedule.split('_'))
       },
-      parseTime (num) {
+      //  将'HH:mm'类型的时间根据baseDate转换成mills值
+      getNumDateTime (time) {
+        return moment(this.baseDate + ' ' + time, 'YYYYMMDD HH:mm').valueOf()
+      },
+      parseTimeObj (obj) {
+        return {
+          numTime: jsUtil.alertRule2Time(obj.schedule, this.numStartTime, this.numEndTime),
+          selected: false
+        }
+      },
+      parseTimeText (num) {
         return moment(num).format('HH:mm')
       },
-      getRuleList () {
-        return this.localRuleList
+      getSelected (list) {
+        return list
+          .filter(a => {
+            return a.selected
+          })
+      },
+      getSelectedUserRuleList () {
+        return this.displayedTimeList
           .filter(a => {
             return a.selected
           }).map(sel => {
             return {
-              id: sel.id,
-              schedule: sel.schedule,
-              isUserDefined: false
+              schedule: jsUtil.alertTime2Rule(sel.numTime, this.numStartTime, this.numEndTime)
             }
           })
       },
-      getTimeList () {
-        return this.localTimeList
-          .filter(a => {
-            return a.selected
-          }).map(sel => {
-            return {numTime: sel.numTime}
+      //  比对displayedRuleList与sysRuleList，计算最终的提醒列表
+      mergeRuleList () {
+        var selected = this.getSelected(this.displayedRuleList)
+        var result = []
+        //  执行merge算法
+        selected.forEach(s => {
+          var orgObj = this.sysRuleList.find(org => {
+            return org.schedule === s.schedule
           })
+          if (orgObj) {
+            result.push(orgObj)
+          } else {
+            result.push({
+              schedule: s.schedule,
+              isUserDefined: false
+            })
+          }
+        })
+        return result
+      },
+      //  比对displayedTimeList与userRuleList，计算最终的提醒列表
+      //  统一解析成时间来做判断是否相等
+      mergeTimeList () {
+        var selected = this.getSelected(this.displayedTimeList)
+        var result = []
+        //  执行merge算法
+        selected.forEach(s => {
+          var orgObj = this.userRuleList.find(org => {
+            return s.numTime === jsUtil.alertRule2Time(org.schedule, this.numStartTime, this.numEndTime)
+          })
+          if (orgObj) {
+            result.push(orgObj)
+          } else {
+            result.push({
+              schedule: jsUtil.alertTime2Rule(s.numTime, this.numStartTime, this.numEndTime),
+              isUserDefined: true
+            })
+          }
+        })
+        return result
+      },
+      mergeList () {
+        return this.mergeRuleList().concat(this.mergeTimeList())
       },
       saveTodoAlert () {
-        this.$store.commit('PUB_TODO_ALERT_SET', {
+        var list = this.mergeList()
+        this.$store.commit('PUB_TODO_TIME_CLOCK_UPDATE', {
           data: {
-            ruleList: this.getRuleList(),
-            timeList: this.getTimeList()
+            alert: list
           }
         })
       }
@@ -208,7 +286,6 @@
     },
     beforeRouteLeave (to, from, next) {
       this.saveTodoAlert()
-      this.saveTodoTime()
       next()
     }
   }
