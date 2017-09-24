@@ -61,7 +61,7 @@
         if (!this.itemDates && !this.itemStartDate && !this.itemEndDate) {
           return ''
         }
-        var parsed = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
+        var parsed = dateUtil.backend2frontend({dates: this.itemDates, startDate: this.itemStartDate, endDate: this.itemEndDate})
         var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
         return result
       }
@@ -73,12 +73,12 @@
           document.activeElement.blur()
         }
         var that = this
-        var defDate = dateUtil.backend2frontend(this.itemDates, this.itemStartDate, this.itemEndDate)
+        var defDate = dateUtil.backend2frontend({dates: this.itemDates, startDate: this.itemStartDate, endDate: this.itemEndDate})
         SelectDate.show({
           type: defDate.dateType,
           selectNumDate: defDate.dateResult,
           success: function (result) {
-            var resObj = dateUtil.frontend2backend(result.type, result.selectNumDate, that.itemSep)
+            var resObj = dateUtil.frontend2backend({dateType: result.type, dateResult: result.selectNumDate, sep: that.itemSep})
             that.$emit('date-changed', resObj)
           }
         })

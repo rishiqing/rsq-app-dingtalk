@@ -157,22 +157,28 @@ export default {
   },
   /**
    * 转换方法，将后台的dates/itemStartDate/itemEndDate的数据结构转换成前台的type selectDateArray的数据结构
+   * 新增type为'repeat'类型
+   * repeatParams.repeatType
+   * repeatParams.repeatBaseTime
    * 返回值如下：
    */
-  backend2frontend (dates, itemStartDate, itemEndDate) {
+  backend2frontend ({dates, startDate, endDate, repeatType, repeatBaseTime}) {
     var type, arr
-    if (dates) {
+    if (repeatType) {
+      type = 'repeat'
+      arr = repeatBaseTime.split(',').map(this.dateText2Num)
+    } else if (dates) {
       type = 'discrete'
       arr = dates.split(',').map(this.dateText2Num)
-    } else if (itemStartDate && itemEndDate) {
-      if (itemStartDate === itemEndDate) {
+    } else if (startDate && endDate) {
+      if (startDate === endDate) {
         type = 'single'
-        arr = [this.dateText2Num(itemStartDate)]
+        arr = [this.dateText2Num(startDate)]
       } else {
         type = 'range'
         arr = [
-          this.dateText2Num(itemStartDate),
-          this.dateText2Num(itemEndDate)
+          this.dateText2Num(startDate),
+          this.dateText2Num(endDate)
         ]
       }
     } else {
@@ -181,8 +187,9 @@ export default {
     }
     return {
       dateType: type,
+      repeatType: repeatType,
       dateResult: arr,
-      currentDate: arr ? new Date(arr[0]) : null
+      currentDate: arr ? new Date(arr[0]) : null  //  实际上是起始日期
     }
   },
   /**
@@ -213,23 +220,28 @@ export default {
   /**
    * 转换方法，将前台的type/selectDateArray的格式转换为后台的dates/itemStartDate/itemEndDate格式
    */
-  frontend2backend (type, arr, sep) {
+  frontend2backend ({dateType, dateResult, repeatType, sep}) {
+    if (dateResult.length === 0) {
+      dateType = ''
+    }
+    sep = sep || '/'
     var result
-    switch (type) {
+    switch (dateType) {
       case 'single':
-        var dateText = this.dateNum2Text(arr[0], sep)
+        var dateText = this.dateNum2Text(dateResult[0], sep)
         result = {dates: null, startDate: dateText, endDate: dateText}
         break
       case 'discrete':
         var that = this
-        var joinText = arr.map(val => {
+        var joinText = dateResult.map(val => {
           return that.dateNum2Text(val)
         }).join(',')
         result = {dates: joinText, startDate: null, endDate: null}
         break
       case 'range':
-        result = {dates: null, startDate: this.dateNum2Text(arr[0], sep), endDate: this.dateNum2Text(arr[1], sep)}
+        result = {dates: null, startDate: this.dateNum2Text(dateResult[0], sep), endDate: this.dateNum2Text(dateResult[1], sep)}
         break
+      case 'repeat':
       default:
         result = {dates: null, startDate: null, endDate: null}
         break
@@ -261,44 +273,30 @@ export default {
     return map[code]
   },
   /**
-   * 判断是否是工作日重复
-   * @param todo
-   * @returns {string}
-   */
-  repeatWeekdayText (todo) {
-    var text = ''
-    if (todo.type === 'everyWeek') {
-      let valArr = todo.baseTime.split(',').map(str => {
-        return this.dateText2Num(str)
-      }).sort()
-      let isWeekday = true
-      for (var i = 0; i < valArr.length; i++) {
-        if (new Date(valArr[i]).getDay() !== (i + 1)) {
-          isWeekday = false
-          break
-        }
-      }
-      text = isWeekday ? '工作日重复（周一至周五）' : ''
-    }
-    return text
-  },
-  /**
    * 将todo设置的重复转换成文字描述
    * @param type：重复类型："everyDay", "everyWeek", "everyMonth", "everyYear"
-   * @param baseTimeArr, 重复的时间mills值组成的数组
+   * @param baseTimeArr, 重复的时间值组成的数组，以字符串表示"20170931"
    */
   repeatDayText (type, baseTimeArr) {
     var text
     switch (type) {
+      case 'everyDay':
+        text = '每天'
+        break
       case 'everyWeek':
-        text = '每周' + baseTimeArr.map(val => { return this.dayName(new Date(val)) }).join('、')
+        text = '每周' + baseTimeArr.map(val => {
+          const mills = this.dateText2Num(val)
+          return this.dayName(new Date(mills))
+        }).join('、')
         break
       case 'everyMonth':
-        text = '每月' + baseTimeArr.map(val => { return new Date(val).getDate() }).join('、') + '日'
+        text = '每月' + baseTimeArr.map(val => {
+          return val.substr(6, 2)
+        }).join('、') + '日'
         break
       case 'everyYear':
         text = '每年' + baseTimeArr.map(val => {
-          const d = new Date(val)
+          const d = new Date(this.dateText2Num(val))
           return (d.getMonth() + 1) + '月' + d.getDate() + '号'
         }).join('、')
         break

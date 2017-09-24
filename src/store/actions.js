@@ -154,7 +154,7 @@ export default {
     var newItem = p.newItem
     newItem['pContainer'] = 'IE'
 
-    var dateStruct = dateUtil.backend2frontend(newItem.dates, newItem.startDate, newItem.endDate)
+    var dateStruct = dateUtil.backend2frontend({dates: newItem.dates, startDate: newItem.startDate, endDate: newItem.endDate})
     p['dateStruct'] = dateStruct
     switch (dateStruct.dateType) {
       case 'single':
@@ -326,25 +326,39 @@ export default {
   updateTodoDate ({ commit, state, dispatch }, p) {
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
-    //  如果id存在，则ajax更新
-    editItem['id'] = todo.id
-    return api.todo.putTodoProps(editItem)
-      .then(resTodo => {
-        //  处理缓存数据
-        var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
-        var targetDateStruct = dateUtil.backend2frontend(editItem.dates, editItem.startDate, editItem.endDate)
-        var curArrayIndex = todo.pContainer === 'inbox'
-          ? 0
-          : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+    //  如果日期均为空，则容器为收纳箱
+    if (editItem.startDate == null &&
+      editItem.endDate == null &&
+      editItem.dates == null) {
+      editItem['pContainer'] = 'inbox'
+    }
+    var promise
+    if (todo.id) {
+      //  如果id存在，则ajax更新
+      editItem['id'] = todo.id
+      promise = api.todo.putTodoProps(editItem)
+        .then(resTodo => {
+          //  处理缓存数据
+          var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
+          var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
+          var curArrayIndex = todo.pContainer === 'inbox'
+            ? 0
+            : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
-        if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
-          commit('TD_TODO_DELETED', {item: todo})
-        }
-        dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
-        dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
+          if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
+            commit('TD_TODO_DELETED', {item: todo})
+          }
+          dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
+          dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
 
-        commit('TD_TODO_UPDATED', {todo: resTodo})
+          commit('TD_TODO_UPDATED', {todo: resTodo})
+        })
+    } else {
+      promise = Promise.resolve().then(() => {
+        commit('TD_TODO_UPDATED', {todo: editItem})
       })
+    }
+    return promise
   },
   /**
    * 使dateStruct所标记的所有日期的缓存失效，其中排除exceptStrVal所表示的日期。
@@ -452,7 +466,7 @@ export default {
       .then(() => {
         commit('TD_TODO_DELETED', {item: todo})
         //  清除缓存数据
-        var sourceDateStruct = dateUtil.backend2frontend(todo.dates, todo.startDate, todo.endDate)
+        var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
         dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})

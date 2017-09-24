@@ -3,31 +3,26 @@
     <ul class="top-ul">
       <v-touch tag="li" @tap="setSelected(noRepeat)">
         <span>{{toCycle(noRepeat)}}</span>
-        <i class="icon2-selected finish" v-show="selected == noRepeat"></i>
+        <i class="icon2-selected finish" v-show="selected === noRepeat"></i>
       </v-touch>
     </ul>
-    <ul>
+    <ul v-if="showShortcut">
       <v-touch tag="li" v-for="repeat in repeatList"
                :key="repeat.cid" @tap="setSelected(repeat)">
         <span>{{toCycle(repeat)}}{{toText(repeat)}}</span>
         <i class="icon2-selected finish" v-show="selected === repeat"></i>
       </v-touch>
     </ul>
-    <ul class="sec">
-      <v-touch tag="li" @tap="showUserRepeat">
-        <span class="repeat">{{toCycle(userRepeat)}}</span>
-        <span v-if="selected === userRepeat" class="time">每周的周一，周二，周三...</span>
-        <i class="icon2-arrow-right arrow"></i>
-      </v-touch>
-    </ul>
+    <v-touch class="user-repeat" @tap="showUserRepeat">
+      <span class="list-key u-pull-left">{{toCycle(userRepeat)}}</span>
+      <i class="icon2-arrow-right arrow u-pull-right"></i>
+      <span class="list-value u-pull-right">{{repeatText}}</span>
+    </v-touch>
   </div>
 </template>
 <style scoped>
   .edit-repeat {
     .arrow{
-      position: absolute;
-      top:0.35rem;
-      right:0.5rem;
       font-size: 17px;
       color: #999999;
     }
@@ -80,87 +75,166 @@
     li:last-child{
       border:none;
     }
+    .user-repeat {
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      margin-top: 0.25rem;
+      padding: 0 0.4rem;
+      background-color: white;
+      align-items: center;
+      border-top: 1px solid #E0E0E0;
+      border-bottom:1px solid #E0E0E0;
+      font-family: PingFangSC-Regular;
+      font-size: 17px;
+    }
+    span.list-value {margin-right:0.2rem;
+      max-width:5rem;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;
+    }
+    .user-repeat > * {
+      line-height: 1.2rem;
+    }
   }
 </style>
 <script>
-  import eventBus from 'ut/eventBus'
   import dateUtil from 'ut/dateUtil'
+  import jsUtil from 'ut/jsUtil'
   import selectRepeat from 'com/pub/SelectUserRepeat'
-
+  /**
+   * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
+   * {
+   *   dates: null,
+   *   startDate: null,
+   *   endDate: null,
+   *   repeatType: null,
+   *   repeatBaseTime: null,
+   *   _selected: null,  //  TodoEditRepeat页面中用户的选择
+   *   _uRepeatType: null,  //  TodoEditRepeat页面中用户自定义的重复规则
+   *   _uRepeatStrTimeArray: null  //TodoEditRepeat页面中用户自定义的重复规则的baseTime数组
+   * }
+   */
   export default {
     data () {
+      var now = this.$store.state.schedule.strCurrentDate.replace(/[-/]/g, '')
       return {
         selected: null,
-        localNumTime: null,
         //  不重复
-        noRepeat: {cid: 0, type: 'noRepeat'},
+        noRepeat: {cid: -1, type: 'noRepeat', repeatType: '', strTime: []},
         //  系统重复列表
         repeatList: [
-          {cid: 0, type: 'everyDay', showText: false},
-          {cid: 1, type: 'everyWeek', showText: true},
-          {cid: 2, type: 'everyMonth', showText: true},
-          {cid: 3, type: 'everyYear', showText: true},
-          {cid: 4, type: 'weekday', showText: false}
+          {cid: 0, type: 'everyDay', repeatType: 'everyDay', strTime: [now], showText: false},
+          {cid: 1, type: 'everyWeek', repeatType: 'everyWeek', strTime: [now], showText: true},
+          {cid: 2, type: 'everyMonth', repeatType: 'everyMonth', strTime: [now], showText: true},
+          {cid: 3, type: 'everyYear', repeatType: 'everyYear', strTime: [now], showText: true},
+          {cid: 4, type: 'weekday', repeatType: 'everyWeek', strTime: this.getWeekdayNum(now), showText: false}
         ],
         //  用户自定义的重复列表
-        userRepeat: {cid: 99, type: 'userRepeat'}
+        userRepeat: {cid: 99, type: 'userRepeat'},
+        //  初始化时是否有repeat
+        uRepeatType: null,
+        uRepeatStrTimeArray: []
       }
     },
     computed: {
-      //  读取全局的strCurrentDate作为默认的baseTime
-      todoRepeat () {
-        return this.$store.state.pub.currentTodoRepeat
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
+      },
+      //  根据currentTodo来判断是否显示重复
+      showShortcut () {
+        return !this.currentTodo.repeatType
+      },
+      todoDate () {
+        return this.$store.state.pub.currentTodoDate
+      },
+      baseNumTime () {
+        return dateUtil.dateText2Num(this.$store.state.schedule.strCurrentDate)
+      },
+      repeatText () {
+        var text = dateUtil.repeatDayText(this.uRepeatType, this.uRepeatStrTimeArray)
+        return text ? text + '重复' : ''
       }
     },
     methods: {
       initData () {
-        //  编辑日程
-        if (this.todoRepeat.todo) {
-          //  TODO 编辑日程时，根据todo，选中默认的选项
+        //  有修改缓存读修改缓存，否则从原数据读
+        var t = this.todoDate
+        var hasCache = t._uRepeatType !== undefined
+        if (hasCache) {
+          this.uRepeatType = t._uRepeatType
+          this.uRepeatStrTimeArray = t._uRepeatStrTimeArray
+          this.selected = this.findSelect(t._selected.cid)
         } else {
-          //  新建日程时
-          this.selected = this.noRepeat
-          this.localNumTime = this.todoRepeat.numBaseDate || new Date().getTime()
+          this.uRepeatType = t.repeatType
+          var base = t.repeatBaseTime
+          this.uRepeatStrTimeArray = (base === null || base === '' ? [] : base.split(','))
+          //  无缓存的情况下，如果存在repeatType则设置selected为null，如果不存在repeatType，则默认选中noRepeat
+          this.selected = t.repeatType ? null : this.noRepeat
         }
       },
-      checkWeekday (obj) {
-        return dateUtil.repeatWeekdayText(obj)
-      },
       toText (obj) {
-        return obj.showText ? dateUtil.repeatDayText(obj.type, [this.localNumTime]) : ''
+        return obj.showText ? dateUtil.repeatDayText(obj.type, obj.strTime) : ''
       },
       toCycle (obj) {
         return dateUtil.repeatCycleName(obj.type)
       },
+      findSelect (cid) {
+        if (cid === this.noRepeat.cid) return this.noRepeat
+        return jsUtil.findByProperty(this.repeatList, 'cid', cid)
+      },
       setSelected (obj) {
         this.selected = obj
+        this.uRepeatType = null
+        this.uRepeatStrTimeArray = []
+      },
+      //  根据baseVal获取工作日的time value，如果baseVal是周一到周五，那么获取当周的，如果baseVal是周六或者周日，那么获取下一周的
+      getWeekdayNum (strVal) {
+        var baseVal = dateUtil.dateText2Num(strVal)
+        var date = new Date(baseVal)
+        var dayMills = 24 * 3600 * 1000
+        var day = date.getDay()
+        if (day === 0 || day === 6) {
+          date = new Date(baseVal + 3 * dayMills)
+        }
+        var b = dateUtil.firstDayOfWeek(date, 0).getTime() + 1 * dayMills
+        return [0, 1, 2, 3, 4].map(val => {
+          return dateUtil.dateNum2Text(b + val * dayMills)
+        })
       },
       showUserRepeat () {
+        this.selected = null
         selectRepeat.show({
-          default: {},
-          success: function (result) {
-            alert('success from user repeat')
+          baseNumTime: this.baseNumTime,
+          repeatType: this.uRepeatType,
+          repeatStrTimeArray: this.uRepeatStrTimeArray,
+          success: result => {
+            if (result.repeatType) {
+              this.selected = null
+            }
+            this.uRepeatType = result.repeatType
+            this.uRepeatStrTimeArray = result.repeatStrTimeArray
           }
         })
       },
-      //  将传入的todo对象解析成重复需要的格式
-      parseTodo () {},
-      //  将重复的格式解析成传入todo需要的对象
-      parseRepeat () {},
       getResult () {
-        //  TODO 按照需要做parse
-        this.parseRepeat()
+        return {
+          _selected: this.selected,
+          _uRepeatType: this.uRepeatType,
+          _uRepeatStrTimeArray: this.uRepeatStrTimeArray
+        }
+      },
+      saveTodoRepeatState () {
+        var res = this.getResult()
+        this.$store.commit('PUB_TODO_DATE_UPDATE', {data: res})
       }
     },
-    mounted () {
+    created () {
       this.initData()
       window.rsqadmg.execute('setTitle', {title: '设置重复'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
     },
     beforeRouteLeave (to, from, next) {
-      if (to.name === 'login') {
-        eventBus.$emit('todo-edit-repeat-ready', this.getResult())
-      }
+      this.saveTodoRepeatState()
       next()
     }
   }

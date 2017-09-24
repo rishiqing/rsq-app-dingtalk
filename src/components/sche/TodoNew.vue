@@ -173,7 +173,7 @@
        */
       getPlanedTime () {
         var ei = this.editItem
-        var result = dateUtil.backend2frontend(ei.dates, ei.startDate, ei.endDate)
+        var result = dateUtil.backend2frontend({dates: ei.dates, startDate: ei.startDate, endDate: ei.endDate})
         return (result && result.dateResult) ? result.dateResult[0] : null
       },
       saveTitle (newTitle) {

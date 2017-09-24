@@ -17,8 +17,7 @@
   }
 </style>
 <script>
-  import def from 'ut/defaultUtil'
-
+  import moment from 'moment'
   export default {
     data () {
       return {}
@@ -52,17 +51,17 @@
           }
         }
       },
+      mockRepeat () {
+        return {todo: {repeatType: 'every', repeatBaseTime: moment().format('YYYYMMDD')}}
+      },
       logState () {
         console.log(JSON.stringify(this.currentTodo))
         console.log(JSON.stringify(this.currentTodo.clock))
       },
       doEnter () {
-        //  模拟初始数据
-        this.$store.commit('SCH_TODO_READY', {strCurrentDate: '2017-09-20', items: []})
-        this.$store.commit('TD_CURRENT_TODO_SET', {item: def.defaultTodo()})
-
+        this.$store.commit('TD_TODO_UPDATED', {})
         //  测试显示time
-        this.$router.push('/todoEdit/time')
+        this.$router.push('/todoEdit/date')
 
 //        //  login方法
 //        this.$store.dispatch('login', { username: this.username, password: this.password })

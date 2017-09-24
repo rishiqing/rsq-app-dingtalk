@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 
+import Init from 'com/Init'
 import Demo from 'com/Demo'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
@@ -12,6 +13,7 @@ import TodoEdit from 'com/sche/TodoEdit'
 import TodoEditSubTodo from 'com/pub/TodoEditSubTodo'
 import TodoEditTime from 'com/pub/TodoEditTime'
 import TodoEditAlert from 'com/pub/TodoEditAlert'
+import TodoEditDate from 'com/pub/TodoEditDate'
 import TodoEditRepeat from 'com/pub/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
@@ -21,7 +23,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/init'
     },
     {
       path: '/sche',
@@ -66,6 +68,12 @@ const router = new Router({
       meta: {requireAuth: false}
     },
     {
+      path: '/todoEdit/date',
+      name: 'todoEditDate',
+      component: TodoEditDate,
+      meta: {requireAuth: false}
+    },
+    {
       path: '/todoEdit/repeat',
       name: 'todoEditRepeat',
       component: TodoEditRepeat,
@@ -94,6 +102,12 @@ const router = new Router({
       path: '/demo',
       name: 'demo',
       component: Demo
+    },
+    {
+      //  用来测试
+      path: '/init',
+      name: 'init',
+      component: Init
     }
   ]
 })

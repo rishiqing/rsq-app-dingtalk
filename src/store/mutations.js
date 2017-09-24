@@ -1,5 +1,4 @@
 import util from 'ut/jsUtil'
-import dateUtil from 'ut/dateUtil'
 
 /**
  * mutation命名规则：
@@ -217,8 +216,7 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
-    let item = state.todo.currentTodo
-    util.extendObject(item, p.todo)
+    util.extendObject(state.todo.currentTodo, p.todo)
   },
   /**
    * 删除todo
@@ -287,17 +285,17 @@ export default {
   PUB_TODO_TIME_CLOCK_UPDATE (state, p) {
     util.extendObject(state.pub.currentTodoTime.clock, p.data)
   },
-  PUB_TODO_REPEAT_SET (state, p) {
-    p = p || {}
-    var obj = {
-      numBaseDate: p.numBaseDate || dateUtil.clearTime(new Date()).getTime()
+  PUB_TODO_DATE_SET (state, p) {
+    state.pub.currentTodoDate = p.data
+  },
+  PUB_TODO_DATE_UPDATE (state, p) {
+    if (!state.pub.currentTodoDate) {
+      state.pub.currentTodoDate = {}
     }
-    if (p && p.todo) {
-      obj.todo = p.todo
-    } else {
-      obj.todo = null
-    }
-    state.pub.currentTodoRepeat = obj
+    util.extendObject(state.pub.currentTodoDate, p.data)
+  },
+  PUB_TODO_DATE_DELETE (state, p) {
+    state.pub.currentTodoDate = null
   }
   /* --------------------------------- */
 }

@@ -22,7 +22,7 @@
       </v-touch>
     </ul>
     <ul class="last" :class="{'is-text-disabled': isAllDay}">
-      <v-touch tag="li" @tap="setAlert">
+      <v-touch tag="li" @tap="gotoAlert">
         <span class="list-key">提醒</span>
         <span class="list-value">{{alertText}}</span>
         <i class="icon2-arrow-right-small arrow"></i>
@@ -253,7 +253,7 @@
       /**
        * 保存当前todoTime的数据并跳转到提醒页面
        */
-      setAlert () {
+      gotoAlert () {
         if (this.isAllDay) return
         this.saveTodoTimeState()
         this.$router.push('/todoEdit/alert')
@@ -292,6 +292,7 @@
             .then(() => {
               this.$store.commit('PUB_TODO_TIME_DELETE')
               window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
               next()
             })
         } else {
@@ -316,7 +317,7 @@
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存
       this.saveTodoTimeState()
-      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'login') {
+      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
         return next()
       }
 

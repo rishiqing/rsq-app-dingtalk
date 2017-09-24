@@ -8,39 +8,39 @@
         <p class="popup-title">重复频率</p>
       </div>
       <div class="tab-panel">
-        <v-touch class="tab-bg" @tap="setTab('day')">
-          <span class="tab-text" :class="{'is-tab-active': tab === 'day'}">每天</span>
+        <v-touch class="tab-bg" @tap="setTab('everyDay')">
+          <span class="tab-text" :class="{'is-tab-active': localType === 'everyDay'}">每天</span>
         </v-touch>
-        <v-touch class="tab-bg" @tap="setTab('week')">
-          <span class="tab-text" :class="{'is-tab-active': tab === 'week'}">每周</span>
+        <v-touch class="tab-bg" @tap="setTab('everyWeek')">
+          <span class="tab-text" :class="{'is-tab-active': localType === 'everyWeek'}">每周</span>
         </v-touch>
-        <v-touch class="tab-bg" @tap="setTab('month')">
-          <span class="tab-text" :class="{'is-tab-active': tab === 'month'}">每月</span>
+        <v-touch class="tab-bg" @tap="setTab('everyMonth')">
+          <span class="tab-text" :class="{'is-tab-active': localType === 'everyMonth'}">每月</span>
         </v-touch>
-        <v-touch class="tab-bg" @tap="setTab('year')">
-          <span class="tab-text" :class="{'is-tab-active': tab === 'year'}">每年</span>
+        <v-touch class="tab-bg" @tap="setTab('everyYear')">
+          <span class="tab-text" :class="{'is-tab-active': localType === 'everyYear'}">每年</span>
         </v-touch>
       </div>
       <div class="body">
-        <div class="body-img" v-show="tab === 'day'">
+        <div class="body-img" v-show="localType === 'everyDay'">
           <img src="../../../assets/img/repeat-day.png">
         </div>
-        <div class="body-list" v-show="tab === 'week'">
+        <div class="body-list" v-show="localType === 'everyWeek'">
           <ul>
             <v-touch tag="li" v-for="d in days" :key="d.val" @tap="tapSelect(d)">
               <span>{{d.text}}</span>
-              <i class="icon2-selected is-finish" v-show="d.isSelected"></i>
+              <i class="icon2-selected is-finish" v-show="d.selected"></i>
             </v-touch>
           </ul>
         </div>
-        <div class="body-table" v-show="tab === 'month'">
+        <div class="body-table" v-show="localType === 'everyMonth'">
           <table class="dp-table">
             <tbody>
             <tr v-for="(weekArray, index) in calDate" :key="index">
               <v-touch tag="td" v-for="day in weekArray" :key="day.val"
                        @tap="tapSelect(day)">
                 <div class="dp-day"
-                     :class="{'dp-selected': day.isSelected, 'dp-is-last': day.isLast}">
+                     :class="{'dp-selected': day.selected, 'dp-is-last': day.isLast}">
                   {{day.text}}
                 </div>
               </v-touch>
@@ -48,7 +48,7 @@
             </tbody>
           </table>
         </div>
-        <div class="body-img" v-show="tab === 'year'">
+        <div class="body-img" v-show="localType === 'everyYear'">
           <img src="../../../assets/img/repeat-year.png">
         </div>
       </div>
@@ -130,57 +130,63 @@
   }
 </style>
 <script>
+  import dateUtil from 'ut/dateUtil'
+
   export default{
     data () {
       return {
-        tab: 'week',  //  week or month
-        'default': null,
+        baseNumTime: new Date().getTime(),
+        repeatType: '',
+        repeatStrTimeArray: [],
+        isLastDate: false,
+
+        localType: 'everyDay',  //  week or month
         dayName: ['日', '一', '二', '三', '四', '五', '六'],
         days: [
-          {val: 1, text: '周一', isSelected: false},
-          {val: 2, text: '周二', isSelected: false},
-          {val: 3, text: '周三', isSelected: false},
-          {val: 4, text: '周四', isSelected: false},
-          {val: 5, text: '周五', isSelected: false},
-          {val: 6, text: '周六', isSelected: false},
-          {val: 0, text: '周日', isSelected: false}
+          {val: 1, text: '周一', selected: false},
+          {val: 2, text: '周二', selected: false},
+          {val: 3, text: '周三', selected: false},
+          {val: 4, text: '周四', selected: false},
+          {val: 5, text: '周五', selected: false},
+          {val: 6, text: '周六', selected: false},
+          {val: 0, text: '周日', selected: false}
         ],
         dates: [
-          {val: 1, text: '1', isSelected: false},
-          {val: 2, text: '2', isSelected: false},
-          {val: 3, text: '3', isSelected: false},
-          {val: 4, text: '4', isSelected: false},
-          {val: 5, text: '5', isSelected: false},
-          {val: 6, text: '6', isSelected: false},
-          {val: 7, text: '7', isSelected: false},
-          {val: 8, text: '8', isSelected: false},
-          {val: 9, text: '9', isSelected: false},
-          {val: 10, text: '10', isSelected: false},
-          {val: 11, text: '11', isSelected: false},
-          {val: 12, text: '12', isSelected: false},
-          {val: 13, text: '13', isSelected: false},
-          {val: 14, text: '14', isSelected: false},
-          {val: 15, text: '15', isSelected: false},
-          {val: 16, text: '16', isSelected: false},
-          {val: 17, text: '17', isSelected: false},
-          {val: 18, text: '18', isSelected: false},
-          {val: 19, text: '19', isSelected: false},
-          {val: 20, text: '20', isSelected: false},
-          {val: 21, text: '21', isSelected: false},
-          {val: 22, text: '22', isSelected: false},
-          {val: 23, text: '23', isSelected: false},
-          {val: 24, text: '24', isSelected: false},
-          {val: 25, text: '25', isSelected: false},
-          {val: 26, text: '26', isSelected: false},
-          {val: 27, text: '27', isSelected: false},
-          {val: 28, text: '28', isSelected: false},
-          {val: 29, text: '29', isSelected: false},
-          {val: 30, text: '30', isSelected: false},
-          {val: 31, text: '31', isSelected: false},
-          {val: 32, text: '最后一天', isSelected: false, isLast: true}
+          {val: 1, text: '1', selected: false},
+          {val: 2, text: '2', selected: false},
+          {val: 3, text: '3', selected: false},
+          {val: 4, text: '4', selected: false},
+          {val: 5, text: '5', selected: false},
+          {val: 6, text: '6', selected: false},
+          {val: 7, text: '7', selected: false},
+          {val: 8, text: '8', selected: false},
+          {val: 9, text: '9', selected: false},
+          {val: 10, text: '10', selected: false},
+          {val: 11, text: '11', selected: false},
+          {val: 12, text: '12', selected: false},
+          {val: 13, text: '13', selected: false},
+          {val: 14, text: '14', selected: false},
+          {val: 15, text: '15', selected: false},
+          {val: 16, text: '16', selected: false},
+          {val: 17, text: '17', selected: false},
+          {val: 18, text: '18', selected: false},
+          {val: 19, text: '19', selected: false},
+          {val: 20, text: '20', selected: false},
+          {val: 21, text: '21', selected: false},
+          {val: 22, text: '22', selected: false},
+          {val: 23, text: '23', selected: false},
+          {val: 24, text: '24', selected: false},
+          {val: 25, text: '25', selected: false},
+          {val: 26, text: '26', selected: false},
+          {val: 27, text: '27', selected: false},
+          {val: 28, text: '28', selected: false},
+          {val: 29, text: '29', selected: false},
+          {val: 30, text: '30', selected: false},
+          {val: 31, text: '31', selected: false},
+          {val: 32, text: '最后一天', selected: false, isLast: true}
         ],
-        success () {},
-        cancel () {}
+        localStrTimeArray: [],
+        localIsLastDate: false
       }
     },
     computed: {
@@ -196,19 +202,18 @@
       },
       selectedText () {
         var sel = this.getSelected()
-
         var valStr
-        switch (this.tab) {
-          case 'day':
+        switch (this.localType) {
+          case 'everyDay':
             valStr = '每天重复'
             break
-          case 'week':
+          case 'everyWeek':
             valStr = sel.length === 0 ? '' : '每周' + sel.map(d => { return this.dayName[d.val] }).join('，') + '重复'
             break
-          case 'month':
+          case 'everyMonth':
             valStr = sel.length === 0 ? '' : '每月' + sel.map(d => { return d.text }).join('，') + '号重复'
             break
-          case 'year':
+          case 'everyYear':
             valStr = '每年' + '' + '重复'
             break
           default:
@@ -218,39 +223,126 @@
       }
     },
     methods: {
+      initData () {
+        this.setTab(this.repeatType || 'everyDay')
+      },
+      resetData () {
+        this.localType = ''
+        this.localStrTimeArray = []
+        this.localIsLastDate = false
+      },
       getSelected () {
-        var list = this.tab === 'week' ? this.days : this.dates
+        var list = this.localType === 'everyWeek' ? this.days : this.dates
         return list.filter(d => {
-          return d.isSelected
+          return d.selected
         })
       },
       selfClose () {
-        window.onpopstate = null
-        this.cancel()
         this.$emit('self-close')
       },
       tapCancel (e) {
+        this.$emit('select-user-repeat-cancel')
         this.selfClose()
         e.preventDefault()
       },
       tapConfirm (e) {
-        this.success({
-        })
+        var res = this.getResult()
+        this.$emit('select-user-repeat-confirm', res)
         this.selfClose()
         e.preventDefault()
       },
       setTab (tb) {
-        this.tab = tb
+        //  设置localType
+        this.resetData()
+        this.localType = tb
+        switch (tb) {
+          case 'everyDay':
+          case 'everyYear':
+            this.selectSingleDay()
+            break
+          case 'everyWeek':
+            this.selectDefaultDay()
+            break
+          case 'everyMonth':
+            this.selectDefaultDate()
+            break
+          default:
+            break
+        }
+      },
+      selectSingleDay () {
+        this.localStrTimeArray = [dateUtil.dateNum2Text(this.baseNumTime)]
+      },
+      selectDefaultDay () {
+        var arr = this.repeatStrTimeArray.map(t => {
+          return new Date(dateUtil.dateText2Num(t)).getDay()
+        })
+        this.days.forEach(d => {
+          d.selected = (arr.indexOf(d.val) !== -1)
+        })
+      },
+      selectDefaultDate () {
+        var arr = this.repeatStrTimeArray.map(t => {
+          return new Date(dateUtil.dateText2Num(t)).getDate()
+        })
+        this.dates.forEach(d => {
+          d.selected = (arr.indexOf(d.val) !== -1)
+        })
+        this.dates[this.dates.length - 1].selected = this.isLastDate
+      },
+      getSelectedDayValue () {
+        const dayMills = 24 * 3600 * 1000
+        var selected = this.getSelected()
+        var base = new Date(this.baseNumTime)
+        var baseDay = base.getDay() === 0 ? 7 : base.getDay()  //  周日的getDay()为0，转换为7
+        return selected.map(s => {
+          const sDay = s.val === 0 ? 7 : s.val
+          const offset = sDay >= baseDay ? 0 : 7
+          return dateUtil.dateNum2Text(this.baseNumTime + (sDay + offset - baseDay) * dayMills)
+        })
+      },
+      getSelectedDateValue () {
+        var selected = this.getSelected()
+        var base = dateUtil.dateNum2Text(this.baseNumTime).substr(0, 6)
+        var result = []
+        for (var i = 0; i < selected.length; i++) {
+          const s = selected[i]
+          if (s.val === 32) continue
+          result.push(base + (s.val < 10 ? '0' : '') + s.val)
+        }
+        return result
       },
       tapSelect (d) {
-        d.isSelected = !d.isSelected
+        d.selected = !d.selected
+      },
+      getNumTimeArray () {
+        switch (this.localType) {
+          case 'everyDay':
+          case 'everyYear':
+            return [dateUtil.dateNum2Text(this.baseNumTime)]
+          case 'everyWeek':
+            return this.getSelectedDayValue()
+          case 'everyMonth':
+            return this.getSelectedDateValue()
+          default:
+            break
+        }
+      },
+      checkUseLast () {
+        return this.localType === 'everyMonth' && this.dates[this.dates.length - 1].selected
+      },
+      getResult () {
+        return {
+          baseNumTime: this.baseNumTime,
+          repeatType: this.localType,
+          repeatStrTimeArray: this.getNumTimeArray(),
+          isLastDate: this.checkUseLast()
+        }
       }
     },
+    created () {},
     mounted () {
-      //  如果通过任意方式跳出页面了，那么关闭当前选择框
-      window.onpopstate = () => {
-        this.selfClose()
-      }
+      this.initData()
     }
   }
 </script>

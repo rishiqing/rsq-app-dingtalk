@@ -68,15 +68,16 @@ export default {
      */
     currentTodoTime: {},
     /**
-     * 设置repeat
+     * 在设置重复的时候，暂存日期页面的数据
      * {
-     *   numBaseDate:
-     *   todo: {
-     *     alwaysRepeat: true, repeatType: 'everyWeek', repeatBaseTime: '', repeatOverDate: ''
-     *   }
+     *   dates: null,
+     *   startDate: null,
+     *   endDate: null,
+     *   repeatType: null,
+     *   repeatBaseTime: null
      * }
      */
-    currentTodoRepeat: {}
+    currentTodoDate: null
   },
   //  --------缓存相关--------
   /**
