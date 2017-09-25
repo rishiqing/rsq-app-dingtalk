@@ -72,7 +72,9 @@
               window.rsqadmg.execute('showLoader', {text: '删除中...'})
               that.$store.dispatch('deleteSubTodo', {item: item})
                 .then(() => {
-                  console.log('进入到最后了')
+                  this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
+                    .then(() => {
+                    })
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
                   this.$router.replace(window.history.back())
@@ -84,6 +86,9 @@
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
+                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
+                  .then(() => {
+                  })
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '保存成功'})
               })
@@ -97,6 +102,9 @@
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('createSubTodo', {newItem: {pTitle: this.inputTitle}, todoId: this.todoid})
           .then(() => {
+            this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: this.inputTitle, type: 7}})
+              .then(() => {
+              })
             this.inputTitle = ''
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
@@ -105,6 +113,9 @@
       clickCheckOut (item) {
         this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
             .then(function () {
+              this.$store.dispatch('saveTodoAction', {editItem: {status: !item.isDone, type: 17}})
+                .then(() => {
+                })
             })
       }
     },
@@ -132,11 +143,12 @@
   }
   .list-below{
     border:none;
-    line-height: 1.126rem;
-    margin-left: 0.8rem;
+    /*line-height: 1.026rem;*/
+    margin-left: 1rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     width: 90%;
+    /*border: 1px solid red;*/
   }
   .topSubtodo{
     position:fixed;
@@ -185,23 +197,23 @@
   ul{
     position: relative;
     margin-top:0.666rem;
-    border-bottom:1px solid #DADADA ;
-    border-top:1px solid #DADADA ;
+    /*border-bottom:1px solid #DADADA ;*/
+    /*border-top:1px solid #DADADA ;*/
     padding-left: 5%;
   }
   li{
-    padding-left:5%;
+    /*padding-left:5%;*/
     height: 1.226rem;
     line-height: 1.226rem;
-    padding:0;
     position: relative;
     border-bottom:1px solid #DADADA ;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #222222;
   }
-  li:last-child{
-    border: none;
+  li:first-child{
+    /*padding-left: 0;*/
+    border-top: 1px solid #DADADA;
   }
   .isdisplay-sub{
     display: block;
@@ -232,7 +244,7 @@
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.5rem;
+    top:0.45rem;
     right:0.35rem;
     z-index:2
   }

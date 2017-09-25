@@ -5,16 +5,20 @@
         <div class="itm-edt-fields" style="padding-bottom: 80px;">
           <div class="itm-group itm--edit-todo">
             <r-input-title
-              :is-checkable="true"
+              :is-checkable="!isInbox"
               :item-title="editItem.pTitle"
               :item-checked="editItem.pIsDone"
               @text-blur="titleBlur"
               @click-checkout="finishChecked"
             ></r-input-title>
           </div>
-          <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
-            <!--<slot name="slotNote"></slot>-->
-          </div>
+          <v-touch @tap="SwitchToDesp">
+            <div id="noteEditable" contenteditable="true" class="desp"
+                 name="note" rows="5"
+                 placeholder="添加任务描述...">
+              添加任务描述...
+            </div>
+          </v-touch>
           <div class="itm--edit-todo ">
             <!--<slot name="slotContainer"></slot>-->
             <r-input-date
@@ -26,7 +30,7 @@
             ></r-input-date>
             <r-input-member
               :is-native="true"
-              :index-title="'成员'"
+              :index-title="'执行人'"
               :select-title="'请选择成员'"
               :user-rsq-ids="[]"
               :selected-rsq-ids="joinUserRsqIds"
@@ -36,12 +40,20 @@
             <r-input-sub-todo
               :item="currentTodo"
             ></r-input-sub-todo>
-            <div class="ding">
-              <div class="bottom">
-                <p class="">DING</p>
-                <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
-              </div>
-              <input class="mui-switch" type="checkbox">
+            <!--<div class="ding">-->
+              <!--<div class="bottom">-->
+                <!--<p class="">DING</p>-->
+                <!--<p class="message">通过钉钉消息,短信或者电话提醒参与人</p>-->
+              <!--</div>-->
+              <!--<input class="mui-switch" type="checkbox">-->
+            <!--</div>-->
+            <r-comment-list
+              :items="currentTodo.comments"
+              ></r-comment-list>
+            <div class="bottom">
+              <v-touch @tap="SwitchToComent">
+                <input type="text" class="bot" placeholder="输入讨论内容或发送文件">
+              </v-touch>
             </div>
           </div>
         </div>
@@ -50,18 +62,55 @@
   </div>
 </template>
 <style scoped>
+  input::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: STHeitiSC-Light;
+    font-size: 15px;
+    color: #A3A3A3;
+    letter-spacing: 0;
+  }
+  .desp{
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    margin-bottom: 10px;
+    padding-left: 3%;
+    width: 100%;
+    line-height: 1.1rem;
+    font-family: STHeitiSC-Light;
+    font-size: 14px;
+    color: #999999;
+    letter-spacing: 0;
+    background-color: white;
+  }
+  input{
+    line-height: 0.933rem;
+    width:6.8rem;
+  }
+  .bottom{
+    height: 1.1rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    justify-content: center;
+    width:100%;
+    border-top:1px solid #DADADA ;
+  }
+  .bot{
+    padding-left: 2%;
+    width:9.2rem;
+    height:0.933rem ;
+    border:1px solid #E0E0E0 ;
+  }
+  .send>input{
+    width: 300px;
+    height: 50px;
+    border: 1px solid red;
+  }
   p{
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-  }
-  .bottom {
-    height: 2rem;
-    display: inline-block;
-    padding-left: 11px;
-    line-height: 0.1rem;
-    position: relative;
-    margin-top: 0.7rem;
   }
   .ding{
     height:2rem;
@@ -132,7 +181,7 @@
   import InputMember from 'com/pub/InputMember'
   import InputSubTodo from 'com/pub/InputSubTodo'
   import util from 'ut/jsUtil'
-
+  import ComentList from 'com/pub/ComentList'
   export default {
     data () {
       return {
@@ -143,6 +192,9 @@
     computed: {
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
+      },
+      pNote () {
+        return this.$store.state.todo.currentTodo.pNote
       },
       isInbox () {
         return this.currentTodo.pContainer === 'inbox'
@@ -171,9 +223,9 @@
       'r-input-title': InputTitleText,
       'r-input-date': InputDate,
       'r-input-member': InputMember,
-      'r-input-sub-todo': InputSubTodo
+      'r-input-sub-todo': InputSubTodo,
 //      'r-input-note': InputNoteText,
-//      'r-comment-list': CommentList
+      'r-comment-list': ComentList
     },
     beforeRouteEnter (to, from, next) {
       next()
@@ -191,6 +243,12 @@
               window.rsqadmg.exec('hideLoader')
             })
       },
+      SwitchToComent () {
+        this.$router.push('/pub/coment')
+      },
+      SwitchToDesp () {
+        this.$router.push('/pub/desp')
+      },
       titleBlur (newTitle) {
         if (!newTitle) {
           return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
@@ -199,6 +257,10 @@
           window.rsqadmg.exec('showLoader', {text: '保存中...'})
           this.$store.dispatch('updateTodo', {editItem: {pTitle: newTitle}})
               .then(() => {
+                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: newTitle, type: 9}})
+                  .then(() => {
+                    this.editItem.pTitle = newTitle
+                  })
                 this.editItem.pTitle = newTitle
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '保存成功'})
@@ -231,7 +293,6 @@
         }
         this.$store.dispatch('updateTodoDate', {editItem: result})
             .then(() => {
-              console.log('updateTodoDate已执行结束')
               util.extendObject(this.editItem, result)
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '保存成功'})
@@ -255,6 +316,9 @@
         if (status !== this.editItem.isDone) {
           this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
               .then(() => {
+                this.$store.dispatch('saveTodoAction', {editItem: {status: status, type: 5}})
+                  .then(() => {
+                  })
                 this.editItem.pIsDone = status
                 var str = status ? '任务已完成' : '任务已重启'
                 window.rsqadmg.execute('toast', {message: str})
@@ -269,7 +333,6 @@
             window.rsqadmg.execute('showLoader', {text: '删除中...'})
             that.$store.dispatch('deleteTodo', {todo: that.currentTodo})
                 .then(() => {
-                  console.log('进入到最后了')
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
                   that.$router.replace(window.history.back())
@@ -280,6 +343,10 @@
     },
     mounted () {
       this.initData()
+      var noteElement = document.getElementById('noteEditable')
+      if (this.pNote) {
+        noteElement.innerHTML = this.pNote
+      }
       var that = this
       window.rsqadmg.execute('setTitle', {title: '详情'})
       window.rsqadmg.execute('setOptionButtons', {

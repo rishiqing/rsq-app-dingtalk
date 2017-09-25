@@ -80,13 +80,13 @@
         this.selectDate = date
         this.$emit('click-cal-day', date)
       },
-      backToToday () {
+      backToToday () { //  这个函数是干吗的
         var today = this.clearTime(new Date())
         this.focusDate = today
         this.resetBar()
         this.triggerSelectDate(today)
       },
-      resetDays (focusDate) {
+      resetDays (focusDate) { // 为什么要拿到连续三周的数据呢
         return [
           this.getWeekDays(this.firstDayOfWeek(focusDate, -1)),
           this.getWeekDays(this.firstDayOfWeek(focusDate, 0)),
@@ -140,7 +140,7 @@
       this.focusDate = this.defaultSelectDate
       this.resetBar()
 
-      this.triggerSelectDate(this.defaultSelectDate)
+      this.triggerSelectDate(this.defaultSelectDate)// 为什么初始化里要有这个函数
 
       var ele = document.getElementById('hMoveBar')
       ele.addEventListener('transitionend', this.resetBar)

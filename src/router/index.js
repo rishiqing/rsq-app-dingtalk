@@ -20,6 +20,7 @@ import repeat from 'com/sche/repeat'
 import date from 'com/sche/date'
 import coment from 'com/pub/coment'
 import time from 'com/pub/time'
+import desp from 'com/pub/desp'
 import CreateSubTodo from 'com/pub/CreateSubTodo'
 Vue.use(Router)
 
@@ -39,6 +40,12 @@ const router = new Router({
       path: '/pub/coment',
       name: 'coment',
       component: coment,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/desp',
+      name: 'desp',
+      component: desp,
       meta: {requireAuth: true}
     },
     {

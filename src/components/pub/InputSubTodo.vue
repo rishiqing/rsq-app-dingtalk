@@ -37,7 +37,6 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
-    border:1px solid red
   }
 </style>
 <script>

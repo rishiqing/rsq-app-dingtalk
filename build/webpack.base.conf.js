@@ -27,7 +27,8 @@ module.exports = {
       'api': resolve('src/api'),
       'com': resolve('src/components'),
       'ut': resolve('src/utils'),
-      'as': resolve('src/assets')
+      'as': resolve('src/assets'),
+      // 'jquery': path.resolve(__dirname, '../node_modules/jquery/src/jquery')
     }
   },
   module: {

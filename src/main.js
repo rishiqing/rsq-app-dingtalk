@@ -16,9 +16,10 @@ import VueTouch from 'vue-touch'
 import App from './App'
 import router from './router'
 import store from './store'
-
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 Vue.use(VueTouch)
-
+Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 window.rsqadmg.exec('auth', {

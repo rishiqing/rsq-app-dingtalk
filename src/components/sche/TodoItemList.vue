@@ -42,9 +42,12 @@
         this.$router.push('/todo/' + item.id)
       },
       checkTodo (item, status) {
-        console.log('这就是checktodo的参数' + item + ' ' + status)
         this.$store.dispatch('submitTodoFinish', {item: item, status: status})
             .then(function () {
+              this.$store.dispatch('saveTodoAction', {editItem: {status: status}})
+                .then(() => {
+                  console.log('saveTodoAction走完了')
+                })
             })
       }
     }

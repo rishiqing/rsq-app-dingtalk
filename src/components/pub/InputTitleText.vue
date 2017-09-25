@@ -72,8 +72,7 @@
   input[type='text']{
     height:1.458rem;
     background: #FFFFFF;
-    border-bottom:0.5px solid #E0E0E0 ;
-    border-top:0.5px solid #E0E0E0 ;
+    border-top:1px solid #E0E0E0 ;
     line-height:1.458rem ;
   }
   .padding-left-input-{

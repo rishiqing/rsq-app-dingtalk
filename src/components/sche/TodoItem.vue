@@ -67,7 +67,7 @@
   li{
     padding:0;
     line-height:1.612rem ;
-    height: 1.612rem;
+    /*height: 1.612rem;*/
     position: relative;
     border-bottom:1px solid #E0E0E0 ;
   }

@@ -40,7 +40,7 @@
   .outer{
     border-bottom: 1px solid #E0E0E0;
     position: relative;
-    height:1.3rem;
+    /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
     background-color: white;

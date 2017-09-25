@@ -243,9 +243,7 @@ export default {
     let items = state.todo.currentTodo.subTodos
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
-        console.log(i)
         items.splice(i, 1)
-        console.log(items[0])
         break
       }
     }
@@ -283,6 +281,9 @@ export default {
    */
   TD_COMMENT_CREATED (state, p) {
     state.todo.currentTodo.comments.push(p.comment)
+  },
+  TD_DESP_CREATED (state, p) {
+    state.todo.currentTodo.pNote = p.desp.pNote
   }
   /* --------------------------------- */
 }

@@ -91,6 +91,10 @@
     left: 2.053rem;
     bottom:1px;
     padding-bottom:5px;
+    height: 1.306rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .right{
     text-align: center;
@@ -98,11 +102,18 @@
     position: absolute;
     right: 2.11rem;
     bottom:1px;
+    height: 1.306rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .mid{
-    display: inline-block;
-    text-align: center;
-    padding-top: 3px;
+    /*display: inline-block;*/
+    /*text-align: center;*/
+    /*padding-top: 3px;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .add{
     color:#4D93DE;
