@@ -123,6 +123,7 @@ rsqAdapterManager.register({
         'biz.user.get',
         'biz.contact.choose',
         'biz.telephone.call',
+        'biz.ding.create',
         'biz.ding.post']
     });
     dd.ready(function(res){
@@ -503,5 +504,10 @@ rsqAdapterManager.register({
         alert(JSON.stringify(err));
       }
     })
-  }
+  },
+  /**
+   * 钉钉中发Ding
+   * @param params
+   */
+  notify: function(params) {}
 })
