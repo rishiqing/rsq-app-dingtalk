@@ -5,7 +5,7 @@
           <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         </div>
-        <v-touch class="" v-if="isCheckable" @tap="clickCheckOut($event)">
+        <v-touch class="todo-checkbox" v-if="isCheckable" @tap="clickCheckOut">
           <i class="icon2-check-box select"
              :class="{'icon-check_box_outline_blank': !item.pIsDone, 'icon-check': item.pIsDone}"></i>
           <div class="hide" :class="{'for-hide':item.pIsDone}"></div>
@@ -105,16 +105,13 @@
       },
       clickItem (e) {
         //  这个是点击跳到编辑界面
-        if (e.target.className.indexOf('jsItemCheckbox') === -1) {
+        if (!e.target.classList.contains('icon2-check-box')) {
           this.$emit('todo-item-click', this.item)
           e.preventDefault()
         }
       },
       clickCheckOut (e) {
-        e.stopPropagation()
-        e.cancelBubble = true
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
-        e.stopPropagation()
         e.preventDefault()
       }
     },
