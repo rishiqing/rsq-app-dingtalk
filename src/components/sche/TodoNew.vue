@@ -16,11 +16,8 @@
           <div class="itm-group itm--edit-todo itm--part-line">
             <!--<slot name="slotContainer"></slot>-->
             <r-input-date
-              :item-start-date="editItem.startDate"
-              :item-end-date="editItem.endDate"
-              :item-dates="editItem.dates"
-              :item-sep="'/'"
-              @date-changed="saveDate"
+              :item="editItem"
+              :sep="'/'"
             ></r-input-date>
             <r-input-time
               :item-clock="editItem.clock"
@@ -165,8 +162,8 @@
        */
       initData () {
         jsUtil.extendObject(this.editItem, this.currentTodo)
-        this.editItem.startDate = this.currentDate
-        this.editItem.endDate = this.currentDate
+        this.editItem.startDate = this.editItem.startDate || this.currentDate
+        this.editItem.endDate = this.editItem.endDate || this.currentDate
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
@@ -178,15 +175,13 @@
       },
       saveTitle (newTitle) {
         this.editItem.pTitle = newTitle
-      },
-      saveDate ({startDate, endDate, dates}) {
-        this.editItem.startDate = startDate
-        this.editItem.endDate = endDate
-        this.editItem.dates = dates
+        this.$store.commit('TD_TODO_UPDATED', {todo: {pTitle: newTitle}})
       },
       saveMember (idArray) {
         this.joinUserRsqIds = idArray
-        this.editItem.receiverIds = idArray.join(',')
+        var ids = idArray.join(',')
+        this.editItem.receiverIds = ids
+        this.$store.commit('TD_TODO_UPDATED', {todo: {receiverIds: ids}})
       },
       /**
        * 将local的对象保存到state的变量中

@@ -225,6 +225,7 @@
       },
       saveTodoRepeatState () {
         var res = this.getResult()
+        console.log('=@_@===res===#_#=' + JSON.stringify(res))
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: res})
       }
     },

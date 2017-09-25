@@ -205,6 +205,9 @@
       currentTodo () {
         return this.$store.state.todo.currentTodo
       },
+      isEdit () {
+        return !!this.currentTodo.id
+      },
       currentTodoDate () {
         return this.$store.state.pub.currentTodoDate
       },
@@ -220,12 +223,25 @@
           baseArray = c._uRepeatStrTimeArray
         }
         return {
+          selected: c._selected,
           type,
           baseArray
         }
       },
       repeatText () {
-        var text = dateUtil.repeatDayText(this.comRepeat.type, this.comRepeat.baseArray)
+        var text
+        console.log('=@_@===this.comRepeat===#_#=' + JSON.stringify(this.comRepeat))
+        if (this.comRepeat.selected) {
+          if (this.comRepeat.type) {
+            text = dateUtil.repeatDayText(this.comRepeat.type, this.comRepeat.baseArray)
+          }
+        } else {
+          var c = this.currentTodoDate
+          if (c.repeatType) {
+            var arr = this.currentTodoDate.repeatBaseTime.split(',')
+            text = dateUtil.repeatDayText(c.repeatType, arr)
+          }
+        }
         return (text || '不') + '重复'
       }
     },
@@ -393,9 +409,13 @@
         //  TODO  判断是否更新过
         var oldObj = this.currentTodo
         var newObj = this.currentTodoDate
+        console.log('=@_@===oldObj===#_#=' + JSON.stringify(oldObj))
+        console.log('=@_@===newObj===#_#=' + JSON.stringify(newObj))
         return newObj.startDate !== oldObj.startDate ||
           newObj.endDate !== oldObj.endDate ||
-          newObj.dates !== oldObj.dates
+          newObj.dates !== oldObj.dates ||
+          newObj.repeatType !== oldObj.repeatType ||
+          newObj.repeatBaseTime !== oldObj.repeatBaseTime
       },
       gotoRepeat () {
         this.$router.push('/todoEdit/repeat')
@@ -403,6 +423,9 @@
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
         var resObj = dateUtil.frontend2backend({dateType: this.dateType, dateResult: sorted, sep: '/'})
+
+        resObj.repeatType = this.comRepeat.type
+        resObj.repeatBaseTime = this.comRepeat.baseArray.join(',')
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       },
       getSubmitResult () {
@@ -410,22 +433,25 @@
         var o = {
           startDate: c.startDate,
           endDate: c.endDate,
-          dates: c.dates
-        }
-        if (this.comRepeat.type) {
-          o.repeatType = this.comRepeat.type
-          o.repeatBaseTime = this.comRepeat.baseArray.join(',')
+          dates: c.dates,
+          repeatType: c.repeatType,
+          repeatBaseTime: c.repeatBaseTime
         }
         return o
       },
       submitTodo (next) {
+        console.log('=@_@===this.isModified()===#_#=' + JSON.stringify(this.isModified()))
         if (this.isModified()) {
-          window.rsqadmg.exec('showLoader', {text: '保存中...'})
+          if (this.isEdit) {
+            window.rsqadmg.exec('showLoader', {text: '保存中...'})
+          }
           return this.$store.dispatch('updateTodoDate', {editItem: this.getSubmitResult()})
             .then(() => {
               this.$store.commit('PUB_TODO_DATE_DELETE')
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '保存成功'})
+              if (this.isEdit) {
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '保存成功'})
+              }
               next()
             })
         } else {

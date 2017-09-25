@@ -23,7 +23,6 @@ function getSelectDateModal (options) {
 function show (options) {
   options = options || {}
   var vm = getSelectDateModal(options)
-  console.log('=@_@===options===#_#=' + JSON.stringify(options))
   vm.baseNumTime = options.baseNumTime
   vm.repeatType = options.repeatType || ''
   vm.repeatStrTimeArray = options.repeatStrTimeArray || []

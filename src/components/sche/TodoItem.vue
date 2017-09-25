@@ -4,7 +4,9 @@
       <!--<div class="contain-tag" :class="{'bg-con-ie':isIE,'bg-con-iu':isIU,'bg-con-ue':isUE,'bg-con-uu':isUU}"></div>-->
       <!--<div class="itm-inner">-->
         <div class="title-todo" >
-          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">{{ item.pTitle }}</span>
+          <span class="todo-content" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'margin-left':isCheckable}">
+            {{ item.pTitle }}
+          </span>
           <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         </div>
         <v-touch class="" v-if="isCheckable" @tap="clickCheckOut">

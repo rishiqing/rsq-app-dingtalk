@@ -227,6 +227,7 @@ export default {
     sep = sep || '/'
     var result
     switch (dateType) {
+      case 'repeat':  //  repeat类型，默认startDate和endDate与single相同
       case 'single':
         var dateText = this.dateNum2Text(dateResult[0], sep)
         result = {dates: null, startDate: dateText, endDate: dateText}
@@ -241,7 +242,6 @@ export default {
       case 'range':
         result = {dates: null, startDate: this.dateNum2Text(dateResult[0], sep), endDate: this.dateNum2Text(dateResult[1], sep)}
         break
-      case 'repeat':
       default:
         result = {dates: null, startDate: null, endDate: null}
         break

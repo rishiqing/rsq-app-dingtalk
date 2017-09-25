@@ -152,8 +152,9 @@ export default {
   createScheduleItem ({ commit, state, dispatch }, p) {
     //  暂时这么处理----日程任务默认为重要紧急，后面加上选择优先级功能之后再修改
     var newItem = p.newItem
-    newItem['pContainer'] = 'IE'
 
+    newItem['pContainer'] = 'IE'
+    // return
     var dateStruct = dateUtil.backend2frontend({dates: newItem.dates, startDate: newItem.startDate, endDate: newItem.endDate})
     p['dateStruct'] = dateStruct
     switch (dateStruct.dateType) {
@@ -163,9 +164,28 @@ export default {
         return dispatch('createDiscreteScheduleItem', p)
       case 'range':
         return dispatch('createRangeScheduleItem', p)
+      case 'repeat':
+        return dispatch('createRepeatItem', p)
       default:
         break
     }
+  },
+  createRepeatItem ({commit, state, dispatch}, {newItem, dateStruct}) {
+    var arr = newItem.repeatBaseTime.split(',')
+    var strDate = moment(arr[0], 'YYYYMMDD').format('YYYY-MM-DD')
+    var itemCache = state.dateTodosCache
+    //  读取顺序号
+    return dispatch('fetchScheduleItems', { strDate })
+      .then(() => {
+        newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        return api.todo.postNewTodo(newItem)
+          .then(item => {
+            //  TODO  根据重复来让cache中某个缓存的日程列表失效
+            commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
+          })
+      }).catch(err => {
+        alert(JSON.stringify(err))
+      })
   },
   /**
    * 单日逻辑：
@@ -336,23 +356,24 @@ export default {
     if (todo.id) {
       //  如果id存在，则ajax更新
       editItem['id'] = todo.id
-      promise = api.todo.putTodoProps(editItem)
-        .then(resTodo => {
-          //  处理缓存数据
-          var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
-          var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
-          var curArrayIndex = todo.pContainer === 'inbox'
-            ? 0
-            : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
-
-          if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
-            commit('TD_TODO_DELETED', {item: todo})
-          }
-          dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
-          dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
-
-          commit('TD_TODO_UPDATED', {todo: resTodo})
-        })
+      console.log('=@_@===editItem===#_#=' + JSON.stringify(editItem))
+      // promise = api.todo.putTodoProps(editItem)
+      //   .then(resTodo => {
+      //     //  处理缓存数据
+      //     var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
+      //     var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
+      //     var curArrayIndex = todo.pContainer === 'inbox'
+      //       ? 0
+      //       : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+      //
+      //     if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
+      //       commit('TD_TODO_DELETED', {item: todo})
+      //     }
+      //     dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
+      //     dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
+      //
+      //     commit('TD_TODO_UPDATED', {todo: resTodo})
+      //   })
     } else {
       promise = Promise.resolve().then(() => {
         commit('TD_TODO_UPDATED', {todo: editItem})

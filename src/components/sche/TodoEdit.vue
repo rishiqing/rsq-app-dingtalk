@@ -18,11 +18,8 @@
           <div class="itm-group itm--edit-todo itm--part-line">
             <!--<slot name="slotContainer"></slot>-->
             <r-input-date
-              :item-start-date="editItem.startDate"
-              :item-end-date="editItem.endDate"
-              :item-dates="editItem.dates"
-              :item-sep="'/'"
-              @date-changed="updateDate"
+              :item="editItem"
+              :sep="'/'"
             ></r-input-date>
             <r-input-time
               :item-clock="editItem.clock"

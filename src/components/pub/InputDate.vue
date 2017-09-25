@@ -1,9 +1,8 @@
 <template>
   <div class="outer-date">
-    <v-touch class="" @tap="showDatePikcer">
+    <v-touch class="" @tap="gotoDate">
       <span class="date">日期</span>
-      <!--<span class="now">{{ dateString }}</span>-->
-      <span class="now">今天</span>
+      <span class="now">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -43,7 +42,6 @@
   }
 </style>
 <script>
-  import SelectDate from 'com/pub/SelectDate'
   import dateUtil from 'ut/dateUtil'
 
   export default {
@@ -51,37 +49,48 @@
       return {}
     },
     props: {
-      itemStartDate: String,
-      itemEndDate: String,
-      itemDates: String,
-      itemSep: String
+      item: Object,
+      sep: String
     },
     computed: {
       dateString () {
-        if (!this.itemDates && !this.itemStartDate && !this.itemEndDate) {
+        var t = this.item
+        if (!t.dates && !t.startDate && !t.endDate) {
           return ''
         }
-        var parsed = dateUtil.backend2frontend({dates: this.itemDates, startDate: this.itemStartDate, endDate: this.itemEndDate})
-        var result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
+        var parsed = dateUtil.backend2frontend({
+          dates: t.dates,
+          startDate: t.startDate,
+          endDate: t.endDate,
+          repeatType: t.repeatType,
+          repeatBaseTime: t.repeatBaseTime
+        })
+        var result
+        if (parsed.dateType === 'repeat') {
+          result = dateUtil.repeatDayText(t.repeatType, t.repeatBaseTime.split(',')) + '重复'
+        } else {
+          result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
+        }
         return result
       }
     },
     methods: {
-      showDatePikcer () {
-        // 显示之前先将所有获得焦点的元素失去焦点
-        if (document.activeElement) {
-          document.activeElement.blur()
-        }
-        var that = this
-        var defDate = dateUtil.backend2frontend({dates: this.itemDates, startDate: this.itemStartDate, endDate: this.itemEndDate})
-        SelectDate.show({
-          type: defDate.dateType,
-          selectNumDate: defDate.dateResult,
-          success: function (result) {
-            var resObj = dateUtil.frontend2backend({dateType: result.type, dateResult: result.selectNumDate, sep: that.itemSep})
-            that.$emit('date-changed', resObj)
-          }
-        })
+      gotoDate () {
+        this.$router.push('/todoEdit/date')
+//        // 显示之前先将所有获得焦点的元素失去焦点
+//        if (document.activeElement) {
+//          document.activeElement.blur()
+//        }
+//        var that = this
+//        var defDate = dateUtil.backend2frontend({dates: this.itemDates, startDate: this.itemStartDate, endDate: this.itemEndDate})
+//        SelectDate.show({
+//          type: defDate.dateType,
+//          selectNumDate: defDate.dateResult,
+//          success: function (result) {
+//            var resObj = dateUtil.frontend2backend({dateType: result.type, dateResult: result.selectNumDate, sep: that.itemSep})
+//            that.$emit('date-changed', resObj)
+//          }
+//        })
       }
     }
   }

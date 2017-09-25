@@ -147,6 +147,9 @@
       currentTodo () {
         return this.$store.state.todo.currentTodo
       },
+      isEdit () {
+        return !!this.currentTodo.id
+      },
       todoTime () {
         return this.$store.state.pub.currentTodoTime
       },
@@ -287,12 +290,16 @@
        */
       submitTodo (next) {
         if (this.isModified()) {
-          window.rsqadmg.exec('showLoader')
+          if (this.isEdit) {
+            window.rsqadmg.exec('showLoader')
+          }
           return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
             .then(() => {
               this.$store.commit('PUB_TODO_TIME_DELETE')
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '保存成功'})
+              if (this.isEdit) {
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '保存成功'})
+              }
               next()
             })
         } else {
