@@ -9,14 +9,18 @@ export default {
   'POST_LOGIN': 'task/j_spring_security_check',
   'GET_LOGOUT': 'task/j_spring_security_logout',
   'GET_INBOX_TODOS': 'task/mainTodoList/getInboxTodos',
+  'POST_SUB_TODO': 'task/v2/subTodo',
+  'POST_SUBTODO_PROP': 'task/v2/subTodo',
   'POST_NEW_TODO': 'task/v2/todo',
   'PUT_TODO_PROP': 'task/v2/todo/:id',
   'DELETE_TODO': 'task/v2/todo/:id',
+  'DELETE_SUB_TODO': 'task/v2/subTodo/:id',
   'GET_TODO': 'task/v2/todo/:id',
   'GET_SCHEDULE_TODOS': 'task/mainTodoList/getPeriodTodos',
   'POST_DATES_HAS_TODO': 'task/v2/todo/getDatesHasTodo',
-
+  'POST_DESP': 'task/v2/todo/:id',
   'GET_STAFF_LIST': 'task/rsqCommonUser/getAllCompanyUserList',
   'GET_TODO_TITLE': 'task/rsqTodoTitle/getAllTodoTitleList',
-  'POST_TODO_COMMENT': 'task/todoComment'
+  'POST_TODO_COMMENT': 'task/v2/todoComment',
+  'POST_RECORD_COMMENT': 'task/rsqTodoAction/saveTodoAction'
 }

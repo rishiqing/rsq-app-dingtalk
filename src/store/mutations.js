@@ -108,6 +108,9 @@ export default {
    * @param p.item
    * @constructor
    */
+  CHILDTASK_TODO_CREATED (state, p) {
+    state.todo.currentTodo.subTodos.unshift(p.item)
+  },
   INB_TODO_CREATED (state, p) {
     if (!state.inbox.items) {
       state.inbox.items = []
@@ -176,6 +179,9 @@ export default {
   SCH_LIST_TODO_CHECKED (state, p) {
     p.item.pIsDone = p.status
   },
+  SCH_LIST_SUBTODO_CHECKED (state, p) {
+    p.item.isDone = p.status
+  },
   /* --------------------------------- */
 
   /* ---------------todo收纳箱和日程页面的公共数据------------------ */
@@ -218,6 +224,15 @@ export default {
   TD_TODO_UPDATED (state, p) {
     util.extendObject(state.todo.currentTodo, p.todo)
   },
+  TD_SUBTODO_UPDATED (state, p) {
+    let items = state.todo.currentTodo.subTodos
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        util.extendObject(items[i], p.subTodo)
+        break
+      }
+    }
+  },
   /**
    * 删除todo
    * @param state
@@ -230,6 +245,15 @@ export default {
     let index = items.indexOf(p.item)
     if (index > -1) {
       items.splice(index, 1)
+    }
+  },
+  TD_SUBTODO_DELETE  (state, p) {
+    let items = state.todo.currentTodo.subTodos
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+        break
+      }
     }
   },
   /**
@@ -296,6 +320,9 @@ export default {
   },
   PUB_TODO_DATE_DELETE (state, p) {
     state.pub.currentTodoDate = null
+  },
+  TD_DESP_CREATED (state, p) {
+    state.todo.currentTodo.pNote = p.desp.pNote
   }
   /* --------------------------------- */
 }

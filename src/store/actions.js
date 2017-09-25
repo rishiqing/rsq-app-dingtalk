@@ -11,7 +11,7 @@ export default {
    * @param p
    * @param p.isShow
    */
-  setNav ({ commit }, p) {
+  setNav ({commit}, p) {
     commit('SYS_NAV_SHOW', p)
   },
   /**
@@ -21,7 +21,7 @@ export default {
    * @param p.username
    * @param p.password
    */
-  login ({ commit }, p) {
+  login ({commit}, p) {
     return api.system.login(p)
       .then(user => {
         commit('SYS_USR_LOGIN', {user: user})
@@ -30,12 +30,12 @@ export default {
         alert(JSON.stringify(err))
       })
   },
-/**
- * 登出方法
- * @param commit
- * @param state
- */
-  logout ({ commit }) {
+  /**
+   * 登出方法
+   * @param commit
+   * @param state
+   */
+  logout ({commit}) {
     return api.system.logout()
       .then(() => {
         commit('SYS_USR_LOGOUT')
@@ -51,7 +51,7 @@ export default {
    * @param commit
    * @param state
    */
-  fetchInboxItems ({ commit, state }) {
+  fetchInboxItems ({commit, state}) {
     let items = state.inbox.items
     if (items == null) {
       return api.todo.getInboxTodos()
@@ -105,7 +105,7 @@ export default {
    * @param state
    * @param strDate
    */
-  fetchScheduleItems ({ commit, state }, { strDate }) {
+  fetchScheduleItems ({commit, state}, {strDate}) {
     if (strDate instanceof Date) {
       strDate = moment(strDate).format('YYYY-MM-DD')
     }
@@ -131,7 +131,7 @@ export default {
    * @param p.newItem
    * @param p.todoType
    */
-  submitCreateTodoItem ({ dispatch }, p) {
+  submitCreateTodoItem ({dispatch}, p) {
     //  判断下是创建日程item还是收纳箱item
     if (p.todoType === 'schedule') {
       return dispatch('createScheduleItem', p)
@@ -149,7 +149,7 @@ export default {
    * @param p.newItem
    * @param p.todoType
    */
-  createScheduleItem ({ commit, state, dispatch }, p) {
+  createScheduleItem ({commit, state, dispatch}, p) {
     //  暂时这么处理----日程任务默认为重要紧急，后面加上选择优先级功能之后再修改
     var newItem = p.newItem
 
@@ -198,11 +198,11 @@ export default {
    * @param newItem
    * @param dateStruct
    */
-  createSingleScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
+  createSingleScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
     var itemCache = state.dateTodosCache
     //  读取顺序号
-    return dispatch('fetchScheduleItems', { strDate })
+    return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
@@ -210,6 +210,16 @@ export default {
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
           })
       }).catch(err => {
+        alert(JSON.stringify(err))
+      })
+  },
+  createSubTodo ({commit, state, dispatch}, p) {
+    var name = p.newItem.pTitle
+    return api.todo.postSubTodo({name: name, todoId: p.todoId})
+      .then(item => {
+        commit('CHILDTASK_TODO_CREATED', {item: item})
+      })
+      .catch(err => {
         alert(JSON.stringify(err))
       })
   },
@@ -222,10 +232,10 @@ export default {
    * @param newItem
    * @param dateStruct
    */
-  createDiscreteScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
+  createDiscreteScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
     var itemCache = state.dateTodosCache
-    return dispatch('fetchScheduleItems', { strDate })
+    return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
@@ -250,11 +260,11 @@ export default {
    * @param dateStruct
    * @returns {*}
    */
-  createRangeScheduleItem ({ commit, state, dispatch }, {newItem, dateStruct}) {
+  createRangeScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
     var itemCache = state.dateTodosCache
 
-    return dispatch('fetchScheduleItems', { strDate })
+    return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
@@ -280,19 +290,25 @@ export default {
    * @param p.status
    * @param p.item
    */
-  submitTodoFinish ({ commit }, p) {
+  submitTodoFinish ({commit}, p) {
     return api.todo.putTodoProps({id: p.item.id, pIsDone: p.status})
       .then(() => {
         commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
       })
   },
+  submitSubTodoFinish ({commit}, p) {
+    return api.todo.putSubTodoProps({id: p.item.id, pIsDone: p.status})
+      .then(() => {
+        commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
+      })
+  },
   /**
-   * 设置inbox页面当前处于选中状态的item，该item将会被现实在edit子页面中
+   * 设置inbox页面当前处于选中状态的item，该item将会被显示在edit子页面中
    * 不采用promise的方式返回值
    * @param commit
    * @param item
    */
-  setCurrentTodo ({ commit }, item) {
+  setCurrentTodo ({commit}, item) {
     commit('TD_CURRENT_TODO_SET', {item: item})
   },
   updateCurrentTodo ({ commit }, item) {
@@ -343,7 +359,8 @@ export default {
    * @param p.editItem
    * @returns {*}
    */
-  updateTodoDate ({ commit, state, dispatch }, p) {
+  updateTodoDate ({commit, state, dispatch}, p) {
+    // console.log('updateTodoDate进来了')
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
     //  如果日期均为空，则容器为收纳箱
@@ -357,23 +374,23 @@ export default {
       //  如果id存在，则ajax更新
       editItem['id'] = todo.id
       console.log('=@_@===editItem===#_#=' + JSON.stringify(editItem))
-      // promise = api.todo.putTodoProps(editItem)
-      //   .then(resTodo => {
-      //     //  处理缓存数据
-      //     var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
-      //     var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
-      //     var curArrayIndex = todo.pContainer === 'inbox'
-      //       ? 0
-      //       : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
-      //
-      //     if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
-      //       commit('TD_TODO_DELETED', {item: todo})
-      //     }
-      //     dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
-      //     dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
-      //
-      //     commit('TD_TODO_UPDATED', {todo: resTodo})
-      //   })
+      promise = api.todo.putTodoProps(editItem)
+        .then(resTodo => {
+          //  处理缓存数据
+          var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
+          var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
+          var curArrayIndex = todo.pContainer === 'inbox'
+            ? 0
+            : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+
+          if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
+            commit('TD_TODO_DELETED', {item: todo})
+          }
+          dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
+          dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
+
+          commit('TD_TODO_UPDATED', {todo: resTodo})
+        })
     } else {
       promise = Promise.resolve().then(() => {
         commit('TD_TODO_UPDATED', {todo: editItem})
@@ -392,7 +409,7 @@ export default {
    * @param dateStruct
    * @param exceptDateNum
    */
-  invalidateDateItems ({ commit, state }, {dateStruct, exceptDateNum}) {
+  invalidateDateItems ({commit, state}, {dateStruct, exceptDateNum}) {
     if (dateStruct.dateType == null && exceptDateNum !== 0) {
       state.inbox.items = null
       return
@@ -400,6 +417,7 @@ export default {
     switch (dateStruct.dateType) {
       case 'single':
       case 'discrete':
+        // console.log('----------')
         dateStruct.dateResult.forEach(timeNum => {
           if (timeNum !== exceptDateNum) {
             commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(timeNum, '-')})
@@ -428,15 +446,78 @@ export default {
    * @param p.editItem
    * @returns {Function|any|*|Promise.<TResult>|Promise}
    */
-  updateTodo ({ commit, state }, p) {
+  updateTodo ({commit, state}, p) {
     //  p.todo不存在，则默认读取currentTodo
     var todo = p.todo || state.todo.currentTodo
-    var editItem = p.editItem
+    // var items = p.items
     //  如果id存在，则ajax更新
+    var editItem = p.editItem
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
       .then(todo => {
         commit('TD_TODO_UPDATED', {todo: todo})
+      })
+  },
+  saveTodoAction ({commit, state}, p) {
+    var todo = p.todo || state.todo.currentTodo
+    var editItem = p.editItem
+    editItem['todoId'] = todo.id
+    if (editItem.type === 9) {
+      editItem['comment'] = '李永州 更新了标题'
+    } else if (editItem.type === 5 && editItem.status) {
+      editItem['comment'] = '李永州 完成了任务'
+    } else if (editItem.type === 5 && !editItem.status) {
+      editItem['comment'] = '李永州 重启了任务'
+    } else if (editItem.type === 7) {
+      editItem['comment'] = '李永州 创建了子任务'
+    } else if (editItem.type === 17 && editItem.status) {
+      console.log('子任务的操作进来了吗')
+      editItem['comment'] = '李永州 完成了子任务' + '"' + p.name + '"'
+    } else if (editItem.type === 17 && !editItem.status) {
+      console.log('子任务的操作进来了吗')
+      editItem['comment'] = '李永州 重启了子任务' + '"' + p.name + '"'
+    } else if (editItem.type === 10) {
+      editItem['comment'] = '李永州 更新了子任务内容为' + '"' + editItem.idOrContent + '"'
+    }
+    return api.todo.putRecordProps(editItem)
+      .then(record => {
+        commit('TD_COMMENT_CREATED', {comment: record})
+      })
+  },
+  updateSubTodo ({commit, state}, p) {
+    //  p.todo不存在，则默认读取currentTodo
+    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    // var id = state.todo.currentTodo.subTodos[0].id
+    // var id = p.item.id
+    p.item.name = p.name
+    var item = p.item
+    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
+    //  如果id存在，则ajax更新
+    // var editItem = p.editItem
+    // console.log('todo的id是' + id)
+    // editItem['id'] = id
+    return api.todo.putSubTodoProps(item)
+      .then(subTodo => {
+        // console.log('返回来的subTodo是' + subTodo.name)
+        commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
+      })
+  },
+  updateSubTodoCheck ({commit, state}, p) {
+    //  p.todo不存在，则默认读取currentTodo
+    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    // var id = state.todo.currentTodo.subTodos[0].id
+    // var id = p.item.id
+    p.item.name = p.name
+    var item = p.item
+    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
+    //  如果id存在，则ajax更新
+    // var editItem = p.editItem
+    // console.log('todo的id是' + id)
+    // editItem['id'] = id
+    return api.todo.putSubTodoProps(item)
+      .then(subTodo => {
+        // console.log('返回来的subTodo是' + subTodo.name)
+        commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
   /**
@@ -481,16 +562,26 @@ export default {
    * @param p.todo
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
-  deleteTodo ({ commit, state, dispatch }, p) {
+  deleteTodo ({commit, state, dispatch}, p) {
+    console.log('action-deleteTodo进来了')
     var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
       .then(() => {
+        console.log('api-delete已完成')
         commit('TD_TODO_DELETED', {item: todo})
         //  清除缓存数据
         var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
-        dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
+        dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
+      })
+  },
+  deleteSubTodo ({commit, state, dispatch}, p) {
+    // var todo = p.todo || state.todo.currentTodo留待以后查看
+    var item = p.item
+    return api.todo.deleteSubTodo(item)
+      .then(() => {
+        commit('TD_SUBTODO_DELETE', {item: item})
       })
   },
   /**
@@ -499,7 +590,7 @@ export default {
    * @param state
    * @param p
    */
-  getDatesHasTodo ({ commit, state }, p) {
+  getDatesHasTodo ({commit, state}, p) {
     var hasCache = true
     var start = p.startDate.getTime()
     var end = p.endDate.getTime()
@@ -534,9 +625,9 @@ export default {
       return resultArray
     })
   },
-/* ---------------------------------- */
+  /* ---------------------------------- */
 
-  fetchStaffList ({ commit, state }) {
+  fetchStaffList ({commit, state}) {
     if (state.staff.list == null) {
       return api.system.fetchStaffList()
         .then(list => {
@@ -554,7 +645,7 @@ export default {
    * @param p.idArray
    * @param p.corpId
    */
-  fetchRsqidFromUserid ({ commit, state }, p) {
+  fetchRsqidFromUserid ({commit, state}, p) {
     var openidsNotInCache = []
     var result = {}
     var cache = state.openidCache
@@ -593,7 +684,7 @@ export default {
    * @param p.idArray
    * @param p.corpId
    */
-  fetchUseridFromRsqid ({ commit, state }, p) {
+  fetchUseridFromRsqid ({commit, state}, p) {
     var idsNotInCache = []
     var result = {}
     var cache = state.rsqidCache
@@ -623,5 +714,31 @@ export default {
     return promise.then(() => {
       return result
     })
+  },
+  postTodoComment ({commit, state}, props) {
+    if (props.commentContent) {
+      var currentItem = state.todo.currentTodo
+      props['todoId'] = currentItem.id
+      props['type'] = 0
+      return api.todo.postComment(props)
+        .then((com) => {
+          com.type = 0
+          commit('TD_COMMENT_CREATED', {comment: com})
+        })
+    } else {
+      return Promise.resolve()
+    }
+  },
+  postdesp ({commit, state}, props) {
+    if (props.pNote) {
+      var currentItem = state.todo.currentTodo
+      props['id'] = currentItem.id
+      return api.todo.postdesp(props)
+        .then((desp) => {
+          commit('TD_DESP_CREATED', {desp: desp})
+        })
+    } else {
+      return Promise.resolve()
+    }
   }
 }

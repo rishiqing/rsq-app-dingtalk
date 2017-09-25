@@ -187,7 +187,7 @@ rsqAdapterManager.register({
 
   },
   log: function(params){
-    console.log(params.message)
+    // console.log(params.message)
   },
   setTitle: function(params){
     dd.biz.navigation.setTitle({

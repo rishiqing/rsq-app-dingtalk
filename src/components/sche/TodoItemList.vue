@@ -1,5 +1,4 @@
 <template>
-  <!--<ul class="itm-lst itm-lst&#45;&#45;border itm-lst&#45;&#45;margin">-->
   <ul>
     <r-todo-item
         v-for="item in items"
@@ -39,13 +38,16 @@
     },
     methods: {
       showEdit (item) {
-        this.$store.dispatch('setCurrentTodo', item)
+        this.$store.dispatch('setCurrentTodo', item)// 设置当前todo不管是inbox的todo还是ssche的todo
         this.$router.push('/todo/' + item.id)
       },
       checkTodo (item, status) {
         this.$store.dispatch('submitTodoFinish', {item: item, status: status})
             .then(function () {
-//              rsqadmg.execute('toast', {message: str})
+              this.$store.dispatch('saveTodoAction', {editItem: {status: status}})
+                .then(() => {
+                  console.log('saveTodoAction走完了')
+                })
             })
       }
     }

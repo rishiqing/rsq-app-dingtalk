@@ -54,7 +54,12 @@ export default {
    */
   todo: {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
-    currentTodo: {}
+    currentTodo: {
+      subTodos: {
+      },
+      comments: {
+      }
+    }
   },
   /**
    * 组件之间需要共享的临时数据

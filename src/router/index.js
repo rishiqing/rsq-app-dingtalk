@@ -17,6 +17,8 @@ import TodoEditDate from 'com/pub/TodoEditDate'
 import TodoEditRepeat from 'com/pub/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
+import desp from 'com/pub/desp'
+import CreateSubTodo from 'com/pub/CreateSubTodo'
 Vue.use(Router)
 
 const router = new Router({
@@ -29,6 +31,12 @@ const router = new Router({
       path: '/sche',
       name: 'sche',
       component: Sche,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/desp',
+      name: 'desp',
+      component: desp,
       meta: {requireAuth: true}
     },
     {
@@ -51,7 +59,13 @@ const router = new Router({
     },
     {
       path: '/todo/:todoId/subTodo',
-      name: 'todoEditSubTodo',
+      name: 'CreateSubTodo',
+      component: CreateSubTodo,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/todo/SubTodoEdit',
+      name: 'SubTodoEdit',
       component: TodoEditSubTodo,
       meta: {requireAuth: true}
     },

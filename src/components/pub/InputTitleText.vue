@@ -1,15 +1,13 @@
 <template>
   <div class="">
-    <div class="">
-      <div class="" :style="[paddingObject]">
+    <div class="edit">
         <input type="text" placeholder="输入任务标题"
                ref="titleInput"
                :value="itemTitle"
                class="padding-left-input-"
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
-               :class="{'padding-left-input':isCheckable}">
-      </div>
+               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle)}">
       <div class="padding-left-">
       <v-touch class=""
            v-if="isCheckable"
@@ -27,8 +25,18 @@
   .hide{
     display: none;
   }
+  .edit{
+    display: flex;
+    align-items: center;
+  }
+  .real-width{
+    width:88%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap
+  }
   .select-title{
-    color:#69ACEF;
+    color:#b9b9bc;
     font-size: 17px;
     position: absolute;
     top:0.55rem;
@@ -59,15 +67,13 @@
     font-size: 19px;
     color: #8C8C8C;
     letter-spacing: 0;
-    padding-left: 0.3rem;
+    padding-left: 0.1rem;
   }
   input[type='text']{
     height:1.458rem;
     background: #FFFFFF;
-    border-bottom:0.5px solid #DADADA ;
-    border-top:0.5px solid #DADADA ;
-    line-height:1.478rem ;
-    background: #FFFFFF;
+    border-top:1px solid #E0E0E0 ;
+    line-height:1.458rem ;
   }
   .padding-left-input-{
     padding-left:0.3rem;
@@ -96,6 +102,10 @@
       itemChecked: Boolean
     },
     methods: {
+      isMaxlength (title) {
+        title = title || ''
+        return title.length > 15
+      },
       inputBlur (value) {
         this.$emit('text-blur', value)
       },

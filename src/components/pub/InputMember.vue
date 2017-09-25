@@ -38,15 +38,12 @@
     letter-spacing: 0;
   }
   .outer{
-    /*margin-top: 0.231rem;*/
-    border-bottom: 0.5px solid #E3E3E3;
-    /*border-top: 1px solid #E3E3E3;*/
+    border-bottom: 1px solid #E0E0E0;
     position: relative;
-    height:1.3rem;
+    /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
-    width: 100%;
+    background-color: white;
   }
   .people{
     position:absolute;
@@ -56,7 +53,7 @@
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
-    right:0.85rem;
+    right:0.94rem;
   }
   span{
     display: block;
@@ -70,8 +67,8 @@
     color: #999999;
     font-size: 21px;
     position: absolute;
-    top:0.35rem;
-    right: 0.1rem;
+    top:0.38rem;
+    right: 0.3rem;
   }
 </style>
 <script>

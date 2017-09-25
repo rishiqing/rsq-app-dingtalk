@@ -11,7 +11,7 @@
   <div class="bottom">
     <div>
       <p>更新说明</p>
-      <i class="icon2-arrow-right-small daxiao"></i>
+      <i class="icon2-arrow-right-small arow"></i>
     </div>
     <div>
       <p>联系我们</p>
@@ -20,12 +20,12 @@
     <div>
       <v-touch  @tap="gotokefu" :class="{'is-active': '/me' == currentPath}">
       <p>在线客服</p>
-        <i class="icon2-arrow-right-small daxiao"></i>
+        <i class="icon2-arrow-right-small arow"></i>
       </v-touch>
     </div>
     <div>
       <p>电脑访问日事清</p>
-      <i class="icon2-arrow-right-small daxiao"></i>
+      <i class="icon2-arrow-right-small arow"></i>
     </div>
   </div>
   </div>
@@ -87,15 +87,15 @@
   .bottom{
     padding-left: 0.43rem;
     background: #FFFFFF;
-    height: 5.069rem;
-    border-bottom: 0.5px solid #E3E3E3;
+    /*height: 5.069rem;*/
+    border-bottom: 1px solid #E3E3E3;
     width: 100%;
   }
   .bottom>div{
-    height: 1.267rem;
     line-height:1.267rem ;
     border-bottom: 1px solid #E3E3E3;
     color:#E3E3E3;
+    position: relative;
   }
   .bottom div:last-child{
     border-bottom: none;
@@ -108,29 +108,20 @@
     line-height: 22px;
     font-weight: bold;
   }
-  .bottom span{
-    float: right;
-    margin-right:0.32rem;
-    margin-top:0.548rem;
-  }
-  .bottom span:after{
-    display: block;
-    clear: both;
-    content:'';
-  }
   .tel{
-    display: inline-block;
+    position: absolute;
     font-family: PingFangSC-Regular;
     font-size: 15px;
     color: #55A8FD;
     letter-spacing: -0.36px;
-    padding-right: 9px;
+    right: 0.7rem;
+    top: 0.19rem;
   }
-  .daxiao{
+  .arow{
     font-size: 20px;
-    float: right;
+    position: absolute;
     color:#999999;
-    margin-right: 0.3rem;
-    margin-top: 0.49rem;
+    right: 0.5rem;
+    top: 0.49rem;
   }
 </style>

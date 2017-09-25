@@ -43,11 +43,11 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: true,
-    hotPath: '/__webpack_hmr',
+    hotPath: '/__wallace_hmr',
     // 日事清api的后台地址
     apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
+    authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
     frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/'
   }

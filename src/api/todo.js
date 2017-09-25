@@ -60,6 +60,17 @@ export default {
         })
     })
   },
+  postSubTodo (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.POST_SUB_TODO, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   putTodoProps (props) {
     var path = util.replaceUrlParams(mapping.PUT_TODO_PROP, props)
     return new Promise((resolve, reject) => {
@@ -72,9 +83,45 @@ export default {
         })
     })
   },
+  putSubTodoProps (props) {
+    var path = util.replaceUrlParams(mapping.POST_SUBTODO_PROP, props)
+    console.log(path)
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  putSubTodoPropsCheck (props) {
+    var path = util.replaceUrlParams(mapping.POST_SUBTODO_PROP, props)
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   deleteTodo (props) {
     var path = util.replaceUrlParams(mapping.DELETE_TODO, props)
-
+    return new Promise((resolve, reject) => {
+      Vue.http.delete(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  deleteSubTodo (props) {
+    var path = util.replaceUrlParams(mapping.DELETE_SUB_TODO, props)
     return new Promise((resolve, reject) => {
       Vue.http.delete(path)
         .then(res => {
@@ -99,6 +146,29 @@ export default {
   postComment (props) {
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_TODO_COMMENT, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  postdesp (props) {
+    var path = util.replaceUrlParams(mapping.POST_DESP, props)
+    return new Promise((resolve, reject) => {
+      Vue.http.put(path, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  putRecordProps (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.POST_RECORD_COMMENT, props)
         .then(res => {
           resolve(res.json())
         }, err => {

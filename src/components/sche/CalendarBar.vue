@@ -6,7 +6,7 @@
             v-for="day in days"
             :key="day.date.getTime()"
             >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag}"></div>
+          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           <v-touch class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
@@ -20,7 +20,7 @@
   export default {
     data () {
       return {}
-    },
+    }, // 为社么只显示一周的数据  不是三周的数据吗
     props: {
       days: Array,
       barIndex: Number,
@@ -67,7 +67,7 @@
   }
   .cal-weekday {
     position:relative;
-    font-family: PingFangSC-Regular;
+    font-family: PingFangSC-Medium;
     font-size: 11px;
     color: #FFFFFF;
     line-height: 12px;
