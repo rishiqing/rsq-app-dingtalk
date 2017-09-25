@@ -128,24 +128,19 @@
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
-  import dateUtil from 'ut/dateUtil'
-  import moment from 'moment'
   import InputTime from 'com/pub/InputTime'
+  import dateUtil from 'ut/dateUtil'
+  import jsUtil from 'ut/jsUtil'
   export default {
     data () {
       return {
-        editItem: {
-          pTitle: '',
-          dates: null,
-          startDate: null,
-          endDate: null
-        },
+        editItem: {},
         joinUserRsqIds: []
       }
     },
     computed: {
-      todoType () {
-        return this.$route.params.todoType
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
       },
       currentDate () {
         return this.$store.state.schedule.strCurrentDate
@@ -156,44 +151,49 @@
       }
     },
     components: {
-      'r-input-time': InputTime,
       'r-input-title': InputTitleText,
-      'r-input-member': InputMember,
-      'r-input-date': InputDate
+      'r-input-date': InputDate,
+      'r-input-time': InputTime,
+      'r-input-member': InputMember
     },
     beforeRouteEnter (to, from, next) {
       next()
       // beforeRouteEnter中不能获取到this，因为this还没有创建，只能通过next获取
     },
     methods: {
+      /**
+       * 初始化数据，从state的currentTodo复制到local的editItem
+       */
       initData () {
-        if (this.$route.params.todoType === 'schedule') {
-          var currentVal = moment(this.currentDate, 'YYYY-MM-DD').valueOf()
-          var strDate = dateUtil.dateNum2Text(currentVal)
-
-          this.editItem.startDate = strDate
-          this.editItem.endDate = strDate
-        }
+        jsUtil.extendObject(this.editItem, this.currentTodo)
+        this.editItem.startDate = this.editItem.startDate || this.currentDate
+        this.editItem.endDate = this.editItem.endDate || this.currentDate
       },
-      //  从startDate endDate dates三个字段中转换成用户前台显示的date结构
+      /**
+       * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
+       */
       getPlanedTime () {
         var ei = this.editItem
-        var result = dateUtil.backend2frontend(ei.dates, ei.startDate, ei.endDate)
+        var result = dateUtil.backend2frontend({dates: ei.dates, startDate: ei.startDate, endDate: ei.endDate})
         return (result && result.dateResult) ? result.dateResult[0] : null
       },
       saveTitle (newTitle) {
         this.editItem.pTitle = newTitle
-      },
-      saveDate ({startDate, endDate, dates}) {
-        this.editItem.startDate = startDate
-        this.editItem.endDate = endDate
-        this.editItem.dates = dates
+        this.$store.commit('TD_TODO_UPDATED', {todo: {pTitle: newTitle}})
       },
       saveMember (idArray) {
         this.joinUserRsqIds = idArray
-        this.editItem.receiverIds = idArray.join(',')
+        var ids = idArray.join(',')
+        this.editItem.receiverIds = ids
+        this.$store.commit('TD_TODO_UPDATED', {todo: {receiverIds: ids}})
       },
-      saveTodo () {
+      /**
+       * 将local的对象保存到state的变量中
+       */
+      saveTodoState () {
+        this.$store.commit('TD_CURRENT_TODO_UPDATE', {item: this.editItem})
+      },
+      submitTodo () {
         if (!this.editItem.pTitle) {
           return window.rsqadmg.execute('alert', {message: '请填写任务名称'})
         }
@@ -204,32 +204,34 @@
           }
           //  坑爹啊。。。格式不统一，需要做额外的hack
           this.editItem.pPlanedTime = dateUtil.dateNum2Text(planTime, '-') + ' 00:00:00'
+          this.editItem.createTaskDate = dateUtil.dateNum2Text(planTime)
         }
 
+        this.saveTodoState()
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
-        var that = this
-        this.$store.dispatch('submitCreateTodoItem', {newItem: this.editItem, todoType: this.isInbox ? 'inbox' : 'schedule'})
-            .then(function () {
+        this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: 'schedule'})
+            .then(() => {
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '创建成功'})
-              that.$router.replace(window.history.back())
+              this.$router.replace(window.history.back())
             })
       }
     },
-    mounted () {
+    created () {
       this.initData()
       window.rsqadmg.execute('setTitle', {title: '新建任务'})
       var btnParams
       var that = this
       btnParams = {
-        btns: [{key: 'saveTodo', name: '完成'}],
+        btns: [{key: 'submitTodo', name: '完成'}],
         success: function (res) {
-          if (res.key === 'saveTodo') {
-            that.saveTodo()
+          if (res.key === 'submitTodo') {
+            that.submitTodo()
           }
         }
       }
       window.rsqadmg.execute('setOptionButtons', btnParams)
-    }
+    },
+    mounted () {}
   }
 </script>
