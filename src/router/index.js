@@ -4,7 +4,6 @@ import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
 import Init from 'com/Init'
-import Demo from 'com/Demo'
 import Upload from 'com/demo/Upload'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
@@ -26,7 +25,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/upload'
+      redirect: '/sche'
     },
     {
       path: '/sche',
@@ -40,12 +39,12 @@ const router = new Router({
       component: coment,
       meta: {requireAuth: true}
     },
-    {
-      path: '/demo',
-      name: 'demo',
-      component: Demo,
-      meta: {requireAuth: true}
-    },
+    // {
+    //   path: '/demo',
+    //   name: 'demo',
+    //   component: Demo,
+    //   meta: {requireAuth: true}
+    // },
     {
       path: '/pub/desp',
       name: 'desp',
@@ -124,12 +123,12 @@ const router = new Router({
       name: 'login',
       component: Login
     },
-    {
-      //  用来测试
-      path: '/demo',
-      name: 'demo',
-      component: Demo
-    },
+    // {
+    //   //  用来测试
+    //   path: '/demo',
+    //   name: 'demo',
+    //   component: Demo
+    // },
     {
       //  用来测试
       path: '/init',

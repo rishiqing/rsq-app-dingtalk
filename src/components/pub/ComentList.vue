@@ -80,7 +80,6 @@
     computed: {
       comentCount () {
         var count = 0
-        console.log(items)
         for (var i = 0; i < this.items.length; i++) {
           if (this.items[i].type === 0) {
             count++

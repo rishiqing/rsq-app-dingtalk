@@ -239,11 +239,14 @@
         return this.$store.dispatch('getTodo')
             .then(item => {
               util.extendObject(this.editItem, item)
+              var noteElement = document.getElementById('noteEditable')
+              if (this.pNote !== null) {
+                noteElement.innerHTML = this.pNote
+              }
               var joinUserArray = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
               this.joinUserRsqIds = joinUserArray.map(obj => {
                 return obj['id'] + ''
               })
-              console.log('加人id是' + this.joinUserRsqIds)
               window.rsqadmg.exec('hideLoader')
             })
       },
@@ -398,13 +401,13 @@
     },
     mounted () {
       // 下面为什么是undefined
-      var noteElement = document.getElementById('noteEditable')
-      console.log('noteElement是' + noteElement)
-      console.log(this.pNote)
-      if (this.pNote !== null) {
-        console.log('进行复制')
-        noteElement.innerHTML = this.pNote
-      }
+//      var noteElement = document.getElementById('noteEditable')
+//      console.log('noteElement是' + noteElement)
+//      console.log(this.pNote)
+//      if (this.pNote !== null) {
+//        console.log('进行复制')
+//        noteElement.innerHTML = this.pNote
+//      }
     }
   }
 </script>
