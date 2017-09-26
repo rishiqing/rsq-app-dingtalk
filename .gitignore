@@ -9,4 +9,5 @@ test/e2e/reports
 selenium-debug.log
 .idea/
 secret/
+private/
 package-lock.json
