@@ -373,20 +373,14 @@
     },
     created () {
       this.initData()
-      console.log('mount进来了')
-      var noteElement = document.getElementById('noteEditable')
-      console.log(this)
-      console.log('this.editItem是')
-      console.log((this.editItem))// 这个明明有很多值
-      console.log('this.editItemItem.pNote是' + this.editItem.pNote)// 这个是undeinfed
-      console.log('this.editItemItem.pTtile是' + this.editItem.pTitle) // // 这个是undeinfed
-      console.log('currentTodo是')
-      console.log(this.$store.state.todo.currentTodo)// 这个对象也是有很多值
-      console.log('this.pNote是' + this.pNote)// 这个拿到是undeifined
-      if (this.pNote !== null) { // 这个为什么是空的
-        console.log('进来替换')
-        noteElement.innerHTML = this.pNote
-      }
+//      console.log('mount进来了')
+//      var noteElement = document.getElementById('noteEditable')
+//      console.log('noteElement是' + noteElement)
+//      console.log('this.pNote是' + this.pNote)// 这个拿到是undeifined
+//      if (this.pNote !== null) { // 这个为什么是空的
+//        console.log('进来替换')
+//        noteElement.innerHTML = this.pNote
+//      }
       var that = this
       window.rsqadmg.execute('setTitle', {title: '详情'})
       window.rsqadmg.execute('setOptionButtons', {
@@ -401,14 +395,16 @@
           }
         }
       })
+    },
+    mounted () {
+      // 下面为什么是undefined
+      var noteElement = document.getElementById('noteEditable')
+      console.log('noteElement是' + noteElement)
+      console.log(this.pNote)
+      if (this.pNote !== null) {
+        console.log('进行复制')
+        noteElement.innerHTML = this.pNote
+      }
     }
-//    mounted () {
-//      // 下面为什么是undefined
-//    var noteElement = document.getElementById('noteEditable')
-//      if (this.editItem.pNote !== null) {
-//        console.log('进行复制')
-//        noteElement.innerHTML = this.pNote
-//      }
-//    }
   }
 </script>

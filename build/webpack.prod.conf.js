@@ -52,9 +52,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      backendServer: config.dev.backendServer,
-      authServer: config.dev.authServer,
-      apiServer: config.dev.apiServer,
+      backendServer: config.build.backendServer,
+      authServer: config.build.authServer,
+      apiServer: config.build.apiServer,
+      stsServer: config.build.stsServer,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.build.index,

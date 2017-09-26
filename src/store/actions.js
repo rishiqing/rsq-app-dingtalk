@@ -740,5 +740,26 @@ export default {
     } else {
       return Promise.resolve()
     }
+  },
+  uploadToOSS ({commit, state}, p) {
+    var client = p.client
+    var path = p.path
+    var list = p.list
+    return Promise.all(list.map(t => {
+      var f = t.file
+      var name = path + f.name
+      return client.multipartUpload(name, f, {
+        progress: function (p) {
+          return function (done) {
+            var pro = Math.floor(p * 100)
+            t.progress = pro
+            if (pro >= 1) {
+              t.finished = true
+            }
+            done()
+          }
+        }
+      })
+    }))
   }
 }

@@ -2,7 +2,8 @@
 var path = require('path')
 var ip = require('ip')
 
-var devPort = 8090;
+var devPort = 8090
+var stsPort = 8300
 
 module.exports = {
   build: {
@@ -28,7 +29,9 @@ module.exports = {
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dd.rsq.etoutiao.cn/rsqauth',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com'
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
+    // 阿里云OSS STS认证的server地址
+    stsServer: ''
   },
   dev: {
     env: require('./dev.env'),
@@ -49,6 +52,8 @@ module.exports = {
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/'
+    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/',
+    // 阿里云OSS STS认证的server地址
+    stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
   }
 }

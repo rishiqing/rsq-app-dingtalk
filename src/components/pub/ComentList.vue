@@ -15,7 +15,7 @@
       v-for="item in items"
       :item="item"
       :key="item.id"
-      v-if="item.type===0&&items.length>0"
+      v-if="item.type===0"
     ></r-todo-coment>
     <div  v-if="comentCount===0" class="noComent">
       <img src="../../assets/img/nocoment.png" alt="">
@@ -68,17 +68,6 @@
         more: false
       }
     },
-    computed: {
-      comentCount () {
-        var count = 0
-        for (var i = 0; i < this.items.length; i++) {
-          if (this.items[i].type === 0) {
-            count++
-          }
-        }
-        return count
-      }
-    },
     name: 'ComentList',
     props: {
       items: Array,
@@ -87,6 +76,18 @@
     components: {
       'r-todo-coment': ComentItem,
       'r-record-coment': comentRecord
+    },
+    computed: {
+      comentCount () {
+        var count = 0
+        console.log(items)
+        for (var i = 0; i < this.items.length; i++) {
+          if (this.items[i].type === 0) {
+            count++
+          }
+        }
+        return count
+      }
     },
     methods: {
       changeState () {

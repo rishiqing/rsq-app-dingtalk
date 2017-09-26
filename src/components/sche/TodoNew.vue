@@ -13,7 +13,7 @@
           <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
             <!--<slot name="slotNote"></slot>-->
           </div>
-          <div class="itm-group itm--edit-todo itm--part-line">
+          <div class="itm-group itm--edit-todo">
             <!--<slot name="slotContainer"></slot>-->
             <div class="firstGroup">
               <r-input-date
@@ -49,6 +49,13 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .firstGroup{
+    margin-top:10px;
+  }
+  .secondGroup{
+    margin-top:10px;
+    border-top: 1px solid #E0E0E0;
+  }
   p{
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -69,6 +76,7 @@
     font-size: 17px;
     color: #333333;
     position:relative;
+    background-color: white;
   }
   .message{
     font-family: PingFangSC-Regular;
