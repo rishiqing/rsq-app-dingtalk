@@ -53,8 +53,7 @@
         var unfinishcount = 0
         var result = null
         var subtodo = this.item.subTodos
-        // console.log(subtodo.length)
-        if (subtodo.length === 0) {
+        if (typeof (subtodo) === 'undefined') {
           return ''
         } else {
           for (var i = 0; i < subtodo.length; i++) {
