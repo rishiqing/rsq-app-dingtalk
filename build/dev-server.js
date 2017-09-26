@@ -51,6 +51,12 @@ app.use(function(req, res, next) {
   next();
 });
 
+//  upload server
+app.post('/rsqddmdevapp/upload', function(req, res){
+  console.log(chalk.blue('>>>>receiving upload files'))
+  require('./dev-upload-server')(req,  res)
+})
+
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]

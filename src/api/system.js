@@ -67,5 +67,16 @@ export default {
           reject(res)
         })
     })
+  },
+  upload (data) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post('http://dd.rsq.etoutiao.cn/rsqddmdevapp/upload', data)
+        .then((res) => {
+          resolve(res.json())
+        }, (res) => {
+          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          reject(res)
+        })
+    })
   }
 }

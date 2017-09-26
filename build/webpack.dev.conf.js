@@ -29,6 +29,7 @@ module.exports = merge(baseWebpackConfig, {
       backendServer: config.dev.backendServer,
       authServer: config.dev.authServer,
       apiServer: config.dev.apiServer,
+      stsServer: config.dev.stsServer,
       filename: 'index.html',
       template: 'index.html',
       inject: true

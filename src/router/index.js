@@ -5,6 +5,7 @@ import api from '@/api'
 
 import Init from 'com/Init'
 import Demo from 'com/Demo'
+import Upload from 'com/demo/Upload'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -25,7 +26,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/sche'
+      redirect: '/upload'
     },
     {
       path: '/sche',
@@ -122,6 +123,12 @@ const router = new Router({
       path: '/init',
       name: 'init',
       component: Init
+    },
+    {
+      //  用来测试
+      path: '/upload',
+      name: 'upload',
+      component: Upload
     }
   ]
 })

@@ -3,7 +3,7 @@ var path = require('path')
 var url = require('url')
 var OSS = require('ali-oss')
 var readdir = require('recursive-readdir')
-var secret = require('../secret/secret.js')
+var secret = require('../secret')
 var STS = OSS.STS;
 var co = require('co')
 var sts = new STS({
@@ -13,7 +13,7 @@ var sts = new STS({
 var ossRegion = 'oss-cn-beijing'
 var ossBucket = 'rishiqing-front'
 var ossRootPath = 'dingtalk/'
-var roleArn = 'acs:ram::35910535:role/role-oss-js-upload'
+var roleArn = secret.aliOSS.roleArn
 var sessionName = 'dingtalkFrontUser'
 var expiration = 900
 
