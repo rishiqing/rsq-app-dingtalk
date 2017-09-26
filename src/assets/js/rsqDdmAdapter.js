@@ -353,7 +353,7 @@ rsqAdapterManager.register({
    */
   actionsheet: function(params){
     dd.device.notification.actionSheet({
-      title: "请选择操作", //标题
+      // title: "请选择操作", //标题
       cancelButton: '取消', //取消按钮文本
       otherButtons: params.buttonArray,
       onSuccess : function(result) {

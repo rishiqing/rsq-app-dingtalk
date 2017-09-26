@@ -28,6 +28,7 @@
   .edit{
     display: flex;
     align-items: center;
+    border-bottom:1px solid #E0E0E0 ;
   }
   .real-width{
     width:88%;
@@ -70,7 +71,7 @@
     padding-left: 0.1rem;
   }
   input[type='text']{
-    height:1.458rem;
+    /*height:1.458rem;*/
     background: #FFFFFF;
     border-top:1px solid #E0E0E0 ;
     line-height:1.458rem ;

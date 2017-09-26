@@ -97,5 +97,6 @@
     letter-spacing: 0;
     background-color: white;
     height: 200px;
+    box-sizing: border-box;
   }
 </style>

@@ -15,18 +15,18 @@
       </v-touch>
     </div>
     <div class="margin-block"></div>
-    <ul class="list" v-if="">
-    <li v-for="item in items" v-if="items">
-      <v-touch class="">
-         <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
-                  ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
-        <v-touch class="" v-if="" @tap="clickCheckOut(item)">
-          <i class="icon2-check-box select-sub"></i>
-          <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
-          <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
+    <ul class="sublist" v-if="">
+      <li v-for="item in items" v-if="items">
+        <v-touch class="">
+           <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
+                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
+          <v-touch class="" v-if="" @tap="clickCheckOut(item)">
+            <i class="icon2-check-box select-sub"></i>
+            <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
+            <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
+          </v-touch>
         </v-touch>
-      </v-touch>
-    </li>
+      </li>
     </ul>
   </div>
 </template>
@@ -136,15 +136,16 @@
   .select-sub{
     position: absolute;
     top: 0.4rem;
-    color:#b9b9bc
+    color:#b9b9bc;
+    left:0.02rem
   }
-  .list{
+  .sublist{
     background-color: white;
   }
   .list-below{
     border:none;
     /*line-height: 1.026rem;*/
-    margin-left: 1rem;
+    margin-left: 0.6rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     width: 90%;

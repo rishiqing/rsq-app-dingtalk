@@ -50,10 +50,12 @@
     },
     methods: {
       fetchItems (strDate) {
+//        console.log('fetchItems进来了')
         this.$store.dispatch('fetchScheduleItems', { strDate })
       },
       fetchDatesHasTodo (p) {
         //  给日期加角标，值计算p.daysArray中的中间一个数组
+//        console.log('fetchDatesHasTodo进来了')
         var weekArray = p.daysArray[1]
 
         this.$store.dispatch('getDatesHasTodo', {

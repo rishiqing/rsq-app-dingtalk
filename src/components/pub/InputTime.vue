@@ -8,7 +8,7 @@
 <style lang="" scoped>
   .outertime{
     position: relative;
-    height:1.3rem;
+    /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
     border-bottom:1px solid #E3E3E3;

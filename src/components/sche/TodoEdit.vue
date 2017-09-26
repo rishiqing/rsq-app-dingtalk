@@ -70,7 +70,6 @@
     letter-spacing: 0;
   }
   .desp{
-    border-top: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;
     margin-bottom: 10px;
     padding-left: 3%;
@@ -81,6 +80,7 @@
     color: #999999;
     letter-spacing: 0;
     background-color: white;
+    min-height: 30px;
   }
   input{
     line-height: 0.933rem;
@@ -133,7 +133,7 @@
     height: 31px;
     position: absolute;
     top:0.55rem;
-    right:0.4rem;
+    right:0.55rem;
     border: 1px solid #dfdfdf;
     background-color: #fdfdfd;
     box-shadow: #dfdfdf 0 0 0 0 inset;
@@ -243,6 +243,7 @@
               this.joinUserRsqIds = joinUserArray.map(obj => {
                 return obj['id'] + ''
               })
+              console.log('加人id是' + this.joinUserRsqIds)
               window.rsqadmg.exec('hideLoader')
             })
       },
@@ -342,25 +343,72 @@
                 })
           }
         })
+      },
+      more () {
+        var that = this
+        window.dd.device.notification.actionSheet({
+          cancelButton: '取消', // 取消按钮文本
+          otherButtons: ['发送到聊天', '发送提醒', '删除任务'],
+          onSuccess: function (result) {
+            if (result.buttonIndex === 2) {
+              that.deleteCurrentTodo()
+            } else if (result.buttonIndex === 0) {
+              window.dd.biz.chat.pickConversation({
+                corpId: 'dinga5892228289863f535c2f4657eb6378f', // 企业id
+                isConfirm: 'true', // 是否弹出确认窗口，默认为true
+                onSuccess: function () {
+                  console.log('执行成功')
+                },
+                onFail: function () {
+                  console.log('执行失败')
+                }
+              })
+            }
+          },
+          onFail: function (err) {
+            alert(err)
+          }
+        })
       }
     },
     created () {
       this.initData()
+      console.log('mount进来了')
       var noteElement = document.getElementById('noteEditable')
-      if (this.pNote) {
+      console.log(this)
+      console.log('this.editItem是')
+      console.log((this.editItem))// 这个明明有很多值
+      console.log('this.editItemItem.pNote是' + this.editItem.pNote)// 这个是undeinfed
+      console.log('this.editItemItem.pTtile是' + this.editItem.pTitle) // // 这个是undeinfed
+      console.log('currentTodo是')
+      console.log(this.$store.state.todo.currentTodo)// 这个对象也是有很多值
+      console.log('this.pNote是' + this.pNote)// 这个拿到是undeifined
+      if (this.pNote !== null) { // 这个为什么是空的
+        console.log('进来替换')
         noteElement.innerHTML = this.pNote
       }
       var that = this
       window.rsqadmg.execute('setTitle', {title: '详情'})
       window.rsqadmg.execute('setOptionButtons', {
-        btns: [{key: 'deleteTodo', name: '删除'}],
+        btns: [{key: 'more', name: '更多'}],
         success (res) {
-          if (res.key === 'deleteTodo') {
-            that.deleteCurrentTodo()
+          if (res.key === 'more') {
+            that.more()
+            // that.deleteCurrentTodo()
+//            window.rsqadmg.exec('actionsheet', {
+//              buttonArray: ['发送到聊天', '发送提醒', '删除任务']
+//            })
           }
         }
       })
-    },
-    mounted () {}
+    }
+//    mounted () {
+//      // 下面为什么是undefined
+//    var noteElement = document.getElementById('noteEditable')
+//      if (this.editItem.pNote !== null) {
+//        console.log('进行复制')
+//        noteElement.innerHTML = this.pNote
+//      }
+//    }
   }
 </script>

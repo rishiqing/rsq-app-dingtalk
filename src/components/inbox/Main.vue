@@ -75,7 +75,7 @@
     z-index: 2;
   }
   .write{
-    height:1.612rem;
+    height:1.226rem;
     position: fixed;
     background: #FFFFFF;
     border-bottom:1px solid #E3E3E3;
@@ -86,7 +86,7 @@
     z-index: 1;
   }
   .margin-block {
-    height: 100px;
+    height: 83px;
   }
   .input-panel {
     position: fixed;

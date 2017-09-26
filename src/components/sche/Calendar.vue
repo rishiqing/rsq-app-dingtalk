@@ -77,16 +77,19 @@
     },
     methods: {
       triggerSelectDate (date) {
-        this.selectDate = date
+//        console.log('triggerSelectDate进来了传过来的date是' + date)
+        this.selectDate = date// 为什么要有这一步呢，以后会用到selectdate吗,下一步不是直接发出去了吗
         this.$emit('click-cal-day', date)
       },
-      backToToday () { //  这个函数是干吗的
+      backToToday () { //  //这个函数的数据流程重要
+//        console.log('backToToday进来了')
         var today = this.clearTime(new Date())
         this.focusDate = today
-        this.resetBar()
-        this.triggerSelectDate(today)
+        this.resetBar()// 这个应该是更新页面的
+        this.triggerSelectDate(today)// 每次一触发这个都要去后台拿数据
       },
       resetDays (focusDate) { // 为什么要拿到连续三周的数据呢
+//        console.log('resetDays的focusDate是' + focusDate)
         return [
           this.getWeekDays(this.firstDayOfWeek(focusDate, -1)),
           this.getWeekDays(this.firstDayOfWeek(focusDate, 0)),
@@ -97,9 +100,11 @@
         return new Date(date.setHours(0, 0, 0, 0))
       },
       getWeekDays (focusDate) {
+//        console.log('getWeekDays的focusDate是' + focusDate)
         return dateUtil.getWeekDays(focusDate)
       },
       firstDayOfWeek (date, offset) {
+//        console.log('firstDayOfWeek的focusDate是' + date)
         return dateUtil.firstDayOfWeek(date, offset)
       },
       onPanMove (ev) {
@@ -107,6 +112,7 @@
           return
         }
         var delta = ev.deltaX
+//        console.log('onPanMove的delta是' + delta)
         this.translateX = 'translateX(' + delta + 'px)'
       },
       onPanEnd (ev) {
@@ -126,10 +132,12 @@
           this.translateX = 'translateX(0)'
         }
 
-        this.focusDate = this.firstDayOfWeek(this.focusDate, -direction)
+        this.focusDate = this.firstDayOfWeek(this.focusDate, -direction)// 这个是根据方向改变focusdate
       },
-      resetBar () {
+      resetBar () { // 其实就是改变了下daysArray,更新了下界面
+//        console.log('resetBar的daysArray是' + JSON.stringify(this.daysArray))
         this.daysArray = this.resetDays(this.focusDate)
+//        console.log('改变后的daysArray是' + this.daysArray)
         this.easeTrans = false
         this.translateX = 'translateX(0)'
         this.$emit('after-cal-swipe', {daysArray: this.daysArray})
@@ -139,9 +147,8 @@
       //  初始化工作
       this.focusDate = this.defaultSelectDate
       this.resetBar()
-
-      this.triggerSelectDate(this.defaultSelectDate)// 为什么初始化里要有这个函数
-
+//      console.log('resetBar走完了')
+      this.triggerSelectDate(this.defaultSelectDate) // 去拿后台数据去了
       var ele = document.getElementById('hMoveBar')
       ele.addEventListener('transitionend', this.resetBar)
       ele.addEventListener('webkitTransitionEnd', this.resetBar)

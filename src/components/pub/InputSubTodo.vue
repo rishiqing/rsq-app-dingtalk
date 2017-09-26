@@ -53,7 +53,7 @@
         var unfinishcount = 0
         var result = null
         var subtodo = this.item.subTodos
-        if (!subtodo) {
+        if (subtodo.length === 0) {
           return ''
         } else {
           for (var i = 0; i < subtodo.length; i++) {

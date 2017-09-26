@@ -66,6 +66,7 @@
     line-height: 0.7rem;
     border-bottom: none;
     margin-top:10px;
+    padding-left: 0.4rem;
   }
   .comentrecord{
     display: flex;

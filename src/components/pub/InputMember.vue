@@ -18,11 +18,11 @@
       </div>
       <div class="" v-else>
         <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
-        <avatar v-for="item in selectedItems"
-                :key="item.rsqUserId"
-                :src="item.avatar"
-                :username="item.name">
-        </avatar>
+          <avatar v-for="item in selectedItems"
+                  :key="item.rsqUserId"
+                  :src="item.avatar"
+                  :username="item.name">
+          </avatar>
         </div>
         <span class="people">{{selectedLocalList.length}}人</span>
         <i class="icon2-arrow-right-small arrow"></i>

@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
-
+import coment from 'com/pub/coment'
 import Init from 'com/Init'
-import Demo from 'com/Demo'
+import Demo from 'com/demo'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -31,6 +31,18 @@ const router = new Router({
       path: '/sche',
       name: 'sche',
       component: Sche,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/coment',
+      name: 'coment',
+      component: coment,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: Demo,
       meta: {requireAuth: true}
     },
     {
