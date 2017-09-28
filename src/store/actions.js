@@ -485,38 +485,31 @@ export default {
       })
   },
   updateSubTodo ({commit, state}, p) {
-    //  p.todo不存在，则默认读取currentTodo
-    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    //  p.todo不存在，则默认读取currentTod
     // var id = state.todo.currentTodo.subTodos[0].id
     // var id = p.item.id
     p.item.name = p.name
     var item = p.item
-    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
     //  如果id存在，则ajax更新
     // var editItem = p.editItem
     // console.log('todo的id是' + id)
     // editItem['id'] = id
     return api.todo.putSubTodoProps(item)
       .then(subTodo => {
-        // console.log('返回来的subTodo是' + subTodo.name)
         commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
   updateSubTodoCheck ({commit, state}, p) {
     //  p.todo不存在，则默认读取currentTodo
-    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
     // var id = state.todo.currentTodo.subTodos[0].id
     // var id = p.item.id
     p.item.name = p.name
     var item = p.item
-    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
     //  如果id存在，则ajax更新
     // var editItem = p.editItem
-    // console.log('todo的id是' + id)
     // editItem['id'] = id
     return api.todo.putSubTodoProps(item)
       .then(subTodo => {
-        // console.log('返回来的subTodo是' + subTodo.name)
         commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
@@ -740,6 +733,15 @@ export default {
     } else {
       return Promise.resolve()
     }
+  },
+  toRsqServer ({commit, state}, p) {
+    var p1 = p
+    p1['fileName'] = p.name.substr(28)
+    p1['filePath'] = p.name
+    return api.todo.getFileFromAli(p1)
+      .then((file) => {
+        return file
+      })
   },
   uploadToOSS ({commit, state}, p) {
     var client = p.client

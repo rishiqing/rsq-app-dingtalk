@@ -88,7 +88,6 @@
   .child-item{
     margin-left: 1rem;
     margin-bottom: 0;
-    /*margin-top: 5px;*/
     background-color: lightyellow;
     width: 84%;
   }
@@ -101,7 +100,6 @@
     text-align: left;
     font-size: 16px;
     color:#ACACAC;
-    /*margin-left:0.4rem*/
   }
   .time{
     font-size: 0.34rem;
@@ -112,7 +110,6 @@
 </style>
 <script>
   import Avatar from 'com/pub/TextAvatar'
-
   export default {
     data () {
       return {

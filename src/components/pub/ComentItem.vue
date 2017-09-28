@@ -13,6 +13,10 @@
         </div>
         <div class="bottom">
           <div class="comentContent">{{item.commentContent}}</div>
+          <div class="comentItempicture" v-for="fileId in item.fileList">
+            <img class="comentPhoto" :src="fileId.realPath"  alt="">
+            <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+          </div>
         </div>
       </div>
   </li>
@@ -21,8 +25,28 @@
   .coment{
     padding-left: 3%;
     margin-top:20px ;
+    margin-bottom: 10px;
     line-height: 0.7rem;
     border-bottom: none;
+  }
+  .fileName{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #3D3D3D;
+    margin-left: 10px;
+  }
+  .comentPhoto{
+    width: 25px;
+    height: 29px;
+  }
+  .comentItempicture{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: white;
+    border: 1px solid #E0E0E0;
+    width: 91%;
+    margin-top: 5px;
   }
   .coment:after{
     display: block;

@@ -1,55 +1,70 @@
 <template>
   <!--用来测试用的页面，不应用在生产环境中-->
-  <div class="init-form">
-    <p>上传文件测试</p>
-    <div class="form">
-      <v-touch class="form-control" @tap="logState">
-        <input class="u-full-width" type="button" value="log state"/>
-      </v-touch>
-      <v-touch class="form-control" @tap="uploadToOSS">
-        <input class="u-full-width" type="button" value="上传文件"/>
-      </v-touch>
-      <form id="form1">
-        <div class="input-wrapper">
-          <p>选择文件</p>
-          <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
-        </div>
-        <ul>
-          <li v-for="t in taskList">
-            <img class="preview-img" :src="t.img.src" alt="t.img.name"/>
-            <p v-if="t.finished">上传完成</p>
-            <p v-else>上传进度:{{t.progress}}%</p>
-          </li>
-        </ul>
-      </form>
-    </div>
+  <div class="">
+      <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
+      <ul class="ul-list">
+        <li v-for="task in taskList" class="taskList">
+          <img class="preview-img" :src="task.img.src" alt="task.img.name"/>
+          <span class="word">{{task.img.name.substr(0,30)}}</span>
+          <v-touch @tap="deleteTask(task)">
+            <i class="icon2-error deleteComent"></i>
+          </v-touch>
+          <!--<p v-if="t.finished">上传完成</p>-->
+          <!--<p v-else>上传进度:{{t.progress}}%</p>-->
+        </li>
+      </ul>
+      <!--<v-touch class="form-control" @tap="uploadToOSS">-->
+        <!--<input class="u-full-width" type="button" value="上传文件"/>-->
+      <!--</v-touch>-->
   </div>
 </template>
 <style lang="scss">
-  .init-form {
-    position: absolute;left: 10%;width: 80%;top: 20%;background: #f8f8f8;padding: 10px;font-size: 16px;
+  .deleteComent{
+    color: #DEDEDE;
+    font-size: 18px;
+    position: absolute;
+    top: 0.4rem;
+    right:0.7rem
   }
-  .preview-img {
-    width: 100px;
+  img{
+    width: 27px;
+    height: 27px;
   }
-  .input-wrapper {
-    height: 32px;
-    width: 64px;
-    overflow: hidden;
+  .ul-list{
+    margin-top: -15px;
+  }
+  .word{
+    font-family:AppleSystemUIFont;
+    font-size: 13px;
+    color: #3D3D3D;
+    margin-left: 10px;
+  }
+  .taskList {
     position: relative;
-    cursor: pointer;
-    /*Using a background color, but you can use a background image to represent a button*/
-    background-color: #0FF;
+    display:flex;
+    align-items: center;
+    border-top: 1px solid #E0E0E0;
+    background-color: white;
+    padding-left: 13px;
+    height: 1.2rem;
+  }
+  .taskList:last-child{
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .init-form {
+    position: absolute;left: 10%;width: 80%;top: 20%;padding: 10px;font-size: 16px;
+  }
+  .u-full-width {
+    position: absolute;
+    top:10rem
   }
   .file-input {
     cursor: pointer;
-    height: 100%;
     position:absolute;
-    top: 0;
-    right: 0;
-    z-index: 99;
-    /*This makes the button huge. If you want a bigger button, increase the font size*/
-    font-size:50px;
+    top: 4.3rem;
+    font-size:30px;
+    width: 30px;
     /*Opacity settings for all browsers*/
     opacity: 0;
     -moz-opacity: 0;
@@ -77,8 +92,11 @@
       loginUser () {
         return this.$store.getters.loginUser || {}
       },
+      unionId () {
+        return this.loginUser.authUser.unionId ? this.loginUser.authUser.unionId : 'dingtalkupload'
+      },
       userId () {
-        return this.loginUser.authUser ? this.loginUser.authUser.userId : 'dingtalkupload'
+        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
       },
       unfinishedTask () {
         return this.taskList.filter(t => {
@@ -87,9 +105,13 @@
       }
     },
     methods: {
-      logState () {
-        console.log(JSON.stringify(this.currentTodo))
-        console.log(JSON.stringify(this.currentTodo.clock))
+      deleteTask (task) {
+        for (var i = 0; i < this.taskList.length; i++) {
+          if (task.img.name === this.taskList[i].img.name) {
+            this.taskList.splice(i, 1)
+          }
+        }
+        this.$emit('removeFileId', task.img.name)
       },
       //  显示图片的第一种方式
       addToTask (e) {
@@ -112,6 +134,7 @@
             file: file
           })
         }
+        this.uploadToOSS()
       },
       //  显示图片的第二种方式
       readURL (e) {
@@ -136,16 +159,45 @@
       },
       //  上传到阿里云OSS
       uploadToOSS () {
-        var len = this.unfinishedTask.length
+        // var len = this.unfinishedTask.length
+        var time = new Date()
+        var year = time.getFullYear()
+        var month = time.getMonth() + 1
+        if (month < 10) {
+          month = '0' + month
+        }
+        var day = time.getDate()
+        if (day < 10) {
+          day = '0' + day
+        }
+        var hour = time.getHours()
+        if (hour < 10) {
+          hour = '0' + hour
+        }
+        var minute = time.getMinutes()
+        if (minute < 10) {
+          minute = '0' + minute
+        }
+        var second = time.getSeconds()
+        if (second < 10) {
+          second = '0' + second
+        }
+        var standardTime = year + month + day + hour + minute + second
         this.getToken()
           .then(client => {
             //  同时上传需要做数量控制，因此不做同时上传，只做顺序上传
             return this.$store.dispatch('uploadToOSS', {
               client: client,
-              path: this.ossRootPath + this.userId + '/',
+              path: this.ossRootPath + this.userId + '/' + standardTime,
               list: this.unfinishedTask
             }).then(res => {
-              console.log(len + ' files upload successfully')
+              // 在这里发送getfromAli
+              for (var i = 0; i < res.length; i++) {
+                var name = res[i].name
+                this.$store.dispatch('toRsqServer', {name: name}).then(res => {
+                  this.$emit('getFileId', {id: res.id, name: res.name.substr(14)})
+                })
+              }
             })
           })
       },
@@ -172,17 +224,9 @@
         var files = input.files
         var formData
         if (files.length > 0) {
-          // One or more files selected, process the file upload
-
-          // create a FormData object which will be sent as the data payload in the
-          // AJAX request
           formData = new FormData()
-
-          // loop through all the selected files
           for (var i = 0; i < files.length; i++) {
             var file = files[i]
-
-            // add the files to formData object for the data payload
             formData.append('uploads[]', file, file.name)
           }
         }

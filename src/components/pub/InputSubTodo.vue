@@ -53,8 +53,9 @@
         var unfinishcount = 0
         var result = null
         var subtodo = this.item.subTodos
-        // console.log(subtodo.length)
-        if (subtodo.length === 0) {
+        // console.log('---' + subtodo + '----') // 这一行输出两次
+        if (subtodo === undefined) {
+          // console.log('果然相等')
           return ''
         } else {
           for (var i = 0; i < subtodo.length; i++) {
@@ -64,8 +65,12 @@
               unfinishcount++
             }
           }
-          result = finishcount + '条已完成, ' + unfinishcount + '条未完成'
-          return result
+          if (finishcount === 0 && unfinishcount === 0) {
+            return ''
+          } else {
+            result = finishcount + '条已完成, ' + unfinishcount + '条未完成'
+            return result
+          }
         }
       }
     },
