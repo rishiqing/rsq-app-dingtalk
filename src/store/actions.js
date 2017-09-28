@@ -761,5 +761,27 @@ export default {
         }
       })
     }))
+  },
+  sendToConversation ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendToConversation({
+      urlParams,
+      data: p.data
+    })
+  },
+  sendAsyncCorpMessage ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendAsyncCorpMessage({
+      urlParams,
+      data: p.data
+    })
   }
 }

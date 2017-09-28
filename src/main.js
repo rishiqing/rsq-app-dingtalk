@@ -28,7 +28,6 @@ window.rsqadmg.exec('auth', {
       authUser: authUser
     }
 
-    // console.log('========' + JSON.stringify(store.state.loginUser))
     store.state.env.isAddNav = true
 
     /* eslint-disable no-new */

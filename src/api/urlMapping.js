@@ -2,6 +2,8 @@ export default {
   //  第三方集成authServer的接口
   'AUTH_TO_RSQID': 'idmap/userid2rsqid',
   'AUTH_TO_USERID': 'idmap/rsqid2userid',
+  'SEND_TO_CONV': 'msg/sendtoconversation',
+  'SEND_TO_CORP_CONV': 'msg/sendasynccorpmessage',
 
   'AVATAR_CDN': 'https://rishiqing-avatar.oss-cn-beijing.aliyuncs.com/',
   'SYS_AVATAR_CDN': 'https://rishiqing-images.oss-cn-beijing.aliyuncs.com/avatar/',

@@ -16,7 +16,8 @@ export default {
    */
   sys: {
     //  当前路由的路径
-    currentPath: ''
+    currentPath: '',
+    appId: window.rsqadmg.store.app.appid
   },
   /**
    * 当前登录的用户，基本结构如下：
