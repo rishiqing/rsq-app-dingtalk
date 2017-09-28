@@ -324,5 +324,4 @@ export default {
   TD_DESP_CREATED (state, p) {
     state.todo.currentTodo.pNote = p.desp.pNote
   }
-  /* --------------------------------- */
 }

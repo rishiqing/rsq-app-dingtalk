@@ -26,7 +26,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/sendConversation'
+      redirect: '/sche'
     },
     {
       path: '/sche',

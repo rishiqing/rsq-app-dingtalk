@@ -19,6 +19,17 @@ export default {
         })
     })
   },
+  getFileFromAli (props) {
+    return new Promise((resolve, reject) => {
+      Vue.http.post(mapping.GET_FILE_FROM_AlI, props)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
   /**
    * 获取指定日程中的任务
    * @returns {*}
