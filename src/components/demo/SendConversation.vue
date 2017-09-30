@@ -12,6 +12,12 @@
       <v-touch class="form-control" @tap="showCorpMessage">
         <input class="u-full-width" type="button" value="发送企业消息"/>
       </v-touch>
+      <v-touch class="form-control" @tap="showSendRemind(1)">
+        <input class="u-full-width" type="button" value="发送提醒（1分钟之后）"/>
+      </v-touch>
+      <v-touch class="form-control" @tap="showSendRemind(3)">
+        <input class="u-full-width" type="button" value="发送提醒（3分钟之后）"/>
+      </v-touch>
     </div>
   </div>
 </template>
@@ -158,6 +164,40 @@
                 alert('发送成功！')
               }
             })
+          }
+        })
+      },
+      showSendRemind (time) {
+        var data = {
+          todo_id: '12345',
+          mills_array: [new Date().getTime() + time * 60 * 1000],
+          remind_array: ['任务还有2分钟开始，请点击查看详情'],
+          userid_list: this.loginUser.authUser.userId,
+          msgtype: 'oa',
+          msgcontent: {
+            message_url: 'https://www.rishiqing.com',
+            head: {
+              text: '日事清',
+              bgcolor: 'FF55A8FD'
+            },
+            body: {
+              title: '任务提醒',
+              form: [
+                {key: '任务名称：', value: '产品设计'},
+                {key: '时间：', value: '17:55-18:00'},
+                {key: '当前时间：', value: new Date()}
+              ]
+            }
+          }
+        }
+        this.$store.dispatch('sendRemind', {
+          corpId: this.loginUser.authUser.corpId,
+          data: data
+        }).then(res => {
+          if (res.errcode !== 0) {
+            alert('发送失败：' + JSON.stringify(res))
+          } else {
+            alert('发送成功！')
           }
         })
       }

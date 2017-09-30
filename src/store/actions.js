@@ -785,5 +785,16 @@ export default {
       urlParams,
       data: p.data
     })
+  },
+  sendRemind ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendRemind({
+      urlParams,
+      data: p.data
+    })
   }
 }
