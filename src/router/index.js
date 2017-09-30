@@ -6,6 +6,7 @@ import coment from 'com/pub/coment'
 import Init from 'com/Init'
 import Upload from 'com/demo/Upload'
 import SendConversation from 'com/demo/SendConversation'
+import Scroll from 'com/demo/Scroll'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -26,7 +27,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/sendConversation'
+      redirect: '/scroll'
     },
     {
       path: '/sche',
@@ -147,6 +148,12 @@ const router = new Router({
       path: '/sendConversation',
       name: 'sendConversation',
       component: SendConversation
+    },
+    {
+      //  用来测试
+      path: '/scroll',
+      name: 'scroll',
+      component: Scroll
     }
   ]
 })

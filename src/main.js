@@ -27,6 +27,8 @@ window.rsqadmg.exec('auth', {
       rsqUser: rsqUser,
       authUser: authUser
     }
+    //  去掉iOS的回弹效果
+    window.rsqadmg.exec('disableBounce')
 
     store.state.env.isAddNav = true
 

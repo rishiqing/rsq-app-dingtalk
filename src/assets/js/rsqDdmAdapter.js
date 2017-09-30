@@ -505,6 +505,10 @@ rsqAdapterManager.register({
       }
     })
   },
+  disableBounce: function(){
+    //  去掉iOS的回弹效果
+    dd.ui.webViewBounce.disable();
+  },
   /**
    * 钉钉中发Ding
    * @param params

@@ -5,6 +5,7 @@
       'auth', 'sign',
       'init',
       'log',
+      'disableBounce',
       'setTitle', 'setOptionButtons', 'selectDeptMember', 'selectMember',
       'alert',
       'confirm',
