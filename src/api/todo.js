@@ -2,7 +2,6 @@ import { Promise } from 'es6-promise'
 import Vue from 'vue'
 import mapping from './urlMapping'
 import util from 'ut/jsUtil'
-
 export default {
   /**
    * 获取收纳箱中的任务
@@ -56,7 +55,9 @@ export default {
           resolve(res.json())
         }, err => {
           window.rsqadmg.log(JSON.stringify(err))
-          reject(err)
+          // console.log('没拿到数据') 留待测试
+          // console.log('上面是跳转')
+          reject(err.body)
         })
     })
   },
@@ -96,7 +97,6 @@ export default {
   },
   putSubTodoProps (props) {
     var path = util.replaceUrlParams(mapping.POST_SUBTODO_PROP, props)
-    console.log(path)
     return new Promise((resolve, reject) => {
       Vue.http.put(path, props)
         .then(res => {
@@ -121,6 +121,19 @@ export default {
   },
   deleteTodo (props) {
     var path = util.replaceUrlParams(mapping.DELETE_TODO, props)
+    return new Promise((resolve, reject) => {
+      Vue.http.delete(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  deleteCommentItem (props) {
+    var path = util.replaceUrlParams(mapping.DELETE_COMMENT_TODO, props)
+    console.log('删除评论路径是' + path)
     return new Promise((resolve, reject) => {
       Vue.http.delete(path)
         .then(res => {

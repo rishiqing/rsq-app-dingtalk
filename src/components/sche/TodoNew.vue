@@ -39,7 +39,9 @@
                   <p class="">DING</p>
                   <p class="message">通过钉钉消息,短信或者电话提醒参与人</p>
                 </div>
-                <input class="mui-switch" type="checkbox">
+                <v-touch @tap="toggleAllDay">
+                  <input class="mui-switch" type="checkbox">
+                </v-touch>
               </div>
             </div>
           </div>
@@ -55,6 +57,7 @@
   .secondGroup{
     margin-top:10px;
     border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
   }
   p{
     font-family: PingFangSC-Regular;
@@ -150,7 +153,7 @@
     },
     computed: {
       currentTodo () {
-        return this.$store.state.todo.currentTodo
+        return this.$store.state.todo.currentTodo // 这里面有东西吗
       },
       currentDate () {
         return this.$store.state.schedule.strCurrentDate
@@ -158,6 +161,15 @@
       isInbox () {
         //  所有日期属性均为date，判断当前新建的item为收纳箱任务
         return (!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)
+      },
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
+      userId () {
+        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+      },
+      corpId () {
+        return this.loginUser.authUser.corpId ? this.loginUser.authUser.corpId : 'dingtalkupload'
       }
     },
     components: {
@@ -173,10 +185,7 @@
     methods: {
       empty () {},
       toggleAllDay (e) {
-        console.log('进来了之前 this.isChecked是' + this.editItem.isChecked)
-        // this.isAllDay = !this.isAllDay
         this.editItem.isChecked = !this.editItem.isChecked
-        console.log('之后 this.isChecked是' + this.editItem.isChecked)
       },
       /**
        * 初始化数据，从state的currentTodo复制到local的editItem
@@ -225,31 +234,61 @@
         }
 
         this.saveTodoState()
+        var that = this
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: 'schedule'})
-            .then(() => {
+            .then((item) => {
               window.rsqadmg.exec('hideLoader')
               window.rsqadmg.execute('toast', {message: '创建成功'})
-              if (this.isChecked) {
-                window.dd.biz.ding.post({
-                  users: ['manager5864'], // 用户列表，工号
-                  corpId: 'dinga5892228289863f535c2f4657eb6378f', // 企业id
-                  type: 2, // 钉类型 1：image  2：link
-                  alertType: 2,
-                  alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': '2017-09-29 08:00'},
-                  attachment: {
-                    title: '',
-                    url: '',
-                    image: '',
-                    text: ''
-                  },
-                  text: '', // 消息
-                  onSuccess: function () {},
-                  onFail: function () {}
+              var IDArrays = item.receiverIds.split(',')
+              var empIDArray = []
+              this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
+                .then(idMap => {
+                  for (var i = 0; i < IDArrays.length; i++) {
+                    empIDArray.push(idMap[IDArrays[i]].emplId)
+                  }
+                  if (this.editItem.isChecked) {
+                    var time = new Date()
+                    var year = time.getFullYear()
+                    var month = time.getMonth() + 1
+                    if (month < 10) {
+                      month = '0' + month
+                    }
+                    var day = time.getDate()
+                    if (day < 10) {
+                      day = '0' + day
+                    }
+                    var hour = time.getHours()
+                    if (hour < 10) {
+                      hour = '0' + hour
+                    }
+                    var minute = time.getMinutes()
+                    if (minute < 10) {
+                      minute = '0' + minute
+                    }
+                    var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
+                    window.dd.biz.ding.post({
+                      users: empIDArray, // 用户列表，工号
+                      corpId: this.corpId, // 企业id
+                      type: 2, // 钉类型 1：image  2：link
+                      alertType: 2,
+                      alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
+                      attachment: {
+                        title: '',
+                        url: '',
+                        image: '',
+                        text: ''
+                      },
+                      text: item.pTitle, // 消息
+                      onSuccess: function () {
+                        that.$router.replace(window.history.back())
+                      },
+                      onFail: function () {}
+                    })
+                  } else {
+                    this.$router.replace(window.history.back())
+                  }
                 })
-              } else {
-                this.$router.replace(window.history.back())
-              }
             })
       }
     },

@@ -4,21 +4,64 @@
       <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
       <ul class="ul-list">
         <li v-for="task in taskList" class="taskList">
-          <img class="preview-img" :src="task.img.src" alt="task.img.name"/>
-          <span class="word">{{task.img.name.substr(0,30)}}</span>
-          <v-touch @tap="deleteTask(task)">
-            <i class="icon2-error deleteComent"></i>
-          </v-touch>
-          <!--<p v-if="t.finished">上传完成</p>-->
-          <!--<p v-else>上传进度:{{t.progress}}%</p>-->
+          <template v-if="new RegExp('image/').test(task.file.type)">
+            <img class="preview-img" :src="task.img.src" alt="task.img.name"/>
+            <span class="word">{{task.img.name.substr(0,30)}}</span>
+            <v-touch @tap="deleteTask(task)">
+              <i class="icon2-error deleteComent"></i>
+            </v-touch>
+          </template>
+          <template v-else>
+            <template v-if="task.file.type === 'application/pdf'">
+              <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png" alt="task.img.name"/>
+              <span class="word">{{task.img.name.substr(0,30)}}</span>
+              <v-touch @tap="deleteTask(task)">
+                <i class="icon2-error deleteComent"></i>
+              </v-touch>
+            </template>
+            <template v-else>
+              <template v-if="task.file.type === 'application/zip'">
+                <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png" alt="task.img.name"/>
+                <span class="word">{{task.img.name.substr(0,30)}}</span>
+                <v-touch @tap="deleteTask(task)">
+                  <i class="icon2-error deleteComent"></i>
+                </v-touch>
+              </template>
+              <template v-else>
+                <template v-if="task.file.type === 'application/ppt'">
+                  <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png" alt="task.img.name"/>
+                  <span class="word">{{task.img.name.substr(0,30)}}</span>
+                  <v-touch @tap="deleteTask(task)">
+                    <i class="icon2-error deleteComent"></i>
+                  </v-touch>
+                </template>
+                <template v-else>
+                  <template v-if="task.file.type === 'application/docx'">
+                    <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png" alt="task.img.name"/>
+                    <span class="word">{{task.img.name.substr(0,30)}}</span>
+                    <v-touch @tap="deleteTask(task)">
+                      <i class="icon2-error deleteComent"></i>
+                    </v-touch>
+                  </template>
+                  <template v-else>
+                      <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png" alt="task.img.name"/>
+                      <span class="word">{{task.img.name.substr(0,30)}}</span>
+                      <v-touch @tap="deleteTask(task)">
+                        <i class="icon2-error deleteComent"></i>
+                      </v-touch>
+                  </template>
+                </template>
+              </template>
+            </template>
+          </template>
         </li>
       </ul>
-      <!--<v-touch class="form-control" @tap="uploadToOSS">-->
-        <!--<input class="u-full-width" type="button" value="上传文件"/>-->
-      <!--</v-touch>-->
   </div>
 </template>
 <style lang="scss">
+  .file-doc{
+    background-img: image-set(url(https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png) 1x,url(https://res-front-cdn.timetask.cn/beta/images/word_2x.ccc798e3a0.png) 2x);
+  }
   .deleteComent{
     color: #DEDEDE;
     font-size: 18px;
@@ -39,17 +82,17 @@
     color: #3D3D3D;
     margin-left: 10px;
   }
-  .taskList {
+  .taskList{
     position: relative;
     display:flex;
     align-items: center;
     border-top: 1px solid #E0E0E0;
+    border-bottom: none;
     background-color: white;
     padding-left: 13px;
     height: 1.2rem;
   }
   .taskList:last-child{
-    border-top: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;
   }
   .init-form {
@@ -64,7 +107,8 @@
     position:absolute;
     top: 4.3rem;
     font-size:30px;
-    width: 30px;
+    left: -3.5rem;
+    width:5.648rem;
     /*Opacity settings for all browsers*/
     opacity: 0;
     -moz-opacity: 0;
@@ -124,6 +168,8 @@
         for (var i = 0; i < files.length; i++) {
           var file = files[i]
           var url = URL.createObjectURL(file)
+//          console.log('file是' + JSON.stringify(file))
+//          console.log('url是' + url)
           this.taskList.push({
             finished: false,
             progress: 0,

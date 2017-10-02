@@ -15,8 +15,8 @@
       </v-touch>
     </div>
     <div class="margin-block"></div>
-    <ul class="sublist" v-if="">
-      <li v-for="item in items" v-if="items">
+    <ul class="sublist" :class="{hasborder:!haschild}">
+      <li v-for="item in items" v-if="items" class="sublistItem">
         <v-touch class="">
            <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
                     ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
@@ -43,10 +43,13 @@
     },
     computed: {
       items () {
-        return this.$store.state.todo.currentTodo.subTodos
+        return this.$store.state.todo.currentTodo.subTodos// 其实有没有必要写这个呢，因为currenttodo是动态变化的，只要重新和后台打交道setcurrent以后自然可以变化
       },
       todoid () {
         return this.$store.state.todo.currentTodo.id
+      },
+      haschild () {
+        return this.$store.state.todo.currentTodo.subTodos.length === 0
       }
     },
     components: {
@@ -131,7 +134,6 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
-    /*line-height: 22px;*/
   }
   .select-sub{
     position: absolute;
@@ -141,16 +143,26 @@
   }
   .sublist{
     background-color: white;
+    padding-left: 0.6rem;
+  }
+  .hasborder{
+    border-top:1px solid #E0E0E0;
+    border-bottom:1px solid #E0E0E0;
   }
   .list-below{
     border:none;
-    /*line-height: 1.026rem;*/
-    margin-left: 0.6rem;
+    margin-left: 0.9rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    width: 90%;
-    /*border: 1px solid red;*/
+    width: 85%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap
   }
+  .sublistItem:last-child{
+    border-bottom: none;
+  }
+  .sublistItem{}
   .topSubtodo{
     position:fixed;
     background-color: white;
@@ -168,6 +180,7 @@
     color:white;
     border: 1px solid #55A8FD;
     border-radius: 50%;
+    left:0.55rem;
   }
   .title-todo input{
     border: none;
@@ -198,13 +211,9 @@
   ul{
     position: relative;
     margin-top:0.666rem;
-    /*border-bottom:1px solid #DADADA ;*/
-    /*border-top:1px solid #DADADA ;*/
     padding-left: 5%;
   }
   li{
-    /*padding-left:5%;*/
-    height: 1.226rem;
     line-height: 1.226rem;
     position: relative;
     border-bottom:1px solid #DADADA ;
@@ -213,8 +222,6 @@
     color: #222222;
   }
   li:first-child{
-    /*padding-left: 0;*/
-    border-top: 1px solid #DADADA;
   }
   .isdisplay-sub{
     display: block;
@@ -245,20 +252,21 @@
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.45rem;
+    top:0.55rem;
     right:0.35rem;
-    z-index:2
+    z-index:2;
+
   }
   .write{
-    height:1.226rem;
     background: #FFFFFF;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
     top: 0.266rem;
-    padding-left:0.3rem;
+    padding-left:0.6rem;
     position: fixed;
     z-index: 1;
     line-height: 1.226rem;
+    padding-right: 2.432rem;
   }
   .margin-block {
     height: 50px;

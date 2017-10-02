@@ -13,7 +13,7 @@
       'hideLoader',
       'actionsheet',
       'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
-      'notify'
+      'notify','sendConv'
     ];
   function register(adapter){
     extend(mgrObj, adapter);

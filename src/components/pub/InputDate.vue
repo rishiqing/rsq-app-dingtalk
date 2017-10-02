@@ -24,7 +24,7 @@
     font-size: 21px;
     position: absolute;
     top:0.38rem;
-    right: 0.3rem;
+    right: 0.2rem;
   }
   .now {
     position: absolute;

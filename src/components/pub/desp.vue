@@ -89,7 +89,6 @@
     border-top: 1px solid #E0E0E0;
     margin-top: 10px;
     padding: 3%;
-    width: 100%;
     line-height: 0.7rem;
     font-family: STHeitiSC-Light;
     font-size: 17px;

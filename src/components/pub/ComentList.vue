@@ -17,7 +17,7 @@
       :key="item.id"
       v-if="item.type===0"
     ></r-todo-coment>
-    <div  v-if="this.comentCount===0" class="noComent">
+    <div  v-if="comentCount" class="noComent">
       <img src="../../assets/img/nocoment.png" alt="">
       <p class="noComentContent">暂无评论</p>
     </div>
@@ -54,7 +54,6 @@
     color:#55A8FD;
     font-size:15px ;
     background-color: white;
-    width: 100%;
     border-bottom: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;
   }
@@ -65,8 +64,7 @@
   export default {
     data () {
       return {
-        more: false,
-        comentCount: 0
+        more: false
       }
     },
     name: 'ComentList',
@@ -79,21 +77,22 @@
       'r-record-coment': comentRecord
     },
     computed: {
+      comentCount () {
+        if (this.items === undefined) {
+          return
+        } else {
+          for (var i = 0; i < this.items.length; i++) {
+            if (this.items[i].type === 0) {
+              return false
+            }
+          }
+          return true
+        }
+      }
     },
     methods: {
       changeState () {
         this.more = !this.more
-      }
-    },
-    mounted () {
-      if (this.items === undefined) {
-        return
-      } else {
-        for (var i = 0; i < this.items.length; i++) {
-          if (this.items[i].type === 0) {
-            this.comentCount++
-          }
-        }
       }
     }
   }

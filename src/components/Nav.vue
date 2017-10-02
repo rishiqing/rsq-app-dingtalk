@@ -111,9 +111,6 @@
     justify-content: center;
   }
   .mid{
-    /*display: inline-block;*/
-    /*text-align: center;*/
-    /*padding-top: 3px;*/
     display: flex;
     align-items: center;
     justify-content: center;

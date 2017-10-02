@@ -208,6 +208,7 @@ export default {
         return api.todo.postNewTodo(newItem)
           .then(item => {
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -556,17 +557,24 @@ export default {
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
   deleteTodo ({commit, state, dispatch}, p) {
-    console.log('action-deleteTodo进来了')
+    // console.log('action-deleteTodo进来了')
     var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
       .then(() => {
-        console.log('api-delete已完成')
+        // console.log('api-delete已完成')
         commit('TD_TODO_DELETED', {item: todo})
         //  清除缓存数据
         var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
         dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
+      })
+  },
+  deleteCommentItem ({commit, state, dispatch}, p) {
+    var item = p.item
+    return api.todo.deleteCommentItem(item)
+      .then(() => {
+        commit('TD_COMMENT_DELETE', {item: item})
       })
   },
   deleteSubTodo ({commit, state, dispatch}, p) {

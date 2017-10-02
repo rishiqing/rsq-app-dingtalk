@@ -11,7 +11,7 @@
   .subtodo{
     background-color: white;
     position: relative;
-    height:1.3rem;
+    /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
     border-bottom:1px solid #E3E3E3;
@@ -21,7 +21,7 @@
     font-size: 21px;
     position: absolute;
     top:0.38rem;
-    right: 0.3rem;
+    right: 0.2rem;
   }
   .now {
     position: absolute;

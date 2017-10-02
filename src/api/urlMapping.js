@@ -16,6 +16,7 @@ export default {
   'POST_NEW_TODO': 'task/v2/todo',
   'PUT_TODO_PROP': 'task/v2/todo/:id',
   'DELETE_TODO': 'task/v2/todo/:id',
+  'DELETE_COMMENT_TODO': 'task/v2/todoComment/:id',
   'DELETE_SUB_TODO': 'task/v2/subTodo/:id',
   'GET_TODO': 'task/v2/todo/:id',
   'GET_SCHEDULE_TODOS': 'task/mainTodoList/getPeriodTodos',

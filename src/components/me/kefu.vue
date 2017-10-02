@@ -12,12 +12,24 @@
   </div>
 </template>
 <script>
+  export default {
+    data () {
+      return {
+        titleName: '在线客服'
+      }
+    },
+    mounted () {
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+//      this.$store.dispatch('setNav', {isShow: true})
+    }
+  }
 </script>
 <style scoped>
   .xian{
     margin: 0 auto;
     width: 206px;
-    border-bottom:2px solid #999999;
+    border-bottom:1px solid #E0E0E0;
     margin-top:8px;
     margin-bottom: 12px;
   }

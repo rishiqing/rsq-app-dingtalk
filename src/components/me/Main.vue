@@ -78,7 +78,6 @@
   }
   .tupian{
     display: inline-block;
-    margin:0 auto;
     border-radius: 100px;
     width: 65px;
     height: 65px;
@@ -87,9 +86,7 @@
   .bottom{
     padding-left: 0.43rem;
     background: #FFFFFF;
-    /*height: 5.069rem;*/
     border-bottom: 1px solid #E3E3E3;
-    width: 100%;
   }
   .bottom>div{
     line-height:1.267rem ;
@@ -106,7 +103,6 @@
     font-size: 17px;
     color: #222222;
     line-height: 22px;
-    font-weight: bold;
   }
   .tel{
     position: absolute;
@@ -114,14 +110,14 @@
     font-size: 15px;
     color: #55A8FD;
     letter-spacing: -0.36px;
-    right: 0.7rem;
+    right: 0.4rem;
     top: 0.19rem;
   }
   .arow{
     font-size: 20px;
     position: absolute;
     color:#999999;
-    right: 0.5rem;
+    right: 0.2rem;
     top: 0.49rem;
   }
 </style>

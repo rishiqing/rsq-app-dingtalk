@@ -247,6 +247,15 @@ export default {
       items.splice(index, 1)
     }
   },
+  TD_COMMENT_DELETE (state, p) {
+    let items = state.todo.currentTodo.comments
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+        break
+      }
+    }
+  },
   TD_SUBTODO_DELETE  (state, p) {
     let items = state.todo.currentTodo.subTodos
     for (var i = 0; i < items.length; i++) {

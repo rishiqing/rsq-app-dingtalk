@@ -29,9 +29,10 @@
     display: flex;
     align-items: center;
     border-bottom:1px solid #E0E0E0 ;
+    position: relative;
   }
   .real-width{
-    width:88%;
+    /*width:88%;*/
     text-overflow: ellipsis;
     overflow: hidden;
     white-space:nowrap
@@ -40,7 +41,7 @@
     color:#b9b9bc;
     font-size: 17px;
     position: absolute;
-    top:0.55rem;
+    top:0.46rem;
     left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;
@@ -48,14 +49,14 @@
   .isdisplay-title{
     display: block;
     position:absolute;
-    top:0.45rem;
+    top:0.35rem;
     left: 0.44rem;
     font-size: 15px;
     color:#55A8FD;
   }
   .for-hide-title{
     position: absolute;
-    top:0.52rem;
+    top:0.42rem;
     left: 0.75rem;
     display: block;
     width: 2px;
@@ -74,7 +75,8 @@
     /*height:1.458rem;*/
     background: #FFFFFF;
     border-top:1px solid #E0E0E0 ;
-    line-height:1.458rem ;
+    line-height:1.3rem ;
+    font-size: 19px;
   }
   .padding-left-input-{
     padding-left:0.3rem;
