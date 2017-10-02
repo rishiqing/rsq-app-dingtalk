@@ -221,7 +221,7 @@ export default {
    * 转换方法，将前台的type/selectDateArray的格式转换为后台的dates/itemStartDate/itemEndDate格式
    */
   frontend2backend ({dateType, dateResult, repeatType, sep}) {
-    if (dateResult.length === 0) {
+    if (dateType === 'none' || dateResult.length === 0) {
       dateType = ''
     }
     sep = sep || '/'

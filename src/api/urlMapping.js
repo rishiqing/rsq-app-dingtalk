@@ -4,6 +4,7 @@ export default {
   'AUTH_TO_USERID': 'idmap/rsqid2userid',
   'SEND_TO_CONV': 'msg/sendtoconversation',
   'SEND_TO_CORP_CONV': 'msg/sendasynccorpmessage',
+  'SEND_REMIND': 'msg/remind',
 
   'AVATAR_CDN': 'https://rishiqing-avatar.oss-cn-beijing.aliyuncs.com/',
   'SYS_AVATAR_CDN': 'https://rishiqing-images.oss-cn-beijing.aliyuncs.com/avatar/',

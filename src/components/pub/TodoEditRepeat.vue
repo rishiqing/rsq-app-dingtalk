@@ -40,9 +40,6 @@
       color: #55A8FD;
       font-weight: bold;
     }
-    .top-ul {
-      margin-top:1.938rem;
-    }
     ul{
       position: relative;
       border-bottom: 0.5px solid #E3E3E3;
@@ -120,14 +117,14 @@
       return {
         selected: null,
         //  不重复
-        noRepeat: {cid: -1, type: 'noRepeat', repeatType: '', strTime: []},
+        noRepeat: {cid: -1, type: 'noRepeat', repeatType: 'none', strTime: []},
         //  系统重复列表
         repeatList: [
-          {cid: 0, type: 'everyDay', repeatType: 'everyDay', strTime: [now], showText: false},
-          {cid: 1, type: 'everyWeek', repeatType: 'everyWeek', strTime: [now], showText: true},
-          {cid: 2, type: 'everyMonth', repeatType: 'everyMonth', strTime: [now], showText: true},
-          {cid: 3, type: 'everyYear', repeatType: 'everyYear', strTime: [now], showText: true},
-          {cid: 4, type: 'weekday', repeatType: 'everyWeek', strTime: this.getWeekdayNum(now), showText: false}
+          {cid: 1, type: 'everyDay', repeatType: 'everyDay', strTime: [now], showText: false},
+          {cid: 2, type: 'everyWeek', repeatType: 'everyWeek', strTime: [now], showText: true},
+          {cid: 3, type: 'everyMonth', repeatType: 'everyMonth', strTime: [now], showText: true},
+          {cid: 4, type: 'everyYear', repeatType: 'everyYear', strTime: [now], showText: true},
+          {cid: 5, type: 'weekday', repeatType: 'everyWeek', strTime: this.getWeekdayNum(now), showText: false}
         ],
         //  用户自定义的重复列表
         userRepeat: {cid: 99, type: 'userRepeat'},
@@ -153,17 +150,34 @@
       repeatText () {
         var text = dateUtil.repeatDayText(this.uRepeatType, this.uRepeatStrTimeArray)
         return text ? text + '重复' : ''
+      },
+      comRepeat () {
+        var type = null
+        var baseArray = []
+        if (this.selected) {
+          type = this.selected.repeatType
+          baseArray = this.selected.strTime
+        } else {
+          type = this.uRepeatType
+          baseArray = this.uRepeatStrTimeArray
+        }
+        return {
+          selected: this.selected,
+          type,
+          baseArray
+        }
       }
     },
     methods: {
       initData () {
         //  有修改缓存读修改缓存，否则从原数据读
         var t = this.todoDate
-        var hasCache = t._uRepeatType !== undefined
-        if (hasCache) {
+        if (t._selected || t._uRepeatType) {
           this.uRepeatType = t._uRepeatType
           this.uRepeatStrTimeArray = t._uRepeatStrTimeArray
-          this.selected = this.findSelect(t._selected.cid)
+          if (t._selected) {
+            this.selected = this.findSelect(t._selected.cid)
+          }
         } else {
           this.uRepeatType = t.repeatType
           var base = t.repeatBaseTime
@@ -217,15 +231,26 @@
         })
       },
       getResult () {
-        return {
+        var params = {
           _selected: this.selected,
           _uRepeatType: this.uRepeatType,
           _uRepeatStrTimeArray: this.uRepeatStrTimeArray
         }
+        //  表示选择的是“不重复”
+        if (this.comRepeat.type === 'none') {
+          params['repeatType'] = null
+          params['repeatBaseTime'] = null
+        } else {
+          params['repeatType'] = this.comRepeat.type
+          params['repeatBaseTime'] = this.comRepeat.baseArray.join(',')
+          var strDate = dateUtil.dateNum2Text(this.baseNumTime, '/')
+          params['startDate'] = strDate
+          params['endDate'] = strDate
+        }
+        return params
       },
       saveTodoRepeatState () {
         var res = this.getResult()
-        console.log('=@_@===res===#_#=' + JSON.stringify(res))
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: res})
       }
     },

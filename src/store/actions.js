@@ -361,7 +361,6 @@ export default {
    * @returns {*}
    */
   updateTodoDate ({commit, state, dispatch}, p) {
-    // console.log('updateTodoDate进来了')
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
     //  如果日期均为空，则容器为收纳箱
@@ -374,7 +373,6 @@ export default {
     if (todo.id) {
       //  如果id存在，则ajax更新
       editItem['id'] = todo.id
-      console.log('=@_@===editItem===#_#=' + JSON.stringify(editItem))
       promise = api.todo.putTodoProps(editItem)
         .then(resTodo => {
           //  处理缓存数据
@@ -387,9 +385,8 @@ export default {
           if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
             commit('TD_TODO_DELETED', {item: todo})
           }
-          dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
-          dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
-
+          dispatch('invalidateDateItems', {dateStruct: targetDateStruct, exceptDateNum: curArrayIndex})
+          dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
           commit('TD_TODO_UPDATED', {todo: resTodo})
         })
     } else {
@@ -418,7 +415,6 @@ export default {
     switch (dateStruct.dateType) {
       case 'single':
       case 'discrete':
-        // console.log('----------')
         dateStruct.dateResult.forEach(timeNum => {
           if (timeNum !== exceptDateNum) {
             commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(timeNum, '-')})
@@ -790,6 +786,17 @@ export default {
       appid: appId
     }
     return api.appAuth.sendAsyncCorpMessage({
+      urlParams,
+      data: p.data
+    })
+  },
+  sendRemind ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendRemind({
       urlParams,
       data: p.data
     })

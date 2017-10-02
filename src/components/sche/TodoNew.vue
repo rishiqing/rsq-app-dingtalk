@@ -148,7 +148,8 @@
           isChecked: false,
           isAllDay: true
         },
-        joinUserRsqIds: []
+        joinUserRsqIds: [],
+        isShowNote: false
       }
     },
     computed: {
@@ -157,6 +158,9 @@
       },
       currentDate () {
         return this.$store.state.schedule.strCurrentDate
+      },
+      numCurrentDate () {
+        return dateUtil.dateText2Num(this.currentDate)
       },
       isInbox () {
         //  所有日期属性均为date，判断当前新建的item为收纳箱任务
@@ -192,8 +196,9 @@
        */
       initData () {
         jsUtil.extendObject(this.editItem, this.currentTodo)
-        this.editItem.startDate = this.editItem.startDate || this.currentDate
-        this.editItem.endDate = this.editItem.endDate || this.currentDate
+        var strDate = dateUtil.dateNum2Text(this.numCurrentDate, '/')
+        this.editItem.startDate = this.editItem.startDate || strDate
+        this.editItem.endDate = this.editItem.endDate || strDate
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
