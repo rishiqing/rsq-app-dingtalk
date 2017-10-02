@@ -21,32 +21,32 @@ Vue.use(VueTouch)
 
 Vue.config.productionTip = false
 
-window.rsqadmg.exec('auth', {
-  success: function (rsqUser, authUser) {
-    store.state.loginUser = {
-      rsqUser: rsqUser,
-      authUser: authUser
-    }
-    //  去掉iOS的回弹效果
-    window.rsqadmg.exec('disableBounce')
-
-    store.state.env.isAddNav = true
-
-    /* eslint-disable no-new */
-    new Vue({
-      el: '#app',
-      router,
-      store,
-      template: '<App/>',
-      components: { App }
-    })
-  }
-})
-
-// new Vue({
-//   el: '#app',
-//   router,
-//   store,
-//   template: '<App/>',
-//   components: { App }
+// window.rsqadmg.exec('auth', {
+//   success: function (rsqUser, authUser) {
+//     store.state.loginUser = {
+//       rsqUser: rsqUser,
+//       authUser: authUser
+//     }
+//     //  去掉iOS的回弹效果
+//     window.rsqadmg.exec('disableBounce')
+//
+//     store.state.env.isAddNav = true
+//
+//     /* eslint-disable no-new */
+//     new Vue({
+//       el: '#app',
+//       router,
+//       store,
+//       template: '<App/>',
+//       components: { App }
+//     })
+//   }
 // })
+
+new Vue({
+  el: '#app',
+  router,
+  store,
+  template: '<App/>',
+  components: { App }
+})
