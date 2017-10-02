@@ -27,7 +27,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/scroll'
+      redirect: '/sche'
     },
     {
       path: '/sche',

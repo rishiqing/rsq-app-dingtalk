@@ -22,7 +22,7 @@
         <v-touch tag="i" class="icon icon-keyboard_arrow_right u-pull-right"
                  @tap="tapChangeMonth($event, 1)"></v-touch>
         <div class="dp-title-text">
-          {{currentDate.getFullYear()}}年{{currentDate.getMonth() + 1}}月
+          {{focusDate.getFullYear()}}年{{focusDate.getMonth() + 1}}月
         </div>
       </div>
       <div class="dp-content">
@@ -58,6 +58,7 @@
       <span class="list-value u-pull-right light-color">{{repeatText}}</span>
     </v-touch>
     <v-touch tag="p" class="date-clear" @tap="tapEmpty">清除日期放入收纳箱</v-touch>
+    <v-touch tag="p" class="date-clear" @tap="showState">显示state</v-touch>
   </div>
 </template>
 <style lang="scss">
@@ -179,11 +180,13 @@
   /**
    * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
    * {
+   * //  一级（date）页面的数据
    *   dates: null,
    *   startDate: null,
    *   endDate: null,
    *   repeatType: null,
    *   repeatBaseTime: null,
+   *   //  二级（repeat）页面需要使用的数据以"_"作为前缀，二级页面
    *   _selected: null,  //  TodoEditRepeat页面中用户的选择
    *   _uRepeatType: null,  //  TodoEditRepeat页面中用户自定义的重复规则
    *   _uRepeatStrTimeArray: null  //TodoEditRepeat页面中用户自定义的重复规则的baseTime数组
@@ -195,10 +198,11 @@
         compId: 'SYSTEM_SELECT_DATE',
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
-        currentDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
+        focusDate: new Date(),  //  表示当前显示的月份，决定了当前显示哪个月份的日历
         days: [],
-        dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复
-        selectNumDate: null  //  表示当前选中的日期
+        //  重复功能相关
+        dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复，none表示dateType被清空
+        selectNumDate: null  //  表示重复当前选中的日期
       }
     },
     computed: {
@@ -211,78 +215,41 @@
       currentTodoDate () {
         return this.$store.state.pub.currentTodoDate
       },
-      comRepeat () {
-        var type = null
-        var baseArray = []
-        var c = this.currentTodoDate
-        if (c._selected) {
-          type = c._selected.repeatType
-          baseArray = c._selected.strTime
-        } else {
-          type = c._uRepeatType
-          baseArray = c._uRepeatStrTimeArray
-        }
-        return {
-          selected: c._selected,
-          type,
-          baseArray
-        }
-      },
       repeatText () {
         var text
-        console.log('=@_@===this.comRepeat===#_#=' + JSON.stringify(this.comRepeat))
-        if (this.comRepeat.selected) {
-          if (this.comRepeat.type) {
-            text = dateUtil.repeatDayText(this.comRepeat.type, this.comRepeat.baseArray)
-          }
-        } else {
-          var c = this.currentTodoDate
-          if (c.repeatType) {
-            var arr = this.currentTodoDate.repeatBaseTime.split(',')
-            text = dateUtil.repeatDayText(c.repeatType, arr)
-          }
+        var c = this.currentTodoDate
+        if (this.dateType === 'repeat' && c.repeatType) {
+          var arr = this.currentTodoDate.repeatBaseTime.split(',')
+          text = dateUtil.repeatDayText(c.repeatType, arr)
         }
         return (text || '不') + '重复'
       }
     },
     methods: {
+      showState () {},
       initData () {
-        var c = this.currentTodo
-
-        var obj
-        //  如果currentTodoDate不存在，那么从currentTodo获取currentTodoDate的信息
-        if (this.currentTodoDate === null) {
-          obj = {
-            startDate: c.startDate || null,
-            endDate: c.endDate || null,
-            dates: c.dates || null,
-            repeatType: c.repeatType || null,
-            repeatBaseTime: c.repeatBaseTime || null
-          }
-          this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
-        }
-        //  如果comRepeat.type存在，说明是新增的repeat
-        if (this.comRepeat.type) {
-          this.dateType = 'repeat'
-          this.selectNumDate = []
-        } else {
-          var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
-          this.dateType = dateStruct.dateType || 'single'
-          this.selectNumDate = dateStruct.dateResult || []
-        }
+        var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
+        this.dateType = dateStruct.dateType || 'single'
+        this.selectNumDate = dateStruct.dateResult || []
+        this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
         this.resetType()
       },
-      clearRepeat () {
-
+      clearType () {
+        this.dateType = 'none'
       },
       tapEmpty (e) {
         this.selectNumDate = []
+        this.clearType()
         this.clearSelected()
         if (e) e.preventDefault()
       },
       tapBackToday (e) {
+        if (this.dateType === 'repeat') {
+          this.dateType = 'single'
+          this.tapBackToday(e)
+        }
         var nowDate = dateUtil.clearTime(new Date())
-        this.currentDate = nowDate
+        this.focusDate = nowDate
         this.dateType = 'single'
         this.selectNumDate = [nowDate.getTime()]
         this.resetMonth()
@@ -300,9 +267,8 @@
       tapDay (e, day) {
         //  如果是在repeat状态下点击日期，那么清除重复，进入single状态
         if (this.dateType === 'repeat') {
-          this.clearRepeat()
           this.dateType = 'single'
-          this.resetType()
+          this.tapDay(e, day)
         }
         this.toggleSelect(day)
         e.preventDefault()
@@ -312,9 +278,9 @@
       },
       resetMonth (offset) {
         if (offset) {
-          this.currentDate = dateUtil.firstDayOfMonth(this.currentDate, offset)
+          this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, offset)
         }
-        this.days = dateUtil.getMonthDays(this.currentDate)
+        this.days = dateUtil.getMonthDays(this.focusDate)
         this.selectDays()
       },
       toggleSelect (day) {
@@ -423,9 +389,15 @@
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
         var resObj = dateUtil.frontend2backend({dateType: this.dateType, dateResult: sorted, sep: '/'})
+        //  如果不是repeat类型，那么清除
+        if (this.dateType !== 'repeat') {
+          resObj['repeatType'] = null
+          resObj['repeatBaseTime'] = null
+          resObj['_selected'] = null
+          resObj['_uRepeatType'] = null
+          resObj['_uRepeatStrTimeArray'] = null
+        }
 
-        resObj.repeatType = this.comRepeat.type
-        resObj.repeatBaseTime = this.comRepeat.baseArray.join(',')
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       },
       getSubmitResult () {
@@ -440,7 +412,6 @@
         return o
       },
       submitTodo (next) {
-        console.log('=@_@===this.isModified()===#_#=' + JSON.stringify(this.isModified()))
         if (this.isModified()) {
           if (this.isEdit) {
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
@@ -479,6 +450,7 @@
       if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
         return next()
       }
+//      next()
       this.submitTodo(next)
     }
   }
