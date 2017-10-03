@@ -199,8 +199,6 @@
         var deltaY = ev.deltaY
         var absY = Math.abs(deltaY)
         //  超出范围不再移动
-        console.log('=@_@===absY===#_#=' + JSON.stringify(absY))
-        console.log('=@_@===this.calHeight===#_#=' + JSON.stringify(this.calHeight))
         if (absY > this.calHeight - this.paneLineHeight) {
           return
         }

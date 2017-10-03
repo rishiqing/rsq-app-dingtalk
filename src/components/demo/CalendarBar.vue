@@ -56,8 +56,8 @@
     width: 100%;
     height: 100%;
     top: 0;display: inline-block;
-    /*background: #F00;*/
-    background: #458CDA;
+    background: #F00;
+    /*background: #458CDA;*/
   }
   .cal-table {
     border-collapse: collapse;
