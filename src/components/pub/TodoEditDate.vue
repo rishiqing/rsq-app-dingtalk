@@ -375,8 +375,6 @@
         //  TODO  判断是否更新过
         var oldObj = this.currentTodo
         var newObj = this.currentTodoDate
-        console.log('=@_@===oldObj===#_#=' + JSON.stringify(oldObj))
-        console.log('=@_@===newObj===#_#=' + JSON.stringify(newObj))
         return newObj.startDate !== oldObj.startDate ||
           newObj.endDate !== oldObj.endDate ||
           newObj.dates !== oldObj.dates ||

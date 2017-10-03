@@ -242,9 +242,11 @@
         var that = this
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: 'schedule'})
-            .then((item) => {
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '创建成功'})
+          .then((item) => {
+            window.rsqadmg.exec('hideLoader')
+            window.rsqadmg.execute('toast', {message: '创建成功'})
+
+            if (this.editItem.isChecked) {
               var IDArrays = item.receiverIds.split(',')
               var empIDArray = []
               this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
@@ -252,49 +254,48 @@
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-                  if (this.editItem.isChecked) {
-                    var time = new Date()
-                    var year = time.getFullYear()
-                    var month = time.getMonth() + 1
-                    if (month < 10) {
-                      month = '0' + month
-                    }
-                    var day = time.getDate()
-                    if (day < 10) {
-                      day = '0' + day
-                    }
-                    var hour = time.getHours()
-                    if (hour < 10) {
-                      hour = '0' + hour
-                    }
-                    var minute = time.getMinutes()
-                    if (minute < 10) {
-                      minute = '0' + minute
-                    }
-                    var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
-                    window.dd.biz.ding.post({
-                      users: empIDArray, // 用户列表，工号
-                      corpId: this.corpId, // 企业id
-                      type: 2, // 钉类型 1：image  2：link
-                      alertType: 2,
-                      alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
-                      attachment: {
-                        title: '',
-                        url: '',
-                        image: '',
-                        text: ''
-                      },
-                      text: item.pTitle, // 消息
-                      onSuccess: function () {
-                        that.$router.replace(window.history.back())
-                      },
-                      onFail: function () {}
-                    })
-                  } else {
-                    this.$router.replace(window.history.back())
+                  var time = new Date()
+                  var year = time.getFullYear()
+                  var month = time.getMonth() + 1
+                  if (month < 10) {
+                    month = '0' + month
                   }
+                  var day = time.getDate()
+                  if (day < 10) {
+                    day = '0' + day
+                  }
+                  var hour = time.getHours()
+                  if (hour < 10) {
+                    hour = '0' + hour
+                  }
+                  var minute = time.getMinutes()
+                  if (minute < 10) {
+                    minute = '0' + minute
+                  }
+                  var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
+                  window.dd.biz.ding.post({
+                    users: empIDArray, // 用户列表，工号
+                    corpId: this.corpId, // 企业id
+                    type: 2, // 钉类型 1：image  2：link
+                    alertType: 2,
+                    alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
+                    attachment: {
+                      title: '',
+                      url: '',
+                      image: '',
+                      text: ''
+                    },
+                    text: item.pTitle, // 消息
+                    onSuccess: function () {
+                      that.$router.replace(window.history.back())
+                    },
+                    onFail: function () {}
+                  })
                 })
-            })
+            } else {
+              this.$router.replace(window.history.back())
+            }
+          })
       }
     },
     created () {
