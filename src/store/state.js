@@ -3,6 +3,7 @@ export default {
    * 环境变量
    */
   env: {
+    version: {name: 'rsq-app-version', value: window.rsqConfig.version},
     //  是否在页面上添加nav元素，只有当页面添加了nav元素，且isShowNav为true的时候才会显示nav
     isAddNav: false,
     isShowNav: false

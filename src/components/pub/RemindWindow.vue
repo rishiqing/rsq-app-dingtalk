@@ -121,24 +121,13 @@
     },
     methods: {
       SwitchToexplain () {
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
         this.$router.push('/pub/explain')
       },
       SwitchTosche () {
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
         this.$router.replace('/sche')
       }
-    },
-    created () {
-      window.rsqadmg.exec('checkVersion', {
-        success (p) {
-          var localVersion = Number(p.v)
-          var currentVersion = Number(window.rsqConfig.version)
-          if (localVersion < currentVersion) {
-            window.rsqadmg.exec('upgradeVersion', {v: currentVersion})
-          } else {
-            this.$router.replace('/sche')
-          }
-        }
-      })
     }
   }
 </script>

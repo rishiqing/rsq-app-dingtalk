@@ -520,34 +520,42 @@ rsqAdapterManager.register({
    */
   sendConv: function(prams) {},
   /**
-   * 检查版本
+   * 从localStorage中获取值
+   * @param params
    */
-  checkVersion: function(params) {
+  getItem: function(params) {
     //  检查是否存在version信息，version信息以整数为准，初始值为1
     dd.util.domainStorage.getItem({
-      name:'rsq-dingtalk-app-version' , // 存储信息的key值
+      name: params.name , // 存储信息的key值
       onSuccess : function(info) {
-        var v = 1
-        if (info.value) {
-          v = Number(info.value)
-        }
-        rsqChk(params.success, [{v}]);
+        rsqChk(params.success, [info]);
       },
       onFail : function(err) {
         alert(JSON.stringify(err));
       }
     });
   },
-  upgradeVersion (params) {
+  setItem: function(params) {
     dd.util.domainStorage.setItem({
-      name: 'rsq-dingtalk-app-version' , // 存储信息的key值
-      value: params.v, // 存储信息的Value值
+      name: params.name, // 存储信息的key值
+      value: params.value, // 存储信息的Value值
       onSuccess : function(info) {
-        alert(JSON.stringify(info));
+        rsqChk(params.success, [info]);
       },
       onFail : function(err) {
         alert(JSON.stringify(err));
       }
     });
-  }
+  },
+  removeItem: function(params) {
+    dd.util.domainStorage.removeItem({
+      name: params.name, // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
 })

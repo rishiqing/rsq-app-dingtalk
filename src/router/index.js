@@ -31,13 +31,29 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/pub/RemindWindow'
+      redirect: '/sche'
     },
     {
       path: '/sche',
       name: 'sche',
       component: Sche,
-      meta: {requireAuth: true}
+      meta: {requireAuth: true},
+      beforeEnter: (to, from, next) => {
+        // window.rsqadmg.exec('removeItem', store.state.env.version)
+        window.rsqadmg.exec('getItem', {
+          name: store.state.env.version.name,
+          success (p) {
+            var localVersion = Number(p.value)
+            var currentVersion = Number(window.rsqConfig.version)
+            if (isNaN(localVersion) || localVersion < currentVersion) {
+              //  跳转到引导页
+              next('/pub/RemindWindow')
+            } else {
+              next()
+            }
+          }
+        })
+      }
     },
     {
       path: '/pub/noPermission',

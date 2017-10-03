@@ -313,6 +313,8 @@
       }
       window.rsqadmg.execute('setOptionButtons', btnParams)
     },
-    mounted () {}
+    mounted () {
+      this.joinUserRsqIds = [this.$store.state.loginUser.rsqUser.id]
+    }
   }
 </script>
