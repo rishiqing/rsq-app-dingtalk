@@ -7,6 +7,7 @@ import Init from 'com/Init'
 import Upload from 'com/demo/Upload'
 import SendConversation from 'com/demo/SendConversation'
 import Scroll from 'com/demo/Scroll'
+import CalendarDemo from 'com/demo/CalendarDemo'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -186,6 +187,12 @@ const router = new Router({
       path: '/scroll',
       name: 'scroll',
       component: Scroll
+    },
+    {
+      //  用来测试
+      path: '/calendar',
+      name: 'calendar',
+      component: CalendarDemo
     }
   ]
 })
