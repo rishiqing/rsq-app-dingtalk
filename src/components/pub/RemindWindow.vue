@@ -121,9 +121,11 @@
     },
     methods: {
       SwitchToexplain () {
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
         this.$router.push('/pub/explain')
       },
       SwitchTosche () {
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
         this.$router.replace('/sche')
       }
     }

@@ -14,7 +14,8 @@
       'hideLoader',
       'actionsheet',
       'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
-      'notify','sendConv'
+      'notify','sendConv', 'getItem', 'setItem', 'deleteItem',
+      'checkVersion', 'upgradeVersion'
     ];
   function register(adapter){
     extend(mgrObj, adapter);

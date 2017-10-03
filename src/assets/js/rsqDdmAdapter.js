@@ -518,5 +518,44 @@ rsqAdapterManager.register({
    * 发送到聊天
    * @param prams
    */
-  sendConv: function(prams) {}
+  sendConv: function(prams) {},
+  /**
+   * 从localStorage中获取值
+   * @param params
+   */
+  getItem: function(params) {
+    //  检查是否存在version信息，version信息以整数为准，初始值为1
+    dd.util.domainStorage.getItem({
+      name: params.name , // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  setItem: function(params) {
+    dd.util.domainStorage.setItem({
+      name: params.name, // 存储信息的key值
+      value: params.value, // 存储信息的Value值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  removeItem: function(params) {
+    dd.util.domainStorage.removeItem({
+      name: params.name, // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
 })
