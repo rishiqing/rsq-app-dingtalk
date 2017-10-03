@@ -94,98 +94,92 @@ rsqAdapterManager.register({
     );
   },
   sign: function(params){
-    // var currentUrl = window.location.href.split('#')[0];
-    // var pa = rsqadmg.store.app;
-    // console.log(rsqConfig.authServer + 'get_js_config')
-    // rsqAdapterManager.ajax.get(rsqConfig.authServer + 'get_js_config', {
-    //   url: currentUrl,
-    //   corpid: pa.corpid,
-    //   appid: pa.appid
-    // }, function(resSign){
-    //   var resJson = JSON.parse(resSign);
-    //   rsqChk(params.success, [resJson]);
-    // });
-
-    //  for test
-    rsqChk(params.success, [{}]);
+    var currentUrl = window.location.href.split('#')[0];
+    var pa = rsqadmg.store.app;
+    console.log(rsqConfig.authServer + 'get_js_config')
+    rsqAdapterManager.ajax.get(rsqConfig.authServer + 'get_js_config', {
+      url: currentUrl,
+      corpid: pa.corpid,
+      appid: pa.appid
+    }, function(resSign){
+      var resJson = JSON.parse(resSign);
+      rsqChk(params.success, [resJson]);
+    });
   },
   init: function(params){
-    //  for test
-    rsqChk(params.success, [{rsqUsername: 'www123@qq.com', rsqPassword: '123456'}]);
+    dd.config({
+      "agentId": params.agentId,
+      "corpId": rsqadmg.store.app.corpid,
+      "timeStamp": params.timeStamp,
+      "nonceStr": params.nonceStr,
+      "signature": params.signature,
+      jsApiList: [
+        'runtime.info',
+        'biz.chat.pickConversation',
+        'biz.customContact.choose',
+        'biz.customContact.multipleChoose',
+        'biz.chat.open',
+        'biz.util.open',
+        'biz.user.get',
+        'biz.contact.choose',
+        'biz.telephone.call',
+        'biz.ding.create',
+        'biz.ding.post']
+    });
+    dd.ready(function(res){
 
-    // dd.config({
-    //   "agentId": params.agentId,
-    //   "corpId": rsqadmg.store.app.corpid,
-    //   "timeStamp": params.timeStamp,
-    //   "nonceStr": params.nonceStr,
-    //   "signature": params.signature,
-    //   jsApiList: [
-    //     'runtime.info',
-    //     'biz.chat.pickConversation',
-    //     'biz.customContact.choose',
-    //     'biz.customContact.multipleChoose',
-    //     'biz.chat.open',
-    //     'biz.util.open',
-    //     'biz.user.get',
-    //     'biz.contact.choose',
-    //     'biz.telephone.call',
-    //     'biz.ding.create',
-    //     'biz.ding.post']
-    // });
-    // dd.ready(function(res){
-    //
-    //   var appdata = rsqadmg.store.app;
-    //   var cookieName = appdata.appid + '-' + appdata.corpid + '-userId';
-    //
-    //   //  执行删除cookie，后续在app中删除cookie
-    //   // rsqadmg.exec('deleteUserCache', {
-    //   //   name: cookieName
-    //   // });
-    //
-    //   var userCookie = getCookie(cookieName);
-    //
-    //   //  从cookie中获取
-    //   if(userCookie){
-    //     //  直接从authServer获取到用户数据
-    //     rsqAdapterManager.ajax.get(rsqConfig.authServer + 'staff/userId', {
-    //       corpid: appdata.corpid, appid: appdata.appid, userid: userCookie
-    //     }, function(result){
-    //       var resJson = JSON.parse(result);
-    //       if(resJson.errcode && resJson.errcode != '0'){
-    //         rsqChk(params.error, [resJson]);
-    //       }else{
-    //         rsqChk(params.success, [resJson.user]);
-    //       }
-    //     });
-    //   }else{
-    //     //  如果cookie中不存在用户信息，则调用authCode请求
-    //     dd.runtime.permission.requestAuthCode({
-    //       corpId: appdata.corpid, //企业id
-    //       onSuccess: function (info) {
-    //         var url = rsqConfig.authServer + 'staff/authCode';
-    //         rsqAdapterManager.ajax.get(url, {
-    //           appid: appdata.appid,
-    //           corpid: appdata.corpid,
-    //           code: info.code
-    //         }, function(resSign){
-    //           var authResult = JSON.parse(resSign);
-    //           if(authResult.errcode && authResult.errcode != '0'){
-    //             rsqChk(params.error, [authResult]);
-    //           }else{
-    //             setCookie(cookieName, authResult.user.userId);
-    //             rsqChk(params.success, [authResult.user]);
-    //           }
-    //         });
-    //       },
-    //       onFail: function (err) {
-    //         alert('requestAuthCode fail: ' + JSON.stringify(err));
-    //       }
-    //     });
-    //   }
-    // });
-    // dd.error(function(err){
-    //   alert('dd error: ' + JSON.stringify(err));
-    // });
+      var appdata = rsqadmg.store.app;
+      var cookieName = appdata.appid + '-' + appdata.corpid + '-userId';
+
+      //  执行删除cookie，后续在app中删除cookie
+      // rsqadmg.exec('deleteUserCache', {
+      //   name: cookieName
+      // });
+
+      var userCookie = getCookie(cookieName);
+
+      //  从cookie中获取
+      if(userCookie){
+        //  直接从authServer获取到用户数据
+        rsqAdapterManager.ajax.get(rsqConfig.authServer + 'staff/userId', {
+          corpid: appdata.corpid, appid: appdata.appid, userid: userCookie
+        }, function(result){
+          var resJson = JSON.parse(result);
+          if(resJson.errcode && resJson.errcode != '0'){
+            rsqChk(params.error, [resJson]);
+          }else{
+            rsqChk(params.success, [resJson.user]);
+          }
+        });
+      }else{
+        //  如果cookie中不存在用户信息，则调用authCode请求
+        dd.runtime.permission.requestAuthCode({
+          corpId: appdata.corpid, //企业id
+          onSuccess: function (info) {
+            var url = rsqConfig.authServer + 'staff/authCode';
+            rsqAdapterManager.ajax.get(url, {
+              appid: appdata.appid,
+              corpid: appdata.corpid,
+              code: info.code
+            }, function(resSign){
+              var authResult = JSON.parse(resSign);
+              if(authResult.errcode && authResult.errcode != '0'){
+                rsqChk(params.error, [authResult]);
+              }else{
+                setCookie(cookieName, authResult.user.userId);
+                rsqChk(params.success, [authResult.user]);
+              }
+            });
+          },
+          onFail: function (err) {
+            alert('requestAuthCode fail: ' + JSON.stringify(err));
+          }
+        });
+      }
+    });
+    dd.error(function(err){
+      alert('dd error: ' + JSON.stringify(err));
+    });
   },
   deleteUserCache: function(params){
     deleteCookie(params.name);
