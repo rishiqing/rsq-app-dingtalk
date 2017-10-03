@@ -513,5 +513,10 @@ rsqAdapterManager.register({
    * 钉钉中发Ding
    * @param params
    */
-  notify: function(params) {}
+  notify: function(params) {},
+  /**
+   * 发送到聊天
+   * @param prams
+   */
+  sendConv: function(prams) {}
 })

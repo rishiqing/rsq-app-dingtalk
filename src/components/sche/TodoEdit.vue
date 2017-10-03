@@ -20,7 +20,6 @@
             </div>
           </v-touch>
           <div class="itm--edit-todo ">
-            <!--<slot name="slotContainer"></slot>-->
             <r-input-date
               :item="editItem"
               :sep="'/'"
@@ -41,13 +40,6 @@
             <r-input-sub-todo
               :item="currentTodo"
             ></r-input-sub-todo>
-            <!--<div class="ding">-->
-              <!--<div class="bottom">-->
-                <!--<p class="">DING</p>-->
-                <!--<p class="message">通过钉钉消息,短信或者电话提醒参与人</p>-->
-              <!--</div>-->
-              <!--<input class="mui-switch" type="checkbox">-->
-            <!--</div>-->
             <r-comment-list
               :items="currentTodo.comments"
               ></r-comment-list>
@@ -69,11 +61,13 @@
     color: #A3A3A3;
     letter-spacing: 0;
   }
+  .content{
+    background-color: white;
+  }
   .desp{
     border-bottom: 1px solid #E0E0E0;
     margin-bottom: 10px;
     padding-left: 3%;
-    width: 100%;
     line-height: 1.1rem;
     font-family: STHeitiSC-Light;
     font-size: 14px;
@@ -87,7 +81,7 @@
     width:6.8rem;
   }
   .bottom{
-    height: 1.1rem;
+    height: 1.333rem;
     display: flex;
     align-items: center;
     background-color: white;
@@ -96,12 +90,14 @@
     justify-content: center;
     width:100%;
     border-top:1px solid #DADADA ;
+    background-color: #FDFDFF ;
   }
   .bot{
     padding-left: 2%;
     width:9.2rem;
-    height:0.933rem ;
+    height:0.945rem ;
     border:1px solid #E0E0E0 ;
+    border-radius: 4px;
   }
   .send>input{
     width: 300px;
@@ -201,6 +197,9 @@
       isInbox () {
         return this.currentTodo.pContainer === 'inbox'
       },
+      dynamicId () {
+        return this.$route.params.todoId
+      },
 //      joinUsers () {
 //        var todo = this.$store.state.todo.currentTodo
 //        var todo = this.editItem
@@ -219,6 +218,31 @@
         } else {
           return []
         }
+      },
+      loginUser () {
+        return this.$store.getters.loginUser || {}
+      },
+      userId () {
+        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+      },
+      corpId () {
+        return this.loginUser.authUser.corpId ? this.loginUser.authUser.corpId : 'dingtalkupload'
+      },
+      dates () {
+        var dates = this.$store.state.todo.currentTodo.dates
+        var datesArray = dates.split(',')
+        var newArray = []
+        for (var i = 0; i < datesArray.length; i++) {
+          var monthOfday = datesArray.substr(4, 5) + '月' + datesArray.substr(6, 7) + '日 '
+          newArray.push(monthOfday)
+        }
+        return newArray
+      },
+      fileCount () {
+      },
+      time () {
+        var dates = this.$store.state.todo.currentTodo.clock
+        return dates.startTime + '-' + dates.endTime
       }
     },
     components: {
@@ -236,7 +260,7 @@
     methods: {
       initData () {
         window.rsqadmg.exec('showLoader')
-        return this.$store.dispatch('getTodo')
+        return this.$store.dispatch('getTodo', {todo: {id: this.dynamicId}})
             .then(item => {
               util.extendObject(this.editItem, item)
               var noteElement = document.getElementById('noteEditable')
@@ -249,6 +273,13 @@
               })
               window.rsqadmg.exec('hideLoader')
             })
+          .catch(err => {
+            if (err.code === 400320) {
+              this.$router.push('/pub/CheckFailure')
+            } else if (err.code === 400318) {
+              this.$router.push('/pub/noPermission')
+            }
+          })
       },
       SwitchToComent () {
         this.$router.push('/pub/coment')
@@ -357,15 +388,86 @@
               that.deleteCurrentTodo()
             } else if (result.buttonIndex === 0) {
               window.dd.biz.chat.pickConversation({
-                corpId: 'dinga5892228289863f535c2f4657eb6378f', // 企业id
+                corpId: that.corpId, // 企业id
                 isConfirm: 'true', // 是否弹出确认窗口，默认为true
-                onSuccess: function () {
-                  console.log('执行成功')
+                onSuccess: function (res) {
+                  that.$store.dispatch('sendToConversation', {
+                    corpId: that.corpId, // that.loginUser.authUser.corpId,
+                    data: {
+                      sender: that.userId,
+                      cid: res.cid,
+                      msgtype: 'oa',
+                      oa: {
+                        message_url: window.location.href,
+                        head: {
+                          text: '日事清',
+                          bgcolor: 'FF55A8FD'
+                        },
+                        body: {
+                          title: that.editItem.pTitle,
+                          form: [
+                            {key: '日期：', value: '2017102'},
+                            {key: '时间：', value: '20:17'}
+//                            {key: '重要性：', value: '重要且紧急'}
+                          ],
+                          content: that.editItem.pNote,
+                          author: that.loginUser.authUser.name// 这里要向后台要值
+                        }
+                      }
+                    }
+                  })
                 },
                 onFail: function () {
                   console.log('执行失败')
                 }
               })
+            } else if (result.buttonIndex === 1) {
+              var time = new Date()
+              var year = time.getFullYear()
+              var month = time.getMonth() + 1
+              if (month < 10) {
+                month = '0' + month
+              }
+              var day = time.getDate()
+              if (day < 10) {
+                day = '0' + day
+              }
+              var hour = time.getHours()
+              if (hour < 10) {
+                hour = '0' + hour
+              }
+              var minute = time.getMinutes()
+              if (minute < 10) {
+                minute = '0' + minute
+              }
+              var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
+              var IDArrays = that.currentTodo.receiverIds === null ? [that.currentTodo.pUserId] : that.currentTodo.receiverIds.split(',')
+              var empIDArray = []
+              that.$store.dispatch('fetchUseridFromRsqid', {corpId: that.corpId, idArray: IDArrays})
+                .then(idMap => {
+                  for (var i = 0; i < IDArrays.length; i++) {
+                    empIDArray.push(idMap[IDArrays[i]].emplId)
+                  }
+                  window.dd.biz.ding.post({
+                    users: empIDArray, // 用户列表，工号
+                    corpId: that.corpId, // 企业id
+                    type: 2, // 钉类型 1：image  2：link
+                    alertType: 2,
+                    alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
+                    attachment: {
+                      title: '',
+                      url: '',
+                      image: '',
+                      text: ''
+                    },
+                    text: that.currentTodo.pTitle, // 消息
+                    onSuccess: function () {
+                      that.$router.replace(window.history.back())
+                    },
+                    onFail: function () {
+                    }
+                  })
+                })
             }
           },
           onFail: function (err) {
@@ -376,14 +478,6 @@
     },
     created () {
       this.initData()
-//      console.log('mount进来了')
-//      var noteElement = document.getElementById('noteEditable')
-//      console.log('noteElement是' + noteElement)
-//      console.log('this.pNote是' + this.pNote)// 这个拿到是undeifined
-//      if (this.pNote !== null) { // 这个为什么是空的
-//        console.log('进来替换')
-//        noteElement.innerHTML = this.pNote
-//      }
       var that = this
       window.rsqadmg.execute('setTitle', {title: '详情'})
       window.rsqadmg.execute('setOptionButtons', {
@@ -400,14 +494,6 @@
       })
     },
     mounted () {
-      // 下面为什么是undefined
-//      var noteElement = document.getElementById('noteEditable')
-//      console.log('noteElement是' + noteElement)
-//      console.log(this.pNote)
-//      if (this.pNote !== null) {
-//        console.log('进行复制')
-//        noteElement.innerHTML = this.pNote
-//      }
     }
   }
 </script>

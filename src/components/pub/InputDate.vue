@@ -24,7 +24,7 @@
     font-size: 21px;
     position: absolute;
     top:0.38rem;
-    right: 0.3rem;
+    right: 0.2rem;
   }
   .now {
     position: absolute;
@@ -80,6 +80,16 @@
     },
     methods: {
       gotoDate () {
+        //  将需要用到的属性设置到currentTodoDate中
+        var c = this.item
+        var obj = {
+          startDate: c.startDate || null,
+          endDate: c.endDate || null,
+          dates: c.dates || null,
+          repeatType: c.repeatType || null,
+          repeatBaseTime: c.repeatBaseTime || null
+        }
+        this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')
 //        // 显示之前先将所有获得焦点的元素失去焦点
 //        if (document.activeElement) {

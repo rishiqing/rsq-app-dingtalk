@@ -46,7 +46,6 @@
             .then(function () {
               this.$store.dispatch('saveTodoAction', {editItem: {status: status}})
                 .then(() => {
-                  console.log('saveTodoAction走完了')
                 })
             })
       }

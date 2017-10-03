@@ -1,5 +1,6 @@
 <template>
-  <li class="coment" >
+  <v-touch @tap="TriggerAndriod(item)">
+    <li class="coment" >
       <div class="left">
         <avatar :src="loginUser.authUser.avatar"
                 :username="loginUser.authUser.name"
@@ -14,12 +15,43 @@
         <div class="bottom">
           <div class="comentContent">{{item.commentContent}}</div>
           <div class="comentItempicture" v-for="fileId in item.fileList">
-            <img class="comentPhoto" :src="fileId.realPath"  alt="">
-            <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+            <template v-if="(fileId.contentType === 'png')||(fileId.contentType === 'jpeg')||(fileId.contentType === 'jpg')">
+              <img class="comentPhoto" :src="fileId.realPath"  alt="">
+              <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+            </template>
+            <template v-else>
+              <template v-if="fileId.contentType == 'pdf'">
+                <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
+                <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+              </template>
+              <template v-else>
+                <template v-if="fileId.contentType === 'zip'">
+                  <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
+                  <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+                </template>
+                <template v-else>
+                  <template v-if="fileId.contentType === 'docx'">
+                    <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
+                    <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+                  </template>
+                  <template v-else>
+                    <template v-if="fileId.contentType === 'ppt'">
+                      <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
+                      <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+                    </template>
+                    <template v-else>
+                      <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
+                      <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+                    </template>
+                  </template>
+                </template>
+              </template>
+            </template>
           </div>
         </div>
       </div>
-  </li>
+    </li>
+  </v-touch>
 </template>
 <style scoped>
   .coment{
@@ -103,6 +135,9 @@
     computed: {
       loginUser () {
         return this.$store.state.loginUser
+      },
+      comments () {
+        return this.$store.state.todo.currentTodo.comments
       }
     },
     props: {
@@ -113,6 +148,24 @@
       'avatar': Avatar
     },
     methods: {
+      deleteComment (item) {
+        var that = this
+        window.rsqadmg.exec('confirm', {
+          message: '确定要删除此评论？',
+          success () {
+            window.rsqadmg.execute('showLoader', {text: '删除中...'})
+            that.$store.dispatch('deleteCommentItem', {item: item})
+              .then(() => {
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '删除成功'})
+               // that.$router.replace(window.history.back())
+              })
+          }
+        })
+      },
+      TriggerAndriod (item) {
+        this.deleteComment(item)
+      }
     }
   }
 </script>

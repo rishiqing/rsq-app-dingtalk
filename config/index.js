@@ -25,13 +25,13 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清api的后台地址
-    apiServer: 'http://dd.rsq.etoutiao.cn/task',
+    apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth',
+    authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
-    // 阿里云OSS STS认证的server地址
-    stsServer: ''
+    // 阿里云OSS STS认证的server地址，临时！！！！注意更新
+    stsServer: 'http://182.92.222.40:8300/sts/'
   },
   dev: {
     env: require('./dev.env'),
@@ -54,6 +54,7 @@ module.exports = {
     // 日事清前端文件地址
     frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/',
     // 阿里云OSS STS认证的server地址
-    stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
+    // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
+    stsServer: 'http://182.92.222.40:8300/sts/'
   }
 }

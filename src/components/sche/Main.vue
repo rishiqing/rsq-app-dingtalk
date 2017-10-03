@@ -8,15 +8,12 @@
     <r-todo-item-list
       :items="items"
       :is-checkable="true"
-      v-if="items != null && items.length > 0"
+      v-if="items != null"
     ></r-todo-item-list>
     <div class="itm-lst" v-else>
       <img src="../../assets/img/todo-empty.png" alt="">
       <p class="shouye">还没有日程，赶快去创建吧</p>
     </div>
-    <!--<div class="float-action-button" v-touch:tap="showCreate">-->
-    <!--<i class="icon icon-add"></i>-->
-    <!--</div>-->
   </div>
 </template>
 <script>
@@ -38,7 +35,21 @@
         return strDate ? moment(strDate, 'YYYY-MM-DD').toDate() : new Date()
       },
       items () {
-        return this.$store.state.schedule.items
+        var items = this.$store.state.schedule.items
+        var newItems = []
+        if (items !== null) {
+          for (var i = 0; i < items.length; i++) {
+            if (!items[i].pIsDone) {
+              newItems.push(items[i])
+            }
+          }
+          for (i = 0; i < items.length; i++) {
+            if (items[i].pIsDone) {
+              newItems.push(items[i])
+            }
+          }
+          return newItems
+        }
       },
       dateString () {
         return this.currentDate.getFullYear() + '年' + (this.currentDate.getMonth() + 1) + '月'
@@ -50,12 +61,10 @@
     },
     methods: {
       fetchItems (strDate) {
-//        console.log('fetchItems进来了')
         this.$store.dispatch('fetchScheduleItems', { strDate })
       },
       fetchDatesHasTodo (p) {
         //  给日期加角标，值计算p.daysArray中的中间一个数组
-//        console.log('fetchDatesHasTodo进来了')
         var weekArray = p.daysArray[1]
 
         this.$store.dispatch('getDatesHasTodo', {

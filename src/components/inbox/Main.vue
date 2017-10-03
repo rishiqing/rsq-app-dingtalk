@@ -1,15 +1,18 @@
 <template>
   <div class="">
-      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
-      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" class="create"/>
-      </v-touch>
+    <div class="topest"></div>
+    <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
+    <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
+      <input value="创建" class="create"/>
+    </v-touch>
     <div class="margin-block"></div>
-    <r-todo-item-list
-      :items="items"
-      :is-checkable="false"
-      v-if="items != null && items.length > 0"
-    ></r-todo-item-list>
+    <div class="InboxItem">
+      <r-todo-item-list
+        :items="items"
+        :is-checkable="false"
+        v-if="items != null && items.length > 0"
+      ></r-todo-item-list>
+    </div>
   </div>
 </template>
 <script>
@@ -57,7 +60,15 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
-    line-height: 22px;
+    line-height:normal;
+    height: 1.612rem;
+  }
+  .topest{
+    background-color: #F8F8F8;
+    height: 10px;
+    z-index: 2;
+    position: fixed;
+    width: 100%;
   }
   .create{
     display: block;
@@ -70,23 +81,29 @@
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:1rem;
+    top:0.75rem;
     right:0.35rem;
-    z-index: 2;
+    z-index: 3;
   }
   .write{
-    height:1.226rem;
-    position: fixed;
-    background: #FFFFFF;
+    line-height: 1.612rem;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
-    margin-top: 0.574rem;
+    position: fixed;
+    top:10px;
+    background: #FFFFFF;
     padding-left:0.3rem;
+    padding-right: 2.432rem;
     margin-bottom: 0.224rem;
-    z-index: 1;
+    z-index: 2;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .margin-block {
-    height: 83px;
+    height: 1.9rem;
+    z-index: 1;
   }
   .input-panel {
     position: fixed;

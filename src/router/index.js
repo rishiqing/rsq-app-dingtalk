@@ -21,7 +21,11 @@ import TodoEditRepeat from 'com/pub/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 import desp from 'com/pub/desp'
+import Explain from 'com/pub/Explain'
 import CreateSubTodo from 'com/pub/CreateSubTodo'
+import RemindWindow from 'com/pub/RemindWindow'
+import NoPermission from 'com/pub/NoPermission'
+import CheckFailure from 'com/pub/CheckFailure'
 Vue.use(Router)
 
 const router = new Router({
@@ -37,17 +41,35 @@ const router = new Router({
       meta: {requireAuth: true}
     },
     {
+      path: '/pub/noPermission',
+      name: 'noPermission',
+      component: NoPermission,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/CheckFailure',
+      name: 'CheckFailure',
+      component: CheckFailure,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/RemindWindow',
+      name: 'RemindWindow',
+      component: RemindWindow,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/explain',
+      name: 'explain',
+      component: Explain,
+      meta: {requireAuth: true}
+    },
+    {
       path: '/pub/coment',
       name: 'coment',
       component: coment,
       meta: {requireAuth: true}
     },
-    // {
-    //   path: '/demo',
-    //   name: 'demo',
-    //   component: Demo,
-    //   meta: {requireAuth: true}
-    // },
     {
       path: '/pub/desp',
       name: 'desp',
@@ -126,12 +148,6 @@ const router = new Router({
       name: 'login',
       component: Login
     },
-    // {
-    //   //  用来测试
-    //   path: '/demo',
-    //   name: 'demo',
-    //   component: Demo
-    // },
     {
       //  用来测试
       path: '/init',
