@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-  import Calendar from 'com/sche/Calendar'
+  import Calendar from 'com/sche/CalendarV2'
   import TodoItemList from 'com/sche/TodoItemList'
   import moment from 'moment'
 

@@ -32,7 +32,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/calendar'
+      redirect: '/sche'
     },
     {
       path: '/sche',
