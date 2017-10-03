@@ -6,7 +6,7 @@
        :pan-options="{ direction: 'all', threshold: 10 }">
   <div class="cal-title z-index-3xs">
       <span>{{currentView.focusDate ? months[currentView.focusDate.getMonth()] : ''}}月</span>
-      <span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}-{{barPaneIndex}}</span>
+      <span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}</span>
       <!--<v-touch tag="span" class="cal-title-today"-->
             <!--@tap="backToToday"-->
             <!--v-show="!isToday">今</v-touch>-->
@@ -83,7 +83,7 @@
         direction: {2: 'h', 4: 'h', 8: 'v', 16: 'v'},  //  2和4表示横向移动，8和16表示纵向移动
         currentLock: null,  //  方向锁，防止在pan上下移动的同时发生左右移动
         transDirection: null,  //  当前正在进行中的transition的方向，v表示垂直方向，hBar表示bar的水平方向，hPane表示pane的水平方向
-        isShowBar: true,
+        isShowBar: false,
 
         translateY: 'translateY(0)',
         calHeight: 0,
@@ -152,39 +152,29 @@
         this.selectDate = date
         //  如果是在pane的状态下点击的，那么还每次点击需要reset bar
         if (this.isPane) {
-          this.barView.focusDate = date
-          this.resetBar()
+          this.resetView(this.barView, {focusDate: date})
         }
         this.$emit('click-cal-day', date)
       },
       backToToday () {
         var today = this.clearTime(new Date())
-        this.barView.focusDate = today
-        this.paneView.focusDate = today
-        this.resetBar()
-        this.resetPane()
+        this.resetAllViews({focusDate: today})
         this.triggerSelectDate(today)
       },
-      resetDays (focusDate) {
-        if (this.isBar) {
-          //  获取前一、当前、后一三周的数据
-          return [
-            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, -1)),
-            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 0)),
-            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 1))
-          ]
-        } else {
-          //  获取前一、当前、后一三月的数据
-          return [
-            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, -1)),
-            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 0)),
-            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 1))
-          ]
-        }
-
+      firstDayOfView (type, date, offset) {
+        return type === 'bar' ? dateUtil.firstDayOfWeek(date, offset) : dateUtil.firstDayOfMonth(date, offset)
       },
-      resetDates (focusDate) {
-
+      getViewDays (type, date) {
+        return type === 'bar' ? dateUtil.getWeekDays(date) : dateUtil.getMonthDays(date)
+      },
+      resetDays (type, focusDate) {
+        //  isBar时，获取前一、当前、后一三周的数据
+        //  isPane时，获取前一、当前、后一三月的数据
+        return [
+          this.getViewDays(type, this.firstDayOfView(type, focusDate, -1)),
+          this.getViewDays(type, this.firstDayOfView(type, focusDate, 0)),
+          this.getViewDays(type, this.firstDayOfView(type, focusDate, 1))
+        ]
       },
       clearTime (date) {
         return new Date(date.setHours(0, 0, 0, 0))
@@ -219,25 +209,29 @@
           case 2:
           case 4:
             var deltaX = ev.deltaX
-            //  超出范围不做相应
-            //  TODO 超出100%
             this.currentView.translateX = 'translateX(' + deltaX + 'px)'
             break
           case 8:
+            console.log('8888')
             //  处于pane状态只能上拉
             if (this.isPane) {
               if (absY > this.barPaneIndex * this.paneLineHeight) {
                 this.isShowBar = true
+              } else {
+                this.isShowBar = false
               }
               this.translateY = 'translateY(' + deltaY + 'px)'
             }
             break
           case 16:
+            console.log('6666')
             //  处于bar状态只能下拉
             if (this.isBar) {
               //  超出范围不再移动
               if (absY > (this.paneLine - this.barPaneIndex - 1) * this.paneLineHeight) {
                 this.isShowBar = false
+              } else {
+                this.isShowBar = true
               }
               this.translateY = 'translateY(' + (this.barView.height - this.paneView.height + deltaY) + 'px)'
             }
@@ -264,6 +258,8 @@
         var delta = ev.deltaX
         var direction
 
+        //  如果滑动距离超过20像素，那么就跳转到下一个页面
+        //  否则返回原来位置
         if (Math.abs(delta) > 20 && ev.type === 'panend') {
           direction = delta > 0 ? 1 : -1
           this.currentView.translateX = 'translateX(' + (direction * 100) + '%)'
@@ -271,11 +267,8 @@
           direction = 0
           this.currentView.translateX = 'translateX(0)'
         }
-        if (this.isBar) {
-          this.barView.focusDate = dateUtil.firstDayOfWeek(this.barView.focusDate, -direction)
-        } else {
-          this.paneView.focusDate = dateUtil.firstDayOfMonth(this.paneView.focusDate, -direction)
-        }
+        var v = this.currentView
+        v.focusDate = this.firstDayOfView(v.type, v.focusDate, -direction)
       },
       transY (ev) {
         var delta = ev.deltaY
@@ -286,6 +279,8 @@
           return
         }
 
+        //  如果滑动距离超过20像素，那么就跳转到另外一个view
+        //  否则，回到原view
         if (Math.abs(delta) > 20 && ev.type === 'panend') {
           var offset = 0
           if (this.isPane) {
@@ -301,48 +296,33 @@
         }
       },
       resetAllAndEmitEvent () {
-        this.resetBar()
-        this.resetPane()
-        if (this.isPane) {
-          this.$emit('after-cal-swipe', {daysArray: this.paneView.daysArray})
-        } else {
-          this.$emit('after-cal-swipe', {daysArray: this.barView.daysArray})
+        this.resetAllViews()
+        this.$emit('after-cal-swipe', {type: this.currentView.type, daysArray: this.currentView.daysArray})
+      },
+      resetView (view, params) {
+        this.transDirection = null
+        if (params && params.focusDate) {
+          view.focusDate = params.focusDate
         }
+        view.daysArray = this.resetDays(view.type, view.focusDate)
+        view.translateX = 'translateX(0)'
       },
-      resetBar () {
-        this.transDirection = null
-        this.barView.daysArray = this.resetDays(this.barView.focusDate)
-        this.barView.translateX = 'translateX(0)'
-      },
-      resetBarAndEmit () {
-        this.resetBar()
-        this.$emit('after-cal-swipe', {daysArray: this.barView.daysArray})
-      },
-      resetPane () {
-        //  TODO-----------------------
-        this.transDirection = null
-        this.paneView.daysArray = this.resetDates(this.paneView.focusDate)
-        this.paneView.translateX = 'translateX(0)'
-      },
-      resetPaneAndEmit () {
-        this.resetPane()
-        this.$emit('after-cal-swipe', {daysArray: this.paneView.daysArray})
+      resetAllViews (params) {
+        this.resetView(this.barView, params)
+        this.resetView(this.paneView, params)
       },
       resetViewType () {
         if (this.transDirection === 'v') {
-//          this.isShowBar = this.isBar
           this.transDirection = null
         }
       }
     },
     mounted () {
       //  初始化工作
-      this.barView.focusDate = this.defaultSelectDate
-      this.paneView.focusDate = this.defaultSelectDate
+      this.resetAllViews({focusDate: this.defaultSelectDate})
       this.currentView = this.paneView
+      this.isShowBar = false
       this.calHeight = this.currentView.height
-      this.resetBar()
-      this.resetPane()
       this.$emit('cal-ready', {type: this.currentView.type, daysArray: this.currentView.daysArray})
       this.triggerSelectDate(this.defaultSelectDate)
 
