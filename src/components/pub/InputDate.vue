@@ -75,7 +75,10 @@
         } else {
           result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
         }
-        return result
+        var time = new Date()
+        var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
+        console.log(result)
+        return newTime === result ? '今天' : result
       }
     },
     methods: {

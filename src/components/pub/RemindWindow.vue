@@ -52,14 +52,14 @@
     width: 7.29rem;
     height: 5.135rem;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     /*background-color: #3E86D6;*/
     background-image: linear-gradient(-90deg, #69ACEF 0%, #3E86D6 100%);
   }
   .window-top>img{
-    width: 4.108rem;
-    height: 4.783rem;
+    width: 3.67rem;
+    height: 3.81rem;
   }
   .window-middle{
     height: 3.918rem;

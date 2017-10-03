@@ -15,7 +15,7 @@
         <div class="bottom">
           <div class="comentContent">{{item.commentContent}}</div>
           <div class="comentItempicture" v-for="fileId in item.fileList">
-            <template v-if="(fileId.contentType === 'png')||(fileId.contentType === 'jpeg')||(fileId.contentType === 'jpg')">
+            <template v-if="(fileId.contentType === 'png||PNG')||(fileId.contentType === 'jpeg')||(fileId.contentType === 'jpg')">
               <img class="comentPhoto" :src="fileId.realPath"  alt="">
               <span class="fileName">{{fileId.name.substr(0,33)}}</span>
             </template>
@@ -136,6 +136,9 @@
       loginUser () {
         return this.$store.state.loginUser
       },
+      userId () {
+        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+      },
       comments () {
         return this.$store.state.todo.currentTodo.comments
       }
@@ -150,18 +153,20 @@
     methods: {
       deleteComment (item) {
         var that = this
-        window.rsqadmg.exec('confirm', {
-          message: '确定要删除此评论？',
-          success () {
-            window.rsqadmg.execute('showLoader', {text: '删除中...'})
-            that.$store.dispatch('deleteCommentItem', {item: item})
-              .then(() => {
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '删除成功'})
-               // that.$router.replace(window.history.back())
-              })
-          }
-        })
+        if (this.userId === item.authorId) {
+          window.rsqadmg.exec('confirm', {
+            message: '确定要删除此评论？',
+            success () {
+              window.rsqadmg.execute('showLoader', {text: '删除中...'})
+              that.$store.dispatch('deleteCommentItem', {item: item})
+                .then(() => {
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '删除成功'})
+                  // that.$router.replace(window.history.back())
+                })
+            }
+          })
+        }
       },
       TriggerAndriod (item) {
         this.deleteComment(item)

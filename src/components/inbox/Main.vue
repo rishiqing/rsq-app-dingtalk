@@ -75,18 +75,22 @@
     text-align: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
-    height: 0.666rem;
-    line-height: 0.76rem;
+    /*height: 0.666rem;*/
+    line-height: 0.66rem;
+    display: flex;
+    align-items: center;
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.75rem;
+    top:0.55rem;
     right:0.35rem;
     z-index: 3;
   }
   .write{
-    line-height: 1.612rem;
+    line-height: 0.612rem;
+    padding-bottom: 15px;
+    padding-top: 15px;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
     position: fixed;

@@ -57,7 +57,7 @@
       background: #FFFFFF;
     }
     .top-ul {
-      margin-top:1.938rem;
+      margin-top:0.266rem;
     }
     .sec{
       margin-top: 0.373rem;

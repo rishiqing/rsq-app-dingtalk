@@ -92,20 +92,20 @@
   .left{
     position: absolute;
     left: 2.053rem;
-    bottom:1px;
-    padding-bottom:5px;
-    height: 1.306rem;
+    bottom:0.108rem;
+    /*padding-bottom:5px;*/
+    /*height: 1.306rem;*/
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .right{
     text-align: center;
-    padding-bottom:5px;
+    /*padding-bottom:5px;*/
     position: absolute;
     right: 2.11rem;
-    bottom:1px;
-    height: 1.306rem;
+    bottom:0.108rem;
+    /*height: 1.306rem;*/
     display: flex;
     align-items: center;
     justify-content: center;
@@ -114,6 +114,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 1.306rem;
   }
   .add{
     color:#4D93DE;

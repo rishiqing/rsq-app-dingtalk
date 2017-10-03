@@ -2,7 +2,9 @@
   <div>
     <textarea type="text" v-model="content" placeholder="输入评论" >
     </textarea>
-    <i class="icon-attachment upload-icon"></i>
+    <div class="icon-wrap">
+      <i class="icon-attachment upload-icon"></i>
+    </div>
     <r-upload
       @getFileId="setFileid"
       @removeFileId="removeFileId"
@@ -10,11 +12,15 @@
   </div>
 </template>
 <style scoped>
+  .icon-wrap{
+    position: relative;
+
+  }
   .upload-icon{
     font-size: 26px;
     color:#a3a3a3;
     position: absolute;
-    top:4.468rem;
+    bottom:0.7rem;
     left:0.4rem;
   }
   li{

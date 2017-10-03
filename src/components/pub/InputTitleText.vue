@@ -41,7 +41,8 @@
     color:#b9b9bc;
     font-size: 17px;
     position: absolute;
-    top:0.46rem;
+    top:50%;
+    margin-top: -0.2rem;
     left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;
@@ -49,14 +50,16 @@
   .isdisplay-title{
     display: block;
     position:absolute;
-    top:0.35rem;
+    top:50%;
+    margin-top: -0.29rem;
     left: 0.44rem;
     font-size: 15px;
     color:#55A8FD;
   }
   .for-hide-title{
     position: absolute;
-    top:0.42rem;
+    top:50%;
+    margin-top: -0.29rem;
     left: 0.75rem;
     display: block;
     width: 2px;
@@ -72,15 +75,18 @@
     padding-left: 0.1rem;
   }
   input[type='text']{
+    font-family: PingFangSC-Regular;
     /*height:1.458rem;*/
     background: #FFFFFF;
     border-top:1px solid #E0E0E0 ;
-    line-height:1.3rem ;
+    line-height:0.7rem ;
+    padding-bottom:0.405rem ;
+    padding-top: 0.405rem;
     font-size: 19px;
   }
-  .padding-left-input-{
-    padding-left:0.3rem;
-  }
+  /*.padding-left-input-{*/
+    /*padding-left:0.3rem;*/
+  /*}*/
   .padding-left-input{
     padding-left: 1.5rem;
   }

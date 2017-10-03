@@ -37,6 +37,7 @@
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
+    background-color: white ;
   }
   .explain-top{
     margin-top: 15px;
@@ -69,8 +70,8 @@
     margin-top: 5px;
   }
  .explain-img>img{
-   width: 6.35rem;
-   height: 10.43rem;
+   width: 5.648rem;
+   height: 8.864rem;
  }
  .explain-img{
    width: 9.32rem;

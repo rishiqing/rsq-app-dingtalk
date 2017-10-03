@@ -91,7 +91,7 @@
     color:#b9b9bc;
     font-size: 17px;
     position: absolute;
-    top:0.55rem;
+    top:0.58rem;
     left:0.2rem;
     background: #FFFFFF;
     border-radius: 1px;

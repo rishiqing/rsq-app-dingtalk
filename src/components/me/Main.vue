@@ -10,12 +10,14 @@
   </div>
   <div class="bottom">
     <div>
-      <p>更新说明</p>
-      <i class="icon2-arrow-right-small arow"></i>
+      <v-touch @tap="SwitchToIntroduction">
+        <p>更新说明</p>
+        <i class="icon2-arrow-right-small arow"></i>
+      </v-touch>
     </div>
     <div>
-      <p>联系我们</p>
-      <span class="tel">010-57294778</span>
+        <p>联系我们</p>
+        <span class="tel">010-57294778</span>
     </div>
     <div>
       <v-touch  @tap="gotokefu" :class="{'is-active': '/me' == currentPath}">
@@ -48,6 +50,9 @@
       'avatar': Avatar
     },
     methods: {
+      SwitchToIntroduction () {
+        this.$router.push('/pub/explain')
+      },
       gotokefu () {
         this.$router.push('/me/kefu')
       }

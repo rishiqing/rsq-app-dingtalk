@@ -199,6 +199,7 @@
         var strDate = dateUtil.dateNum2Text(this.numCurrentDate, '/')
         this.editItem.startDate = this.editItem.startDate || strDate
         this.editItem.endDate = this.editItem.endDate || strDate
+//        this.editItem.joinUserRsqIds.push(this.userId)
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构

@@ -242,12 +242,15 @@
     border: 1px solid white;
   }
   .create{
-    display: block;
+    /*display: block;*/
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
     height: 0.666rem;
-    line-height: 0.76rem;
+    /*line-height: 0.76rem;*/
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
@@ -255,7 +258,6 @@
     top:0.55rem;
     right:0.35rem;
     z-index:2;
-
   }
   .write{
     background: #FFFFFF;
@@ -265,8 +267,10 @@
     padding-left:0.6rem;
     position: fixed;
     z-index: 1;
-    line-height: 1.226rem;
+    line-height: 0.6rem;
     padding-right: 2.432rem;
+    padding-top: 0.405rem;
+    padding-bottom: 0.405rem;
   }
   .margin-block {
     height: 50px;
