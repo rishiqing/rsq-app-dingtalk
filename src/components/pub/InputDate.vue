@@ -23,12 +23,16 @@
     color: #999999;
     font-size: 21px;
     position: absolute;
-    top:0.38rem;
+    /*top:0.38rem;*/
+    top:50%;
+    margin-top: -0.25rem;
     right: 0.2rem;
   }
   .now {
     position: absolute;
-    top:0.04rem;
+    /*top:0.04rem;*/
+    top:50%;
+    margin-top: -0.63rem;
     right: 0.94rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;

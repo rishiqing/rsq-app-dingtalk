@@ -1,10 +1,12 @@
 <template>
   <div class="">
     <div class="topest"></div>
-    <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
-    <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-      <input value="创建" class="create"/>
-    </v-touch>
+    <div class="wrap">
+      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
+      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
+        <input value="创建" class="create"/>
+      </v-touch>
+    </div>
     <div class="margin-block"></div>
     <div class="InboxItem">
       <r-todo-item-list
@@ -56,6 +58,15 @@
   }
 </script>
 <style scoped>
+  .wrap{
+    position: fixed;
+    height: 1.68rem;
+    width: 100%;
+    top: 10px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -82,8 +93,12 @@
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
-    position: fixed;
-    top:0.55rem;
+    float: right;
+    /*position: absolute;*/
+    /*top:0.4rem;*/
+    /*top: 50%;*/
+    margin-top: -1.34rem;
+    margin-right:0.4rem;
     right:0.35rem;
     z-index: 3;
   }
@@ -93,8 +108,8 @@
     padding-top: 15px;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
-    position: fixed;
-    top:10px;
+    /*position: fixed;*/
+    /*top:10px;*/
     background: #FFFFFF;
     padding-left:0.3rem;
     padding-right: 2.432rem;

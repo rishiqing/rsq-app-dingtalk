@@ -137,7 +137,7 @@
   }
   .select-sub{
     position: absolute;
-    top: 0.4rem;
+    top: 0.41rem;
     color:#b9b9bc;
     left:0.02rem
   }

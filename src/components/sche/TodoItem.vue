@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 10px;
+    margin-right: 0.405rem;
   }
   .contain-tag {position:absolute;left:0;height:20px;width:2px;top:50%;margin-top:-10px;}
   .title-todo{
@@ -92,6 +92,8 @@
     font-size: 17px;
     position: absolute;
     top:0.58rem;
+    /*<!--top:50%;-->*/
+    /*<!--margin-top: -0.22rem;-->*/
     left:0.2rem;
     background: #FFFFFF;
     border-radius: 1px;

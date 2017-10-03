@@ -42,7 +42,7 @@
     font-size: 17px;
     position: absolute;
     top:50%;
-    margin-top: -0.2rem;
+    margin-top: -0.17rem;
     left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;

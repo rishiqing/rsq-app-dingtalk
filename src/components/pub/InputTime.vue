@@ -23,7 +23,9 @@
   }
   .now {
     position: absolute;
-    top:0.04rem;
+    /*top:0.04rem;*/
+    top:50%;
+    margin-top: -0.63rem;
     right: 0.94rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
