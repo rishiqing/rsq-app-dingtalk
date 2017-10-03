@@ -56,6 +56,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       authServer: config.build.authServer,
       apiServer: config.build.apiServer,
       stsServer: config.build.stsServer,
+      version: config.build.version,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.build.index,

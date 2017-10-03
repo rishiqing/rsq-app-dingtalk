@@ -77,3 +77,8 @@ vue2.0中，mutation的payload需要是一个对象，而不能同时传入多�
   - hotPath: 开发时前端打包文件的热加载hmr路径，默认为"/__webpack_hmr"，不同的开发者需要设置不同的path
   - dev-server.js: 修改`'webpack-hot-middleware/client?path=/__wallace_hmr&noInfo=true&reload=true'`中的path为配置文件中的hotPath
   - authServer: 后台地址，根据不同的path映射到不同的后台
+
+# 版本号说明
+
+- 三位版本号。如2.0.0
+- 为做比较版本码按照（主版本号 * 1000000 + 副版本号 * 1000 + 三级版本号）的形式表示，例如：2.1.12版本号，对应的版本码为2001012
