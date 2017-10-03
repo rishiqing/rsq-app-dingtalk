@@ -20,7 +20,7 @@
   export default {
     data () {
       return {}
-    }, // 为社么只显示一周的数据  不是三周的数据吗
+    },
     props: {
       days: Array,
       barIndex: Number,
@@ -55,7 +55,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;display: inline-block;
+    top: 200px;display: inline-block;
     background: #F00;
     /*background: #458CDA;*/
   }

@@ -5,8 +5,8 @@
        @pancancel="onPanEnd"
        :pan-options="{ direction: 'all', threshold: 10 }">
   <div class="cal-title z-index-3xs">
-      <span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>
-      <span>{{focusDate ? focusDate.getFullYear() : ''}}-{{barPaneIndex}}</span>
+      <span>{{currentView.focusDate ? months[currentView.focusDate.getMonth()] : ''}}月</span>
+      <span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}-{{barPaneIndex}}</span>
       <!--<v-touch tag="span" class="cal-title-today"-->
             <!--@tap="backToToday"-->
             <!--v-show="!isToday">今</v-touch>-->
@@ -26,7 +26,7 @@
              :style="{'transform': paneView.translateX}"
              :class="{'animate': transDirection === 'h' }">
           <r-cal-pane
-            v-for="(dates, index) in datesArray"
+            v-for="(dates, index) in paneView.daysArray"
             :key="index"
             :dates="dates"
             :pane-index="index"
@@ -41,7 +41,7 @@
              :style="{transform: barView.translateX, height: barView.height + 'px', top: topBase + 'px'}"
              :class="{animate: transDirection === 'h' }">
           <r-cal-bar
-            v-for="(days, index) in daysArray"
+            v-for="(days, index) in barView.daysArray"
             :key="index"
             :days="days"
             :bar-index="index"
@@ -63,18 +63,19 @@
     name: 'Calendar',
     data () {
       return {
-        daysArray: [], //  有当前周、前一个周、后一个周三个数组组成
-        datesArray: [],  //  有当前月份、前一个月份、后一个月份三个数组组成
-        focusDate: null,  //  每一个当前显示的月份（周）都需要有一个focusDate
         selectDate: null,  //  当前选中（高亮显示）的日期
         topBase: 83,  //  顶部的高度，bar和pane都相对于此高度
         barView: {
           type: 'bar',
+          focusDate: null,  //  bar中当前周中的一个日期
+          daysArray: [], //  有当前周、前一个周、后一个周三个数组组成
           height: 50,
           translateX: 'translateX(0)'
         },
         paneView: {
           type: 'pane',
+          focusDate: null,  //  pane中当前月份中的一个日期
+          daysArray: [],  //  有当前月份、前一个月份、后一个月份三个数组组成
           height: 240,
           translateX: 'translateX(0)'
         },
@@ -82,7 +83,7 @@
         direction: {2: 'h', 4: 'h', 8: 'v', 16: 'v'},  //  2和4表示横向移动，8和16表示纵向移动
         currentLock: null,  //  方向锁，防止在pan上下移动的同时发生左右移动
         transDirection: null,  //  当前正在进行中的transition的方向，v表示垂直方向，hBar表示bar的水平方向，hPane表示pane的水平方向
-        isShowBar: false,
+        isShowBar: true,
 
         translateY: 'translateY(0)',
         calHeight: 0,
@@ -98,30 +99,30 @@
       }
     },
     computed: {
+      todayValue () {
+        return this.clearTime(new Date()).getTime()
+      },
       isToday () {
         if (!this.selectDate) {
           return false
         }
         return this.selectDate.getTime() === this.todayValue
       },
-      todayValue () {
-        return this.clearTime(new Date()).getTime()
-      },
       paneLine () {
         //  获取当前显示的月试图中的周的行数
-        return this.datesArray[1].length
+        return this.paneView.daysArray[1].length
       },
       paneLineHeight () {
         return this.calHeight / this.paneLine
       },
       //  bar中的日期是当前pane的第几行
       barPaneIndex () {
-        if (this.daysArray.length === 0 || this.datesArray.length === 0) {
+        if (this.barView.daysArray.length === 0 || this.paneView.daysArray.length === 0) {
           return 999
         }
-        var barTime = this.daysArray[1][0].date.getTime()
-        for (let i = 0; i < this.datesArray[1].length; i++) {
-          var paneTime = this.datesArray[1][i][0].date.getTime()
+        var barTime = this.barView.daysArray[1][0].date.getTime()
+        for (let i = 0; i < this.paneView.daysArray[1].length; i++) {
+          var paneTime = this.paneView.daysArray[1][i][0].date.getTime()
           if (barTime >= paneTime && barTime < paneTime + 7 * 24 * 3600 * 1000) {
             return i
           }
@@ -149,29 +150,41 @@
     methods: {
       triggerSelectDate (date) {
         this.selectDate = date
+        //  如果是在pane的状态下点击的，那么还每次点击需要reset bar
+        if (this.isPane) {
+          this.barView.focusDate = date
+          this.resetBar()
+        }
         this.$emit('click-cal-day', date)
       },
       backToToday () {
         var today = this.clearTime(new Date())
-        this.focusDate = today
+        this.barView.focusDate = today
+        this.paneView.focusDate = today
         this.resetBar()
+        this.resetPane()
         this.triggerSelectDate(today)
       },
-      //  获取前一、当前、后一三周的数据
       resetDays (focusDate) {
-        return [
-          dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, -1)),
-          dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 0)),
-          dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 1))
-        ]
+        if (this.isBar) {
+          //  获取前一、当前、后一三周的数据
+          return [
+            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, -1)),
+            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 0)),
+            dateUtil.getWeekDays(dateUtil.firstDayOfWeek(focusDate, 1))
+          ]
+        } else {
+          //  获取前一、当前、后一三月的数据
+          return [
+            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, -1)),
+            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 0)),
+            dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 1))
+          ]
+        }
+
       },
-      //  获取前一、当前、后一三月的数据
       resetDates (focusDate) {
-        return [
-          dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, -1)),
-          dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 0)),
-          dateUtil.getMonthDays(dateUtil.firstDayOfMonth(focusDate, 1))
-        ]
+
       },
       clearTime (date) {
         return new Date(date.setHours(0, 0, 0, 0))
@@ -259,9 +272,9 @@
           this.currentView.translateX = 'translateX(0)'
         }
         if (this.isBar) {
-          this.focusDate = dateUtil.firstDayOfWeek(this.focusDate, -direction)
+          this.barView.focusDate = dateUtil.firstDayOfWeek(this.barView.focusDate, -direction)
         } else {
-          this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, -direction)
+          this.paneView.focusDate = dateUtil.firstDayOfMonth(this.paneView.focusDate, -direction)
         }
       },
       transY (ev) {
@@ -287,25 +300,33 @@
           this.translateY = 'translateY(' + this.currentView.height + 'px)'
         }
       },
-      resetBarAndPane () {
-        this.transDirection = null
-        this.daysArray = this.resetDays(this.focusDate)
-        this.barView.translateX = 'translateX(0)'
-        this.datesArray = this.resetDates(this.focusDate)
-        this.paneView.translateX = 'translateX(0)'
-        this.$emit('after-cal-swipe', {type: this.currentView.type, daysArray: this.daysArray, datesArray: this.datesArray})
+      resetAllAndEmitEvent () {
+        this.resetBar()
+        this.resetPane()
+        if (this.isPane) {
+          this.$emit('after-cal-swipe', {daysArray: this.paneView.daysArray})
+        } else {
+          this.$emit('after-cal-swipe', {daysArray: this.barView.daysArray})
+        }
       },
       resetBar () {
-        this.daysArray = this.resetDays(this.focusDate)
         this.transDirection = null
+        this.barView.daysArray = this.resetDays(this.barView.focusDate)
         this.barView.translateX = 'translateX(0)'
-        this.$emit('after-cal-swipe', {daysArray: this.daysArray})
+      },
+      resetBarAndEmit () {
+        this.resetBar()
+        this.$emit('after-cal-swipe', {daysArray: this.barView.daysArray})
       },
       resetPane () {
-        this.datesArray = this.resetDates(this.focusDate)
+        //  TODO-----------------------
         this.transDirection = null
+        this.paneView.daysArray = this.resetDates(this.paneView.focusDate)
         this.paneView.translateX = 'translateX(0)'
-        this.$emit('after-cal-swipe', {datesArray: this.datesArray})
+      },
+      resetPaneAndEmit () {
+        this.resetPane()
+        this.$emit('after-cal-swipe', {daysArray: this.paneView.daysArray})
       },
       resetViewType () {
         if (this.transDirection === 'v') {
@@ -316,22 +337,24 @@
     },
     mounted () {
       //  初始化工作
-      this.focusDate = this.defaultSelectDate
+      this.barView.focusDate = this.defaultSelectDate
+      this.paneView.focusDate = this.defaultSelectDate
       this.currentView = this.paneView
       this.calHeight = this.currentView.height
       this.resetBar()
       this.resetPane()
+      this.$emit('cal-ready', {type: this.currentView.type, daysArray: this.currentView.daysArray})
       this.triggerSelectDate(this.defaultSelectDate)
 
       //  给周视图加动画结束的方法
       var ele1 = document.getElementById('hMoveBar')
-      ele1.addEventListener('transitionend', this.resetBarAndPane)
-      ele1.addEventListener('webkitTransitionEnd', this.resetBarAndPane)
+      ele1.addEventListener('transitionend', this.resetAllAndEmitEvent)
+      ele1.addEventListener('webkitTransitionEnd', this.resetAllAndEmitEvent)
 
       //  给月视图加动画结束的方法
       var ele2 = document.getElementById('hMovePane')
-      ele2.addEventListener('transitionend', this.resetBarAndPane)
-      ele2.addEventListener('webkitTransitionEnd', this.resetBarAndPane)
+      ele2.addEventListener('transitionend', this.resetAllAndEmitEvent)
+      ele2.addEventListener('webkitTransitionEnd', this.resetAllAndEmitEvent)
 
       //  给垂直移动加动画结束的方法
       //  WARN 注意！！ele1和ele2触发transition结束时也会触发ele3的监听方法
