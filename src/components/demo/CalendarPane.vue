@@ -20,7 +20,7 @@
   export default {
     data () {
       return {}
-    }, // 为社么只显示一周的数据  不是三周的数据吗
+    },
     props: {
       dates: Array,
       paneIndex: Number,

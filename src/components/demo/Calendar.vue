@@ -6,7 +6,7 @@
        :pan-options="{ direction: 'all', threshold: 10 }">
   <div class="cal-title z-index-3xs">
       <span>{{focusDate ? months[focusDate.getMonth()] : ''}}月</span>
-      <span>{{focusDate ? focusDate.getFullYear() : ''}}</span>
+      <span>{{focusDate ? focusDate.getFullYear() : ''}}-{{barPaneIndex}}</span>
       <!--<v-touch tag="span" class="cal-title-today"-->
             <!--@tap="backToToday"-->
             <!--v-show="!isToday">今</v-touch>-->
@@ -18,11 +18,11 @@
         </tr>
       </table>
     </div>
-    <div class="cal-content z-index-2xs" :style="{height: calHeight}">
-      <div class="cal-outer" id="vMoveWrapper"
+    <div class="cal-content z-index-2xs" :style="{height: calHeight + 'px', top: topBase + 'px'}">
+      <div class="cal-outer cal-outer-pane" id="vPaneWrapper"
            :style="{'transform': translateY}"
            :class="{'animate': transDirection === 'v' }">
-        <div class="cal-inner" id="hMovePane"
+        <div class="cal-inner cal-inner-pane" id="hMovePane"
              :style="{'transform': paneView.translateX}"
              :class="{'animate': transDirection === 'h' }">
           <r-cal-pane
@@ -35,9 +35,11 @@
             @click-cal-pane-day="triggerSelectDate"
           ></r-cal-pane>
         </div>
-        <div class="cal-inner cal-bar-wrapper" id="hMoveBar" v-show="isShowBar"
-             :style="{'transform': barView.translateX, 'height': barView.height + 'px'}"
-             :class="{'animate': transDirection === 'h' }">
+      </div>
+      <div class="cal-outer cal-outer-bar" id="vBarWrapper">
+        <div class="cal-inner cal-inner-bar" id="hMoveBar" v-show="isShowBar"
+             :style="{transform: barView.translateX, height: barView.height + 'px', top: topBase + 'px'}"
+             :class="{animate: transDirection === 'h' }">
           <r-cal-bar
             v-for="(days, index) in daysArray"
             :key="index"
@@ -65,6 +67,7 @@
         datesArray: [],  //  有当前月份、前一个月份、后一个月份三个数组组成
         focusDate: null,  //  每一个当前显示的月份（周）都需要有一个focusDate
         selectDate: null,  //  当前选中（高亮显示）的日期
+        topBase: 83,  //  顶部的高度，bar和pane都相对于此高度
         barView: {
           type: 'bar',
           height: 50,
@@ -79,10 +82,10 @@
         direction: {2: 'h', 4: 'h', 8: 'v', 16: 'v'},  //  2和4表示横向移动，8和16表示纵向移动
         currentLock: null,  //  方向锁，防止在pan上下移动的同时发生左右移动
         transDirection: null,  //  当前正在进行中的transition的方向，v表示垂直方向，hBar表示bar的水平方向，hPane表示pane的水平方向
-        isShowBar: true,
+        isShowBar: false,
 
         translateY: 'translateY(0)',
-        calHeight: '0px',
+        calHeight: 0,
         weeks: ['日', '一', '二', '三', '四', '五', '六'],
         months: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二']
       }
@@ -107,6 +110,23 @@
       paneLine () {
         //  获取当前显示的月试图中的周的行数
         return this.datesArray[1].length
+      },
+      paneLineHeight () {
+        return this.calHeight / this.paneLine
+      },
+      //  bar中的日期是当前pane的第几行
+      barPaneIndex () {
+        if (this.daysArray.length === 0 || this.datesArray.length === 0) {
+          return 999
+        }
+        var barTime = this.daysArray[1][0].date.getTime()
+        for (let i = 0; i < this.datesArray[1].length; i++) {
+          var paneTime = this.datesArray[1][i][0].date.getTime()
+          if (barTime >= paneTime && barTime < paneTime + 7 * 24 * 3600 * 1000) {
+            return i
+          }
+        }
+        return 9999
       },
       anotherView () {
         if (this.isBar) {
@@ -170,8 +190,6 @@
         }
       },
       onPanMove (ev) {
-        console.log('1=======' + this.currentView.type)
-
         if (this.checkLocked(ev)) {
           return
         }
@@ -179,21 +197,37 @@
           return
         }
         var deltaY = ev.deltaY
+        var absY = Math.abs(deltaY)
+        //  超出范围不再移动
+        console.log('=@_@===absY===#_#=' + JSON.stringify(absY))
+        console.log('=@_@===this.calHeight===#_#=' + JSON.stringify(this.calHeight))
+        if (absY > this.calHeight - this.paneLineHeight) {
+          return
+        }
         switch (ev.offsetDirection) {
           case 2:
           case 4:
             var deltaX = ev.deltaX
+            //  超出范围不做相应
+            //  TODO 超出100%
             this.currentView.translateX = 'translateX(' + deltaX + 'px)'
             break
           case 8:
             //  处于pane状态只能上拉
             if (this.isPane) {
+              if (absY > this.barPaneIndex * this.paneLineHeight) {
+                this.isShowBar = true
+              }
               this.translateY = 'translateY(' + deltaY + 'px)'
             }
             break
           case 16:
             //  处于bar状态只能下拉
             if (this.isBar) {
+              //  超出范围不再移动
+              if (absY > (this.paneLine - this.barPaneIndex - 1) * this.paneLineHeight) {
+                this.isShowBar = false
+              }
               this.translateY = 'translateY(' + (this.barView.height - this.paneView.height + deltaY) + 'px)'
             }
             break
@@ -217,8 +251,6 @@
       },
       transX (ev) {
         var delta = ev.deltaX
-        console.log('----------delta:' + delta)
-
         var direction
 
         if (Math.abs(delta) > 20 && ev.type === 'panend') {
@@ -247,12 +279,23 @@
           var offset = 0
           if (this.isPane) {
             offset = this.barView.height - this.paneView.height
+            this.isShowBar = true
+          } else {
+            this.isShowBar = false
           }
           this.translateY = 'translateY(' + offset + 'px)'
           this.currentView = this.anotherView
         } else {
           this.translateY = 'translateY(' + this.currentView.height + 'px)'
         }
+      },
+      resetBarAndPane () {
+        this.transDirection = null
+        this.daysArray = this.resetDays(this.focusDate)
+        this.barView.translateX = 'translateX(0)'
+        this.datesArray = this.resetDates(this.focusDate)
+        this.paneView.translateX = 'translateX(0)'
+        this.$emit('after-cal-swipe', {type: this.currentView.type, daysArray: this.daysArray, datesArray: this.datesArray})
       },
       resetBar () {
         this.daysArray = this.resetDays(this.focusDate)
@@ -277,24 +320,24 @@
       //  初始化工作
       this.focusDate = this.defaultSelectDate
       this.currentView = this.paneView
-      this.calHeight = this.currentView.height + 'px'
+      this.calHeight = this.currentView.height
       this.resetBar()
       this.resetPane()
       this.triggerSelectDate(this.defaultSelectDate)
 
       //  给周视图加动画结束的方法
       var ele1 = document.getElementById('hMoveBar')
-      ele1.addEventListener('transitionend', this.resetBar)
-      ele1.addEventListener('webkitTransitionEnd', this.resetBar)
+      ele1.addEventListener('transitionend', this.resetBarAndPane)
+      ele1.addEventListener('webkitTransitionEnd', this.resetBarAndPane)
 
       //  给月视图加动画结束的方法
       var ele2 = document.getElementById('hMovePane')
-      ele2.addEventListener('transitionend', this.resetPane)
-      ele2.addEventListener('webkitTransitionEnd', this.resetPane)
+      ele2.addEventListener('transitionend', this.resetBarAndPane)
+      ele2.addEventListener('webkitTransitionEnd', this.resetBarAndPane)
 
       //  给垂直移动加动画结束的方法
       //  WARN 注意！！ele1和ele2触发transition结束时也会触发ele3的监听方法
-      var ele3 = document.getElementById('vMoveWrapper')
+      var ele3 = document.getElementById('vPaneWrapper')
       ele3.addEventListener('transitionend', this.resetViewType)
       ele3.addEventListener('webkitTransitionEnd', this.resetViewType)
     }
@@ -329,16 +372,17 @@
     font-family: PingFangSC-Medium;
   }
   .cal-content {
-    position: fixed; top: 83px;left: 0;right: 0;padding:0;
-    width: 100%;overflow: hidden;
+    position: fixed;left: 0;right: 0;padding:0;overflow: hidden;
   }
   .cal-outer {position:relative;width:100%;height:100%;overflow:hidden;background: #458CDA;}
   .cal-inner {
-    left: -100%;
-    position: absolute;top:0;width:100%;bottom:0;overflow: visible;white-space:nowrap;
+    overflow: visible;white-space:nowrap;
   }
-  div.cal-bar-wrapper {
-
+  div.cal-inner-pane {
+    position: absolute;left: -100%;top:0;width:100%;bottom:0;
+  }
+  div.cal-inner-bar {
+    position: fixed;margin-left: -100%;width: 100%;
   }
   .animate {
     transition: transform 0.3s ease;
