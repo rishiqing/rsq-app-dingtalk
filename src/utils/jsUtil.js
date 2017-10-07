@@ -63,7 +63,7 @@ export default {
     if (!obj) return null
     props = props || {}
     for (let prop in props) {
-      if (props.hasOwnProperty(prop)) { // 这一句为什么要判断
+      if (props.hasOwnProperty(prop)) {
         if (obj[prop] === undefined) {
           Vue.set(obj, prop, props[prop])
         } else {

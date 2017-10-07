@@ -238,9 +238,11 @@
         }
         //  表示选择的是“不重复”
         if (this.comRepeat.type === 'none') {
+          params['isCloseRepeat'] = true
           params['repeatType'] = null
           params['repeatBaseTime'] = null
         } else {
+          params['isCloseRepeat'] = false
           params['repeatType'] = this.comRepeat.type
           params['repeatBaseTime'] = this.comRepeat.baseArray.join(',')
           var strDate = dateUtil.dateNum2Text(this.baseNumTime, '/')

@@ -58,7 +58,6 @@
       <span class="list-value u-pull-right light-color">{{repeatText}}</span>
     </v-touch>
     <v-touch tag="p" class="date-clear" @tap="tapEmpty">清除日期放入收纳箱</v-touch>
-    <v-touch tag="p" class="date-clear" @tap="showState">显示state</v-touch>
   </div>
 </template>
 <style lang="scss">
@@ -226,7 +225,6 @@
       }
     },
     methods: {
-      showState () {},
       initData () {
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
         this.dateType = dateStruct.dateType || 'single'
@@ -403,9 +401,23 @@
         var o = {
           startDate: c.startDate,
           endDate: c.endDate,
-          dates: c.dates,
-          repeatType: c.repeatType,
-          repeatBaseTime: c.repeatBaseTime
+          dates: c.dates
+        }
+        //  如果重复相关属性存在，那么处理重复相关的其他属性
+        if (c.repeatType) {
+          o.repeatType = c.repeatType
+          o.repeatBaseTime = c.repeatBaseTime
+          o.alwaysRepeat = c.alwaysRepeat
+          o.isCloseRepeat = false
+          o.isLastDate = c.isLastDate
+          o.repeatOverDate = c.repeatOverDate
+        } else {
+          o.isCloseRepeat = true
+        }
+        var actParamse = JSON.parse(JSON.stringify(o))
+        o.createActive = {
+          name: 'saveDate',
+          params: actParamse
         }
         return o
       },
@@ -414,7 +426,14 @@
           if (this.isEdit) {
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
           }
-          return this.$store.dispatch('updateTodoDate', {editItem: this.getSubmitResult()})
+          var editItem = this.getSubmitResult()
+          //  如果日期均为空，则容器为收纳箱
+          if (!editItem.startDate && !editItem.endDate && !editItem.dates) {
+            editItem['pContainer'] = 'inbox'
+          } else {
+            editItem['pContainer'] = 'IE'
+          }
+          return this.$store.dispatch('updateTodoDate', {editItem: editItem})
             .then(() => {
               this.$store.commit('PUB_TODO_DATE_DELETE')
               if (this.isEdit) {

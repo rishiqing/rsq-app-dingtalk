@@ -154,8 +154,7 @@ export default {
     var newItem = p.newItem
 
     newItem['pContainer'] = 'IE'
-    // return
-    var dateStruct = dateUtil.backend2frontend({dates: newItem.dates, startDate: newItem.startDate, endDate: newItem.endDate})
+    var dateStruct = dateUtil.backend2frontend(newItem)
     p['dateStruct'] = dateStruct
     switch (dateStruct.dateType) {
       case 'single':
@@ -180,7 +179,9 @@ export default {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
           .then(item => {
-            //  TODO  根据重复来让cache中某个缓存的日程列表失效
+            //  TODO  让所有缓存都失效，暂时这么处理
+            commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+            commit('SCH_TODO_CACHE_DELETE_ALL')
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
           })
       }).catch(err => {
@@ -360,15 +361,11 @@ export default {
    * @param p.editItem
    * @returns {*}
    */
-  updateTodoDate ({commit, state, dispatch}, p) {
+  updateTodoDate ({commit, state, dispatch, getters}, p) {
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
-    //  如果日期均为空，则容器为收纳箱
-    if (editItem.startDate == null &&
-      editItem.endDate == null &&
-      editItem.dates == null) {
-      editItem['pContainer'] = 'inbox'
-    }
+    editItem.createTaskDate = todo.createTaskDate || getters.defaultTaskDate
+
     var promise
     if (todo.id) {
       //  如果id存在，则ajax更新
@@ -376,8 +373,8 @@ export default {
       promise = api.todo.putTodoProps(editItem)
         .then(resTodo => {
           //  处理缓存数据
-          var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
-          var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
+          var sourceDateStruct = dateUtil.backend2frontend(todo)
+          var targetDateStruct = dateUtil.backend2frontend(editItem)
           var curArrayIndex = todo.pContainer === 'inbox'
             ? 0
             : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
@@ -428,6 +425,11 @@ export default {
           commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(i, '-')})
           commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: String(i)})
         }
+        break
+      case 'repeat':
+        //  如果更新的是重复，暂时让所有的缓存失效
+        commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+        commit('SCH_TODO_CACHE_DELETE_ALL')
         break
       default:
         break
@@ -557,10 +559,9 @@ export default {
     var todo = p.todo || state.todo.currentTodo
     return api.todo.deleteTodo(todo)
       .then(() => {
-        // console.log('api-delete已完成')
         commit('TD_TODO_DELETED', {item: todo})
         //  清除缓存数据
-        var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
+        var sourceDateStruct = dateUtil.backend2frontend(todo)
         var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
         dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})

@@ -513,7 +513,26 @@ rsqAdapterManager.register({
    * 钉钉中发Ding
    * @param params
    */
-  notify: function(params) {},
+  notify: function(params) {
+    dd.biz.ding.post({
+      users: params.userIds, // 用户列表，工号
+      corpId: params.corpId, // 企业id
+      type: 2, // 钉类型 1：image  2：link
+      alertType: 2,
+      alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': params.alertTime},
+      attachment: {
+        title: '',
+        url: '',
+        image: '',
+        text: ''
+      },
+      text: params.title, // 消息
+      onSuccess: function () {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {}
+    })
+  },
   /**
    * 发送到聊天
    * @param prams

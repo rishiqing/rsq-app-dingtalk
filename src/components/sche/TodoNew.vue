@@ -11,10 +11,8 @@
             ></r-input-title>
           </div>
           <div class="itm-group itm--edit-todo" :class="{'is-hidden': !isShowNote}">
-            <!--<slot name="slotNote"></slot>-->
           </div>
           <div class="itm-group itm--edit-todo">
-            <!--<slot name="slotContainer"></slot>-->
             <div class="firstGroup">
               <r-input-date
                 :item="editItem"
@@ -135,6 +133,7 @@
     transition: border-color 0.4s, background-color ease 0.4s; }
 </style>
 <script>
+  import moment from 'moment'
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputMember from 'com/pub/InputMember'
@@ -154,17 +153,11 @@
     },
     computed: {
       currentTodo () {
-        return this.$store.state.todo.currentTodo // 这里面有东西吗
-      },
-      currentDate () {
-        return this.$store.state.schedule.strCurrentDate
-      },
-      numCurrentDate () {
-        return dateUtil.dateText2Num(this.currentDate)
+        return this.$store.state.todo.currentTodo
       },
       isInbox () {
         //  所有日期属性均为date，判断当前新建的item为收纳箱任务
-        return (!this.editItem.dates) && (!this.editItem.startDate) && (!this.editItem.endDate)
+        return this.editItem.pContainer === 'inbox'
       },
       loginUser () {
         return this.$store.getters.loginUser || {}
@@ -196,10 +189,6 @@
        */
       initData () {
         jsUtil.extendObject(this.editItem, this.currentTodo)
-        var strDate = dateUtil.dateNum2Text(this.numCurrentDate, '/')
-        this.editItem.startDate = this.editItem.startDate || strDate
-        this.editItem.endDate = this.editItem.endDate || strDate
-//        this.editItem.joinUserRsqIds.push(this.userId)
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
@@ -241,9 +230,10 @@
 
         this.saveTodoState()
         var that = this
+        var todoType = this.isInbox ? 'inbox' : 'schedule'
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
-        this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: 'schedule'})
-          .then((item) => {
+        this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: todoType})
+          .then(item => {
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
 
@@ -255,42 +245,15 @@
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-                  var time = new Date()
-                  var year = time.getFullYear()
-                  var month = time.getMonth() + 1
-                  if (month < 10) {
-                    month = '0' + month
-                  }
-                  var day = time.getDate()
-                  if (day < 10) {
-                    day = '0' + day
-                  }
-                  var hour = time.getHours()
-                  if (hour < 10) {
-                    hour = '0' + hour
-                  }
-                  var minute = time.getMinutes()
-                  if (minute < 10) {
-                    minute = '0' + minute
-                  }
-                  var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
-                  window.dd.biz.ding.post({
-                    users: empIDArray, // 用户列表，工号
-                    corpId: this.corpId, // 企业id
-                    type: 2, // 钉类型 1：image  2：link
-                    alertType: 2,
-                    alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
-                    attachment: {
-                      title: '',
-                      url: '',
-                      image: '',
-                      text: ''
-                    },
-                    text: item.pTitle, // 消息
-                    onSuccess: function () {
+                  var standardTime = moment().format('YYYY-MM-DD HH:mm')
+                  window.rsqadmg.exec('notify', {
+                    userIds: empIDArray,
+                    corpId: that.corpId,
+                    alertTime: standardTime,
+                    title: item.pTitle,
+                    success: () => {
                       that.$router.replace(window.history.back())
-                    },
-                    onFail: function () {}
+                    }
                   })
                 })
             } else {

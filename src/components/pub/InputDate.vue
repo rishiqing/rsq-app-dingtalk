@@ -70,6 +70,7 @@
           dates: t.dates,
           startDate: t.startDate,
           endDate: t.endDate,
+          isCloseRepeat: t.isCloseRepeat,
           repeatType: t.repeatType,
           repeatBaseTime: t.repeatBaseTime
         })
@@ -81,7 +82,6 @@
         }
         var time = new Date()
         var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
-        console.log(result)
         return newTime === result ? '今天' : result
       }
     },
@@ -94,7 +94,11 @@
           endDate: c.endDate || null,
           dates: c.dates || null,
           repeatType: c.repeatType || null,
-          repeatBaseTime: c.repeatBaseTime || null
+          repeatBaseTime: c.repeatBaseTime || null,
+          alwaysRepeat: c.alwaysRepeat === undefined ? true : c.alwaysRepeat,
+          isCloseRepeat: c.isCloseRepeat === undefined ? true : c.isCloseRepeat,
+          isLastDate: c.isLastDate === undefined ? false : c.isLastDate,
+          repeatOverDate: c.repeatOverDate || ''
         }
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')

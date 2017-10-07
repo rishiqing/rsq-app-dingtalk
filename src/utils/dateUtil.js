@@ -162,9 +162,9 @@ export default {
    * repeatParams.repeatBaseTime
    * 返回值如下：
    */
-  backend2frontend ({dates, startDate, endDate, repeatType, repeatBaseTime}) {
+  backend2frontend ({dates, startDate, endDate, isCloseRepeat, repeatType, repeatBaseTime}) {
     var type, arr
-    if (repeatType) {
+    if (!isCloseRepeat && repeatType) {
       type = 'repeat'
       arr = repeatBaseTime.split(',').map(this.dateText2Num)
     } else if (dates) {
@@ -189,7 +189,7 @@ export default {
       dateType: type,
       repeatType: repeatType,
       dateResult: arr,
-      currentDate: arr ? new Date(arr[0]) : null  //  实际上是起始日期
+      currentDate: arr ? new Date(arr[0]) : null
     }
   },
   /**

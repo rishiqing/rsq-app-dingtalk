@@ -40,7 +40,7 @@
         this.$router.replace(page)
       },
       createNew () {
-        this.$store.dispatch('setCurrentTodo', def.defaultTodo())
+        this.$store.dispatch('setCurrentTodo', def.allDefaultTodo())
         this.$router.push('/todo/new/schedule')
       }
     }

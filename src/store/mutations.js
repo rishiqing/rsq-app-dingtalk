@@ -154,6 +154,15 @@ export default {
     delete state.dateTodosCache[p.strCurrentDate]
   },
   /**
+   * 清除所有缓存
+   * @param state
+   * @param p
+   * @constructor
+   */
+  SCH_TODO_CACHE_DELETE_ALL (state, p) {
+    state.dateTodosCache = {}
+  },
+  /**
    * 新建todo
    * @param state
    * @param p
@@ -289,6 +298,15 @@ export default {
    */
   TD_DATE_HAS_TD_CACHE_DELETE (state, p) {
     delete state.dayHasTodoCache[p.numDate]
+  },
+  /**
+   * 清除所有日程是否含有todo的缓存
+   * @param state
+   * @param p
+   * @constructor
+   */
+  TD_DATE_HAS_TD_CACHE_DELETE_ALL (state, p) {
+    state.dayHasTodoCache = {}
   },
   /**
    * 新建评论
