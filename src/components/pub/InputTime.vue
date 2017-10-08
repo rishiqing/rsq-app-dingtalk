@@ -47,22 +47,27 @@
       return {}
     },
     computed: {
+      itemClock () {
+        return this.item.clock || {}
+      },
       isAllDay () {
-        return !this.itemClock || !this.itemClock.startTime
+        return !this.itemClock.startTime
       },
       timeValue () {
         return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
       }
     },
     props: {
-      itemClock: Object
+      item: Object
     },
     methods: {
       gotoTodoTime () {
         this.$emit('time-tap')
         //  将需要用到的属性设置到currentTodoTime中
-        var obj = JSON.parse(JSON.stringify(this.itemClock))
-        this.$store.commit('PUB_TODO_TIME_UPDATE', {data: obj})
+        var timeObj = {
+          clock: JSON.parse(JSON.stringify(this.itemClock))
+        }
+        this.$store.commit('PUB_TODO_TIME_UPDATE', {data: timeObj})
         this.$router.push('/todoEdit/time')
       }
     },

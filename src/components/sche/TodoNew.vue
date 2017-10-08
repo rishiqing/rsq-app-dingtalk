@@ -19,7 +19,7 @@
                 :sep="'/'"
               ></r-input-date>
               <r-input-time
-                :item-clock="editItem.clock"
+                :item="editItem"
               ></r-input-time>
             </div>
             <div class="secondGroup">
@@ -43,6 +43,7 @@
               </div>
             </div>
           </div>
+          <!--<div class="itm-group itm&#45;&#45;edit-todo" @click="submitTodo">提交（测试）</div>-->
         </div>
       </div>
     </div>
@@ -232,9 +233,17 @@
         var that = this
         var todoType = this.isInbox ? 'inbox' : 'schedule'
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
+        //  在有提醒的情况下返回值中居然不包括clock.alert的数据，需要前端组合传入
+        var clockAlert = JSON.parse(JSON.stringify(this.currentTodo.clock.alert || null))
+
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: todoType})
           .then(item => {
-            return this.$store.dispatch('handleRemind', {item})
+            if (this.currentTodo.clock && this.currentTodo.clock.startTime) {
+              item.clock.alert = clockAlert
+              return this.$store.dispatch('handleRemind', {item})
+            } else {
+              return item
+            }
           })
           .then(item => {
             window.rsqadmg.exec('hideLoader')

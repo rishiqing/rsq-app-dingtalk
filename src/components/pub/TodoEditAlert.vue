@@ -96,7 +96,7 @@
         //  系统的提醒时间
         //  {cid: 0, schedule: 'begin_0_min', selected: false}
         displayedRuleList: [
-          {schedule: 'begin_0_min', selected: false},
+          {schedule: 'begin_0_hour', selected: false},
           {schedule: 'begin_-5_min', selected: false},
           {schedule: 'begin_-15_min', selected: false},
           {schedule: 'begin_-30_min', selected: false},

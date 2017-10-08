@@ -105,8 +105,10 @@ rsqAdapterManager.register({
       var resJson = JSON.parse(resSign);
       rsqChk(params.success, [resJson]);
     });
+    // rsqChk(params.success, [{}]);
   },
   init: function(params){
+    // rsqChk(params.success, [{rsqUsername: 'KGcPR_1484054002748@dingtalk.rishiqing.com', rsqPassword: 'YcCTVA'}]);
     dd.config({
       "agentId": params.agentId,
       "corpId": rsqadmg.store.app.corpid,

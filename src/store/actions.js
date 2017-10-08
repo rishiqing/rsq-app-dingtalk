@@ -524,9 +524,6 @@ export default {
   updateTodoTime ({ commit, state, getters, dispatch }, p) {
     p = p || {}
     var todo = state.todo.currentTodo
-    if (p.clock.alwaysAlert === undefined) {
-      p.clock.alwaysAlert = true
-    }
     var promise
     //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
@@ -538,6 +535,9 @@ export default {
         }
       })
     } else {
+      if (p.clock.alwaysAlert === undefined) {
+        p.clock.alwaysAlert = true
+      }
       promise = Promise.resolve().then(() => {
         commit('TD_CURRENT_TODO_UPDATE', {item: p})
       })
@@ -809,11 +809,13 @@ export default {
     var item = p.item
     var promise
 
-    console.log('=@_@===item===#_#=' + JSON.stringify(item))
     if (item.clock && item.clock.alert) {
+      var c = item.clock
       // var url = window.location.href.split('')
       var millsArray = item.clock.alert.map(a => {
-        return moment(a.alertTime, 'YYYY-MM-DD HH:mm:ss').valueOf()
+        const numStart = moment(c.taskDate + c.startTime, 'YYYYMMDDHH:mm').valueOf()
+        const numEnd = moment(c.taskDate + c.endTime, 'YYYYMMDDHH:mm').valueOf()
+        return util.alertRule2Time(a.schedule, numStart, numEnd)
       })
       var remindArray = item.clock.alert.map(a => {
         return util.alertCode2RemindText(a.schedule) + '，请点击查看详情'

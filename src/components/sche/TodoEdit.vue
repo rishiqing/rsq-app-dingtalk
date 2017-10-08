@@ -25,7 +25,7 @@
               :sep="'/'"
             ></r-input-date>
             <r-input-time
-              :item-clock="editItem.clock"
+              :item="editItem"
               v-if="editItem.pContainer !== 'inbox'"
             ></r-input-time>
             <r-input-member

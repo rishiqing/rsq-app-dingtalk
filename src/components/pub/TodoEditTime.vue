@@ -165,7 +165,6 @@
             if (!a.isUserDefined) {
               str = jsUtil.alertCode2Text(a.schedule)
             } else {
-              //  如何显示？
               str = jsUtil.alertCode2Text(a.schedule)
             }
             return str
@@ -261,10 +260,10 @@
         this.$router.push('/todoEdit/alert')
       },
       /**
-       * 检查是提醒时间是否遭遇当前时间
+       * 检查是提醒时间是否早于当前时间
        */
       checkWarn () {
-        if (!this.isAllDay && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
+        if (!this.isAllDay && this.clockData.alert.length > 0 && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
@@ -282,28 +281,46 @@
       saveTodoTimeState () {
         this.$store.commit('PUB_TODO_TIME_SET', {data: {clock: this.clockData}})
       },
+      beforeSubmitTodo (next) {
+        if (this.isModified()) {
+          //  提交
+          var that = this
+          var warn = this.checkWarn()
+          if (warn) {
+            window.rsqadmg.exec('confirm', {
+              message: warn,
+              success () {
+                that.submitTodo(next)
+              },
+              cancel () {
+                next(false)
+              }
+            })
+          } else {
+            that.submitTodo(next)
+          }
+        } else {
+          next()
+        }
+      },
       /**
        * 提交todoTime的更新
        * @param next
        * @returns {Promise<U>|Promise.<TResult>|*|Thenable<U>}
        */
       submitTodo (next) {
-        if (this.isModified()) {
-          if (this.isEdit) {
-            window.rsqadmg.exec('showLoader')
-          }
-          return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
-            .then(() => {
-              this.$store.commit('PUB_TODO_TIME_DELETE')
-              if (this.isEdit) {
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '保存成功'})
-              }
-              next()
-            })
-        } else {
-          next()
+        if (this.isEdit) {
+          window.rsqadmg.exec('showLoader')
         }
+        return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
+          .then(() => {
+            this.$store.commit('PUB_TODO_TIME_DELETE')
+            if (this.isEdit) {
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
+            }
+            next()
+          })
       }
     },
     created () {
@@ -327,22 +344,7 @@
         return next()
       }
 
-      //  提交
-      var that = this
-      var warn = this.checkWarn()
-      if (warn) {
-        window.rsqadmg.exec('confirm', {
-          message: warn,
-          success () {
-            that.submitTodo(next)
-          },
-          cancel () {
-            next(false)
-          }
-        })
-      } else {
-        that.submitTodo(next)
-      }
+      this.beforeSubmitTodo(next)
     }
   }
 </script>
