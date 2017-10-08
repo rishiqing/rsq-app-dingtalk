@@ -260,6 +260,23 @@ export default {
     var last = codeArr[2] === 'min' ? '分钟' : '小时'
     return pre + numDir + Math.abs(num) + last
   },
+  alertCode2RemindText (code) {
+    var codeArr = code
+    if (typeof code === 'string') {
+      codeArr = code.split('_')
+    }
+    if (Number(codeArr[1]) === 0) {
+      return codeArr[0] === 'begin' ? '任务已经开始' : '任务已经结束'
+    }
+    var point = codeArr[0] === 'begin' ? '开始' : '结束'
+    var num = Number(codeArr[1])
+    var unit = codeArr[2] === 'min' ? '分钟' : '小时'
+    if (num < 0) {
+      return '任务还有' + Math.abs(num) + unit + point
+    } else {
+      return '任务已经' + point + Math.abs(num) + unit
+    }
+  },
   /**
    * 将提醒的规则转换为具体的提醒时间
    * 将形如"begin_-5_min"这样的规则，在指定的startTime和endTime中转换为time的mills

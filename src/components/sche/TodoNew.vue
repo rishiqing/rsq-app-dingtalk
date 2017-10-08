@@ -234,6 +234,9 @@
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: todoType})
           .then(item => {
+            return this.$store.dispatch('handleRemind', {item})
+          })
+          .then(item => {
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
 

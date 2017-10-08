@@ -181,8 +181,7 @@
        */
       initData () {
         //  检查pub区是否有缓存，有缓存则读缓存，否则从currentTodo上读取
-        var clock = this.todoTime.clock || this.currentTodo.clock
-        jsUtil.extendObject(this.clock, clock)
+        jsUtil.extendObject(this.clock, this.todoTime.clock)
         this.isAllDay = !this.clock.startTime
         this.isChecked = this.isAllDay
 

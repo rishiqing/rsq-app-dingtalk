@@ -60,6 +60,9 @@
     methods: {
       gotoTodoTime () {
         this.$emit('time-tap')
+        //  将需要用到的属性设置到currentTodoTime中
+        var obj = JSON.parse(JSON.stringify(this.itemClock))
+        this.$store.commit('PUB_TODO_TIME_UPDATE', {data: obj})
         this.$router.push('/todoEdit/time')
       }
     },

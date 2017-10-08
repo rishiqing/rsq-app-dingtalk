@@ -748,6 +748,13 @@ export default {
         return file
       })
   },
+  /**
+   * 上传文件到阿里云OSS
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {Promise<any>|Promise.<*>|Promise<TAll[]>}
+   */
   uploadToOSS ({commit, state}, p) {
     var client = p.client
     var path = p.path
@@ -769,6 +776,13 @@ export default {
       })
     }))
   },
+  /**
+   * 发送到聊天
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {*}
+   */
   sendToConversation ({commit, state}, p) {
     var appId = state.sys.appId
     var urlParams = {
@@ -789,6 +803,49 @@ export default {
     return api.appAuth.sendAsyncCorpMessage({
       urlParams,
       data: p.data
+    })
+  },
+  handleRemind ({commit, state, dispatch}, p) {
+    var item = p.item
+    var promise
+
+    console.log('=@_@===item===#_#=' + JSON.stringify(item))
+    if (item.clock && item.clock.alert) {
+      // var url = window.location.href.split('')
+      var millsArray = item.clock.alert.map(a => {
+        return moment(a.alertTime, 'YYYY-MM-DD HH:mm:ss').valueOf()
+      })
+      var remindArray = item.clock.alert.map(a => {
+        return util.alertCode2RemindText(a.schedule) + '，请点击查看详情'
+      })
+      let data = {
+        todo_id: item.id,
+        mills_array: millsArray,
+        remind_array: remindArray,
+        userid_list: state.loginUser.authUser.userId,
+        msgtype: 'oa',
+        msgcontent: {
+          message_url: 'https://www.rishiqing.com',
+          head: {
+            text: '日事清',
+            bgcolor: 'FF55A8FD'
+          },
+          body: {
+            title: '任务提醒',
+            form: [
+              {key: '任务名称：', value: item.pTitle},
+              {key: '时间：', value: item.clock.startTime + '-' + item.clock.endTime}
+            ]
+          }
+        }
+      }
+      promise = dispatch('sendRemind', {corpId: state.loginUser.authUser.corpId, data: data})
+    } else {
+      promise = Promise.resolve()
+    }
+
+    return promise.then(() => {
+      return item
     })
   },
   sendRemind ({commit, state}, p) {

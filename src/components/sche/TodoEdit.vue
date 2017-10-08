@@ -173,6 +173,7 @@
     transition: border-color 0.4s, background-color ease 0.4s; }
 </style>
 <script>
+  import moment from 'moment'
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
   import InputTime from 'com/pub/InputTime'
@@ -380,6 +381,70 @@
       },
       more () {
         var that = this
+        window.rsqadmg.exec('actionsheet', {
+          buttonArray: ['发送到聊天', '发送提醒', '删除任务'],
+          success: function (res) {
+            switch (res.buttonIndex) {
+              case 0:
+                window.rsqadmg.exec('pickConversation', {
+                  corpId: that.corpId,
+                  success: function () {
+                    that.$store.dispatch('sendToConversation', {
+                      corpId: that.corpId, // that.loginUser.authUser.corpId,
+                      data: {
+                        sender: that.userId,
+                        cid: res.cid,
+                        msgtype: 'oa',
+                        oa: {
+                          message_url: window.location.href,
+                          head: {
+                            text: '日事清',
+                            bgcolor: 'FF55A8FD'
+                          },
+                          body: {
+                            title: that.editItem.pTitle,
+                            form: [
+                              {key: '日期：', value: '2017102'},
+                              {key: '时间：', value: '20:17'}
+//                            {key: '重要性：', value: '重要且紧急'}
+                            ],
+                            content: that.editItem.pNote,
+                            author: that.loginUser.authUser.name// 这里要向后台要值
+                          }
+                        }
+                      }
+                    })
+                  }
+                })
+                break
+              case 1:
+                var IDArrays = that.currentTodo.receiverIds === null ? [that.currentTodo.pUserId] : that.currentTodo.receiverIds.split(',')
+                var empIDArray = []
+                that.$store.dispatch('fetchUseridFromRsqid', {corpId: that.corpId, idArray: IDArrays})
+                  .then(idMap => {
+                    for (var i = 0; i < IDArrays.length; i++) {
+                      empIDArray.push(idMap[IDArrays[i]].emplId)
+                    }
+                    var standardTime = moment().format('YYYY-MM-DD HH:mm')
+                    window.rsqadmg.exec('notify', {
+                      userIds: empIDArray,
+                      corpId: that.corpId,
+                      alertTime: standardTime,
+                      title: that.currentTodo.pTitle,
+                      success: () => {
+                        that.$router.replace(window.history.back())
+                      }
+                    })
+                  })
+                break
+              case 2:
+                that.deleteCurrentTodo()
+                break
+              default:
+                break
+            }
+          }
+        })
         window.dd.device.notification.actionSheet({
           cancelButton: '取消', // 取消按钮文本
           otherButtons: ['发送到聊天', '发送提醒', '删除任务'],
@@ -391,83 +456,13 @@
                 corpId: that.corpId, // 企业id
                 isConfirm: 'true', // 是否弹出确认窗口，默认为true
                 onSuccess: function (res) {
-                  that.$store.dispatch('sendToConversation', {
-                    corpId: that.corpId, // that.loginUser.authUser.corpId,
-                    data: {
-                      sender: that.userId,
-                      cid: res.cid,
-                      msgtype: 'oa',
-                      oa: {
-                        message_url: window.location.href,
-                        head: {
-                          text: '日事清',
-                          bgcolor: 'FF55A8FD'
-                        },
-                        body: {
-                          title: that.editItem.pTitle,
-                          form: [
-                            {key: '日期：', value: '2017102'},
-                            {key: '时间：', value: '20:17'}
-//                            {key: '重要性：', value: '重要且紧急'}
-                          ],
-                          content: that.editItem.pNote,
-                          author: that.loginUser.authUser.name// 这里要向后台要值
-                        }
-                      }
-                    }
-                  })
+
                 },
                 onFail: function () {
                   console.log('执行失败')
                 }
               })
             } else if (result.buttonIndex === 1) {
-              var time = new Date()
-              var year = time.getFullYear()
-              var month = time.getMonth() + 1
-              if (month < 10) {
-                month = '0' + month
-              }
-              var day = time.getDate()
-              if (day < 10) {
-                day = '0' + day
-              }
-              var hour = time.getHours()
-              if (hour < 10) {
-                hour = '0' + hour
-              }
-              var minute = time.getMinutes()
-              if (minute < 10) {
-                minute = '0' + minute
-              }
-              var standardTime = year + '-' + month + '-' + day + '' + hour + ':' + minute
-              var IDArrays = that.currentTodo.receiverIds === null ? [that.currentTodo.pUserId] : that.currentTodo.receiverIds.split(',')
-              var empIDArray = []
-              that.$store.dispatch('fetchUseridFromRsqid', {corpId: that.corpId, idArray: IDArrays})
-                .then(idMap => {
-                  for (var i = 0; i < IDArrays.length; i++) {
-                    empIDArray.push(idMap[IDArrays[i]].emplId)
-                  }
-                  window.dd.biz.ding.post({
-                    users: empIDArray, // 用户列表，工号
-                    corpId: that.corpId, // 企业id
-                    type: 2, // 钉类型 1：image  2：link
-                    alertType: 2,
-                    alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': standardTime},
-                    attachment: {
-                      title: '',
-                      url: '',
-                      image: '',
-                      text: ''
-                    },
-                    text: that.currentTodo.pTitle, // 消息
-                    onSuccess: function () {
-                      that.$router.replace(window.history.back())
-                    },
-                    onFail: function () {
-                    }
-                  })
-                })
             }
           },
           onFail: function (err) {

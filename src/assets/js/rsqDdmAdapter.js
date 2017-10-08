@@ -537,7 +537,17 @@ rsqAdapterManager.register({
    * 发送到聊天
    * @param prams
    */
-  sendConv: function(prams) {},
+  pickConversation: function(params) {
+    dd.biz.chat.pickConversation({
+      corpId: params.corpId, // 企业id
+      isConfirm: 'true', // 是否弹出确认窗口，默认为true
+      onSuccess: function () {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {
+      }
+    })
+  },
   /**
    * 从localStorage中获取值
    * @param params

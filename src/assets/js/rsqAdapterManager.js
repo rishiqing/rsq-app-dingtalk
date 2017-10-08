@@ -14,7 +14,7 @@
       'hideLoader',
       'actionsheet',
       'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
-      'notify','sendConv', 'getItem', 'setItem', 'deleteItem',
+      'notify','pickConversation', 'getItem', 'setItem', 'deleteItem',
       'checkVersion', 'upgradeVersion'
     ];
   function register(adapter){

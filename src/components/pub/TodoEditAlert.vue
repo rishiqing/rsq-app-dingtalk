@@ -14,7 +14,7 @@
     </ul>
     <ul class="alert-list">
       <v-touch tag="li" @tap="selectAlert(alert)" v-for="(alert, index) in displayedTimeList" :key="index">
-        <span>{{parseTimeText(alert.numTime)}}-{{alert.selected}}</span>
+        <span>{{parseTimeText(alert.numTime)}}</span>
         <i class="icon2-selected finish" v-show="alert.selected"></i>
       </v-touch>
     </ul>
@@ -170,12 +170,13 @@
 //        var obj = {numTime: this.getNumDateTime(time), selected: false}
 //        this.displayedTimeList.push(obj)
 //        this.selectAlert(obj)
+        var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: moment().format('HH:mm'),
           success (result) {
-            var obj = {numTime: this.getNumDateTime(result.value), selected: false}
-            this.displayedTimeList.push(obj)
-            this.selectAlert(obj)
+            var obj = {numTime: that.getNumDateTime(result.value), selected: false}
+            that.displayedTimeList.push(obj)
+            that.selectAlert(obj)
           }
         })
       },
@@ -232,13 +233,14 @@
         var result = []
         //  执行merge算法
         selected.forEach(s => {
-          var orgObj = this.sysRuleList.find(org => {
+          var orgObjArray = this.sysRuleList.filter(org => {
             return org.schedule === s.schedule
           })
-          if (orgObj) {
-            result.push(orgObj)
+          if (orgObjArray.length > 0) {
+            result.push(orgObjArray[0])
           } else {
             result.push({
+              id: null,
               schedule: s.schedule,
               isUserDefined: false
             })
@@ -253,11 +255,11 @@
         var result = []
         //  执行merge算法
         selected.forEach(s => {
-          var orgObj = this.userRuleList.find(org => {
+          var orgObjArray = this.userRuleList.filter(org => {
             return s.numTime === jsUtil.alertRule2Time(org.schedule, this.numStartTime, this.numEndTime)
           })
-          if (orgObj) {
-            result.push(orgObj)
+          if (orgObjArray.length > 0) {
+            result.push(orgObjArray[0])
           } else {
             result.push({
               schedule: jsUtil.alertTime2Rule(s.numTime, this.numStartTime, this.numEndTime),
