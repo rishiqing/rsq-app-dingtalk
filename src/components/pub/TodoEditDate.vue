@@ -44,7 +44,7 @@
                      @tap="tapDay($event, day)">
               <div class="dp-day"
                    :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected}">
-                {{day.date.getDate()}}
+                {{day.date.getTime() === numToday ? '今' : day.date.getDate()}}
               </div>
             </v-touch>
           </tr>
@@ -205,6 +205,9 @@
       }
     },
     computed: {
+      numToday () {
+        return dateUtil.clearTime(new Date()).getTime()
+      },
       currentTodo () {
         return this.$store.state.todo.currentTodo
       },
@@ -220,6 +223,9 @@
         if (this.dateType === 'repeat' && c.repeatType) {
           var arr = this.currentTodoDate.repeatBaseTime.split(',')
           text = dateUtil.repeatDayText(c.repeatType, arr)
+          if (c.isLastDate) {
+            text += '、最后一天'
+          }
         }
         return (text || '不') + '重复'
       }
@@ -377,7 +383,8 @@
           newObj.endDate !== oldObj.endDate ||
           newObj.dates !== oldObj.dates ||
           newObj.repeatType !== oldObj.repeatType ||
-          newObj.repeatBaseTime !== oldObj.repeatBaseTime
+          newObj.repeatBaseTime !== oldObj.repeatBaseTime ||
+          newObj.isLastDate !== oldObj.isLastDate
       },
       gotoRepeat () {
         this.$router.push('/todoEdit/repeat')
@@ -391,6 +398,7 @@
           resObj['repeatBaseTime'] = null
           resObj['_selected'] = null
           resObj['_uRepeatType'] = null
+          resObj['_uIsLastDate'] = false
           resObj['_uRepeatStrTimeArray'] = null
         }
 

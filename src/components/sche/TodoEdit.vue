@@ -41,7 +41,7 @@
               :item="currentTodo"
             ></r-input-sub-todo>
             <r-comment-list
-              :items="currentTodo.comments"
+              :items="todoComments"
               ></r-comment-list>
             <div class="bottom">
               <v-touch @tap="SwitchToComent">
@@ -180,6 +180,7 @@
   import InputMember from 'com/pub/InputMember'
   import InputSubTodo from 'com/pub/InputSubTodo'
   import util from 'ut/jsUtil'
+  import dateUtil from 'ut/dateUtil'
   import ComentList from 'com/pub/ComentList'
   export default {
     data () {
@@ -201,33 +202,26 @@
       dynamicId () {
         return this.$route.params.todoId
       },
-//      joinUsers () {
-//        var todo = this.$store.state.todo.currentTodo
-//        var todo = this.editItem
-//        if (todo) {
-//          return util.getMapValuePropArray(todo.receiverUser, 'joinUser')
-//        } else {
-//          return []
-//        }
-//      },
-      normalCommonList () {
-        var list = this.editItem.comments
-        if (list) {
-          return list.filter(function (ele) {
-            return ele.type === 0
-          })
-        } else {
-          return []
-        }
+      todoComments () {
+        return this.currentTodo.comments || []
+      },
+      //  普通评论
+      commonComments () {
+        return this.todoComments.filter(i => {
+          return i.type === 0
+        })
       },
       loginUser () {
         return this.$store.getters.loginUser || {}
       },
       userId () {
-        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+        return this.loginUser.authUser.userId
       },
       corpId () {
-        return this.loginUser.authUser.corpId ? this.loginUser.authUser.corpId : 'dingtalkupload'
+        return this.loginUser.authUser.corpId
+      },
+      currentNumDate () {
+        return this.$store.getters.defaultNumTaskDate
       },
       dates () {
         var dates = this.$store.state.todo.currentTodo.dates
@@ -272,14 +266,37 @@
               this.joinUserRsqIds = joinUserArray.map(obj => {
                 return obj['id'] + ''
               })
-              window.rsqadmg.exec('hideLoader')
             })
+          .then(() => {
+            this.fetchCommentIds()
+            window.rsqadmg.exec('hideLoader')
+          })
           .catch(err => {
+            window.rsqadmg.exec('hideLoader')
             if (err.code === 400320) {
               this.$router.push('/pub/CheckFailure')
             } else if (err.code === 400318) {
               this.$router.push('/pub/noPermission')
             }
+          })
+      },
+      fetchCommentIds () {
+        //  根据评论中的rsqId获取userId，用来显示头像
+        var ids = this.commonComments.map(ti => {
+          return ti.authorId
+        })
+        ids = util.unique(ids)  //  去重
+        var corpId = this.loginUser.authUser.corpId
+        return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
+          .then(idMap => {
+            var that = this
+            that.commonComments.forEach(c => {
+              const user = idMap[c.authorId]
+              if (user) {
+                that.$set(c, 'authorAvatar', user.avatar)
+                that.$set(c, 'authorName', 'dingding-' + user.name)
+              }
+            })
           })
       },
       SwitchToComent () {
@@ -305,37 +322,6 @@
                 window.rsqadmg.execute('toast', {message: '保存成功'})
               })
         }
-      },
-      noteBlur () {
-        var note = this.editItem.pNote
-        if (note !== this.currentTodo.pNote) {
-          window.rsqadmg.execute('showLoader', {text: '保存中...'})
-//          this.updateTodo(this.currentTodo, {pNote: note})
-//              .then(function() {
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
-//              })
-        }
-      },
-      updateDate (result) {
-//        //  如果未发生改变则不保存
-        if (result.startDate === this.editItem.startDate &&
-          result.endDate === this.editItem.endDate &&
-          result.dates === this.editItem.dates) {
-          return
-        }
-        window.rsqadmg.execute('showLoader', {text: '保存中...'})
-        if (result.startDate == null &&
-          result.endDate == null &&
-          result.dates == null) {
-          result['pContainer'] = 'inbox'
-        }
-        this.$store.dispatch('updateTodoDate', {editItem: result})
-            .then(() => {
-              util.extendObject(this.editItem, result)
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '保存成功'})
-            })
       },
       saveMember (idArray) {
         var compRes = util.compareList(this.joinUserRsqIds, idArray)
@@ -388,12 +374,15 @@
               case 0:
                 window.rsqadmg.exec('pickConversation', {
                   corpId: that.corpId,
-                  success: function () {
-                    that.$store.dispatch('sendToConversation', {
+                  success: function (conv) {
+                    var d = dateUtil.repeatDate2Text(that.currentTodo)
+                    var clock = that.currentTodo.clock || {}
+                    var t = clock.startTime ? clock.startTime + '-' + clock.endTime : '全天'
+                    var params = {
                       corpId: that.corpId, // that.loginUser.authUser.corpId,
                       data: {
                         sender: that.userId,
-                        cid: res.cid,
+                        cid: conv.cid,
                         msgtype: 'oa',
                         oa: {
                           message_url: window.location.href,
@@ -404,8 +393,8 @@
                           body: {
                             title: that.editItem.pTitle,
                             form: [
-                              {key: '日期：', value: '2017102'},
-                              {key: '时间：', value: '20:17'}
+                              {key: '日期：', value: d},
+                              {key: '时间：', value: t}
 //                            {key: '重要性：', value: '重要且紧急'}
                             ],
                             content: that.editItem.pNote,
@@ -413,6 +402,10 @@
                           }
                         }
                       }
+                    }
+                    that.$store.dispatch('sendToConversation', params)
+                    .then(() => {
+                      window.rsqadmg.exec('toast', {message: '发送成功'})
                     })
                   }
                 })
@@ -443,30 +436,6 @@
               default:
                 break
             }
-          }
-        })
-        window.dd.device.notification.actionSheet({
-          cancelButton: '取消', // 取消按钮文本
-          otherButtons: ['发送到聊天', '发送提醒', '删除任务'],
-          onSuccess: function (result) {
-            if (result.buttonIndex === 2) {
-              that.deleteCurrentTodo()
-            } else if (result.buttonIndex === 0) {
-              window.dd.biz.chat.pickConversation({
-                corpId: that.corpId, // 企业id
-                isConfirm: 'true', // 是否弹出确认窗口，默认为true
-                onSuccess: function (res) {
-
-                },
-                onFail: function () {
-                  console.log('执行失败')
-                }
-              })
-            } else if (result.buttonIndex === 1) {
-            }
-          },
-          onFail: function (err) {
-            alert(err)
           }
         })
       }

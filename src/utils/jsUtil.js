@@ -241,7 +241,6 @@ export default {
   objectEqual (obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2)
   },
-
   /**
    * 提醒时将code值转换为text, code为形如“begin_-5_min”的字符串
    * @param code
@@ -301,5 +300,14 @@ export default {
       num /= 60
     }
     return pre + '_' + num + '_' + unit
+  },
+  /**
+   * 将list中的元素去重
+   * @param list
+   */
+  unique (list) {
+    return list.filter((value, index, self) => {
+      return self.indexOf(value) === index
+    })
   }
 }

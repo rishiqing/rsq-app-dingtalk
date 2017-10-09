@@ -97,6 +97,7 @@
 <script>
   import dateUtil from 'ut/dateUtil'
   import jsUtil from 'ut/jsUtil'
+  import moment from 'moment'
   import selectRepeat from 'com/pub/SelectUserRepeat'
   /**
    * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
@@ -130,7 +131,8 @@
         userRepeat: {cid: 99, type: 'userRepeat'},
         //  初始化时是否有repeat
         uRepeatType: null,
-        uRepeatStrTimeArray: []
+        uRepeatStrTimeArray: [],
+        uIsLastDate: false
       }
     },
     computed: {
@@ -139,7 +141,7 @@
       },
       //  根据currentTodo来判断是否显示重复
       showShortcut () {
-        return !this.currentTodo.repeatType
+        return !this.currentTodo.id || !this.currentTodo.repeatType
       },
       todoDate () {
         return this.$store.state.pub.currentTodoDate
@@ -149,22 +151,28 @@
       },
       repeatText () {
         var text = dateUtil.repeatDayText(this.uRepeatType, this.uRepeatStrTimeArray)
+        if (this.uIsLastDate) {
+          text += '、最后一天'
+        }
         return text ? text + '重复' : ''
       },
       comRepeat () {
         var type = null
         var baseArray = []
+        var isLastDate = false
         if (this.selected) {
           type = this.selected.repeatType
           baseArray = this.selected.strTime
         } else {
           type = this.uRepeatType
           baseArray = this.uRepeatStrTimeArray
+          isLastDate = this.uIsLastDate
         }
         return {
           selected: this.selected,
           type,
-          baseArray
+          baseArray,
+          isLastDate
         }
       }
     },
@@ -175,6 +183,7 @@
         if (t._selected || t._uRepeatType) {
           this.uRepeatType = t._uRepeatType
           this.uRepeatStrTimeArray = t._uRepeatStrTimeArray
+          this.uIsLastDate = t._uIsLastDate
           if (t._selected) {
             this.selected = this.findSelect(t._selected.cid)
           }
@@ -182,6 +191,7 @@
           this.uRepeatType = t.repeatType
           var base = t.repeatBaseTime
           this.uRepeatStrTimeArray = (base === null || base === '' ? [] : base.split(','))
+          this.uIsLastDate = !!t.isLastDate
           //  无缓存的情况下，如果存在repeatType则设置selected为null，如果不存在repeatType，则默认选中noRepeat
           this.selected = t.repeatType ? null : this.noRepeat
         }
@@ -217,16 +227,23 @@
       },
       showUserRepeat () {
         this.selected = null
+        var strTimeArray = this.uRepeatStrTimeArray
+        if (strTimeArray.length === 0) {
+          strTimeArray = [moment(this.baseNumTime).format('YYYYMMDD')]
+        }
+        var that = this
         selectRepeat.show({
-          baseNumTime: this.baseNumTime,
-          repeatType: this.uRepeatType,
-          repeatStrTimeArray: this.uRepeatStrTimeArray,
-          success: result => {
+          baseNumTime: that.baseNumTime,
+          repeatType: that.uRepeatType || 'everyDay',
+          repeatStrTimeArray: strTimeArray,
+          isLastDate: that.uIsLastDate,
+          success: function (result) {
             if (result.repeatType) {
-              this.selected = null
+              that.selected = null
             }
-            this.uRepeatType = result.repeatType
-            this.uRepeatStrTimeArray = result.repeatStrTimeArray
+            that.uRepeatType = result.repeatType
+            that.uRepeatStrTimeArray = result.repeatStrTimeArray
+            that.uIsLastDate = result.isLastDate
           }
         })
       },
@@ -234,7 +251,8 @@
         var params = {
           _selected: this.selected,
           _uRepeatType: this.uRepeatType,
-          _uRepeatStrTimeArray: this.uRepeatStrTimeArray
+          _uRepeatStrTimeArray: this.uRepeatStrTimeArray,
+          _uIsLastDate: this.uIsLastDate
         }
         //  表示选择的是“不重复”
         if (this.comRepeat.type === 'none') {
@@ -244,6 +262,7 @@
         } else {
           params['isCloseRepeat'] = false
           params['repeatType'] = this.comRepeat.type
+          params['isLastDate'] = this.comRepeat.isLastDate
           params['repeatBaseTime'] = this.comRepeat.baseArray.join(',')
           var strDate = dateUtil.dateNum2Text(this.baseNumTime, '/')
           params['startDate'] = strDate

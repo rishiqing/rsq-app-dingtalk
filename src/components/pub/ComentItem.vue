@@ -1,9 +1,9 @@
 <template>
-  <v-touch @tap="TriggerAndriod(item)">
+  <v-touch @tap="triggerAndroid(item)">
     <li class="coment" >
       <div class="left">
-        <avatar :src="loginUser.authUser.avatar"
-                :username="loginUser.authUser.name"
+        <avatar :src="item.authorAvatar"
+                :username="item.authorName"
                 :size="30">
         </avatar>
       </div>
@@ -136,8 +136,8 @@
       loginUser () {
         return this.$store.state.loginUser
       },
-      userId () {
-        return this.loginUser.authUser.userId ? this.loginUser.authUser.userId : 'dingtalkupload'
+      rsqUserId () {
+        return this.loginUser.rsqUser.id
       },
       comments () {
         return this.$store.state.todo.currentTodo.comments
@@ -153,7 +153,7 @@
     methods: {
       deleteComment (item) {
         var that = this
-        if (this.userId === item.authorId) {
+        if (this.rsqUserId === item.authorId) {
           window.rsqadmg.exec('confirm', {
             message: '确定要删除此评论？',
             success () {
@@ -162,13 +162,12 @@
                 .then(() => {
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
-                  // that.$router.replace(window.history.back())
                 })
             }
           })
         }
       },
-      TriggerAndriod (item) {
+      triggerAndroid (item) {
         this.deleteComment(item)
       }
     }

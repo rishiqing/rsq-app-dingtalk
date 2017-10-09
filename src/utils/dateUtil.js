@@ -305,5 +305,33 @@ export default {
         break
     }
     return text
+  },
+  /**
+   * 将重复及日期转换为显示的文字
+   * @param t
+   */
+  repeatDate2Text (t) {
+    if (!t.dates && !t.startDate && !t.endDate) {
+      return ''
+    }
+    var parsed = this.backend2frontend({
+      dates: t.dates,
+      startDate: t.startDate,
+      endDate: t.endDate,
+      isCloseRepeat: t.isCloseRepeat,
+      repeatType: t.repeatType,
+      repeatBaseTime: t.repeatBaseTime
+    })
+    var result
+    if (parsed.dateType === 'repeat') {
+      result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
+      if (t.isLastDate) {
+        result += ',最后一天'
+      }
+      result += '重复'
+    } else {
+      result = this.formatDateDisplay(parsed.dateType, parsed.dateResult)
+    }
+    return result
   }
 }

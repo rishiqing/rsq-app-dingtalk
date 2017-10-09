@@ -5,19 +5,17 @@
       <div :class="{'isDisplay': more}" class="operation">显示操作记录</div>
     </v-touch>
     <r-record-coment
-      v-for="item in items"
+      v-for="item in recordItems"
       :item="item"
       :key="item.id"
       :more="more"
-      v-if="item.type!=0"
     ></r-record-coment>
     <r-todo-coment
-      v-for="item in items"
+      v-for="item in commentItems"
       :item="item"
       :key="item.id"
-      v-if="item.type===0"
     ></r-todo-coment>
-    <div  v-if="comentCount" class="noComent">
+    <div v-if="comentCount" class="noComent">
       <img src="../../assets/img/nocoment.png" alt="">
       <p class="noComentContent">暂无评论</p>
     </div>
@@ -77,6 +75,16 @@
       'r-record-coment': comentRecord
     },
     computed: {
+      recordItems () {
+        return this.items.filter(i => {
+          return i.type !== 0
+        })
+      },
+      commentItems () {
+        return this.items.filter(i => {
+          return i.type === 0
+        })
+      },
       comentCount () {
         if (this.items === undefined) {
           return

@@ -543,7 +543,7 @@ rsqAdapterManager.register({
     dd.biz.chat.pickConversation({
       corpId: params.corpId, // 企业id
       isConfirm: 'true', // 是否弹出确认窗口，默认为true
-      onSuccess: function () {
+      onSuccess: function (res) {
         rsqChk(params.success, [res]);
       },
       onFail: function () {

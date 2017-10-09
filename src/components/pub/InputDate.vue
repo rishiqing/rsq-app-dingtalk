@@ -62,24 +62,7 @@
     },
     computed: {
       dateString () {
-        var t = this.item
-        if (!t.dates && !t.startDate && !t.endDate) {
-          return ''
-        }
-        var parsed = dateUtil.backend2frontend({
-          dates: t.dates,
-          startDate: t.startDate,
-          endDate: t.endDate,
-          isCloseRepeat: t.isCloseRepeat,
-          repeatType: t.repeatType,
-          repeatBaseTime: t.repeatBaseTime
-        })
-        var result
-        if (parsed.dateType === 'repeat') {
-          result = dateUtil.repeatDayText(t.repeatType, t.repeatBaseTime.split(',')) + '重复'
-        } else {
-          result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
-        }
+        var result = dateUtil.repeatDate2Text(this.item)
         var time = new Date()
         var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
         return newTime === result ? '今天' : result

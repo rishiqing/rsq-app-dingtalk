@@ -211,7 +211,14 @@
             valStr = sel.length === 0 ? '' : '每周' + sel.map(d => { return this.dayName[d.val] }).join('，') + '重复'
             break
           case 'everyMonth':
-            valStr = sel.length === 0 ? '' : '每月' + sel.map(d => { return d.text }).join('，') + '号重复'
+            valStr = sel.length === 0 ? '' : '每月' + sel
+              .filter(function (d) { return !d.isLast })
+              .map(function (d) { return d.text }).join('，') + '号'
+            //  如果最后一天被选中，则特殊处理
+            if (this.dates[31].selected) {
+              valStr += ', 最后一天'
+            }
+            valStr += '重复'
             break
           case 'everyYear':
             valStr = '每年' + '' + '重复'
@@ -313,6 +320,14 @@
         return result
       },
       tapSelect (d) {
+        if (d.selected) {
+          var list = this.localType === 'everyWeek' ? this.days : this.dates
+          //  如果是唯一的一天，则不允许取消
+          var sel = list.filter(function (l) {
+            return l.selected
+          })
+          if (sel.length <= 1) return
+        }
         d.selected = !d.selected
       },
       getNumTimeArray () {
