@@ -335,6 +335,10 @@ export default {
         .then(result => {
           result.cDetail = true
           commit('TD_TODO_GET', {todo: result})
+          //  如果currentTodo不存在，那么设置currentTodo为getTodo得到的item
+          if (!state.todo.currentTodo.id) {
+            commit('TD_CURRENT_TODO_SET', {item: result})
+          }
           return result
         })
     } else {
@@ -455,6 +459,7 @@ export default {
     return api.todo.putTodoProps(editItem)
       .then(todo => {
         commit('TD_TODO_UPDATED', {todo: todo})
+        return todo
       })
   },
   saveTodoAction ({commit, state}, p) {
@@ -540,6 +545,7 @@ export default {
       }
       promise = Promise.resolve().then(() => {
         commit('TD_CURRENT_TODO_UPDATE', {item: p})
+        return todo
       })
     }
     return promise
@@ -809,15 +815,16 @@ export default {
     var item = p.item
     var promise
 
-    if (item.clock && item.clock.alert) {
+    if (item.id) {
       var c = item.clock
-      // var url = window.location.href.split('')
-      var millsArray = item.clock.alert.map(a => {
+      var alert = item.clock.alert || []
+      var url = window.location.href.split('#')
+      var millsArray = alert.map(a => {
         const numStart = moment(c.taskDate + c.startTime, 'YYYYMMDDHH:mm').valueOf()
         const numEnd = moment(c.taskDate + c.endTime, 'YYYYMMDDHH:mm').valueOf()
         return util.alertRule2Time(a.schedule, numStart, numEnd)
       })
-      var remindArray = item.clock.alert.map(a => {
+      var remindArray = alert.map(a => {
         return util.alertCode2RemindText(a.schedule) + '，请点击查看详情'
       })
       let data = {
@@ -827,7 +834,7 @@ export default {
         userid_list: state.loginUser.authUser.userId,
         msgtype: 'oa',
         msgcontent: {
-          message_url: 'https://www.rishiqing.com',
+          message_url: url[0] + '#' + '/todo/' + item.id,
           head: {
             text: '日事清',
             bgcolor: 'FF55A8FD'
