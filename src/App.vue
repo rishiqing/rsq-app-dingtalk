@@ -32,5 +32,6 @@
   .rsq-webview{
     background-color: #F8F8F8;
     height:100%;
+    -webkit-overflow-scrolling: touch;
   }
 </style>

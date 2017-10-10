@@ -1,5 +1,5 @@
 <template>
-  <div class="router-view content--cal">
+  <div class="router-view content--cal" style="padding-top: 81px;box-sizing:border-box;">
     <r-calendar
       @click-cal-day="fetchItems"
       @after-cal-swipe="fetchDatesHasTodo"
