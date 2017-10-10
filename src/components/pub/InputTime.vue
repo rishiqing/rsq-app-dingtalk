@@ -58,10 +58,12 @@
       }
     },
     props: {
+      disabled: Boolean,
       item: Object
     },
     methods: {
       gotoTodoTime () {
+        if (this.disabled) return
         this.$emit('time-tap')
         //  将需要用到的属性设置到currentTodoTime中
         var timeObj = {

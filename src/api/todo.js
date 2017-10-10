@@ -34,6 +34,7 @@ export default {
    * @returns {*}
    */
   getScheduleTodos (params) {
+    params.isFrom = 'web'
     params.isGetDelay = true
     let path = mapping.GET_SCHEDULE_TODOS + '?' + util.combineUrlParams(params)
     return new Promise((resolve, reject) => {
@@ -121,6 +122,19 @@ export default {
   },
   deleteTodo (props) {
     var path = util.replaceUrlParams(mapping.DELETE_TODO, props)
+
+    return new Promise((resolve, reject) => {
+      Vue.http.delete(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  deleteRepeatTodo (props) {
+    var path = mapping.DELETE_REPEAT_TODO + '?' + util.combineUrlParams(props)
     return new Promise((resolve, reject) => {
       Vue.http.delete(path)
         .then(res => {

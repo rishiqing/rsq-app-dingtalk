@@ -36,7 +36,7 @@
     bottom: 0;
     background: rgba(0,0,0,0.9);
     opacity: 0.4;
-    z-index: 99;
+    z-index: 999;
   }
   .window{
     width: 7.29rem;
@@ -46,7 +46,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
-    z-index: 100;
+    z-index: 1000;
   }
   .window-top{
     width: 7.29rem;
@@ -121,12 +121,13 @@
     },
     methods: {
       SwitchToexplain () {
+        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
         window.rsqadmg.exec('setItem', this.$store.state.env.version)
         this.$router.push('/pub/explain')
       },
       SwitchTosche () {
+        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
         window.rsqadmg.exec('setItem', this.$store.state.env.version)
-        this.$router.replace('/sche')
       }
     }
   }

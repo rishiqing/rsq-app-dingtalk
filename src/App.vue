@@ -2,10 +2,12 @@
   <div id="app" class="rsq-webview">
     <router-view></router-view>
     <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
+    <r-guide v-if="isShowGuide"></r-guide>
   </div>
 </template>
 <script>
   import Nav from 'com/Nav'
+  import Guide from 'com/pub/RemindWindow'
 
   export default {
     name: 'app',
@@ -15,10 +17,14 @@
       },
       isShowNav () {
         return this.$store.state.env.isShowNav
+      },
+      isShowGuide () {
+        return this.$store.state.env.isShowGuide
       }
     },
     components: {
-      'r-nav': Nav
+      'r-nav': Nav,
+      'r-guide': Guide
     }
   }
 </script>

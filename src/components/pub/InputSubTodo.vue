@@ -45,6 +45,7 @@
       return {}
     },
     props: {
+      disabled: Boolean,
       item: Object
     },
     computed: {
@@ -76,6 +77,7 @@
     },
     methods: {
       showSubTodo () {
+        if (this.disabled) return
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

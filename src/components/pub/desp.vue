@@ -48,7 +48,9 @@
           noteElement.innerHTML = this.DEFAULT_NOTE
         }
         var that = this
-        this.$store.dispatch('postdesp', {pNote: this.newItemNote}).then(() => {
+        var params = {pNote: this.newItemNote}
+        this.$store.dispatch('postdesp', params).then(() => {
+          that.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
           that.$router.replace(window.history.back())
         })
       }

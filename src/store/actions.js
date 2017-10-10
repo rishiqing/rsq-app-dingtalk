@@ -119,6 +119,11 @@ export default {
       return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
         .then(todos => {
           let reverseTodo = todos.reverse()
+          //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
+          var compareDate = moment(strDate).format('YYYYMMDD')
+          reverseTodo = reverseTodo.filter(t => {
+            return t.deletedDate !== compareDate
+          })
           commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
           commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
         })
@@ -312,6 +317,8 @@ export default {
    */
   setCurrentTodo ({commit}, item) {
     commit('TD_CURRENT_TODO_SET', {item: item})
+    //  鉴于重复功能的需要，如果item是重复的日程，这里需要暂存重复的原始值
+    commit('TD_CURRENT_TODO_REPEAT_SET', {item})
   },
   updateCurrentTodo ({ commit }, item) {
     commit('TD_CURRENT_TODO_UPDATE', {item})
@@ -462,6 +469,21 @@ export default {
         return todo
       })
   },
+  //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
+  updateRepeatTodo ({commit, state, getters}, p) {
+    var repeat = state.todo.currentTodoRepeat
+    util.extendObject(repeat, p)
+    repeat.createTaskDate = getters.defaultTaskDate
+    //  如果id存在，则ajax更新
+    return api.todo.putTodoProps(repeat)
+      .then(todo => {
+        // commit('TD_TODO_UPDATED', {todo: todo})
+        //  TODO  让所有缓存都失效，暂时这么处理
+        commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+        commit('SCH_TODO_CACHE_DELETE_ALL')
+        return todo
+      })
+  },
   saveTodoAction ({commit, state}, p) {
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
@@ -560,18 +582,23 @@ export default {
    * @param p.todo
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
-  deleteTodo ({commit, state, dispatch}, p) {
-    // console.log('action-deleteTodo进来了')
+  deleteTodo ({commit, state, dispatch, getters}, p) {
     var todo = p.todo || state.todo.currentTodo
-    return api.todo.deleteTodo(todo)
-      .then(() => {
-        commit('TD_TODO_DELETED', {item: todo})
-        //  清除缓存数据
-        var sourceDateStruct = dateUtil.backend2frontend(todo)
-        var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+    var promise
+    if (p.isRepeat) {
+      var params = {id: todo.id, createTaskDate: getters.defaultTaskDate, type: p.type}
+      promise = api.todo.deleteRepeatTodo(params)
+    } else {
+      promise = api.todo.deleteTodo(todo)
+    }
+    return promise.then(() => {
+      //  清除缓存数据
+      var sourceDateStruct = dateUtil.backend2frontend(todo)
+      var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
-        dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
-      })
+      dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
+      commit('TD_TODO_DELETED', {item: todo})
+    })
   },
   deleteCommentItem ({commit, state, dispatch}, p) {
     var item = p.item

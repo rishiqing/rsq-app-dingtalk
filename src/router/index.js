@@ -46,12 +46,12 @@ const router = new Router({
           success (p) {
             var localVersion = Number(p.value)
             var currentVersion = Number(window.rsqConfig.version)
-            if (isNaN(localVersion) || localVersion < currentVersion) {
-              //  跳转到引导页
-              next('/pub/RemindWindow')
-            } else {
-              next()
+            //  副版本更新时才显示
+            if (isNaN(localVersion) || currentVersion - localVersion >= 1000) {
+              //  显示引导页
+              store.commit('SYS_GUIDE_SHOW')
             }
+            next()
           }
         })
       }

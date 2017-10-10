@@ -7,6 +7,7 @@
                class="padding-left-input-"
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
+               @focus="disabled ? $event.target.blur() : function(){}"
                :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle)}">
       <div class="padding-left-">
       <v-touch class=""
@@ -108,7 +109,8 @@
     props: {
       isCheckable: Boolean,
       itemTitle: String,
-      itemChecked: Boolean
+      itemChecked: Boolean,
+      disabled: Boolean
     },
     methods: {
       isMaxlength (title) {
@@ -122,6 +124,7 @@
         this.$emit('text-change', value)
       },
       clickCheckOut () {
+        if (this.disabled) return
         this.$emit('click-checkout', !this.itemChecked)
       }
     }

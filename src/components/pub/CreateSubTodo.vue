@@ -75,6 +75,8 @@
               window.rsqadmg.execute('showLoader', {text: '删除中...'})
               that.$store.dispatch('deleteSubTodo', {item: item})
                 .then(() => {
+                  //  触发标记重复修改
+                  this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
                   this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
                     .then(() => {
                     })
@@ -89,6 +91,8 @@
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
+                //  触发标记重复修改
+                this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
                 this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
                   .then(() => {
                   })
@@ -105,6 +109,8 @@
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('createSubTodo', {newItem: {pTitle: this.inputTitle}, todoId: this.todoid})
           .then(() => {
+            //  触发标记重复修改
+            this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
             this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: this.inputTitle, type: 7}})
               .then(() => {
               })

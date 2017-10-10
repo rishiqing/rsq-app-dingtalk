@@ -31,6 +31,16 @@ import util from 'ut/jsUtil'
  */
 export default {
   /**
+   * 是否显示引导弹窗
+   * @param state
+   * @param p
+   * @constructor
+   */
+  SYS_GUIDE_SHOW (state, p) {
+    var show = p ? p.isShow : true
+    state.env.isShowGuide = show
+  },
+  /**
    * 登录后设置全局loginUser
    * @param state
    * @param p
@@ -203,6 +213,29 @@ export default {
    */
   TD_CURRENT_TODO_SET (state, p) {
     state.todo.currentTodo = p.item
+  },
+  TD_CURRENT_TODO_REPEAT_SET (state, p) {
+    var i = p.item
+    state.todo.currentTodoRepeat = {
+      id: i.id,
+      pTitle: i.pTitle,
+      pNote: i.pNote || null,
+      oldPTitle: i.pTitle,
+      oldPNote: i.pNote || null,
+      oldSubTodos: JSON.parse(JSON.stringify(i.subTodos || [])),
+      createTaskDate: 'not set',
+      type: 'not set'
+    }
+    state.todo.isRepeatFieldEdit = false
+  },
+  TD_CURRENT_TODO_REPEAT_EDITED (state, p) {
+    state.todo.isRepeatFieldEdit = true
+    if (p.pTitle) {
+      state.todo.currentTodoRepeat.pTitle = p.pTitle
+    }
+    if (p.pNote) {
+      state.todo.currentTodoRepeat.pNote = p.pNote
+    }
   },
   /**
    * 更新当前的todo

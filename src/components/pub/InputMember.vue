@@ -86,6 +86,7 @@
       }
     },
     props: {
+      disabled: Boolean,
       isNative: Boolean,  //  是否使用钉钉应用本地的选择框
       indexTitle: String,
       selectTitle: String,
@@ -117,6 +118,7 @@
     },
     methods: {
       showMemberEdit (e) {
+        if (this.disabled) return
         return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {

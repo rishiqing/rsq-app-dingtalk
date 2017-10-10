@@ -57,6 +57,7 @@
       return {}
     },
     props: {
+      disabled: Boolean,
       item: Object,
       sep: String
     },
@@ -70,6 +71,7 @@
     },
     methods: {
       gotoDate () {
+        if (this.disabled) return
         //  将需要用到的属性设置到currentTodoDate中
         var c = this.item
         var obj = {

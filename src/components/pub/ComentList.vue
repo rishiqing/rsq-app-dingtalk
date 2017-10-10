@@ -6,12 +6,14 @@
     </v-touch>
     <r-record-coment
       v-for="item in recordItems"
+      :disabled="disabled"
       :item="item"
       :key="item.id"
       :more="more"
     ></r-record-coment>
     <r-todo-coment
       v-for="item in commentItems"
+      :disabled="disabled"
       :item="item"
       :key="item.id"
     ></r-todo-coment>
@@ -67,6 +69,7 @@
     },
     name: 'ComentList',
     props: {
+      disabled: Boolean,
       items: Array,
       commentContent: String
     },

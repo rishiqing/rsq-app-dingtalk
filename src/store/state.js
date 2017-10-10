@@ -6,7 +6,9 @@ export default {
     version: {name: 'rsq-app-version', value: window.rsqConfig.version},
     //  是否在页面上添加nav元素，只有当页面添加了nav元素，且isShowNav为true的时候才会显示nav
     isAddNav: false,
-    isShowNav: false
+    isShowNav: false,
+    //  是否显示引导页
+    isShowGuide: false
   },
   /**
    * 默认字段设置
@@ -59,7 +61,11 @@ export default {
     currentTodo: {
       subTodos: [],
       comments: []
-    }
+    },
+    //  用于处理重复的任务修改时，需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
+    currentTodoRepeat: {},
+    //  重复相关的字段是否修改过，目前的条件是如果title/note/subTodos修改过，认为修改过
+    isRepeatFieldEdit: false
   },
   /**
    * 组件之间需要共享的临时数据

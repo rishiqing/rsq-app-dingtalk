@@ -1,30 +1,35 @@
 <template>
   <div class="router-view">
+    <!--<div class="itm-edt z-index-xs" @click="prepareDelete">测试（删除）</div>-->
     <div class="itm-edt z-index-xs">
       <div class="content">
         <div class="itm-edt-fields" style="padding-bottom: 80px;">
           <div class="itm-group itm--edit-todo">
             <r-input-title
+              ref="title"
               :is-checkable="!isInbox"
               :item-title="editItem.pTitle"
               :item-checked="editItem.pIsDone"
-              @text-blur="titleBlur"
+              :disabled="!checkEdit()"
+              @text-blur="saveTitle"
               @click-checkout="finishChecked"
             ></r-input-title>
           </div>
           <v-touch @tap="SwitchToDesp">
             <div id="noteEditable" contenteditable="true" class="desp"
                  name="note" rows="5"
-                 placeholder="添加任务描述...">
+                 placeholder="添加任务描述..." onfocus="this.blur();">
               添加任务描述...
             </div>
           </v-touch>
           <div class="itm--edit-todo ">
             <r-input-date
+              :disabled="!checkEdit()"
               :item="editItem"
               :sep="'/'"
             ></r-input-date>
             <r-input-time
+              :disabled="!checkEdit()"
               :item="editItem"
               v-if="editItem.pContainer !== 'inbox'"
             ></r-input-time>
@@ -35,17 +40,20 @@
               :user-rsq-ids="[]"
               :selected-rsq-ids="joinUserRsqIds"
               :disabled-rsq-ids="[]"
+              :disabled="!checkEdit()"
               @member-changed="saveMember"
             ></r-input-member>
             <r-input-sub-todo
+              :disabled="!checkEdit()"
               :item="currentTodo"
             ></r-input-sub-todo>
             <r-comment-list
+              :disabled="!checkEdit()"
               :items="todoComments"
               ></r-comment-list>
             <div class="bottom">
               <v-touch @tap="SwitchToComent">
-                <input type="text" class="bot" placeholder="输入讨论内容或发送文件">
+                <input type="text" class="bot" placeholder="输入讨论内容或发送文件" onfocus="this.blur();">
               </v-touch>
             </div>
           </div>
@@ -173,6 +181,7 @@
     transition: border-color 0.4s, background-color ease 0.4s; }
 </style>
 <script>
+  import { Promise } from 'es6-promise'
   import moment from 'moment'
   import InputTitleText from 'com/pub/InputTitleText'
   import InputDate from 'com/pub/InputDate'
@@ -249,10 +258,12 @@
 //      'r-input-note': InputNoteText,
       'r-comment-list': ComentList
     },
-    beforeRouteEnter (to, from, next) {
-      next()
-    },
     methods: {
+      //  过去的日程不允许更新日程详情
+      checkEdit () {
+        var enabled = this.currentNumDate + 24 * 3600 * 1000 > new Date().getTime()
+        return enabled
+      },
       initData () {
         window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('getTodo', {todo: {id: this.dynamicId}})
@@ -300,27 +311,36 @@
           })
       },
       SwitchToComent () {
+        if (!this.checkEdit()) return
         this.$router.push('/pub/coment')
       },
       SwitchToDesp () {
+        if (!this.checkEdit()) return
         this.$router.push('/pub/desp')
       },
-      titleBlur (newTitle) {
+      saveTitle (newTitle) {
         if (!newTitle) {
-          return window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
+          window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
+          return Promise.reject()
         }
         if (newTitle !== this.editItem.pTitle) {
           window.rsqadmg.exec('showLoader', {text: '保存中...'})
-          this.$store.dispatch('updateTodo', {editItem: {pTitle: newTitle}})
-              .then(() => {
-                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: newTitle, type: 9}})
-                  .then(() => {
-                    this.editItem.pTitle = newTitle
-                  })
-                this.editItem.pTitle = newTitle
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '保存成功'})
-              })
+          var params = {pTitle: newTitle}
+          return this.$store.dispatch('updateTodo', {editItem: params})
+            .then(() => {
+              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
+            })
+            .then(() => {
+              return this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: newTitle, type: 9}})
+            })
+            .then(() => {
+              this.editItem.pTitle = newTitle
+              this.editItem.pTitle = newTitle
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
+            })
+        } else {
+          return Promise.resolve()
         }
       },
       saveMember (idArray) {
@@ -350,20 +370,51 @@
               })
         }
       },
-      deleteCurrentTodo () {
+      deleteCurrentTodo (p) {
+        return this.$store.dispatch('deleteTodo', p)
+      },
+      prepareDelete () {
         var that = this
-        window.rsqadmg.exec('confirm', {
-          message: '确定要删除此任务？',
-          success () {
-            window.rsqadmg.execute('showLoader', {text: '删除中...'})
-            that.$store.dispatch('deleteTodo', {todo: that.currentTodo})
+        if (that.currentTodo.isCloseRepeat) {
+          window.rsqadmg.exec('confirm', {
+            message: '确定要删除此任务？',
+            success () {
+              window.rsqadmg.execute('showLoader', {text: '删除中...'})
+              that.deleteCurrentTodo({todo: that.currentTodo})
                 .then(() => {
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
                   that.$router.replace(window.history.back())
                 })
-          }
-        })
+            }
+          })
+        } else {
+          window.rsqadmg.exec('actionsheet', {
+            buttonArray: ['仅删除此任务', '删除此任务及以后的任务', '删除所有的重复任务'],
+            success: function (res) {
+              window.rsqadmg.execute('showLoader', {text: '删除中...'})
+              var promise
+              switch (res.buttonIndex) {
+                case 0:
+                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'today'})
+                  break
+                case 1:
+                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'after'})
+                  break
+                case 2:
+                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'all'})
+                  break
+                default:
+                  break
+              }
+              promise.then(() => {
+                window.rsqadmg.exec('hideLoader')
+                window.rsqadmg.execute('toast', {message: '删除成功'})
+                that.$router.replace(window.history.back())
+              })
+            }
+          })
+        }
       },
       more () {
         var that = this
@@ -431,13 +482,58 @@
                   })
                 break
               case 2:
-                that.deleteCurrentTodo()
+                that.prepareDelete()
                 break
               default:
                 break
             }
           }
         })
+      },
+      updateRepeat (p) {
+        return this.$store.dispatch('updateRepeatTodo', p)
+      },
+      checkIfRepeatEdited (next) {
+        //  如果check时发现title有未保存的内容，那么先保存title
+        var newValue = this.$refs.title.$refs.titleInput.value
+        this.saveTitle(newValue)
+          .then(() => {
+            var c = this.currentTodo
+            var isEdited = this.$store.state.todo.isRepeatFieldEdit
+            if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
+              var that = this
+              window.rsqadmg.exec('actionsheet', {
+                buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
+                success: function (res) {
+                  window.rsqadmg.execute('showLoader', {text: '更新中...'})
+                  var promise
+                  switch (res.buttonIndex) {
+                    case 0:
+                      promise = that.updateRepeat({type: 'today'})
+                      break
+                    case 1:
+                      promise = that.updateRepeat({type: 'after'})
+                      break
+                    case 2:
+                      promise = that.updateRepeat({type: 'all'})
+                      break
+                    default:
+                      break
+                  }
+                  promise.then(() => {
+                    window.rsqadmg.exec('hideLoader')
+                    window.rsqadmg.execute('toast', {message: '更新成功'})
+                    return next()
+                  })
+                }
+              })
+            } else {
+              return next()
+            }
+          })
+          .catch(() => {
+            next(false)
+          })
       }
     },
     created () {
@@ -449,15 +545,23 @@
         success (res) {
           if (res.key === 'more') {
             that.more()
-            // that.deleteCurrentTodo()
-//            window.rsqadmg.exec('actionsheet', {
-//              buttonArray: ['发送到聊天', '发送提醒', '删除任务']
-//            })
           }
         }
       })
     },
     mounted () {
+    },
+    beforeRouteEnter (to, from, next) {
+      next()
+    },
+    beforeRouteLeave (to, from, next) {
+      //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
+      if (to.name === 'sche') {
+        next(false)
+        this.checkIfRepeatEdited(next)
+      } else {
+        return next()
+      }
     }
   }
 </script>

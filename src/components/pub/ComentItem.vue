@@ -144,6 +144,7 @@
       }
     },
     props: {
+      disabled: Boolean,
       item: Object,
       more: Boolean
     },
@@ -168,6 +169,7 @@
         }
       },
       triggerAndroid (item) {
+        if (this.disabled) return
         this.deleteComment(item)
       }
     }
