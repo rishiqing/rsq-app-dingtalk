@@ -187,9 +187,8 @@ export default {
    * @param prop
    */
   extractProp (array, prop) {
-    return array.map(obj => {
-      return obj[prop]
-    })
+    return array.filter(obj => { return obj[prop] })
+      .map(obj => { return obj[prop] })
   },
   /**
    * 从map中提取出有value object 中的prop组成的数组

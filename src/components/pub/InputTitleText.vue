@@ -7,9 +7,8 @@
                class="padding-left-input-"
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
-               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}">
-               @focus="disabled ? $event.target.blur() : function(){}"
-
+               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
+               @focus="disabled ? $event.target.blur() : function(){}">
       <div class="padding-left-">
       <v-touch class=""
            v-if="isCheckable"
