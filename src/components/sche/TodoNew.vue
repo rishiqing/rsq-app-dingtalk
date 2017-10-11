@@ -5,7 +5,7 @@
         <div class="itm-edt-fields" style="padding-bottom: 80px;">
           <div class="itm-group">
             <r-input-title
-              :is-checkable="false"
+              :new-checkable="true"
               :item-title="editItem.pTitle"
               @text-change="saveTitle"
             ></r-input-title>
@@ -24,6 +24,7 @@
             </div>
             <div class="secondGroup">
               <r-input-member
+                :new-time="true"
                 :is-native="true"
                 :index-title="'执行人'"
                 :select-title="'请选择成员'"
@@ -50,13 +51,19 @@
   </div>
 </template>
 <style lang="scss" scoped>
+  .router-view{
+    height: 100%;
+  }
+  .content{
+    height: 100%;
+  }
   .firstGroup{
     margin-top:10px;
   }
   .secondGroup{
     margin-top:10px;
-    border-top: 1px solid #E0E0E0;
-    border-bottom: 1px solid #E0E0E0;
+    /*border-top: 1px solid #E0E0E0;*/
+    /*border-bottom: 1px solid #E0E0E0;*/
   }
   p{
     font-family: PingFangSC-Regular;

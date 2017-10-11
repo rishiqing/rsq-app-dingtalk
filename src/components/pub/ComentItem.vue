@@ -86,11 +86,11 @@
     clear: both;
   }
   .time{
-    font-size: 12px;
+    font-size: 0.34rem;
     color:#999999;
     width: 2.186rem;
     position: absolute;
-    right:0.68rem;
+    right:0.26rem;
   }
   .left{
     width: 1.093rem;

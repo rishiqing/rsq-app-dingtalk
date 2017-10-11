@@ -13,8 +13,8 @@
 <style lang="scss" scoped>
   ul{
     background-color: white;
-    border-bottom:1px solid #DADADA ;
-    border-top:1px solid #DADADA ;
+    border-bottom:1px solid #E0E0E0 ;
+    /*border-top:1px solid #DADADA ;*/
     padding-left: 3%;
   }
   li:last-child{

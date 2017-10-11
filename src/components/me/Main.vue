@@ -94,7 +94,7 @@
     border-bottom: 1px solid #E3E3E3;
   }
   .bottom>div{
-    line-height:1.267rem ;
+    line-height:1.253rem ;
     border-bottom: 1px solid #E3E3E3;
     color:#E3E3E3;
     position: relative;

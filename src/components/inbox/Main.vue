@@ -69,7 +69,7 @@
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
-    font-size: 17px;
+    font-size: 0.453rem;
     color: #999999;
     line-height:normal;
     height: 1.612rem;
@@ -93,19 +93,19 @@
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
-    float: right;
-    /*position: absolute;*/
-    /*top:0.4rem;*/
-    /*top: 50%;*/
-    margin-top: -1.34rem;
-    margin-right:0.4rem;
+    position: absolute;
+    margin-top:-0.5rem;
+    top: 50%;
     right:0.35rem;
+    /*margin-top: -1.34rem;*/
+    /*margin-right:0.4rem;*/
+    /*float: right;*/
     z-index: 3;
   }
   .write{
     line-height: 0.612rem;
-    padding-bottom: 15px;
-    padding-top: 15px;
+    padding-bottom: 0.4rem;
+    padding-top: 0.4rem;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
     /*position: fixed;*/

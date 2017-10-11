@@ -9,12 +9,13 @@
     <ul v-if="showShortcut">
       <v-touch tag="li" v-for="repeat in repeatList"
                :key="repeat.cid" @tap="setSelected(repeat)">
-        <span>{{toCycle(repeat)}}{{toText(repeat)}}</span>
+        <span v-if="repeat.type === 'everyDay'||repeat.type === 'weekday'">{{toCycle(repeat)}}{{toText(repeat)}}</span>
+        <span v-else>{{toCycle(repeat)}}({{toText(repeat)}})</span>
         <i class="icon2-selected finish" v-show="selected === repeat"></i>
       </v-touch>
     </ul>
     <v-touch class="user-repeat" @tap="showUserRepeat">
-      <span class="list-key u-pull-left">{{toCycle(userRepeat)}}</span>
+      <span class="list-key u-pull-left user-define">{{toCycle(userRepeat)}}</span>
       <i class="icon2-arrow-right arrow u-pull-right"></i>
       <span class="list-value u-pull-right">{{repeatText}}</span>
     </v-touch>
@@ -56,6 +57,9 @@
       font-family: PingFangSC-Regular;
       font-size: 17px;
     }
+    .user-define {
+      color:#55A8FD
+    }
     .repeat{
       margin-left: 0.2rem;
     }
@@ -78,7 +82,7 @@
       box-sizing: border-box;
       overflow: hidden;
       margin-top: 0.25rem;
-      padding: 0 0.4rem;
+      padding: 0 0.45rem 0 0;
       background-color: white;
       align-items: center;
       border-top: 1px solid #E0E0E0;

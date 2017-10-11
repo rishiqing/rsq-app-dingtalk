@@ -1,7 +1,7 @@
 <template>
   <v-touch class="outertime" @tap="gotoTodoTime">
     <span class="date">时间</span>
-    <span class="now">{{timeValue}}</span>
+    <span class="now" :class="{'edit-padding-left':editTime}">{{timeValue}}</span>
     <i class="icon2-arrow-right-small arrow"></i>
   </v-touch>
 </template>
@@ -32,6 +32,9 @@
     color: #999999;
     letter-spacing: 0;
   }
+  .edit-padding-left{
+    left:1.5rem
+  }
   span{
     display: block;
     /*margin-bottom: 5px;*/
@@ -58,8 +61,9 @@
       }
     },
     props: {
-      disabled: Boolean,
-      item: Object
+      item: Object,
+      editTime: Boolean,
+      disabled: Boolean
     },
     methods: {
       gotoTodoTime () {

@@ -83,10 +83,10 @@
     },
     methods: {
       setFileid (p) {
-//        console.log('传过来的id是' + p.id) 以后调bug用
+        console.log('传过来的id是' + p.id) // 以后调bug用
         this.fileId.push(p.id)
         this.fileName.push(p.name)
-        // console.log('触发一次' + this.fileId) // 以后调bug用
+        console.log('触发一次' + this.fileId) // 以后调bug用
       },
       removeFileId (name) {
         for (var i = 0; i < this.fileName.length; i++) {

@@ -5,27 +5,49 @@
         {{indexTitle}}
       </div>
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
-        <!--<div v-for="item in localList">{{item.avatar}}</div>-->
-        <!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
-        <div class="itm-icon-img-wrap">
-          <avatar v-for="item in selectedLocalList"
-                  :key="item.rsqUserId"
-                  :src="item.avatar"
-                  :username="item.name"></avatar>
+        <div v-if="newTime === true">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <avatar v-for="item in selectedLocalList"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name"></avatar>
+          </div>
+          <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          <i class="icon2-arrow-right-small arrow"></i>
         </div>
-        <span class="people">{{selectedLocalList.length}}人</span>
-        <i class="icon2-arrow-right-small arrow"></i>
+        <div v-else="">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <avatar v-for="item in selectedLocalList"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name"></avatar>
+            <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          </div>
+          <i class="icon2-arrow-right-small arrow"></i>
+        </div>
       </div>
       <div class="" v-else>
-        <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
-          <avatar v-for="item in selectedItems"
-                  :key="item.rsqUserId"
-                  :src="item.avatar"
-                  :username="item.name">
-          </avatar>
+        <div v-if="newTime === true">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
+            <avatar v-for="item in selectedItems"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name">
+            </avatar>
+          </div>
+          <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          <i class="icon2-arrow-right-small arrow"></i>
         </div>
-        <span class="people">{{selectedLocalList.length}}人</span>
-        <i class="icon2-arrow-right-small arrow"></i>
+        <div v-else="">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <avatar v-for="item in selectedItems"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name"></avatar>
+            <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          </div>
+          <i class="icon2-arrow-right-small arrow"></i>
+        </div>
       </div>
     </v-touch>
   </div>
@@ -36,6 +58,25 @@
     font-size: 17px;
     color: #333333;
     letter-spacing: 0;
+  }
+  .new-padding-left{
+    left:5.7rem
+  }
+  .edit-padding-left{
+    left:1.8rem
+  }
+  .edit-padding-left-count{
+    left:4.4rem
+  }
+  /*.new-padding-left-count{*/
+    /*right:0.94rem;*/
+  /*}*/
+  .people-left{
+    float: left;
+    /* position: absolute; */
+    display: inline-block;
+    /* top: 0.05rem; */
+    margin-top: -0.3rem;
   }
   .outer{
     border-bottom: 1px solid #E0E0E0;
@@ -92,7 +133,9 @@
       selectTitle: String,
       userRsqIds: Array,    //  可选人
       selectedRsqIds: Array,  //  当前选中的人
-      disabledRsqIds: Array   //  不可选的人
+      disabledRsqIds: Array,   //  不可选的人
+      newTime: Boolean,
+      editTime: Boolean
     },
     computed: {
       loginUser () {

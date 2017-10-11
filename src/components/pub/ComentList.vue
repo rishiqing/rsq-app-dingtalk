@@ -45,7 +45,8 @@
   .comentlist{
     background-color: white;
     margin-top: 10px;
-    border-top: 1px solid #E0E0E0;
+    margin-bottom: 1.4rem;
+    /*border-top: 1px solid #E0E0E0;*/
   }
   .operation{
     line-height:1.083rem;

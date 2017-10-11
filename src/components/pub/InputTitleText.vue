@@ -7,8 +7,9 @@
                class="padding-left-input-"
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
+               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}">
                @focus="disabled ? $event.target.blur() : function(){}"
-               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle)}">
+
       <div class="padding-left-">
       <v-touch class=""
            v-if="isCheckable"
@@ -68,6 +69,12 @@
     background-color: white;
     border: 1px solid white;
   }
+  .padding-left-input{
+    padding-left: 1.1rem;
+  }
+  .inbox-padding-left{
+    padding-left: 0.3rem;
+  }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
     font-size: 19px;
@@ -107,6 +114,7 @@
       }
     },
     props: {
+      newCheckable: Boolean,
       isCheckable: Boolean,
       itemTitle: String,
       itemChecked: Boolean,
