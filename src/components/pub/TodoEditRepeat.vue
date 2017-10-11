@@ -281,6 +281,7 @@
       window.rsqadmg.exec('setOptionButtons', {hide: true})
     },
     beforeRouteLeave (to, from, next) {
+      selectRepeat.close()
       this.saveTodoRepeatState()
       next()
     }

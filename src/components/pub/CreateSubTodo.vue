@@ -248,6 +248,7 @@
     border: 1px solid white;
   }
   .create{
+    -webkit-appearance: none;
     /*display: block;*/
     text-align: center;
     display: flex;

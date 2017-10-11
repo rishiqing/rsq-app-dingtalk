@@ -50,9 +50,6 @@
           }
           return newItems
         }
-      },
-      dateString () {
-        return this.currentDate.getFullYear() + '年' + (this.currentDate.getMonth() + 1) + '月'
       }
     },
     components: {
@@ -60,27 +57,40 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      formatTitleDate (date) {
+        return date.getFullYear() + '年' + (date.getMonth() + 1) + '月'
+      },
       fetchItems (strDate) {
+        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
         this.$store.dispatch('fetchScheduleItems', { strDate })
       },
       fetchDatesHasTodo (p) {
         //  给日期加角标，值计算p.daysArray中的中间一个数组
         var weekArray = p.daysArray[1]
+        //  如果dateSelect已经显示，则设置为dateSelect的月份，否则设置标题为当周所在的月份，以当周的第一天为准
+        var numDate = this.dateSelect.getTime()
+        var firstDate = weekArray[0].date
+        var lastDate = weekArray[weekArray.length - 1].date
+        var titleDate = firstDate
+        if (numDate > firstDate.getTime() && numDate < lastDate.getTime()) {
+          titleDate = this.dateSelect
+        }
+        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(titleDate)})
 
         this.$store.dispatch('getDatesHasTodo', {
-          startDate: weekArray[0].date,
-          endDate: weekArray[weekArray.length - 1].date})
-          .then(res => {
-            weekArray.forEach(day => {
-              if (res.indexOf(String(day.date.getTime())) !== -1) {
-                this.$set(day, 'showTag', true)
-              }
-            })
+          startDate: firstDate,
+          endDate: lastDate
+        }).then(res => {
+          weekArray.forEach(day => {
+            if (res.indexOf(String(day.date.getTime())) !== -1) {
+              this.$set(day, 'showTag', true)
+            }
           })
+        })
       }
     },
     mounted () {
-      window.rsqadmg.exec('setTitle', {title: this.dateString})
+      window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(this.dateSelect)})
       var btnParams
       var that = this
       btnParams = {

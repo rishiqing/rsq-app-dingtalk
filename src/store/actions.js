@@ -636,7 +636,10 @@ export default {
     if (hasCache) {
       promise = Promise.resolve()
     } else {
-      promise = api.todo.getDatesHasTodo(p)
+      promise = api.todo.getDatesHasTodo({
+        startDate: dateUtil.dateNum2Text(start, '-'),
+        endDate: dateUtil.dateNum2Text(end, '-')
+      })
         .then(result => {
           p.daysHasTodo = result.date.split(',').map(text => {
             return moment(text).valueOf()

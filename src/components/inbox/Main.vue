@@ -82,6 +82,7 @@
     width: 100%;
   }
   .create{
+    -webkit-appearance: none;
     display: block;
     text-align: center;
     border: 1px solid #55A8FD;

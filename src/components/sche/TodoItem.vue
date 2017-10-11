@@ -90,13 +90,22 @@
   .select{
     color:#b9b9bc;
     font-size: 17px;
-    position: absolute;
-    top:0.58rem;
+    display: block;
+    margin: 0.58rem 0 0 0.3rem;
+    /*position: absolute;*/
+    /*top:0.58rem;*/
     /*<!--top:50%;-->*/
     /*<!--margin-top: -0.22rem;-->*/
-    left:0.2rem;
+    /*left:0.2rem;*/
     background: #FFFFFF;
     border-radius: 1px;
+  }
+  .todo-checkbox {
+    position: absolute;
+    top: 0;
+    left: -0.1rem;
+    width: 1rem;
+    height: 1.6rem;
   }
 </style>
 <script>
