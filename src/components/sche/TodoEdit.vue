@@ -457,8 +457,12 @@
       },
       more () {
         var that = this
+        var arr = ['发送到聊天', '发送提醒']
+        if (this.checkEdit()) {
+          arr.push('删除任务')
+        }
         window.rsqadmg.exec('actionsheet', {
-          buttonArray: ['发送到聊天', '发送提醒', '删除任务'],
+          buttonArray: arr,
           success: function (res) {
             switch (res.buttonIndex) {
               case 0:
