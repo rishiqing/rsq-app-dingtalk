@@ -2,7 +2,7 @@
   <div class="subtodo">
     <v-touch class="" @tap="showSubTodo">
       <span class="date">子任务</span>
-      <span class="now">{{subtodoString}}</span>
+      <span class="now" :class="{'edit-padding-left':editTime}">{{subtodoString}}</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -14,7 +14,7 @@
     /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
+    /*border-bottom:1px solid #E3E3E3;*/
   }
   .arrow{
     color: #999999;
@@ -32,6 +32,9 @@
     color: #999999;
     letter-spacing: 0;
   }
+  .edit-padding-left{
+    left:1.9rem
+  }
   span{
     display: block;
     font-family: PingFangSC-Regular;
@@ -45,7 +48,8 @@
       return {}
     },
     props: {
-      item: Object
+      item: Object,
+      editTime: Boolean
     },
     computed: {
       subtodoString () {

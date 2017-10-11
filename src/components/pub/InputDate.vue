@@ -2,7 +2,7 @@
   <div class="outer-date">
     <v-touch class="" @tap="gotoDate">
       <span class="date">日期</span>
-      <span class="now">{{ dateString }}</span>
+      <span class="now" :class="{'edit-padding-left':editTime}">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
     </v-touch>
   </div>
@@ -16,7 +16,7 @@
     line-height: 1.3rem;
     padding-left:3% ;
     border-bottom:1px solid #E0E0E0;
-    border-top:1px solid #E0E0E0;
+    /*border-top:1px solid #E0E0E0;*/
     background-color: white;
   }
   .arrow{
@@ -39,6 +39,9 @@
     color: #999999;
     letter-spacing: 0;
   }
+  .edit-padding-left{
+    left:1.5rem
+  }
   .date{
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -58,14 +61,19 @@
     },
     props: {
       item: Object,
-      sep: String
+      sep: String,
+      editTime: Boolean
     },
     computed: {
       dateString () {
-        var result = dateUtil.repeatDate2Text(this.item)
-        var time = new Date()
-        var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
-        return newTime === result ? '今天' : result
+        if (this.item.pContainer === 'inbox') {
+          return '添至日程'
+        } else {
+          var result = dateUtil.repeatDate2Text(this.item)
+          var time = new Date()
+          var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
+          return newTime === result ? '今天' : result
+        }
       }
     },
     methods: {
@@ -77,11 +85,7 @@
           endDate: c.endDate || null,
           dates: c.dates || null,
           repeatType: c.repeatType || null,
-          repeatBaseTime: c.repeatBaseTime || null,
-          alwaysRepeat: c.alwaysRepeat === undefined ? true : c.alwaysRepeat,
-          isCloseRepeat: c.isCloseRepeat === undefined ? true : c.isCloseRepeat,
-          isLastDate: c.isLastDate === undefined ? false : c.isLastDate,
-          repeatOverDate: c.repeatOverDate || ''
+          repeatBaseTime: c.repeatBaseTime || null
         }
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')

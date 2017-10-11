@@ -7,9 +7,9 @@
         </v-touch>
       </div>
       <div class="mid">
-      <v-touch class="" @tap="createNew">
-        <i class="icon2-add-circle add" ></i>
-      </v-touch>
+        <v-touch class="" @tap="createNew">
+          <i class="icon2-add-circle add" ></i>
+        </v-touch>
       </div>
       <div class="right">
         <v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">

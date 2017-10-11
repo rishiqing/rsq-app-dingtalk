@@ -23,7 +23,7 @@
         <p class="explain-title">3.把日程分享到聊天中</p>
         <p class="explain-content">现在可以把日程分享给同事看了，并且同事可以参与日程讨论。</p>
         <div class="explain-img">
-          <img src="../../assets/img/explain-3.png" alt="">
+          <img  class="last-picture" src="../../assets/img/explain-3.png" alt="">
         </div>
       </div>
     </div>
@@ -71,7 +71,10 @@
   }
  .explain-img>img{
    width: 5.648rem;
-   height: 8.864rem;
+   /*height: 8.864rem;*/
+ }
+  .explain-img .last-picture{
+   width: 4.5rem;
  }
  .explain-img{
    width: 9.32rem;

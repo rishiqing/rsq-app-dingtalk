@@ -2,7 +2,7 @@
   <div class="router-view">
     <div class="itm-edt z-index-xs">
       <div class="content">
-        <div class="itm-edt-fields" style="padding-bottom: 80px;">
+        <div class="itm-edt-fields" >
           <div class="itm-group itm--edit-todo">
             <r-input-title
               :is-checkable="!isInbox"
@@ -20,26 +20,46 @@
             </div>
           </v-touch>
           <div class="itm--edit-todo ">
-            <r-input-date
-              :item="editItem"
-              :sep="'/'"
-            ></r-input-date>
-            <r-input-time
-              :item="editItem"
-              v-if="editItem.pContainer !== 'inbox'"
-            ></r-input-time>
-            <r-input-member
-              :is-native="true"
-              :index-title="'执行人'"
-              :select-title="'请选择成员'"
-              :user-rsq-ids="[]"
-              :selected-rsq-ids="joinUserRsqIds"
-              :disabled-rsq-ids="[]"
-              @member-changed="saveMember"
-            ></r-input-member>
-            <r-input-sub-todo
-              :item="currentTodo"
-            ></r-input-sub-todo>
+            <div class="edit-padding-left">
+              <div class="first-date">
+                <i class="icon2-schedule sche"></i>
+                <r-input-date
+                  :item="editItem"
+                  :sep="'/'"
+                  :edit-time="true"
+                ></r-input-date>
+              </div>
+              <div class="first-date" v-show="!isInbox">
+                <div class="time-border">
+                  <i class="icon2-alarm sche"></i>
+                  <r-input-time
+                    :item="editItem"
+                    :edit-time="true"
+                    v-if="editItem.pContainer !== 'inbox'"
+                  ></r-input-time>
+                </div>
+              </div>
+              <div class="first-date">
+                <i class="icon2-member sche"></i>
+                <r-input-member
+                  :edit-time="true"
+                  :is-native="true"
+                  :index-title="'执行人'"
+                  :select-title="'请选择成员'"
+                  :user-rsq-ids="[]"
+                  :selected-rsq-ids="joinUserRsqIds"
+                  :disabled-rsq-ids="[]"
+                  @member-changed="saveMember"
+                ></r-input-member>
+              </div>
+              <div class="first-date">
+                <i class="icon2-subplan-web sche"></i>
+                <r-input-sub-todo
+                  :item="currentTodo"
+                  :edit-time="true"
+                ></r-input-sub-todo>
+              </div>
+            </div>
             <r-comment-list
               :items="todoComments"
               ></r-comment-list>
@@ -55,6 +75,26 @@
   </div>
 </template>
 <style scoped>
+  .first-date{
+    position: relative;
+    padding-left: 1.1rem;
+  }
+  .sche{
+    font-size:0.586rem;
+    color:#55A8FD;
+    position: absolute;
+    top: 50%;
+    margin-top: -0.29rem;
+    left:0.3rem
+  }
+  .edit-padding-left{
+    background-color: white;
+  }
+  .time-border{
+    border-bottom: 1px solid #E0E0E0;
+    /*position: relative;*/
+    /*padding-left: 1.1rem;*/
+  }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: STHeitiSC-Light;
     font-size: 15px;
@@ -65,10 +105,10 @@
     background-color: white;
   }
   .desp{
-    border-bottom: 1px solid #E0E0E0;
+    /*border-bottom: 1px solid #E0E0E0;*/
     margin-bottom: 10px;
     padding-left: 3%;
-    line-height: 1.1rem;
+    line-height: 0.8rem;
     font-family: STHeitiSC-Light;
     font-size: 14px;
     color: #999999;

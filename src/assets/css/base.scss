@@ -94,26 +94,35 @@ div.div-editable.editable-blank {
 .itm-avatar--round {border-radius: 50%;}
 .itm-avatar.itm-avatar--small {width: 32px;height:32px;margin-top:5px;}
 .itm-avatar-wrap--small {padding-top: 5px;}
-.itm-icon-img-wrap>* {
+.itm-icon-img-wrap-right>* {
     display: inline-block;
     //vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 7px;
     float: right;
+}
+.itm-icon-img-wrap-left>* {
+  display: inline-block;
+  //vertical-align: middle;
+  //margin-right: 5px;
+  float: left;
 }
 .itm-icon-img-wrap {
   position: absolute;
   top: 0.3rem;
-  left: 5.7rem;
-  width: 90px;
+  //left: 5.7rem;
+  width: 2.8rem;
 }
 .itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;display: inline-block}
 
 .itm-lst-title {position: relative;padding: 0 20px;}
 .itm-lst-title-text {height:34px;line-height: 34px;font-size:14px;}
 
-.itm-edt {}
+.itm-edt {
+  height: 100%;
+  background-color: white;
+}
 .itm-edt-fields {
-    min-height: 100%;background: #f6f6f6;padding: 10px 0;}
+    min-height: 100%;background: #f6f6f6;padding: 10px 0 0 0;}
 .itm-group, .itm-single {
     position: relative;
     //background: #ffffff;

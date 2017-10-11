@@ -1,6 +1,6 @@
 <template>
   <div class="">
-
+    <div class="for-cover"></div>
     <div class="topSubtodo" v-if="seen" >
       <v-touch @tap="change">
         <v-touch ><i class="icon2-add-circle add"></i></v-touch>
@@ -130,6 +130,15 @@
   }
 </script>
 <style scoped>
+  .for-cover{
+    height: 0.266rem;
+    z-index:1;
+    /*background-color: rebeccapurple;*/
+    position: fixed;
+    top:0;
+    left:0;
+    right: 0;
+  }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -144,6 +153,7 @@
   .sublist{
     background-color: white;
     padding-left: 0.6rem;
+    z-index: 0;
   }
   .hasborder{
     border-top:1px solid #E0E0E0;
@@ -175,7 +185,7 @@
   .add{
     position: absolute;
     top:0.4rem;
-    font-size: 15px;
+    font-size: 0.4rem;
     background-color: #55A8FD;
     color:white;
     border: 1px solid #55A8FD;
@@ -274,6 +284,7 @@
   }
   .margin-block {
     height: 50px;
+    z-index: 3;
   }
   .input-panel {
     position: fixed;

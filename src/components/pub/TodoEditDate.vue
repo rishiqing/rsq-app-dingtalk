@@ -90,7 +90,7 @@
     .dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}
     .dp-table {width:100%;height:8rem;text-align: center;}
     .dp-grey {color: #a8a8a8;}
-    .dp-selected {
+    .dp-table .dp-selected {
       background: #55A8FD;
       color:white;}
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
@@ -129,7 +129,10 @@
       border-radius: 50%;
       font-family: PingFangSC-Medium;
       font-size: 17px;
-      /*color: #666666;*/
+      color: #666666;
+    }
+    .edit-date div{
+
     }
     .week-six{
       font-family: PingFangSC-Regular;

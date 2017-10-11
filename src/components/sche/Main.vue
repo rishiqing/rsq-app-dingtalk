@@ -8,7 +8,7 @@
     <r-todo-item-list
       :items="items"
       :is-checkable="true"
-      v-if="items != null"
+      v-if="items.length!==0"
     ></r-todo-item-list>
     <div class="itm-lst" v-else>
       <img src="../../assets/img/todo-empty.png" alt="">
@@ -37,7 +37,8 @@
       items () {
         var items = this.$store.state.schedule.items
         var newItems = []
-        if (items !== null) {
+//        console.log(JSON.stringify(items))
+        if (items !== null && items.length !== 0) {
           for (var i = 0; i < items.length; i++) {
             if (!items[i].pIsDone) {
               newItems.push(items[i])
@@ -49,6 +50,8 @@
             }
           }
           return newItems
+        } else {
+          return []
         }
       },
       dateString () {
@@ -100,6 +103,7 @@
   .itm-lst{
     text-align: center;
     background-color: #F8F8F8;
+    height: 78%;
   }
   img{
     width: 1.866rem;
