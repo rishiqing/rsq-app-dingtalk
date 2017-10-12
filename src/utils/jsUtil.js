@@ -308,5 +308,18 @@ export default {
     return list.filter((value, index, self) => {
       return self.indexOf(value) === index
     })
+  },
+  /**
+   * 将以B为单位的num转换为K，M或者G为单位
+   * @param num
+   */
+  formatUnit (num) {
+    if (num < 1000) {
+      return num + 'B'
+    } else if (num > 1000 && num < 1000000) {
+      return (num / 1000) + 'K'
+    } else if (num > 1000000) {
+      return (num / 1000000) + 'M'
+    }
   }
 }

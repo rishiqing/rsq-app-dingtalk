@@ -792,26 +792,50 @@ export default {
    * @returns {Promise<any>|Promise.<*>|Promise<TAll[]>}
    */
   uploadToOSS ({commit, state}, p) {
-    var client = p.client
-    var path = p.path
+    //  使用pathId做权限，用户只能操作特定pathId下的文件
+    var pathId = p.pathId
+    var time = moment().format('YYYYMMDDHHmmss')
+    var path = window.rsqConfig.ossRoot + pathId + '/' + time
     var list = p.list
-    return Promise.all(list.map(t => {
-      var f = t.file
-      var name = path + f.name
-      return client.multipartUpload(name, f, {
-        progress: function (p) {
-          return function (done) {
-            var pro = Math.floor(p * 100)
-            t.progress = pro
-            if (pro >= 1) {
-              t.finished = true
+    return api.system.getOSSClient({pathId: pathId})
+      .then(client => {
+        return Promise.all(list.map(t => {
+          var f = t.file
+          var name = path + f.name
+          return client.multipartUpload(name, f, {
+            progress: function (p) {
+              return function (done) {
+                var pro = Math.floor(p * 100)
+                t.progress = pro
+                if (pro >= 1) {
+                  t.finished = true
+                }
+                done()
+              }
             }
-            done()
-          }
-        }
+          })
+        }))
       })
-    }))
   },
+  /**
+   * 取消上传
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {*}
+   */
+  cancelUploadToOSS ({commit, state}, p) {
+    var pathId = p.pathId
+    return api.system.getOSSClient({pathId: pathId})
+      .then(client => {
+        client.listUploads({query: 'dddd'})
+          .then(res => {
+            alert(JSON.stringify(res))
+          })
+      })
+  },
+  //  dingtalk/130350304726297460/2126PictureUnlock_haokan1171162_16:9.pictureunlock.jpg
+  getOSSUrl ({commit, state}, p) {},
   /**
    * 发送到聊天
    * @param commit

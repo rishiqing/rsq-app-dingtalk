@@ -32,6 +32,11 @@ module.exports = {
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     stsServer: 'http://182.92.222.40:8300/sts/',
+    aliOSS: {
+      region: 'oss-cn-beijing',
+      bucket: 'rishiqing-file',
+      root: 'dingtalk/'
+    },
     version: 2000000
   },
   dev: {
@@ -57,6 +62,11 @@ module.exports = {
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
     stsServer: 'http://182.92.222.40:8300/sts/',
+    aliOSS: {
+      region: 'oss-cn-beijing',
+      bucket: 'rishiqing-file',
+      root: 'dingtalk/'
+    },
     version: 2000000
   }
 }
