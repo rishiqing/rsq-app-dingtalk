@@ -13,7 +13,11 @@
           <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
         </div>
         <div class="bottom">
-          <div class="comentContent">{{item.commentContent}}</div>
+          <div class="comentContent" v-if="IfReplyComment">
+            <span class="replyComment">{{item.commentContent.substring(0,IndexOfBlank)}}</span>
+            <span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>
+          </div>
+          <div class="comentContent" v-else>{{item.commentContent}}</div>
           <div class="comentItempicture" v-for="fileId in item.fileList">
             <template v-if="(fileId.contentType.toUpperCase() === 'PNG'||fileId.contentType.toUpperCase() === 'JPEG'|| fileId.contentType === 'JPG')">
               <img class="comentPhoto" :src="fileId.realPath"  alt="">
@@ -54,6 +58,9 @@
   </v-touch>
 </template>
 <style scoped>
+  .replyComment{
+    background: rgba(0,0,0,.1);
+  }
   .coment{
     padding-left: 3%;
     margin-top:20px ;
@@ -141,6 +148,14 @@
       },
       comments () {
         return this.$store.state.todo.currentTodo.comments
+      },
+      IfReplyComment () {
+        return (this.item.commentContent.indexOf('@') !== -1)
+      },
+      IndexOfBlank () {
+        if (this.IfReplyComment) {
+          return this.item.commentContent.indexOf('&')
+        }
       }
     },
     props: {
@@ -154,6 +169,7 @@
     methods: {
       deleteComment (item) {
         var that = this
+        console.log('进来了' + item)
         if (this.rsqUserId === item.authorId) {
           window.rsqadmg.exec('confirm', {
             message: '确定要删除此评论？',
@@ -166,12 +182,25 @@
                 })
             }
           })
+        } else {
+          window.rsqadmg.exec('confirm', {
+            message: '确定回复此评论？',
+            success () {
+              that.$store.dispatch('ReplyCommentItem', {item: item})
+                .then(() => {
+                  that.$router.push('/pub/coment')
+                })
+            }
+          })
         }
       },
       triggerAndroid (item) {
         if (this.disabled) return
         this.deleteComment(item)
       }
+    },
+    mounted () {
+      console.log(this.item.com)
     }
   }
 </script>

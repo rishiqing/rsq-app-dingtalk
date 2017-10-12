@@ -106,5 +106,7 @@ export default {
   /**
    * 每一天是否含有todo的cache，以date.getTime()的Number类型作为key值，true和false作为value值
    */
-  dayHasTodoCache: {}
+  dayHasTodoCache: {},
+  replyId: null,
+  replyName: null
 }

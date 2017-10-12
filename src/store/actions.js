@@ -188,6 +188,7 @@ export default {
             commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
             commit('SCH_TODO_CACHE_DELETE_ALL')
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -247,11 +248,13 @@ export default {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
           .then(item => {
+            console.log('createDiscreteScheduleItem的item是' + item)
             //  清除缓存，强制从服务器获取数据
             dateStruct.dateResult.forEach(valDate => {
               commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: valDate})
               return commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(valDate).format('YYYY-MM-DD')})
             })
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -282,6 +285,8 @@ export default {
               commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: i})
               commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(i).format('YYYY-MM-DD')})
             }
+            console.log('createRangeScheduleItem的item是' + item)
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -752,8 +757,15 @@ export default {
   postTodoComment ({commit, state}, props) {
     if (props.commentContent) {
       var currentItem = state.todo.currentTodo
+      var replyId = state.replyId
+      var replyName = state.replyName
       props['todoId'] = currentItem.id
       props['type'] = 0
+      if (replyId !== null) {
+        props['atIds'] = replyId
+        props.commentContent = '@' + replyName + '&' + props.commentContent
+      }
+
       return api.todo.postComment(props)
         .then((com) => {
           com.type = 0
@@ -762,6 +774,9 @@ export default {
     } else {
       return Promise.resolve()
     }
+  },
+  ReplyCommentItem ({commit, state}, props) {
+    commit('REPLY_COMMENT_CREATED', {item: props.item})
   },
   postdesp ({commit, state}, props) {
     if (props.pNote) {

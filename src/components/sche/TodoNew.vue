@@ -255,9 +255,30 @@
           .then(item => {
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
-//            console.log(item.receiverIds)
             if (item.receiverIds) {
-//              console.log('判断成功')
+              var date = ''
+              if (item.startDate !== null) {
+                if (item.startDate === item.endDate) {
+                  date = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+                } else {
+                  var start = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+                  var end = item.endDate.substring(5, 7) + '月' + item.endDate.substring(8, 10) + '日'
+                  date = start + '-' + end
+                }
+              } else {
+                var dateArray = item.dates.split(',')
+                console.log(dateArray)
+                for (var i = 0; i < dateArray.length; i++) {
+                  date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
+                }
+                if (date.length > 11) {
+                  date = date.substring(0, 11) + '...'
+                }
+              }
+              var time = ''
+              if (item.clock !== null) {
+                time = item.clock.startTime + '-' + item.clock.endTime
+              }
               var data = {
                 msgtype: 'oa',
                 msgcontent: {
@@ -269,19 +290,14 @@
                   body: {
                     title: item.pTitle,
                     form: [
-                      {key: '日期：', value: '2017/10/11'},
-                      {key: '时间：', value: '20:52'}
+                      {key: '日期：', value: date},
+                      {key: '时间：', value: time}
                     ],
                     content: item.pNote,
                     author: that.loginUser.authUser.name// 这里要向后台要值
                   }
                 }
               }
-//              var idArray = jsUtil.extractProp(item.receiverIds, 'emplId')
-//              console.log(idArray)
-//              if (idArray.length > 0) {
-//                data['userid_list'] = idArray.join(',')
-//              }
               var IDArrays = item.receiverIds.split(',')
               var empIDArray = []
 //              console.log(IDArrays)
@@ -290,7 +306,7 @@
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-//                  console.log(empIDArray)
+                  console.log(JSON.stringify(idMap))
                   data['userid_list'] = empIDArray.toString()
                   that.$store.dispatch('sendAsyncCorpMessage', {
                     corpId: that.loginUser.authUser.corpId,
@@ -299,7 +315,7 @@
                     if (res.errcode !== 0) {
                       alert('发送失败：' + JSON.stringify(res))
                     } else {
-                      alert('发送成功！')
+                      console.log('发送成功！')
                     }
                   })
                 })

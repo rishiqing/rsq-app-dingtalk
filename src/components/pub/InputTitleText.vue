@@ -95,7 +95,7 @@
     /*padding-left:0.3rem;*/
   /*}*/
   .padding-left-input{
-    padding-left: 1.5rem;
+    /*padding-left: 1.5rem;*/
   }
 </style>
 <script>

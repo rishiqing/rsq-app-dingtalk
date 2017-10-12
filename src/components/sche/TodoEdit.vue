@@ -15,7 +15,7 @@
             ></r-input-title>
           </div>
           <v-touch @tap="SwitchToDesp">
-            <div id="noteEditable" contenteditable="true" class="desp"
+            <div id="noteEditable" contenteditable="true" class="desp editor-style"
                  name="note" rows="5"
                  placeholder="添加任务描述..." onfocus="this.blur();">
               添加任务描述...
@@ -122,8 +122,8 @@
     letter-spacing: 0;
     background-color: white;
     min-height:1.12rem;
-    display: flex;
-    align-items: center;
+    /*display: flex;*/
+    /*align-items: center;*/
   }
   input{
     line-height: 0.933rem;
@@ -399,8 +399,32 @@
           this.joinUserRsqIds = idArray
           window.rsqadmg.exec('hideLoader')
           window.rsqadmg.execute('toast', {message: '保存成功'})
-          console.log('params的addJoinUsers是' + params.addJoinUsers)
+//          console.log('params的addJoinUsers是' + params.addJoinUsers)
           if (params.addJoinUsers) {
+            var date = ''
+            if (this.currentTodo.startDate !== null) {
+              if (this.currentTodo.startDate === this.currentTodo.endDate) {
+                date = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
+              } else {
+                var start = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
+                var end = this.currentTodo.endDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
+                date = start + '-' + end
+              }
+            } else if (this.currentTodo.dates !== null) {
+              var dateArray = this.currentTodo.dates.split(',')
+              console.log(dateArray)
+              for (var i = 0; i < dateArray.length; i++) {
+                date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
+              }
+              if (date.length > 11) {
+                date = date.substring(0, 11) + '...'
+              }
+            }
+            console.log(date)
+            var time = ''
+            if (this.currentTodo.clock !== null) {
+              time = this.currentTodo.clock.startTime + '-' + this.currentTodo.clock.endTime
+            }
             var data = {
               msgtype: 'oa',
               msgcontent: {
@@ -412,8 +436,8 @@
                 body: {
                   title: that.currentTodo.pTitle,
                   form: [
-                    {key: '日期：', value: '2017/10/11'},
-                    {key: '时间：', value: '20:52'}
+                    {key: '日期：', value: date},
+                    {key: '时间：', value: time}
                   ],
                   content: that.currentTodo.pNote,
                   author: that.loginUser.authUser.name// 这里要向后台要值
@@ -421,14 +445,14 @@
               }
             }
             var IDArrays = params.addJoinUsers.split(',')
-            console.log('IDArrays是' + IDArrays)
+//            console.log('IDArrays是' + IDArrays)
             var empIDArray = []
             this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
               .then(idMap => {
                 for (var i = 0; i < IDArrays.length; i++) {
                   empIDArray.push(idMap[IDArrays[i]].emplId)
                 }
-                console.log(empIDArray)
+//                console.log(empIDArray)
                 data['userid_list'] = empIDArray.toString()
                 that.$store.dispatch('sendAsyncCorpMessage', {
                   corpId: that.loginUser.authUser.corpId,
@@ -537,7 +561,6 @@
                             form: [
                               {key: '日期：', value: d},
                               {key: '时间：', value: t}
-//                            {key: '重要性：', value: '重要且紧急'}
                             ],
                             content: that.editItem.pNote,
                             author: that.loginUser.authUser.name// 这里要向后台要值

@@ -49,7 +49,6 @@
   }
   span{
     display: block;
-
   }
 </style>
 <script>
@@ -71,6 +70,10 @@
           return '添至日程'
         } else {
           var result = dateUtil.repeatDate2Text(this.item)
+//          console.log(result.length)
+          if (result.length > 20) {
+            result = result.substring(0, 21)
+          }
           var time = new Date()
           var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
           return newTime === result ? '今天' : result
