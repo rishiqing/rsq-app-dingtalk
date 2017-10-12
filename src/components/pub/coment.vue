@@ -125,7 +125,7 @@
         success (res) {
           if (res.key === 'sendComent') {
             if (that.uploadingFile.length > 0) {
-              window.exec('confirm', {
+              window.rsqadmg.exec('confirm', {
                 message: '还有未上传完成的附件，确定发送？',
                 success: function () {
                   that.comentBlur(that.content)

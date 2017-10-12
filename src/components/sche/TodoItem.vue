@@ -15,7 +15,7 @@
     </v-touch>
   </li>
 </template>
-<style lang="scss" scope>
+<style lang="scss" scoped>
   .isfrom{
     display: none;
   }

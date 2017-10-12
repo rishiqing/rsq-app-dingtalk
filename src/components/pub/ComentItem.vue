@@ -1,5 +1,5 @@
 <template>
-  <v-touch @tap="triggerAndroid(item)">
+  <v-touch @tap="triggerAndroid($event)">
     <li class="coment" >
       <div class="left">
         <avatar :src="item.authorAvatar"
@@ -18,40 +18,32 @@
             <span class="comentContent">{{item.commentContent.substr(IndexOfBlank + 1)}}</span>
           </div>
           <div class="comentContent" v-else>{{item.commentContent}}</div>
-          <div class="comentItempicture" v-for="fileId in item.fileList">
-            <template v-if="(fileId.contentType.toUpperCase() === 'PNG'||fileId.contentType.toUpperCase() === 'JPEG'|| fileId.contentType === 'JPG')">
-              <img class="comentPhoto" :src="fileId.realPath"  alt="">
-              <span class="fileName">{{fileId.name.substr(0,33)}}</span>
+          <v-touch class="coment-item-picture file-touch" v-for="file in item.fileList" :key="file.id" @tap="fileTouch(file)">
+            <template v-if="(file.contentType.toUpperCase() === 'PNG'||file.contentType.toUpperCase() === 'JPEG'|| file.contentType.toUpperCase() === 'JPG')">
+              <img class="comment-photo file-touch" :src="file.realPath"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+            </template>
+            <template v-else-if="file.contentType.toUpperCase() == 'PDF'">
+              <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+            </template>
+            <template v-else-if="file.contentType.toUpperCase() === 'ZIP'">
+              <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+            </template>
+            <template v-else-if="file.contentType.toUpperCase() === 'DOC' || file.contentType.toUpperCase() === 'DOC'">
+              <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+            </template>
+            <template v-else-if="file.contentType.toUpperCase() === 'PPT' || file.contentType.toUpperCase() === 'PPTX'">
+              <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
             </template>
             <template v-else>
-              <template v-if="fileId.contentType == 'pdf'">
-                <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
-                <span class="fileName">{{fileId.name.substr(0,33)}}</span>
-              </template>
-              <template v-else>
-                <template v-if="fileId.contentType === 'zip'">
-                  <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
-                  <span class="fileName">{{fileId.name.substr(0,33)}}</span>
-                </template>
-                <template v-else>
-                  <template v-if="fileId.contentType === 'docx'">
-                    <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
-                    <span class="fileName">{{fileId.name.substr(0,33)}}</span>
-                  </template>
-                  <template v-else>
-                    <template v-if="fileId.contentType === 'ppt'">
-                      <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
-                      <span class="fileName">{{fileId.name.substr(0,33)}}</span>
-                    </template>
-                    <template v-else>
-                      <img class="comentPhoto" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
-                      <span class="fileName">{{fileId.name.substr(0,33)}}</span>
-                    </template>
-                  </template>
-                </template>
-              </template>
+              <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
+              <span class="file-name file-touch">{{getFileName(file.name)}}</span>
             </template>
-          </div>
+          </v-touch>
         </div>
       </div>
     </li>
@@ -68,17 +60,17 @@
     line-height: 0.7rem;
     border-bottom: none;
   }
-  .fileName{
+  .file-name{
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #3D3D3D;
     margin-left: 10px;
   }
-  .comentPhoto{
+  .comment-photo{
     width: 25px;
     height: 29px;
   }
-  .comentItempicture{
+  .coment-item-picture{
     display: flex;
     align-items: center;
     padding: 5px;
@@ -167,9 +159,13 @@
       'avatar': Avatar
     },
     methods: {
+      getFileName (orgName) {
+        if (!orgName) return ''
+        var arr = orgName.split('/')
+        return arr[arr.length - 1].substr(14, 33)
+      },
       deleteComment (item) {
         var that = this
-        console.log('进来了' + item)
         if (this.rsqUserId === item.authorId) {
           window.rsqadmg.exec('confirm', {
             message: '确定要删除此评论？',
@@ -194,13 +190,16 @@
           })
         }
       },
-      triggerAndroid (item) {
+      fileTouch (file) {
+        this.$emit('comment-file-touch', file)
+      },
+      triggerAndroid (e) {
         if (this.disabled) return
-        this.deleteComment(item)
+        if (!e.target.classList.contains('file-touch')) {
+          this.deleteComment(this.item)
+        }
       }
     },
-    mounted () {
-      console.log(this.item.com)
-    }
+    mounted () {}
   }
 </script>

@@ -317,9 +317,17 @@ export default {
     if (num < 1000) {
       return num + 'B'
     } else if (num > 1000 && num < 1000000) {
-      return (num / 1000) + 'K'
+      return Math.ceil(num / 100) / 10 + 'K'
     } else if (num > 1000000) {
-      return (num / 1000000) + 'M'
+      return Math.ceil(num / 100000) / 10 + 'M'
     }
+  },
+  isImage (type) {
+    var typeArray = ['PNG', 'JPG', 'JPEG']
+    return typeArray.indexOf(type.toUpperCase()) !== -1
+  },
+  isFileCanPreview (type) {
+    var fileType = ['NOTYPE']
+    return fileType.indexOf(type.toUpperCase()) !== -1
   }
 }

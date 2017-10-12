@@ -9,7 +9,7 @@
           @upload-item-delete="deleteTask"
         ></r-upload-item>
       </ul>
-    <div @click="cancelUpload">测试</div>
+    <!--<div @click="cancelUpload">测试</div>-->
   </div>
 </template>
 <style lang="scss">
@@ -98,7 +98,7 @@
       },
       //  上传
       triggerUpload () {
-        if (this.unfinishedTask.length.length > 0) {
+        if (this.unfinishedTask.length > 0) {
           this.$emit('ready-to-upload', this.unfinishedTask)
         }
         //  同时上传需要做数量控制，因此不做同时上传，只做顺序上传
@@ -125,17 +125,7 @@
         })
       }
     },
-    mounted () {
-//      this.taskList.push({
-//        finished: false,
-//        progress: 0,
-//        img: {
-//          name: 'test...',
-//          src: ''
-//        },
-//        file: {}
-//      })
-    },
+    mounted () {},
     beforeDestroy () {}
   }
 </script>

@@ -15,7 +15,7 @@
 <style lang="scss" scoped>
   img{
     width: 27px;
-    /*height: 27px;*/
+    height: 27px;
   }
   .icon-wrap {
     position:absolute;top:0;right:0.5rem;bottom:0;overflow:hidden;
