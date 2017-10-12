@@ -255,10 +255,58 @@
           .then(item => {
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
-
-            if (this.editItem.isChecked) {
+//            console.log(item.receiverIds)
+            if (item.receiverIds) {
+//              console.log('判断成功')
+              var data = {
+                msgtype: 'oa',
+                msgcontent: {
+                  message_url: window.location.href,
+                  head: {
+                    text: '日事清',
+                    bgcolor: 'FF55A8FD'
+                  },
+                  body: {
+                    title: item.pTitle,
+                    form: [
+                      {key: '日期：', value: '2017/10/11'},
+                      {key: '时间：', value: '20:52'}
+                    ],
+                    content: item.pNote,
+                    author: that.loginUser.authUser.name// 这里要向后台要值
+                  }
+                }
+              }
+//              var idArray = jsUtil.extractProp(item.receiverIds, 'emplId')
+//              console.log(idArray)
+//              if (idArray.length > 0) {
+//                data['userid_list'] = idArray.join(',')
+//              }
               var IDArrays = item.receiverIds.split(',')
               var empIDArray = []
+//              console.log(IDArrays)
+              this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
+                .then(idMap => {
+                  for (var i = 0; i < IDArrays.length; i++) {
+                    empIDArray.push(idMap[IDArrays[i]].emplId)
+                  }
+//                  console.log(empIDArray)
+                  data['userid_list'] = empIDArray.toString()
+                  that.$store.dispatch('sendAsyncCorpMessage', {
+                    corpId: that.loginUser.authUser.corpId,
+                    data: data
+                  }).then(res => {
+                    if (res.errcode !== 0) {
+                      alert('发送失败：' + JSON.stringify(res))
+                    } else {
+                      alert('发送成功！')
+                    }
+                  })
+                })
+            }
+            if (this.editItem.isChecked) {
+              IDArrays = item.receiverIds.split(',')
+              empIDArray = []
               this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
                 .then(idMap => {
                   for (var i = 0; i < IDArrays.length; i++) {

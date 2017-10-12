@@ -97,20 +97,20 @@ div.div-editable.editable-blank {
 .itm-icon-img-wrap-right>* {
     display: inline-block;
     //vertical-align: middle;
-    margin-right: 7px;
+    margin-right: 0.133rem;
     float: right;
 }
 .itm-icon-img-wrap-left>* {
   display: inline-block;
   //vertical-align: middle;
-  //margin-right: 5px;
+  margin-left: 5px;
   float: left;
 }
 .itm-icon-img-wrap {
   position: absolute;
   top: 0.3rem;
   //left: 5.7rem;
-  width: 2.8rem;
+  width: 4rem;
 }
 .itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;display: inline-block}
 

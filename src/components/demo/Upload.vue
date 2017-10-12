@@ -69,7 +69,7 @@
     top: 0.4rem;
     right:0.7rem
   }
-  img{
+  .preview-img{
     width: 27px;
     height: 27px;
   }

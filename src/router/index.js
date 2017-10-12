@@ -26,6 +26,7 @@ import CreateSubTodo from 'com/pub/CreateSubTodo'
 import RemindWindow from 'com/pub/RemindWindow'
 import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
+import pcEnd from 'com/me/pcEnd'
 Vue.use(Router)
 
 const router = new Router({
@@ -60,6 +61,12 @@ const router = new Router({
       path: '/pub/noPermission',
       name: 'noPermission',
       component: NoPermission,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/me/pcEnd',
+      name: 'pcEnd',
+      component: pcEnd,
       meta: {requireAuth: true}
     },
     {

@@ -1,7 +1,7 @@
 <template>
   <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
       <div class="left">
-        <v-touch class="" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
+        <v-touch class="left-sche" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
           <i class="icon2-schedule richeng" :class="{'is-active': '/sche' == currentPath}"></i>
           <p class="sche " :class="{'is-active': '/sche' == currentPath}">日程</p>
         </v-touch>
@@ -54,12 +54,21 @@
   }
 </script>
 <style scoped>
+  .left-sche{
+      height:1.306rem;
+    /*display: flex;*/
+    /*align-items: center;*/
+  }
+  .text-icon{
+    height:1.306rem;
+  }
   .is-active{
     color:#55A8FD
   }
   .richeng {
     font-size: 25px;
-    color:  #999999;;
+    color:  #999999;
+    /*display: block;*/
   }
   .bot{
     display: flex;
@@ -72,6 +81,7 @@
   .richeng{
     font-size: 22px;
     color: #999999;
+    /*display: block;*/
   }
   .sche{
     font-family: PingFangSC-Regular;
@@ -99,23 +109,23 @@
   .left{
     position: absolute;
     left: 2.053rem;
-    bottom:0.108rem;
-    /*padding-bottom:5px;*/
-    /*height: 1.306rem;*/
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    bottom:0.168rem;
+    padding-bottom:0.026rem;
+    height: 1.306rem;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
   }
   .right{
     text-align: center;
-    /*padding-bottom:5px;*/
+    padding-bottom:0.026rem;
     position: absolute;
     right: 2.11rem;
     bottom:0.108rem;
     /*height: 1.306rem;*/
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
   }
   .mid{
     display: flex;
@@ -126,6 +136,7 @@
   .add{
     color:#4D93DE;
     font-size: 29.6px;
+    display: block;
   }
   .bot:after{
     content:'';

@@ -54,7 +54,7 @@ export default {
     })
   },
   sendAsyncCorpMessage (props) {
-    alert(JSON.stringify(props))
+    // alert(JSON.stringify(props))
     return new Promise((resolve, reject) => {
       var request = url.resolve(window.rsqConfig.authServer, mapping.SEND_TO_CORP_CONV) + '?' + util.combineUrlParams(props.urlParams)
       Vue.http.post(request, JSON.stringify(props.data))

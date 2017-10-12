@@ -19,6 +19,9 @@
   .isfrom{
     display: none;
   }
+  .todo-checkbox{
+
+  }
   .receive{
     border: 1px solid #55A8FD;
     border-radius: 2px;

@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul :class="{'itemList':itemcount}">
     <r-todo-item
         v-for="item in items"
         :item="item"
@@ -17,6 +17,9 @@
     /*border-top:1px solid #DADADA ;*/
     padding-left: 3%;
   }
+  .itemList{
+    padding-bottom:1.306rem;
+  }
   li:last-child{
     border-bottom: none;
   }
@@ -32,6 +35,11 @@
     props: {
       items: Array,
       isCheckable: Boolean    //  是否显示完成复选框
+    },
+    computed: {
+      itemcount () {
+        return this.items.length >= 8 && this.isCheckable
+      }
     },
     components: {
       'r-todo-item': TodoItem

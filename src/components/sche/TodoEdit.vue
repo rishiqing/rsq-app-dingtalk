@@ -98,7 +98,7 @@
     background-color: white;
   }
   .time-border{
-    border-bottom: 1px solid #E0E0E0;
+    /*border-bottom: 1px solid #E0E0E0;*/
     /*position: relative;*/
     /*padding-left: 1.1rem;*/
   }
@@ -112,16 +112,18 @@
     background-color: white;
   }
   .desp{
-    border-bottom: 1px solid #E0E0E0;
+    /*border-bottom: 1px solid #E0E0E0;*/
     margin-bottom: 10px;
     padding-left: 3%;
     line-height: 0.8rem;
-    font-family: STHeitiSC-Light;
+    font-family: PingFangSC-Regular;
     font-size: 14px;
     color: #999999;
     letter-spacing: 0;
     background-color: white;
-    min-height: 30px;
+    min-height:1.12rem;
+    display: flex;
+    align-items: center;
   }
   input{
     line-height: 0.933rem;
@@ -227,6 +229,7 @@
   import InputTime from 'com/pub/InputTime'
   import InputMember from 'com/pub/InputMember'
   import InputSubTodo from 'com/pub/InputSubTodo'
+  import SendConversation from 'com/demo/SendConversation'
   import util from 'ut/jsUtil'
   import dateUtil from 'ut/dateUtil'
   import ComentList from 'com/pub/ComentList'
@@ -295,7 +298,8 @@
       'r-input-member': InputMember,
       'r-input-sub-todo': InputSubTodo,
 //      'r-input-note': InputNoteText,
-      'r-comment-list': ComentList
+      'r-comment-list': ComentList,
+      'r-send-conversation': SendConversation
     },
     methods: {
       //  过去的日程不允许更新日程详情
@@ -383,6 +387,7 @@
         }
       },
       saveMember (idArray) {
+        var that = this
         var compRes = util.compareList(this.joinUserRsqIds, idArray)
         var params = {
           receiverIds: idArray.join(','),
@@ -394,6 +399,49 @@
           this.joinUserRsqIds = idArray
           window.rsqadmg.exec('hideLoader')
           window.rsqadmg.execute('toast', {message: '保存成功'})
+          console.log('params的addJoinUsers是' + params.addJoinUsers)
+          if (params.addJoinUsers) {
+            var data = {
+              msgtype: 'oa',
+              msgcontent: {
+                message_url: window.location.href,
+                head: {
+                  text: '日事清',
+                  bgcolor: 'FF55A8FD'
+                },
+                body: {
+                  title: that.currentTodo.pTitle,
+                  form: [
+                    {key: '日期：', value: '2017/10/11'},
+                    {key: '时间：', value: '20:52'}
+                  ],
+                  content: that.currentTodo.pNote,
+                  author: that.loginUser.authUser.name// 这里要向后台要值
+                }
+              }
+            }
+            var IDArrays = params.addJoinUsers.split(',')
+            console.log('IDArrays是' + IDArrays)
+            var empIDArray = []
+            this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
+              .then(idMap => {
+                for (var i = 0; i < IDArrays.length; i++) {
+                  empIDArray.push(idMap[IDArrays[i]].emplId)
+                }
+                console.log(empIDArray)
+                data['userid_list'] = empIDArray.toString()
+                that.$store.dispatch('sendAsyncCorpMessage', {
+                  corpId: that.loginUser.authUser.corpId,
+                  data: data
+                }).then(res => {
+                  if (res.errcode !== 0) {
+                    alert('发送失败：' + JSON.stringify(res))
+                  } else {
+                    console.log('发送成功！')
+                  }
+                })
+              })
+          }
         })
       },
       finishChecked (status) {

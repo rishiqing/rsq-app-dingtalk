@@ -7,10 +7,10 @@
                class="padding-left-input-"
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
-               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}">
+               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
                @focus="disabled ? $event.target.blur() : function(){}"
-
-      <div class="padding-left-">
+        >
+      <!--<div class="padding-left-">-->
       <v-touch class=""
            v-if="isCheckable"
            @tap="clickCheckOut">
@@ -21,7 +21,7 @@
       </v-touch>
       </div>
     </div>
-  </div>
+  <!--</div>-->
 </template>
 <style scoped>
   .hide{
@@ -44,7 +44,7 @@
     font-size: 17px;
     position: absolute;
     top:50%;
-    margin-top: -0.17rem;
+    margin-top: -0.2rem;
     left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;
@@ -77,7 +77,7 @@
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
-    font-size: 19px;
+    font-size: 0.506rem;
     color: #8C8C8C;
     letter-spacing: 0;
     padding-left: 0.1rem;
@@ -86,18 +86,18 @@
     font-family: PingFangSC-Regular;
     /*height:1.458rem;*/
     background: #FFFFFF;
-    border-top:1px solid #E0E0E0 ;
-    line-height:0.7rem ;
-    padding-bottom:0.405rem ;
-    padding-top: 0.405rem;
-    font-size: 19px;
+    /*border-top:1px solid #E0E0E0 ;*/
+    line-height:0.72rem ;
+    padding-bottom:0.305rem ;
+    padding-top: 0.305rem;
+    font-size: 0.506rem;
   }
   /*.padding-left-input-{*/
     /*padding-left:0.3rem;*/
   /*}*/
-  .padding-left-input{
-    padding-left: 1.5rem;
-  }
+  /*.padding-left-input{*/
+    /*padding-left: 1.5rem;*/
+  /*}*/
 </style>
 <script>
   export default {

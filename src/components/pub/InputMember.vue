@@ -60,7 +60,8 @@
     letter-spacing: 0;
   }
   .new-padding-left{
-    left:5.7rem
+    /*left:5.3rem*/
+    left:4.4rem
   }
   .edit-padding-left{
     left:1.8rem
@@ -183,8 +184,9 @@
             if (res.length === 0) {
               return this.$emit('member-changed', [])
             }
-
+//            console.log('返回来的res是' + JSON.stringify(res))
             var idArray = util.extractProp(res, 'emplId')
+//            console.log('返回来的idarray是' + idArray)
             window.rsqadmg.exec('showLoader')
             that.$store.dispatch('fetchRsqidFromUserid', {corpId: corpId, idArray: idArray})
                 .then(function (idMap) {

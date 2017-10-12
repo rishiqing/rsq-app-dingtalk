@@ -15,7 +15,7 @@
         <div class="bottom">
           <div class="comentContent">{{item.commentContent}}</div>
           <div class="comentItempicture" v-for="fileId in item.fileList">
-            <template v-if="fileId.contentType && (fileId.contentType.toUpperCase() === 'PNG'||fileId.contentType.toUpperCase() === 'JPEG'|| fileId.contentType === 'JPG')">
+            <template v-if="(fileId.contentType.toUpperCase() === 'PNG'||fileId.contentType.toUpperCase() === 'JPEG'|| fileId.contentType === 'JPG')">
               <img class="comentPhoto" :src="fileId.realPath"  alt="">
               <span class="fileName">{{fileId.name.substr(0,33)}}</span>
             </template>

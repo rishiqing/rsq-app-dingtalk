@@ -14,7 +14,7 @@
     /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
+    /*border-bottom:1px solid #E3E3E3;*/
   }
   .arrow{
     color: #999999;

@@ -2,9 +2,9 @@
   <div class="">
   <div class="top">
     <div class="tupian">
-    <avatar :src="loginUser.authUser.avatar"
-            :username="loginUser.authUser.name"
-            :size="73"></avatar>
+      <avatar :src="loginUser.authUser.avatar"
+              :username="loginUser.authUser.name"
+              :size="73"></avatar>
     </div>
     <p class="xingming">{{loginUser.authUser.name}}</p>
   </div>
@@ -26,8 +26,10 @@
       </v-touch>
     </div>
     <div>
-      <p>电脑访问日事清</p>
-      <i class="icon2-arrow-right-small arow"></i>
+      <v-touch @tap="gotoPC">
+        <p>登录日事清PC端</p>
+        <i class="icon2-arrow-right-small arow"></i>
+      </v-touch>
     </div>
   </div>
   </div>
@@ -55,6 +57,9 @@
       },
       gotokefu () {
         this.$router.push('/me/kefu')
+      },
+      gotoPC () {
+        this.$router.push('/me/pcEnd')
       }
     },
     mounted () {
@@ -70,12 +75,12 @@
     font-size: 15px;
     color: #FFFFFF;
     letter-spacing: 0.36px;
-    padding-top: 15px;
+    padding-top: 0.4rem;
     margin-left: 7px;
   }
   .top{
     text-align: center;
-    height: 200px;
+    height:5.33rem;
     background-color:#3E86D6;
   }
   .top p{
@@ -84,9 +89,9 @@
   .tupian{
     display: inline-block;
     border-radius: 100px;
-    width: 65px;
-    height: 65px;
-    margin-top: 47px;
+    width: 1.733rem;
+    height: 1.733rem;
+    margin-top: 1.253rem;
   }
   .bottom{
     padding-left: 0.43rem;
