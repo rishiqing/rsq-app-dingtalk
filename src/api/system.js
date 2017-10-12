@@ -68,6 +68,12 @@ export default {
         })
     })
   },
+  /**
+   * 上传到本地，已废弃
+   * @deprecated
+   * @param data
+   * @returns {*}
+   */
   upload (data) {
     return new Promise((resolve, reject) => {
       Vue.http.post('http://dd.rsq.etoutiao.cn/rsqddmdevapp/upload', data)
@@ -77,6 +83,25 @@ export default {
           window.rsqadmg.log('login error:' + JSON.stringify(res))
           reject(res)
         })
+    })
+  },
+  getOSSClient (data) {
+    var urllib = window.OSS.urllib
+    var OSS = window.OSS.Wrapper
+    var stsServer = window.rsqConfig.stsServer
+    var region = window.rsqConfig.ossRegion
+    var bucket = window.rsqConfig.ossBucket
+    return urllib.request(stsServer + data.pathId, {
+      method: 'GET'
+    }).then(function (result) {
+      var credential = JSON.parse(result.data)
+      return new OSS({
+        region: region,
+        accessKeyId: credential.AccessKeyId,
+        accessKeySecret: credential.AccessKeySecret,
+        stsToken: credential.SecurityToken,
+        bucket: bucket
+      })
     })
   }
 }

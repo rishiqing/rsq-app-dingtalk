@@ -57,6 +57,9 @@ var webpackConfig = merge(baseWebpackConfig, {
       apiServer: config.build.apiServer,
       stsServer: config.build.stsServer,
       version: config.build.version,
+      ossRegion: config.build.aliOSS.region,
+      ossBucket: config.build.aliOSS.bucket,
+      ossRoot: config.build.aliOSS.root,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.build.index,

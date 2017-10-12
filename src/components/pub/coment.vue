@@ -6,8 +6,10 @@
       <i class="icon-attachment upload-icon"></i>
     </div>
     <r-upload
-      @getFileId="setFileid"
-      @removeFileId="removeFileId"
+      @get-file-id="setFileId"
+      @remove-file-id="removeFileId"
+      @ready-to-upload="isUploading"
+      @finish-upload="finishUpload"
     ></r-upload>
   </div>
 </template>
@@ -65,28 +67,28 @@
   }
 </style>
 <script>
-  import Upload from 'com/demo/Upload'
+  import Upload from 'com/pub/Upload'
   export default {
     name: 'coment',
     props: {
     },
     data () {
       return {
+        content: '',
         fileId: [],
-        fileName: []
+        fileName: [],
+        uploadingFile: []
       }
-    }, // 定义事件
+    },
     components: {
       'r-upload': Upload
     },
     computed: {
     },
     methods: {
-      setFileid (p) {
-        console.log('传过来的id是' + p.id) // 以后调bug用
+      setFileId (p) {
         this.fileId.push(p.id)
         this.fileName.push(p.name)
-        console.log('触发一次' + this.fileId) // 以后调bug用
       },
       removeFileId (name) {
         for (var i = 0; i < this.fileName.length; i++) {
@@ -95,7 +97,6 @@
             this.fileName.splice(i, 1)
           }
         }
-//        console.log('删除完之后的field' + this.fileId)
       },
       comentBlur (newTitle) {
         if (!newTitle) {
@@ -108,6 +109,12 @@
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '保存成功'})
           })
+      },
+      isUploading (array) {
+        this.uploadingFile = array
+      },
+      finishUpload () {
+        this.uploadingFile = []
       }
     },
     mounted () {
@@ -117,7 +124,16 @@
         btns: [{key: 'sendComent', name: '发送'}],
         success (res) {
           if (res.key === 'sendComent') {
-            that.comentBlur(that.content)
+            if (that.uploadingFile.length > 0) {
+              window.exec('confirm', {
+                message: '还有未上传完成的附件，确定发送？',
+                success: function () {
+                  that.comentBlur(that.content)
+                }
+              })
+            } else {
+              that.comentBlur(that.content)
+            }
           }
         }
       })
