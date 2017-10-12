@@ -263,7 +263,7 @@
        * 检查是提醒时间是否早于当前时间
        */
       checkWarn () {
-        if (!this.isAllDay && this.clockData.alert.length > 0 && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
+        if (!this.isAllDay && this.clockData.alert && this.clockData.alert.length > 0 && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
@@ -350,7 +350,6 @@
       if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
         return next()
       }
-
       this.beforeSubmitTodo(next)
     }
   }

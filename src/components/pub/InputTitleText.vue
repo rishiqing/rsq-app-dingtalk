@@ -8,9 +8,8 @@
                @input="inputChange($event.target.value)"
                @blur="inputBlur($event.target.value)"
                :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
-               @focus="disabled ? $event.target.blur() : function(){}"
-        >
-      <!--<div class="padding-left-">-->
+               @focus="disabled ? $event.target.blur() : function(){}">
+      <div class="padding-left-">
       <v-touch class=""
            v-if="isCheckable"
            @tap="clickCheckOut">
@@ -21,7 +20,7 @@
       </v-touch>
       </div>
     </div>
-  <!--</div>-->
+  </div>
 </template>
 <style scoped>
   .hide{
@@ -95,9 +94,9 @@
   /*.padding-left-input-{*/
     /*padding-left:0.3rem;*/
   /*}*/
-  /*.padding-left-input{*/
-    /*padding-left: 1.5rem;*/
-  /*}*/
+  .padding-left-input{
+    padding-left: 1.5rem;
+  }
 </style>
 <script>
   export default {
