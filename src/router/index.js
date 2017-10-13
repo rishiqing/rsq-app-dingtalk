@@ -3,11 +3,11 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
-import Init from 'com/Init'
-import Upload from 'com/demo/Upload'
-import SendConversation from 'com/demo/SendConversation'
-import Scroll from 'com/demo/Scroll'
-import CalendarDemo from 'com/demo/CalendarDemo'
+// import Init from 'com/Init'
+// import Upload from 'com/demo/Upload'
+// import SendConversation from 'com/demo/SendConversation'
+// import Scroll from 'com/demo/Scroll'
+// import CalendarDemo from 'com/demo/CalendarDemo'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -170,37 +170,37 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      //  用来测试
-      path: '/init',
-      name: 'init',
-      component: Init
-    },
-    {
-      //  用来测试
-      path: '/upload',
-      name: 'upload',
-      component: Upload
-    },
-    {
-      //  用来测试
-      path: '/sendConversation',
-      name: 'sendConversation',
-      component: SendConversation
-    },
-    {
-      //  用来测试
-      path: '/scroll',
-      name: 'scroll',
-      component: Scroll
-    },
-    {
-      //  用来测试
-      path: '/calendar',
-      name: 'calendar',
-      component: CalendarDemo
     }
+    // {
+    //   //  用来测试
+    //   path: '/init',
+    //   name: 'init',
+    //   component: Init
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/upload',
+    //   name: 'upload',
+    //   component: Upload
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/sendConversation',
+    //   name: 'sendConversation',
+    //   component: SendConversation
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/scroll',
+    //   name: 'scroll',
+    //   component: Scroll
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/calendar',
+    //   name: 'calendar',
+    //   component: CalendarDemo
+    // }
   ]
 })
 

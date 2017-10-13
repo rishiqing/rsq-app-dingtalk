@@ -1,6 +1,6 @@
 <template>
   <li class="task-list">
-    <img class="preview-img" :src="previewImg" alt="task.img.name"/>
+    <img class="small-img" :src="previewImg" alt="task.img.name"/>
     <div class="file-name">
       <div class="word">{{task.img.name.substr(0,30)}}</div>
       <div class="file-size">{{format(uploadedSize)}}/{{format(task.file.size)}}</div>
@@ -13,7 +13,7 @@
   </li>
 </template>
 <style lang="scss" scoped>
-  img{
+  .small-img{
     width: 27px;
     height: 27px;
   }

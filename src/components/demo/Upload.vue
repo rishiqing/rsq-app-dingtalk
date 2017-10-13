@@ -5,7 +5,7 @@
       <ul class="ul-list">
         <li v-for="task in taskList" class="taskList">
           <template v-if="new RegExp('image/').test(task.file.type)">
-            <img class="preview-img" :src="task.img.src" alt="task.img.name"/>
+            <img class="demo-preview-img" :src="task.img.src" alt="task.img.name"/>
             <span class="word">{{task.img.name.substr(0,30)}}</span>
             <v-touch @tap="deleteTask(task)">
               <i class="icon2-error deleteComent"></i>
@@ -13,7 +13,7 @@
           </template>
           <template v-else>
             <template v-if="task.file.type === 'application/pdf'">
-              <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png" alt="task.img.name"/>
+              <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png" alt="task.img.name"/>
               <span class="word">{{task.img.name.substr(0,30)}}</span>
               <v-touch @tap="deleteTask(task)">
                 <i class="icon2-error deleteComent"></i>
@@ -21,7 +21,7 @@
             </template>
             <template v-else>
               <template v-if="task.file.type === 'application/zip'">
-                <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png" alt="task.img.name"/>
+                <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png" alt="task.img.name"/>
                 <span class="word">{{task.img.name.substr(0,30)}}</span>
                 <v-touch @tap="deleteTask(task)">
                   <i class="icon2-error deleteComent"></i>
@@ -29,7 +29,7 @@
               </template>
               <template v-else>
                 <template v-if="task.file.type === 'application/ppt'">
-                  <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png" alt="task.img.name"/>
+                  <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png" alt="task.img.name"/>
                   <span class="word">{{task.img.name.substr(0,30)}}</span>
                   <v-touch @tap="deleteTask(task)">
                     <i class="icon2-error deleteComent"></i>
@@ -37,14 +37,14 @@
                 </template>
                 <template v-else>
                   <template v-if="task.file.type === 'application/docx'">
-                    <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png" alt="task.img.name"/>
+                    <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png" alt="task.img.name"/>
                     <span class="word">{{task.img.name.substr(0,30)}}</span>
                     <v-touch @tap="deleteTask(task)">
                       <i class="icon2-error deleteComent"></i>
                     </v-touch>
                   </template>
                   <template v-else>
-                      <img class="preview-img" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png" alt="task.img.name"/>
+                      <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png" alt="task.img.name"/>
                       <span class="word">{{task.img.name.substr(0,30)}}</span>
                       <v-touch @tap="deleteTask(task)">
                         <i class="icon2-error deleteComent"></i>
@@ -69,7 +69,7 @@
     top: 0.4rem;
     right:0.7rem
   }
-  .preview-img{
+  .demo-preview-img{
     width: 27px;
     height: 27px;
   }
