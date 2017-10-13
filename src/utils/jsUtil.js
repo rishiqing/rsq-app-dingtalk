@@ -321,13 +321,5 @@ export default {
     } else if (num > 1000000) {
       return Math.ceil(num / 100000) / 10 + 'M'
     }
-  },
-  isImage (type) {
-    var typeArray = ['PNG', 'JPG', 'JPEG']
-    return typeArray.indexOf(type.toUpperCase()) !== -1
-  },
-  isFileCanPreview (type) {
-    var fileType = ['NOTYPE']
-    return fileType.indexOf(type.toUpperCase()) !== -1
   }
 }
