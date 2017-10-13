@@ -11,7 +11,6 @@
     /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
-    border-bottom:1px solid #E3E3E3;
     background-color: white;
   }
   .arrow{
@@ -25,7 +24,7 @@
     position: absolute;
     /*top:0.04rem;*/
     top:50%;
-    margin-top: -0.63rem;
+    margin-top: -0.65rem;
     right: 0.94rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;

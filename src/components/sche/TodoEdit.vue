@@ -98,7 +98,7 @@
     background-color: white;
   }
   .time-border{
-    /*border-bottom: 1px solid #E0E0E0;*/
+    border-bottom: 1px solid #E0E0E0;
     /*position: relative;*/
     /*padding-left: 1.1rem;*/
   }
