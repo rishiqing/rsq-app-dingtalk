@@ -512,6 +512,7 @@ export default {
     }
     return api.todo.putRecordProps(editItem)
       .then(record => {
+        console.log('putRecordProps回来了吗')
         commit('TD_COMMENT_CREATED', {comment: record})
       })
   },

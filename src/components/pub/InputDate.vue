@@ -15,7 +15,7 @@
     /*height:1.3rem;*/
     line-height: 1.3rem;
     padding-left:3% ;
-    /*border-bottom:1px solid #E0E0E0;*/
+    border-bottom:1px solid #E0E0E0;
     /*border-top:1px solid #E0E0E0;*/
     background-color: white;
   }

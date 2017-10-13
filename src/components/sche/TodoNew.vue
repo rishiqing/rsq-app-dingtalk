@@ -298,7 +298,15 @@
                   }
                 }
               }
+              var sendID = item.senderTodo.pUserId
+//              console.log(sendID)
               var IDArrays = item.receiverIds.split(',')
+              for (i = 0; i < IDArrays.length; i++) {
+                if (sendID === parseInt(IDArrays[i])) {
+                  IDArrays.splice(i, 1)
+                  break
+                }
+              }
               var empIDArray = []
 //              console.log(IDArrays)
               this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
@@ -306,7 +314,7 @@
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-                  console.log(JSON.stringify(idMap))
+                  console.log(JSON.stringify(empIDArray))
                   data['userid_list'] = empIDArray.toString()
                   that.$store.dispatch('sendAsyncCorpMessage', {
                     corpId: that.loginUser.authUser.corpId,

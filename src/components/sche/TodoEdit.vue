@@ -407,7 +407,7 @@
                 date = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
               } else {
                 var start = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
-                var end = this.currentTodo.endDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
+                var end = this.currentTodo.endDate.substring(5, 7) + '月' + this.currentTodo.endDate.substring(8, 10) + '日'
                 date = start + '-' + end
               }
             } else if (this.currentTodo.dates !== null) {
@@ -472,9 +472,9 @@
         if (status !== this.editItem.isDone) {
           this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
               .then(() => {
-                this.$store.dispatch('saveTodoAction', {editItem: {status: status, type: 5}})
-                  .then(() => {
-                  })
+//                this.$store.dispatch('saveTodoAction', {editItem: {status: status, type: 5}})
+//                  .then(() => {
+//                  })
                 this.editItem.pIsDone = status
                 var str = status ? '任务已完成' : '任务已重启'
                 window.rsqadmg.execute('toast', {message: str})

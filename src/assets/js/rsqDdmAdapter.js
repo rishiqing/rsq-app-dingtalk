@@ -393,7 +393,7 @@ rsqAdapterManager.register({
   },
   selectDeptMember: function(params){
     dd.biz.contact.choose({
-      startWithDepartmentId: -1, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
+      startWithDepartmentId: 0, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
       multiple: params.multiple, //是否多选： true多选 false单选； 默认true
       users: params.selectedIds, //默认选中的用户列表，userid；成功回调中应包含该信息
       disabledUsers:params.disabledIds || [],//['10001', '10002', ...],// 不能选中的用户列表，员工userid

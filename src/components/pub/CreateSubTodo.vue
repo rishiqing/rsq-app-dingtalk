@@ -7,11 +7,10 @@
         <span>新建子任务</span>
       </v-touch>
     </div>
-
     <div v-else class="anotherTop">
       <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" class="create"/>
+        <input value="创建" class="create" disabled="disabled"/>
       </v-touch>
     </div>
     <div class="margin-block"></div>
@@ -76,13 +75,13 @@
               that.$store.dispatch('deleteSubTodo', {item: item})
                 .then(() => {
                   //  触发标记重复修改
-                  this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
-                  this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
-                    .then(() => {
-                    })
+                  that.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
+//                  this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
+//                    .then(() => {
+//                    })
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
-                  this.$router.replace(window.history.back())
+                  that.$router.replace(window.history.back())
                 })
             }
           })
@@ -91,11 +90,13 @@
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
+                console.log('updateSubTodo执行完成')
                 //  触发标记重复修改
                 this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
-                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
-                  .then(() => {
-                  })
+//                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
+//                  .then(() => {
+//                  })
+//                console.log('马上就要成功')
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '保存成功'})
               })
@@ -110,10 +111,12 @@
         this.$store.dispatch('createSubTodo', {newItem: {pTitle: this.inputTitle}, todoId: this.todoid})
           .then(() => {
             //  触发标记重复修改
+//            console.log('创建完成了')
             this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
-            this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: this.inputTitle, type: 7}})
-              .then(() => {
-              })
+//            this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: this.inputTitle, type: 7}})
+//              .then(() => {
+//                console.log('saveTodoAction资格行完成')
+//              })
             this.inputTitle = ''
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
@@ -275,6 +278,7 @@
     top:0.55rem;
     right:0.35rem;
     z-index:2;
+    background-color: white;
   }
   .write{
     background: #FFFFFF;
