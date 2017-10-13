@@ -273,7 +273,7 @@
        * currentTodo.id存在（更新）：比对localTodoTime和todoTime的每一项是否都一样
        */
       isModified () {
-        return !jsUtil.objectEqual(this.clockData, this.currentTodo.clock)
+        return !jsUtil.objectEqual(this.clockData, (this.currentTodo.clock || {}))
       },
       /**
        * 保存todoTime的状态到state中

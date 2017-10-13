@@ -90,7 +90,8 @@
           endDate: c.endDate || null,
           dates: c.dates || null,
           repeatType: c.repeatType || null,
-          repeatBaseTime: c.repeatBaseTime || null
+          repeatBaseTime: c.repeatBaseTime || null,
+          isLastDate: c.isLastDate === undefined || false
         }
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')
