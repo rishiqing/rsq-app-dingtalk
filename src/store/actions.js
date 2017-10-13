@@ -884,9 +884,10 @@ export default {
     var item = p.item
     var promise
 
+    //  不管是新增还是编辑，这里的item始终是有id的
     if (item.id) {
-      var c = item.clock
-      var alert = item.clock.alert || []
+      var c = item.clock || {}
+      var alert = c.alert || []
       var url = window.location.href.split('#')
       var millsArray = alert.map(a => {
         const numStart = moment(c.taskDate + c.startTime, 'YYYYMMDDHH:mm').valueOf()
@@ -912,7 +913,7 @@ export default {
             title: '任务提醒',
             form: [
               {key: '任务名称：', value: item.pTitle},
-              {key: '时间：', value: item.clock.startTime + '-' + item.clock.endTime}
+              {key: '时间：', value: c.startTime + '-' + c.endTime}
             ]
           }
         }

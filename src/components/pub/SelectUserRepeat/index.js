@@ -37,9 +37,11 @@ function show (options) {
 
 function close () {
   var vm = getSelectDateModal()
-  vm.$off('select-user-repeat-confirm')
-  vm.$off('select-user-repeat-cancel')
-  vm.$el.remove()
+  if (vm.$el) {
+    vm.$off('select-user-repeat-confirm')
+    vm.$off('select-user-repeat-cancel')
+    vm.$el.remove()
+  }
 }
 
 export default {
