@@ -109,8 +109,8 @@
   .left{
     position: absolute;
     left: 2.053rem;
-    bottom:0.168rem;
-    padding-bottom:0.026rem;
+    bottom:0.2rem;
+    /*padding-bottom:0.026rem;*/
     height: 1.306rem;
     /*display: flex;*/
     /*align-items: center;*/
@@ -118,10 +118,10 @@
   }
   .right{
     text-align: center;
-    padding-bottom:0.026rem;
+    /*padding-bottom:0.026rem;*/
     position: absolute;
     right: 2.11rem;
-    bottom:0.108rem;
+    bottom:0.2rem;
     /*height: 1.306rem;*/
     /*display: flex;*/
     /*align-items: center;*/

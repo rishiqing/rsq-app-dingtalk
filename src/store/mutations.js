@@ -229,13 +229,17 @@ export default {
     state.todo.isRepeatFieldEdit = false
   },
   TD_CURRENT_TODO_REPEAT_EDITED (state, p) {
+    console.log('进来了')
+    p = p || {}
     state.todo.isRepeatFieldEdit = true
+    // console.log('p.pTitle')
     if (p.pTitle) {
       state.todo.currentTodoRepeat.pTitle = p.pTitle
     }
     if (p.pNote) {
       state.todo.currentTodoRepeat.pNote = p.pNote
     }
+    console.log('执行完毕')
   },
   /**
    * 更新当前的todo
