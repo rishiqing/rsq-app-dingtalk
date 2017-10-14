@@ -6,6 +6,7 @@
           <div class="itm-group itm--edit-todo">
             <r-input-title
               ref="title"
+              :textarea="true"
               :is-checkable="!isInbox"
               :item-title="editItem.pTitle"
               :item-checked="editItem.pIsDone"
@@ -367,7 +368,7 @@
           return Promise.reject()
         }
         if (newTitle !== this.editItem.pTitle) {
-          window.rsqadmg.exec('showLoader', {text: '保存中...'})
+//          window.rsqadmg.exec('showLoader', {text: '保存中...'})
           var params = {pTitle: newTitle}
           return this.$store.dispatch('updateTodo', {editItem: params})
             .then(() => {
@@ -378,9 +379,9 @@
             })
             .then(() => {
               this.editItem.pTitle = newTitle
-              this.editItem.pTitle = newTitle
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '保存成功'})
+//              this.editItem.pTitle = newTitle
+//              window.rsqadmg.exec('hideLoader')
+//              window.rsqadmg.execute('toast', {message: '保存成功'})
             })
         } else {
           return Promise.resolve()
@@ -424,6 +425,8 @@
             var time = ''
             if (this.currentTodo.clock !== null) {
               time = this.currentTodo.clock.startTime + '-' + this.currentTodo.clock.endTime
+            } else {
+              time = '全天'
             }
             var data = {
               msgtype: 'oa',
@@ -664,6 +667,7 @@
       })
     },
     mounted () {
+      console.log('编辑界面的url是' + window.location.href)
     },
     beforeRouteEnter (to, from, next) {
       next()

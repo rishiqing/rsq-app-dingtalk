@@ -4,7 +4,8 @@
       <div class="title-todo" :class="{'margin-left':!isCheckable}">
         <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
         <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        <span v-if="!isCheckable" v-show="!isFrom" class="receive">我收到的</span>
+        <span v-if="!isCheckable" v-show="isFromSche" class="receive">我收到的</span>
+        <span v-if="!isCheckable" v-show="isFromkanban" class="receive">来自计划</span>
       </div>
     </v-touch>
     <v-touch class="todo-checkbox" v-if="isCheckable" @tap="clickCheckOut">
@@ -61,14 +62,14 @@
     display: block;
     position:absolute;
     top:0.45rem;
-    left: 0.33rem;
+    left: 0.37rem;
     font-size: 15px;
     color:#55A8FD;
   }
   .for-hide{
     position: absolute;
     top:0.52rem;
-    left: 0.59rem;
+    left: 0.649rem;
     display: block;
     width: 2px;
     height: 2px;
@@ -124,19 +125,19 @@
       isCheckable: Boolean
     },
     computed: {
-      currentDate () { return this.$store.getters.defaultTaskDate },
       isIE () { return this.item.pContainer === 'IE' },
       isIU () { return this.item.pContainer === 'IU' },
       isUE () { return this.item.pContainer === 'UE' },
       isUU () { return this.item.pContainer === 'UU' },
+      isDelay () { return this.delayDays > 0 && !this.item.pIsDone },
+      isFromSche () {
+        return this.item.isFrom === 'sender'
+      },
+      isFromkanban () {
+        return this.item.isFrom === 'kanban'
+      },
       delayDays () {
         return dateUtil.getDelayDays(this.item, this.currentDate, false)
-      },
-      isDelay () {
-        return this.delayDays
-      },
-      isFrom () {
-        return this.item.from === null
       }
     },
     methods: {

@@ -278,11 +278,14 @@
               var time = ''
               if (item.clock !== null) {
                 time = item.clock.startTime + '-' + item.clock.endTime
+              } else {
+                time = '全天'
               }
+              var url = window.location.href.split('#')
               var data = {
                 msgtype: 'oa',
                 msgcontent: {
-                  message_url: window.location.href,
+                  message_url: url[0] + '#' + '/todo/' + item.id,
                   head: {
                     text: '日事清',
                     bgcolor: 'FF55A8FD'
@@ -314,7 +317,7 @@
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-                  console.log(JSON.stringify(empIDArray))
+//                  console.log(JSON.stringify(empIDArray))
                   data['userid_list'] = empIDArray.toString()
                   that.$store.dispatch('sendAsyncCorpMessage', {
                     corpId: that.loginUser.authUser.corpId,
@@ -343,12 +346,14 @@
                     alertTime: standardTime,
                     title: item.pTitle,
                     success: () => {
-                      that.$router.replace(window.history.back())
+//                      window.history.back()
+                      that.$router.replace('/sche')// 这里跳到日程列表页面
                     }
                   })
                 })
             } else {
-              this.$router.replace(window.history.back())
+//              window.history.back()
+              this.$router.replace('/sche')
             }
           })
       }
@@ -370,6 +375,7 @@
     },
     mounted () {
       this.joinUserRsqIds = [this.$store.state.loginUser.rsqUser.id]
+      console.log('新建页面的url' + window.location.href)
     }
   }
 </script>

@@ -10,7 +10,7 @@
     <div v-else class="anotherTop">
       <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" class="create" disabled="disabled"/>
+        <button value="创建" class="create" disabled="disabled">创建</button>
       </v-touch>
     </div>
     <div class="margin-block"></div>
@@ -87,7 +87,7 @@
           })
         } else {
           if (value !== item.name) {
-            window.rsqadmg.exec('showLoader', {text: '保存中...'})
+//            window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
                 console.log('updateSubTodo执行完成')
@@ -97,8 +97,8 @@
 //                  .then(() => {
 //                  })
 //                console.log('马上就要成功')
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '保存成功'})
+//                window.rsqadmg.exec('hideLoader')
+//                window.rsqadmg.execute('toast', {message: '保存成功'})
               })
           }
         }
@@ -136,6 +136,9 @@
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
     }
+//    beforeRouteLeave (to, from, next) {
+//      this.inputBlur()
+//    }
   }
 </script>
 <style scoped>
@@ -278,7 +281,7 @@
     top:0.55rem;
     right:0.35rem;
     z-index:2;
-    background-color: white;
+    /*background-color: white;*/
   }
   .write{
     background: #FFFFFF;
