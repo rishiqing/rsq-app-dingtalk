@@ -17,6 +17,18 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+//  sentry相关
+import Raven from 'raven-js'
+import RavenVue from 'raven-js/plugins/vue'
+
+//  正式环境下配置sentry
+if (window.rsqConfig.env === 'prod') {
+  Raven
+    .config('https://8c36e59fcc6f4d1283c64115f5a99955@sentry.io/230122')
+    .addPlugin(RavenVue, Vue)
+    .install()
+}
+
 Vue.use(VueTouch)
 
 Vue.config.productionTip = false

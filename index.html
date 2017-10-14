@@ -9,6 +9,7 @@
     <script src="http://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
     <script>
       var rsqConfig = {
+        env: '<%= htmlWebpackPlugin.options.env %>',
         authServer: '<%= htmlWebpackPlugin.options.authServer %>',
         apiServer: '<%= htmlWebpackPlugin.options.apiServer %>',
         stsServer: '<%= htmlWebpackPlugin.options.stsServer %>',

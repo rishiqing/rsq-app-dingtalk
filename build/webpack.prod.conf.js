@@ -52,6 +52,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      env: 'prod',
       backendServer: config.build.backendServer,
       authServer: config.build.authServer,
       apiServer: config.build.apiServer,
