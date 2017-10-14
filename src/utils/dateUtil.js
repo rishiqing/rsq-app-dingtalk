@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default {
   /**
    * date的周次偏移offset之后所在周的第一天，offset为0或者不传值表示当前周
@@ -333,5 +335,53 @@ export default {
       result = this.formatDateDisplay(parsed.dateType, parsed.dateResult)
     }
     return result
+  },
+  /**
+   * 获取延期日期的方法，由大磊哥帮助提供
+   * @param model
+   * @param atDate
+   * @param inWindow
+   * @returns {*}
+   */
+  getDelayDays (model, atDate, inWindow) { // YYYYMMDD
+    const dates = model['dates']
+    const today = moment().format('YYYYMMDD')
+    const fd = model['pFinishedTime'] ? moment(model['pFinishedTime'], 'YYYY-MM-DD').format('YYYYMMDD') : null
+    let endDate = model['endDate']
+    if (model['isRepeatTodo']) {
+      return false
+    }
+    if (!model['pIsDone']) {
+      if (atDate !== today) {
+        return false
+      }
+    } else {
+      if (!inWindow) {
+        return false
+      }
+    }
+    if (dates) { // 离散日期
+      const args = dates.split(',')
+      const lastDateStr = args[args.length - 1]
+      endDate = moment(lastDateStr, 'YYYY/MM/DD').format('YYYYMMDD')
+    } else {
+      endDate = endDate ? moment(endDate, 'YYYY-MM-DD').format('YYYYMMDD') : null
+    }
+    if (!endDate) {
+      return false
+    }
+    if (!model['pIsDone']) {
+      if (endDate < today) {
+        return moment(today, 'YYYYMMDD').diff(moment(endDate, 'YYYYMMDD'), 'days')
+      } else {
+        return false
+      }
+    } else {
+      if (endDate < fd) {
+        return moment(fd, 'YYYYMMDD').diff(moment(endDate, 'YYYYMMDD'), 'days')
+      } else {
+        return false
+      }
+    }
   }
 }

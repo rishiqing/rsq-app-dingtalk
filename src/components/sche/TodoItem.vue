@@ -112,6 +112,8 @@
   }
 </style>
 <script>
+  import dateUtil from 'ut/dateUtil'
+
   export default {
     name: 'TodoItem',
     data () {
@@ -122,12 +124,17 @@
       isCheckable: Boolean
     },
     computed: {
+      currentDate () { return this.$store.getters.defaultTaskDate },
       isIE () { return this.item.pContainer === 'IE' },
       isIU () { return this.item.pContainer === 'IU' },
       isUE () { return this.item.pContainer === 'UE' },
       isUU () { return this.item.pContainer === 'UU' },
-      delayDays () { return this.item.delayDays },
-      isDelay () { return this.delayDays > 0 && !this.item.pIsDone },
+      delayDays () {
+        return dateUtil.getDelayDays(this.item, this.currentDate, false)
+      },
+      isDelay () {
+        return this.delayDays
+      },
       isFrom () {
         return this.item.from === null
       }
