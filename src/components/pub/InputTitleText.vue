@@ -148,9 +148,9 @@
         if (this.disabled) return
         this.$emit('click-checkout', !this.itemChecked)
       }
-    },
-    beforeRouteLeave (to, from, next) {
-      this.$emit('text-blur', this.content)
     }
+//    beforeRouteLeave (to, from, next) {
+//      this.$emit('text-blur', this.content)
+//    }
   }
 </script>
