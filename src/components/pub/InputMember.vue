@@ -227,11 +227,12 @@
           return Promise.resolve()
         }
         var corpId = this.loginUser.authUser.corpId
-        window.rsqadmg.exec('showLoader')
+        //  暂时去掉loader
+//        window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
             this[targetListName] = util.getMapValuePropArray(idMap)
-            window.rsqadmg.exec('hideLoader')
+//            window.rsqadmg.exec('hideLoader')
           })
       }
     },
