@@ -9,8 +9,8 @@
       <div class="window-middle">
         <p class="window-title">日事清v2.0上线了</p>
         <p class="window-content">1现在创建任务的时候可以发DING<br/>
-          2计划功能挪到pc端了，钉钉日事清pc端稍后上线<br/>
-          点击查看更多，了解本次更新全部内容</p>
+          2计划功能挪到pc端了，钉钉日事清pc端稍后上线
+        <p class="more-content">点击查看更多，了解本次更新全部内容</p>
       </div>
       <div class="window-bottom">
         <v-touch @tap="SwitchTosche">
@@ -27,6 +27,14 @@
   div{
     margin:0;
     padding: 0;
+  }
+  .more-content{
+    font-family: PingFangSC-Regular;
+    font-size: 11px;
+    color: #B0CDEA;
+    letter-spacing: 0;
+    line-height: 20px;
+    text-align: center;
   }
   .modal{
     position: fixed;
@@ -58,8 +66,8 @@
     background-image: linear-gradient(-90deg, #69ACEF 0%, #3E86D6 100%);
   }
   .window-top>img{
-    width: 3.67rem;
-    height: 3.81rem;
+    width: 5.28rem;
+    height: 4.37rem;
   }
   .window-middle{
     height: 3.918rem;

@@ -50,8 +50,14 @@
     },
     methods: {
       returnTo () {
+        console.log('进来了')
         this.$router.replace('/sche')
       }
+    },
+    beforeRouteLeave (to, from, next) {
+//      this.$router.replace('/sche')
+      console.log(from)
+      next('/')
     }
   }
 </script>

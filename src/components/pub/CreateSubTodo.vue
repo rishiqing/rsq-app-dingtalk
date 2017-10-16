@@ -4,13 +4,13 @@
     <div class="topSubtodo" v-if="seen" >
       <v-touch @tap="change">
         <v-touch ><i class="icon2-add-circle add"></i></v-touch>
-        <span>新建子任务</span>
+        <span class="new-create">新建子任务</span>
       </v-touch>
     </div>
     <div v-else class="anotherTop">
       <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <button value="创建" class="create" disabled="disabled">创建</button>
+        <button value="创建" class="create" >创建</button>
       </v-touch>
     </div>
     <div class="margin-block"></div>
@@ -19,11 +19,11 @@
         <v-touch class="">
            <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
                     ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
-          <v-touch class="" v-if="" @tap="clickCheckOut(item)">
-            <i class="icon2-check-box select-sub"></i>
-            <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
-            <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
-          </v-touch>
+        </v-touch>
+        <v-touch class="" v-if="" @tap="clickCheckOut(item)">
+          <i class="icon2-check-box select-sub"></i>
+          <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
+          <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
         </v-touch>
       </li>
     </ul>
@@ -158,7 +158,7 @@
   }
   .select-sub{
     position: absolute;
-    top: 0.41rem;
+    top: 0.4rem;
     color:#b9b9bc;
     left:0.02rem
   }
@@ -175,6 +175,7 @@
     border:none;
     margin-left: 0.9rem;
     font-family: PingFangSC-Regular;
+    line-height: 0.2rem;
     font-size: 17px;
     width: 85%;
     text-overflow: ellipsis;
@@ -184,7 +185,14 @@
   .sublistItem:last-child{
     border-bottom: none;
   }
-  .sublistItem{}
+  .sublistItem{
+    position: relative;
+    border-bottom:1px solid #DADADA ;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #222222;
+    padding: 0.33rem 0 0.15rem 0
+  }
   .topSubtodo{
     position:fixed;
     background-color: white;
@@ -217,7 +225,7 @@
     font-size: 17px;
     color: #55A8FD;
   }
-  span{
+  .new-create{
     display: block;
     margin-left: 0.8rem;
     font-family:PingFangSC-Regular;
@@ -236,12 +244,7 @@
     padding-left: 5%;
   }
   li{
-    line-height: 1.226rem;
-    position: relative;
-    border-bottom:1px solid #DADADA ;
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    color: #222222;
+
   }
   li:first-child{
   }
@@ -278,10 +281,11 @@
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.55rem;
+    top:0.67rem;
     right:0.35rem;
     z-index:2;
-    /*background-color: white;*/
+    background-color: white;
+    padding-left: 0.26rem;
   }
   .write{
     background: #FFFFFF;

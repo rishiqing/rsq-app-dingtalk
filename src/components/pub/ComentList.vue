@@ -47,6 +47,7 @@
     background-color: white;
     margin-top: 10px;
     margin-bottom: 5rem;
+    padding-bottom: 1.3rem;
     /*margin-bottom: 1.4rem;*/
     /*border-top: 1px solid #E0E0E0;*/
   }

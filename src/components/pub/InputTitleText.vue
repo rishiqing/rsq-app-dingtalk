@@ -1,16 +1,15 @@
 <template>
   <div class="">
-    <div class="edit">
-        <textarea type="text" placeholder="输入任务标题"
-                  v-if="textarea"
+    <div class="edit" :class="{'edit-border':isEdit}">
+        <textarea type="text"
+                  v-if="isEdit"
                ref="titleInput"
                :value="itemTitle"
-               class="padding-left-input-"
+                  @blur="inputBlur($event.target.value)"
                @input="inputChange($event.target.value)"
-                  v-model="content"
-               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
+                  :class="{'padding-left-input':isCheckable}"
                   @focus="disabled ? $event.target.blur() : function(){}"></textarea>
-      <input type="text" placeholder="输入任务标题"
+        <input type="text" placeholder="输入任务标题"
                 v-if="newCheckable"
                 ref="titleInput"
                 :value="itemTitle"
@@ -37,10 +36,12 @@
   .hide{
     display: none;
   }
+  .edit-border{
+    border-bottom: 1px solid #e0e0e0;
+  }
   .edit{
     display: flex;
     align-items: center;
-    border-bottom:1px solid #E0E0E0 ;
     position: relative;
   }
   .real-width{
@@ -113,7 +114,6 @@
   export default {
     data () {
       return {
-        content: ''
       }
     },
     computed: {
@@ -131,16 +131,16 @@
       itemTitle: String,
       itemChecked: Boolean,
       disabled: Boolean,
-      textarea: Boolean
+      isEdit: Boolean
     },
     methods: {
       isMaxlength (title) {
         title = title || ''
         return title.length > 15
       },
-//      inputBlur (value) {
-//        this.$emit('text-blur', value)
-//      },
+      inputBlur (value) {
+        this.$emit('text-blur', value)
+      },
       inputChange (value) {
         this.$emit('text-change', value)
       },

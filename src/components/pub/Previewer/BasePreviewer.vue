@@ -3,7 +3,7 @@
     <div class="preview-mask"></div>
     <div class="preview-head">
       <div class="preview-title">{{fileName}}</div>
-      <v-touch class="preview-close" @tap="closePreview">×</v-touch>
+      <v-touch  class="preview-close"@tap="closePreview">×</v-touch>
     </div>
     <div class="preview-img-wrap" v-show="previewImage.id">
       <img class="preview-img"
@@ -21,10 +21,15 @@
   .preview-head {position: fixed;top: 0;left: 0;width: 100%;overflow:hidden;
     text-align: center;cursor: default;background: rgba(0,0,0,.86);z-index: 1530;}
   .preview-close {
-    position:fixed;width: 0.8rem;
-    border-radius: 50%;line-height: 0.8rem;
+    position:fixed;width: 0.7rem;
+    border-radius: 50%;line-height: 0.65rem;
     top: 0.35rem;right: 0.35rem;
     color: #000;background: #fff;
+    padding-bottom: 0.1rem;
+    padding-left: 0.04rem;
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
   }
   .preview-title {text-align:center;width: 80%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;
     margin:0 auto;font-size: 16px;height:1.5rem;line-height:1.5rem;}

@@ -154,6 +154,7 @@
         editItem: {
           isChecked: false,
           isAllDay: true
+//          receiverIds: []
         },
         joinUserRsqIds: [],
         isShowNote: false
@@ -196,7 +197,11 @@
        * 初始化数据，从state的currentTodo复制到local的editItem
        */
       initData () {
+//        console.log('this.currentTodo是' + JSON.stringify(this.currentTodo))
+//        console.log('this.JOINuserid' + [this.editItem.receiverIds])
         jsUtil.extendObject(this.editItem, this.currentTodo)
+//        console.log('this.edititem' + JSON.stringify(this.editItem))
+//        this.editItem.receiverIds = [this.editItem.receiverIds]
       },
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
@@ -214,8 +219,11 @@
         this.joinUserRsqIds = idArray
         var ids = idArray.join(',')
         this.editItem.receiverIds = ids
+//        console.log(this.editItem.receiverIds)
+//        console.log('此时id是' + this.joinUserRsqIds)
         this.$store.commit('TD_TODO_UPDATED', {todo: {receiverIds: ids}})
-      },
+//        this.editItem.receiverIds = idArray
+      }, // 注意这里没有和后台打交道，在提交新建的时候才打交道
       /**
        * 将local的对象保存到state的变量中
        */
@@ -282,6 +290,8 @@
                 time = '全天'
               }
               var url = window.location.href.split('#')
+              var note = this.editItem.pNote
+              var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
               var data = {
                 msgtype: 'oa',
                 msgcontent: {
@@ -296,7 +306,7 @@
                       {key: '日期：', value: date},
                       {key: '时间：', value: time}
                     ],
-                    content: item.pNote,
+                    content: newnote,
                     author: that.loginUser.authUser.name// 这里要向后台要值
                   }
                 }
@@ -346,10 +356,12 @@
                     alertTime: standardTime,
                     title: item.pTitle,
                     success: () => {
+                      console.log('发送成功')
 //                      window.history.back()
-                      that.$router.replace('/sche')// 这里跳到日程列表页面
+//                      that.$router.replace('/sche')// 这里跳到日程列表页面
                     }
                   })
+                  that.$router.replace('/sche')
                 })
             } else {
 //              window.history.back()
@@ -374,8 +386,19 @@
       window.rsqadmg.execute('setOptionButtons', btnParams)
     },
     mounted () {
+//      console.log('进来了mouted')
+//      this.editItem.receiverIds = [this.$store.state.loginUser.rsqUser.id]
+//      console.log('进来mouted1次')
       this.joinUserRsqIds = [this.$store.state.loginUser.rsqUser.id]
-      console.log('新建页面的url' + window.location.href)
+      if (this.editItem.receiverIds !== null) {
+        var idArray = this.editItem.receiverIds.split(',')
+        this.joinUserRsqIds = []
+        for (var i = 0; i < idArray.length; i++) {
+          this.joinUserRsqIds.push(idArray[i])
+        }
+      }
+//      console.log(this.joinUserRsqIds)
+//      console.log('新建页面的url' + window.location.href)
     }
   }
 </script>

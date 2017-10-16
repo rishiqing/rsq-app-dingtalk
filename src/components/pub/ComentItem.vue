@@ -60,6 +60,9 @@
     line-height: 0.7rem;
     border-bottom: none;
   }
+  .comment:last-child{
+
+  }
   .file-name{
     font-family: PingFangSC-Regular;
     font-size: 13px;
