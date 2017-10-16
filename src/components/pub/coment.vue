@@ -99,9 +99,9 @@
         }
       },
       comentBlur (newTitle) {
-        if (!newTitle) {
-          return window.rsqadmg.execute('alert', {message: '任务评论不能为空'})
-        }
+//        if (!newTitle) {
+//          return window.rsqadmg.execute('alert', {message: '任务评论不能为空'})
+//        }
         var that = this
         this.$store.dispatch('postTodoComment', {commentContent: newTitle, fileIds: this.fileId})
           .then(() => {

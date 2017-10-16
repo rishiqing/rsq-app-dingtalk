@@ -27,6 +27,7 @@ import RemindWindow from 'com/pub/RemindWindow'
 import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
 import pcEnd from 'com/me/pcEnd'
+import test from 'com/demo/test'
 Vue.use(Router)
 
 const router = new Router({
@@ -61,6 +62,12 @@ const router = new Router({
       path: '/pub/noPermission',
       name: 'noPermission',
       component: NoPermission,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/demo/test',
+      name: 'test',
+      component: test,
       meta: {requireAuth: true}
     },
     {

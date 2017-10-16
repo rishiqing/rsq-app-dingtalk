@@ -6,6 +6,7 @@
           <div class="itm-group itm--edit-todo">
             <r-input-title
               ref="title"
+              :is-edit="true"
               :is-checkable="!isInbox"
               :item-title="editItem.pTitle"
               :item-checked="editItem.pIsDone"
@@ -367,7 +368,7 @@
           return Promise.reject()
         }
         if (newTitle !== this.editItem.pTitle) {
-          window.rsqadmg.exec('showLoader', {text: '保存中...'})
+//          window.rsqadmg.exec('showLoader', {text: '保存中...'})
           var params = {pTitle: newTitle}
           return this.$store.dispatch('updateTodo', {editItem: params})
             .then(() => {
@@ -378,17 +379,18 @@
             })
             .then(() => {
               this.editItem.pTitle = newTitle
-              this.editItem.pTitle = newTitle
-              window.rsqadmg.exec('hideLoader')
-              window.rsqadmg.execute('toast', {message: '保存成功'})
+//              this.editItem.pTitle = newTitle
+//              window.rsqadmg.exec('hideLoader')
+//              window.rsqadmg.execute('toast', {message: '保存成功'})
             })
         } else {
           return Promise.resolve()
         }
       },
-      saveMember (idArray) {
+      saveMember (idArray) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
         var that = this
         var compRes = util.compareList(this.joinUserRsqIds, idArray)
+//        console.log('比较之后的结果是' + JSON.stringify(compRes))
         var params = {
           receiverIds: idArray.join(','),
           addJoinUsers: compRes.addList.join(','),
@@ -420,11 +422,15 @@
                 date = date.substring(0, 11) + '...'
               }
             }
-            console.log(date)
+//            console.log(date)
             var time = ''
             if (this.currentTodo.clock !== null) {
               time = this.currentTodo.clock.startTime + '-' + this.currentTodo.clock.endTime
+            } else {
+              time = '全天'
             }
+            var note = this.editItem.pNote
+            var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
             var data = {
               msgtype: 'oa',
               msgcontent: {
@@ -439,7 +445,7 @@
                     {key: '日期：', value: date},
                     {key: '时间：', value: time}
                   ],
-                  content: that.currentTodo.pNote,
+                  content: newnote,
                   author: that.loginUser.authUser.name// 这里要向后台要值
                 }
               }
@@ -544,6 +550,10 @@
                     var d = dateUtil.repeatDate2Text(that.currentTodo)
                     var clock = that.currentTodo.clock || {}
                     var t = clock.startTime ? clock.startTime + '-' + clock.endTime : '全天'
+                    var note = that.editItem.pNote
+//                    console.log(note)
+                    var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
+//                    var newNote = newnote.replace(/ /g, '')
                     var params = {
                       corpId: that.corpId, // that.loginUser.authUser.corpId,
                       data: {
@@ -562,7 +572,7 @@
                               {key: '日期：', value: d},
                               {key: '时间：', value: t}
                             ],
-                            content: that.editItem.pNote,
+                            content: newnote,
                             author: that.loginUser.authUser.name// 这里要向后台要值
                           }
                         }
@@ -664,6 +674,7 @@
       })
     },
     mounted () {
+//      console.log('编辑界面的url是' + window.location.href)
     },
     beforeRouteEnter (to, from, next) {
       next()

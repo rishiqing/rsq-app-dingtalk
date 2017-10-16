@@ -229,7 +229,7 @@ export default {
     state.todo.isRepeatFieldEdit = false
   },
   TD_CURRENT_TODO_REPEAT_EDITED (state, p) {
-    console.log('进来了')
+    // console.log('进来了')
     p = p || {}
     state.todo.isRepeatFieldEdit = true
     // console.log('p.pTitle')
@@ -239,7 +239,7 @@ export default {
     if (p.pNote) {
       state.todo.currentTodoRepeat.pNote = p.pNote
     }
-    console.log('执行完毕')
+    // console.log('执行完毕')
   },
   /**
    * 更新当前的todo
@@ -268,7 +268,10 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
+    // console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
+    // console.log('p.todo是' + JSON.stringify(p.todo))
     util.extendObject(state.todo.currentTodo, p.todo)
+    // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos

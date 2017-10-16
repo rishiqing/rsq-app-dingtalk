@@ -1,15 +1,25 @@
 <template>
   <div class="">
-    <div class="edit">
-        <input type="text" placeholder="输入任务标题"
+    <div class="edit" :class="{'edit-border':isEdit}">
+        <textarea type="text"
+                  v-if="isEdit"
                ref="titleInput"
                :value="itemTitle"
-               class="padding-left-input-"
+                  @blur="inputBlur($event.target.value)"
                @input="inputChange($event.target.value)"
-               @blur="inputBlur($event.target.value)"
-               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
-               @focus="disabled ? $event.target.blur() : function(){}">
+                  :class="{'padding-left-input':isCheckable}"
+                  @focus="disabled ? $event.target.blur() : function(){}"></textarea>
+        <input type="text" placeholder="输入任务标题"
+                v-if="newCheckable"
+                ref="titleInput"
+                :value="itemTitle"
+                class="padding-left-input-"
+                @input="inputChange($event.target.value)"
+                @blur="inputBlur($event.target.value)"
+                :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
+                @focus="disabled ? $event.target.blur() : function(){}"/>
       <div class="padding-left-">
+        <!--@blur="inputBlur($event.target.value)"-->
       <v-touch class=""
            v-if="isCheckable"
            @tap="clickCheckOut">
@@ -26,10 +36,12 @@
   .hide{
     display: none;
   }
+  .edit-border{
+    border-bottom: 1px solid #e0e0e0;
+  }
   .edit{
     display: flex;
     align-items: center;
-    border-bottom:1px solid #E0E0E0 ;
     position: relative;
   }
   .real-width{
@@ -42,8 +54,8 @@
     color:#b9b9bc;
     font-size: 17px;
     position: absolute;
-    top:50%;
-    margin-top: -0.2rem;
+    top:0.27rem;
+    /*margin-top: -0.2rem;*/
     left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;
@@ -51,16 +63,16 @@
   .isdisplay-title{
     display: block;
     position:absolute;
-    top:50%;
-    margin-top: -0.29rem;
+    top:0.17rem;
+    /*margin-top: -0.29rem;*/
     left: 0.44rem;
     font-size: 15px;
     color:#55A8FD;
   }
   .for-hide-title{
     position: absolute;
-    top:50%;
-    margin-top: -0.29rem;
+    top:0.17rem;
+    /*margin-top: -0.29rem;*/
     left: 0.75rem;
     display: block;
     width: 2px;
@@ -101,7 +113,8 @@
 <script>
   export default {
     data () {
-      return {}
+      return {
+      }
     },
     computed: {
       paddingObject () {
@@ -117,7 +130,8 @@
       isCheckable: Boolean,
       itemTitle: String,
       itemChecked: Boolean,
-      disabled: Boolean
+      disabled: Boolean,
+      isEdit: Boolean
     },
     methods: {
       isMaxlength (title) {
@@ -135,5 +149,8 @@
         this.$emit('click-checkout', !this.itemChecked)
       }
     }
+//    beforeRouteLeave (to, from, next) {
+//      this.$emit('text-blur', this.content)
+//    }
   }
 </script>

@@ -66,12 +66,14 @@
     },
     methods: {
       gotoTodoTime () {
+//        console.log('进来了')
         if (this.disabled) return
         this.$emit('time-tap')
         //  将需要用到的属性设置到currentTodoTime中
         var timeObj = {
           clock: JSON.parse(JSON.stringify(this.itemClock))
         }
+//        console.log(JSON.stringify(timeObj))
         this.$store.commit('PUB_TODO_TIME_UPDATE', {data: timeObj})
         this.$router.push('/todoEdit/time')
       }

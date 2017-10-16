@@ -168,8 +168,11 @@
       showNativeMemberEdit () {
         var that = this
         var corpId = that.loginUser.authUser.corpId
+//        console.log('提取之前内容是' + JSON.stringify(this.selectedLocalList))
         var selectedArray = util.extractProp(this.selectedLocalList, 'userId')
+//        console.log('提取之后内容是' + (selectedArray))
         var disabledArray = util.extractProp(this.disabledLocalList, 'userId')
+//        console.log('提取之后禁止内容是' + (selectedArray))
         window.rsqadmg.exec('selectDeptMember', {
           btnText: '确定',  //  选择器按钮文本，pc端需要的参数
           multiple: true, //  默认false，选择单人
@@ -192,6 +195,7 @@
                 .then(function (idMap) {
                   window.rsqadmg.exec('hideLoader')
                   var userArray = util.getMapValuePropArray(idMap)
+//                  console.log('userId是' + JSON.stringify(userArray))
                   var rsqIdArray = util.extractProp(userArray, 'rsqUserId')
                   that.$emit('member-changed', rsqIdArray)
                 })
@@ -236,6 +240,8 @@
           })
       }
     },
-    mounted () {}
+    mounted () {
+//      console.log('传进来的selectedRsqIds' + this.selectedRsqIds)
+    }
   }
 </script>
