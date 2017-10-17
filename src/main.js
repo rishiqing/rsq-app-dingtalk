@@ -52,6 +52,9 @@ window.rsqadmg.exec('auth', {
       template: '<App/>',
       components: { App }
     })
+  },
+  error: function () {
+    alert('验证失败')
   }
 })
 

@@ -60,7 +60,7 @@ module.exports = {
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
-    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/',
+    frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
     stsServer: 'http://182.92.222.40:8300/sts/',
