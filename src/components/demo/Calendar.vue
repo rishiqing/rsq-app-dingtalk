@@ -4,7 +4,7 @@
        @panend="onPanEnd"
        @pancancel="onPanEnd"
        :pan-options="{ direction: 'all', threshold: 10 }">
-  <div class="cal-title z-index-3xs">
+  <div class="cal-title z-index-m">
       <span>{{currentView.focusDate ? months[currentView.focusDate.getMonth()] : ''}}月</span>
       <span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}</span>
       <!--<v-touch tag="span" class="cal-title-today"-->
@@ -18,12 +18,12 @@
         </tr>
       </table>
     </div>
-    <div class="cal-content z-index-2xs">
+    <div class="cal-content z-index-3xs" :style="{height: calHeight + 'px', top: (topBase + titleHeight) + 'px'}">
       <div class="cal-outer cal-outer-pane" id="vPaneWrapper"
-           :style="{'transform': translateY, height: calHeight + 'px', top: topBase + 'px'}"
+           :style="{'transform': translateY}"
            :class="{'animate': transDirection === 'v' }">
         <div class="cal-inner cal-inner-pane" id="hMovePane"
-             :style="{'transform': paneView.translateX}"
+             :style="{'transform': paneView.translateX, height: paneView.height + 'px', top: '0px'}"
              :class="{'animate': transDirection === 'h' }">
           <r-cal-pane
             v-for="(dates, index) in paneView.daysArray"
@@ -36,9 +36,9 @@
           ></r-cal-pane>
         </div>
       </div>
-      <div class="cal-outer cal-outer-bar" id="vBarWrapper">
+      <div class="cal-outer cal-outer-bar" id="vBarWrapper" style="transform: translateY(0px);">
         <div class="cal-inner cal-inner-bar" id="hMoveBar" v-show="isShowBar"
-             :style="{transform: barView.translateX, height: barView.height + 'px', top: topBase + 'px'}"
+             :style="{transform: barView.translateX, height: barView.height + 'px', top: '0px'}"
              :class="{animate: transDirection === 'h' }">
           <r-cal-bar
             v-for="(days, index) in barView.daysArray"
@@ -54,7 +54,7 @@
     </div>
   </v-touch>
 </template>
-<script scoped>
+<script>
   import CalendarBar from 'com/demo/CalendarBar'
   import CalendarPane from 'com/demo/CalendarPane'
   import dateUtil from 'ut/dateUtil'
@@ -64,7 +64,8 @@
     data () {
       return {
         selectDate: null,  //  当前选中（高亮显示）的日期
-        topBase: 83,  //  顶部的高度，bar和pane都相对于此高度
+        topBase: 53,  //  顶部的高度，bar和pane都相对于此高度
+        titleHeight: 31,
         barView: {
           type: 'bar',
           focusDate: null,  //  bar中当前周中的一个日期
@@ -213,6 +214,7 @@
             break
           case 8:
             //  处于pane状态只能上拉
+            console.log('=@_@===this.isPane===#_#=' + JSON.stringify(this.isPane))
             if (this.isPane) {
               if (absY > this.barPaneIndex * this.paneLineHeight) {
                 this.isShowBar = true
@@ -318,7 +320,7 @@
     mounted () {
       //  初始化工作
       this.resetAllViews({focusDate: this.defaultSelectDate})
-      this.currentView = this.paneView
+      this.currentView = this.barView
       this.isShowBar = false
       this.calHeight = this.currentView.height
       this.$emit('cal-ready', {type: this.currentView.type, daysArray: this.currentView.daysArray})
@@ -371,14 +373,14 @@
     font-family: PingFangSC-Medium;
   }
   .cal-content {
-    position: fixed;left: 0;right: 0;padding:0;overflow: hidden;
+    position: fixed;left: 0;right: 0;top:84px;padding:0;
   }
-  .cal-outer {position:relative;width:100%;overflow:hidden;background: #458CDA;}
+  .cal-outer {position:relative;width:100%;overflow:visible;}
   .cal-inner {
     overflow: visible;white-space:nowrap;
   }
   div.cal-inner-pane {
-    position: absolute;left: -100%;top:0;width:100%;bottom:0;
+    position: fixed;margin-left: -100%;width:100%;
   }
   div.cal-inner-bar {
     position: fixed;margin-left: -100%;width: 100%;

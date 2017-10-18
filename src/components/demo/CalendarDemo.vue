@@ -5,6 +5,11 @@
       @after-cal-swipe="afterSwipe"
       :default-select-date="dateSelect"
     ></r-calendar>
+    <div style="width: 100%; height: 800px; padding-top: 100px;">
+      <div style="">
+        this is a item list
+      </div>
+    </div>
   </div>
 </template>
 <style>
