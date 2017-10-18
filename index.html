@@ -5,8 +5,10 @@
     <title>日事清</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html;charset=utf8"/>
+    <meta name="format-detection" content="telephone=no" />
     <script type="text/javascript" src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
     <script src="https://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
+    <script type='text/javascript' src='https://assets.growingio.com/sdk/wx/vds-wx-plugin.js'></script>
     <script>
       var rsqConfig = {
         env: '<%= htmlWebpackPlugin.options.env %>',
@@ -20,7 +22,7 @@
       }
     </script>
     <script>
-      (function(){
+      (function () {
         var width = document.documentElement.clientWidth
         var style = document.createElement('style')
         style.type = 'text/css'

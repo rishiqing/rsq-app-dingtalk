@@ -16,14 +16,14 @@
     <div class="margin-block"></div>
     <ul class="sublist" :class="{hasborder:!haschild}">
       <li v-for="item in items" v-if="items" class="sublistItem">
-        <v-touch class="">
-           <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
-                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
-        </v-touch>
-        <v-touch class="" v-if="" @tap="clickCheckOut(item)">
+        <v-touch class="wrap-sub-icon" v-if="" @tap="clickCheckOut(item)">
           <i class="icon2-check-box select-sub"></i>
           <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
+        </v-touch>
+        <v-touch class="">
+           <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
+                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
         </v-touch>
       </li>
     </ul>
@@ -58,12 +58,6 @@
       change () {
         this.seen = false
       },
-      // 留待以后使用
-//      judgeable () {
-//        if (this.items) {
-//          this.judge = true
-//        }
-//      },
       inputBlur (value, item) {
         this.$refs.titleInput.value = value
         if (!value) {
@@ -90,15 +84,9 @@
 //            window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
-                console.log('updateSubTodo执行完成')
+//                console.log('updateSubTodo执行完成')
                 //  触发标记重复修改
                 this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
-//                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
-//                  .then(() => {
-//                  })
-//                console.log('马上就要成功')
-//                window.rsqadmg.exec('hideLoader')
-//                window.rsqadmg.execute('toast', {message: '保存成功'})
               })
           }
         }
@@ -142,6 +130,12 @@
   }
 </script>
 <style scoped>
+  .wrap-sub-icon{
+    height: 1.28rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
   .for-cover{
     height: 0.266rem;
     z-index:1;
@@ -157,10 +151,10 @@
     color: #999999;
   }
   .select-sub{
-    position: absolute;
-    top: 0.4rem;
-    color:#b9b9bc;
-    left:0.02rem
+    /*position: absolute;*/
+    /*top: 0.4rem;*/
+    /*color:#b9b9bc;*/
+    /*left:0.02rem*/
   }
   .sublist{
     background-color: white;
@@ -168,30 +162,35 @@
     z-index: 0;
   }
   .hasborder{
-    border-top:1px solid #E0E0E0;
-    border-bottom:1px solid #E0E0E0;
+    /*border-top:1px solid #E0E0E0;*/
+    /*border-bottom:1px solid #E0E0E0;*/
   }
   .list-below{
     border:none;
-    margin-left: 0.9rem;
+    margin-left: 0.35rem;
     font-family: PingFangSC-Regular;
-    line-height: 0.2rem;
+    /*line-height: 0.2rem;*/
     font-size: 17px;
     width: 85%;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space:nowrap
+    white-space:nowrap;
+    padding-top: 0.08rem;
   }
   .sublistItem:last-child{
     border-bottom: none;
   }
   .sublistItem{
     position: relative;
+    padding-top: 0.1rem;
     border-bottom:1px solid #DADADA ;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #222222;
-    padding: 0.33rem 0 0.15rem 0
+    /*padding: 0.33rem 0 0.15rem 0*/
+    height: 1.22rem;
+    display: flex;
+    align-items: center;
   }
   .topSubtodo{
     position:fixed;
@@ -251,7 +250,7 @@
   .isdisplay-sub{
     display: block;
     position:absolute;
-    top:0.25rem;
+    top:0.27rem;
     left: 0.13rem;
     font-size: 15px;
     color:#55A8FD;
@@ -277,11 +276,11 @@
     border-radius: 2px;
     height: 0.666rem;
     /*line-height: 0.76rem;*/
-    width:1.413rem;
+    width:1.4rem;
     font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.67rem;
+    top:0.57rem;
     right:0.35rem;
     z-index:2;
     background-color: white;
@@ -297,8 +296,8 @@
     z-index: 1;
     line-height: 0.6rem;
     padding-right: 2.432rem;
-    padding-top: 0.405rem;
-    padding-bottom: 0.405rem;
+    padding-top: 0.28rem;
+    padding-bottom: 0.28rem;
   }
   .margin-block {
     height: 50px;

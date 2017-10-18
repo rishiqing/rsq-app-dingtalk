@@ -67,8 +67,11 @@
     methods: {
       gotoTodoTime () {
 //        console.log('进来了')
-        if (this.disabled) return
-        this.$emit('time-tap')
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
+        this.$emit('time-tap') // 谁来接收它呢
         //  将需要用到的属性设置到currentTodoTime中
         var timeObj = {
           clock: JSON.parse(JSON.stringify(this.itemClock))

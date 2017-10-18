@@ -319,6 +319,7 @@ rsqAdapterManager.register({
   showLoader: function(params){
     params = params || {};
     var text = params.text || '';
+    console.log(text)
     dd.device.notification.showPreloader({
       text: text, //loading显示的字符，空表示不显示文字
       showIcon: true, //是否显示icon，默认true

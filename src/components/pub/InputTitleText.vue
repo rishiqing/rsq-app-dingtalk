@@ -1,38 +1,48 @@
 <template>
   <div class="">
-    <div class="edit" :class="{'edit-border':isEdit}">
-        <textarea type="text"
-                  v-if="isEdit"
-               ref="titleInput"
-               :value="itemTitle"
-                  @blur="inputBlur($event.target.value)"
-               @input="inputChange($event.target.value)"
-                  :class="{'padding-left-input':isCheckable}"
-                  @focus="disabled ? $event.target.blur() : function(){}"></textarea>
-        <input type="text" placeholder="输入任务标题"
-                v-if="newCheckable"
-                ref="titleInput"
-                :value="itemTitle"
-                class="padding-left-input-"
-                @input="inputChange($event.target.value)"
-                @blur="inputBlur($event.target.value)"
-                :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable}"
-                @focus="disabled ? $event.target.blur() : function(){}"/>
-      <div class="padding-left-">
-        <!--@blur="inputBlur($event.target.value)"-->
-      <v-touch class=""
-           v-if="isCheckable"
-           @tap="clickCheckOut">
+    <div class="edit" >
+        <!--<textarea type="text"-->
+                  <!--class="edit-text"-->
+                  <!--v-if="isEdit"-->
+               <!--ref="titleInput"-->
+               <!--:value="itemTitle"-->
+                  <!--@blur="inputBlur($event.target.value)"-->
+               <!--@input="inputChange($event.target.value)"-->
+                  <!--:class="{'padding-left-input':isCheckable}"-->
+                  <!--@focus="IsDisabled($event)"></textarea>-->
+      <v-touch class="wrap-icon"
+               v-if="isCheckable"
+               @tap="clickCheckOut">
         <i class="icon2-check-box select-title"
            :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
         <div class="hide" :class="{'for-hide-title':itemChecked}"></div>
         <i class="icon2-selected hide" :class="{'isdisplay-title':itemChecked}"></i>
       </v-touch>
-      </div>
+      <input type="text" placeholder="输入任务标题"
+              ref="titleInput"
+              :value="itemTitle"
+              class="padding-left-input-"
+              @input="inputChange($event.target.value)"
+              @blur="inputBlur($event.target.value)"
+              :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit}"
+              @focus="IsDisabled($event)"/>
+        <!--@blur="inputBlur($event.target.value)"-->
     </div>
   </div>
 </template>
 <style scoped>
+  .wrap-icon{
+    display: flex;
+    align-items: center;
+    height: 1.28rem;
+    position: relative;
+  }
+  .edit-text{
+    font-family: PingFangSC-Medium;
+    font-size: 0.506rem;
+    color: #333333;
+    letter-spacing: 0;
+  }
   .hide{
     display: none;
   }
@@ -43,6 +53,7 @@
     display: flex;
     align-items: center;
     position: relative;
+    background-color: white;
   }
   .real-width{
     /*width:88%;*/
@@ -51,27 +62,27 @@
     white-space:nowrap
   }
   .select-title{
-    color:#b9b9bc;
-    font-size: 17px;
-    position: absolute;
-    top:0.27rem;
+    color:black;
+    font-size: 0.506rem;
+    /*position: absolute;*/
+    top:0.39rem;
     /*margin-top: -0.2rem;*/
-    left:0.35rem;
+    margin-left:0.35rem;
     background: #FFFFFF;
     border-radius: 1px;
   }
   .isdisplay-title{
     display: block;
     position:absolute;
-    top:0.17rem;
+    top:0.3rem;
     /*margin-top: -0.29rem;*/
-    left: 0.44rem;
+    left: 0.46rem;
     font-size: 15px;
     color:#55A8FD;
   }
   .for-hide-title{
     position: absolute;
-    top:0.17rem;
+    top:0.35rem;
     /*margin-top: -0.29rem;*/
     left: 0.75rem;
     display: block;
@@ -81,7 +92,7 @@
     border: 1px solid white;
   }
   .padding-left-input{
-    padding-left: 1.1rem;
+    margin-left: 0.32rem;
   }
   .inbox-padding-left{
     padding-left: 0.3rem;
@@ -102,6 +113,7 @@
     padding-bottom:0.305rem ;
     padding-top: 0.305rem;
     font-size: 0.506rem;
+    border-radius: 0;
   }
   /*.padding-left-input-{*/
     /*padding-left:0.3rem;*/
@@ -138,6 +150,13 @@
         title = title || ''
         return title.length > 15
       },
+      IsDisabled (e) {
+        if (this.disabled) {
+          e.target.blur()
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
+      },
       inputBlur (value) {
         this.$emit('text-blur', value)
       },
@@ -145,7 +164,10 @@
         this.$emit('text-change', value)
       },
       clickCheckOut () {
-        if (this.disabled) return
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         this.$emit('click-checkout', !this.itemChecked)
       }
     }

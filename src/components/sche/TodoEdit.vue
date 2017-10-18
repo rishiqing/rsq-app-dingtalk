@@ -115,14 +115,17 @@
   .desp{
     /*border-bottom: 1px solid #E0E0E0;*/
     margin-bottom: 10px;
-    padding-left: 3%;
-    line-height: 0.8rem;
+    padding-left: 1.1rem;
+    padding-top:0.193rem ;
+    padding-bottom: 0.293rem;
+    padding-right: 0.3rem;
+    line-height: 0.586rem;
     font-family: PingFangSC-Regular;
-    font-size: 14px;
-    color: #999999;
+    font-size: 0.373rem;
+    color: #333333;
     letter-spacing: 0;
     background-color: white;
-    min-height:1.12rem;
+    min-height:0.586rem;
     /*display: flex;*/
     /*align-items: center;*/
   }
@@ -137,6 +140,8 @@
     background-color: white;
     position: fixed;
     bottom: 0;
+    left:0;
+    right: 0;
     justify-content: center;
     width:100%;
     border-top:1px solid #DADADA ;
@@ -309,7 +314,7 @@
         return enabled
       },
       initData () {
-        window.rsqadmg.exec('showLoader')
+        window.rsqadmg.exec('showLoader', {'text': '加载中'})
         return this.$store.dispatch('getTodo', {todo: {id: this.dynamicId}})
             .then(item => {
               util.extendObject(this.editItem, item)
@@ -355,11 +360,17 @@
           })
       },
       SwitchToComent () {
-        if (!this.checkEdit()) return
+        if (!this.checkEdit()) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         this.$router.push('/pub/coment')
       },
       SwitchToDesp () {
-        if (!this.checkEdit()) return
+        if (!this.checkEdit()) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         this.$router.push('/pub/desp')
       },
       saveTitle (newTitle) {
@@ -403,32 +414,8 @@
           window.rsqadmg.execute('toast', {message: '保存成功'})
 //          console.log('params的addJoinUsers是' + params.addJoinUsers)
           if (params.addJoinUsers) {
-            var date = ''
-            if (this.currentTodo.startDate !== null) {
-              if (this.currentTodo.startDate === this.currentTodo.endDate) {
-                date = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
-              } else {
-                var start = this.currentTodo.startDate.substring(5, 7) + '月' + this.currentTodo.startDate.substring(8, 10) + '日'
-                var end = this.currentTodo.endDate.substring(5, 7) + '月' + this.currentTodo.endDate.substring(8, 10) + '日'
-                date = start + '-' + end
-              }
-            } else if (this.currentTodo.dates !== null) {
-              var dateArray = this.currentTodo.dates.split(',')
-              console.log(dateArray)
-              for (var i = 0; i < dateArray.length; i++) {
-                date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
-              }
-              if (date.length > 11) {
-                date = date.substring(0, 11) + '...'
-              }
-            }
-//            console.log(date)
-            var time = ''
-            if (this.currentTodo.clock !== null) {
-              time = this.currentTodo.clock.startTime + '-' + this.currentTodo.clock.endTime
-            } else {
-              time = '全天'
-            }
+            var time = util.SendConversationTime(this.currentTodo)
+            var date = util.SendConversationDate(this.currentTodo)
             var note = this.editItem.pNote
             var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
             var data = {

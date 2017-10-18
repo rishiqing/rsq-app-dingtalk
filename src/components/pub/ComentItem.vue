@@ -22,6 +22,7 @@
             <template v-if="(file.contentType.toUpperCase() === 'PNG'||file.contentType.toUpperCase() === 'JPEG'|| file.contentType.toUpperCase() === 'JPG')">
               <img class="comment-photo file-touch" :src="file.realPath"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-name file-touch">{{file.size}}</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() == 'PDF'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
@@ -55,8 +56,8 @@
   }
   .coment{
     padding-left: 3%;
-    margin-top:20px ;
-    margin-bottom: 10px;
+    margin-top:0.613rem ;
+    /*margin-bottom: 10px;*/
     line-height: 0.7rem;
     border-bottom: none;
   }
@@ -66,7 +67,7 @@
   .file-name{
     font-family: PingFangSC-Regular;
     font-size: 13px;
-    color: #3D3D3D;
+    color: #BFBFBF;
     margin-left: 10px;
   }
   .comment-photo{
@@ -88,11 +89,12 @@
     clear: both;
   }
   .time{
-    font-size: 0.34rem;
-    color:#999999;
+    font-size: 0.32rem;
+    color:#8C8C8C ;
     width: 2.186rem;
     position: absolute;
     right:0.26rem;
+    font-family: PingFangSC-Regular;
   }
   .left{
     width: 1.093rem;
@@ -113,16 +115,16 @@
   }
   .author{
     width: 5.733rem;
-    font-family: STHeitiSC-Light;
-    font-size: 13px;
-    color: #999999;
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    color: #8C8C8C;
     letter-spacing: 0;
   }
   .comentContent{
     width: 94%;
     font-family: STHeitiSC-Light;
-    font-size: 16px;
-    color: #111111;
+    font-size: 15px;
+    color: #8C8C8C;
     letter-spacing: 0;
     line-height: 21px;
   }

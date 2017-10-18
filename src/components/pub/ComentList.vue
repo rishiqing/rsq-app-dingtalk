@@ -27,7 +27,7 @@
 <style>
   .noComent{
     text-align: center;
-    height: 5.479rem;
+    height: 3rem;
   }
   .noComent>img{
     width: 44px;
@@ -47,7 +47,7 @@
     background-color: white;
     margin-top: 10px;
     margin-bottom: 5rem;
-    padding-bottom: 1.3rem;
+    padding-bottom: 2.6rem;
     /*margin-bottom: 1.4rem;*/
     /*border-top: 1px solid #E0E0E0;*/
   }

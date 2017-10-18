@@ -264,31 +264,8 @@
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
             if (item.receiverIds) {
-              var date = ''
-              if (item.startDate !== null) {
-                if (item.startDate === item.endDate) {
-                  date = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
-                } else {
-                  var start = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
-                  var end = item.endDate.substring(5, 7) + '月' + item.endDate.substring(8, 10) + '日'
-                  date = start + '-' + end
-                }
-              } else {
-                var dateArray = item.dates.split(',')
-                console.log(dateArray)
-                for (var i = 0; i < dateArray.length; i++) {
-                  date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
-                }
-                if (date.length > 11) {
-                  date = date.substring(0, 11) + '...'
-                }
-              }
-              var time = ''
-              if (item.clock !== null) {
-                time = item.clock.startTime + '-' + item.clock.endTime
-              } else {
-                time = '全天'
-              }
+              var time = jsUtil.SendConversationTime(item)
+              var date = jsUtil.SendConversationDate(item)
               var url = window.location.href.split('#')
               var note = this.editItem.pNote
               var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
@@ -314,7 +291,7 @@
               var sendID = item.senderTodo.pUserId
 //              console.log(sendID)
               var IDArrays = item.receiverIds.split(',')
-              for (i = 0; i < IDArrays.length; i++) {
+              for (var i = 0; i < IDArrays.length; i++) {
                 if (sendID === parseInt(IDArrays[i])) {
                   IDArrays.splice(i, 1)
                   break

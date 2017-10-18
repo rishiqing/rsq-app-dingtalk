@@ -281,7 +281,7 @@
         e.preventDefault()
       },
       resetType () {
-        this.resetMonth()
+        this.resetMonth() // 这是干吗用的
       },
       resetMonth (offset) {
         if (offset) {
@@ -349,7 +349,7 @@
           })
         })
       },
-      selectDays () {
+      selectDays () { // 略复杂
         if (this.selectNumDate.length === 0) {
           return
         }
@@ -360,7 +360,7 @@
           })
         })
       },
-      isInSelect (type, date, selectNumDate) {
+      isInSelect (type, date, selectNumDate) { // 不懂
         var numDate = date.getTime()
         switch (type) {
           case 'single':

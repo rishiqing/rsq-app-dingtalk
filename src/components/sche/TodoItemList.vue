@@ -1,5 +1,5 @@
 <template>
-  <ul :class="{'itemList':itemcount}">
+  <ul :class="{'itemList':itemcount}" class="sche-list">
     <r-todo-item
         v-for="item in items"
         :item="item"
@@ -11,10 +11,10 @@
   </ul>
 </template>
 <style lang="scss" scoped>
-  ul{
+  .sche-list{
     background-color: white;
     border-bottom:1px solid #E0E0E0 ;
-    /*border-top:1px solid #DADADA ;*/
+    border-top:1px solid #DADADA ;
     padding-left: 3%;
   }
   .itemList{

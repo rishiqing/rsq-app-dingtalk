@@ -39,7 +39,7 @@
     }
     input.mui-switch {
       display: block;
-      width: 52px;
+      width: 50px;
       height: 31px;
       border: 1px solid #dfdfdf;
       background-color: #fdfdfd;
@@ -56,7 +56,7 @@
     input.mui-switch:before {
       content: '';
       width: 29px;
-      height: 29px;
+      height: 30px;
       position: absolute;
       top: 0px;
       left: 0;
@@ -180,7 +180,7 @@
        */
       initData () {
         //  检查pub区是否有缓存，有缓存则读缓存，否则从currentTodo上读取
-        console.log('进来一次')
+//        console.log('进来一次')
         jsUtil.extendObject(this.clock, this.todoTime.clock)
         this.isAllDay = !this.clock.startTime
         this.isChecked = this.isAllDay
@@ -217,11 +217,11 @@
             this.$set(this.clock, 'endTime', base.add(1, 'h').format('HH:mm'))
           }
         }
-        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
+//        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
       },
       empty () {},
       toggleAllDay (e) {
-        console.log('toggleAllDay是' + JSON.stringify(this.clock))
+//        console.log('toggleAllDay是' + JSON.stringify(this.clock))
         this.isAllDay = !this.isAllDay
         this.isChecked = this.isAllDay
       },
@@ -234,9 +234,9 @@
         window.rsqadmg.exec('timePicker', {
           strInit: that.clock.startTime,
           success (result) {
-            console.log('result是' + JSON.stringify(result))
+//            console.log('result是' + JSON.stringify(result))
             that.clock.startTime = result.value
-            console.log(' that.clock是' + JSON.stringify(that.clock))
+//            console.log(' that.clock是' + JSON.stringify(that.clock))
             that.autoStart = false
             that.autoChangeTime()
           }
@@ -256,7 +256,7 @@
             } else {
               that.$set(that.clock, 'endTime', result.value)
 //              that.clock.endTime = result.value
-              alert(JSON.stringify(that.clock))
+//              alert(JSON.stringify(that.clock))
               that.autoEnd = false
               that.autoChangeTime()
             }

@@ -67,13 +67,13 @@
     right: 0;
     z-index: 2;
   }
-  input::-webkit-input-placeholder { /* WebKit browsers */
-    font-family: PingFangSC-Regular;
-    font-size: 0.453rem;
-    color: #999999;
-    line-height:normal;
-    height: 1.612rem;
-  }
+  /*input::-webkit-input-placeholder { !* WebKit browsers *!*/
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 0.453rem;*/
+    /*color: #999999;*/
+    /*line-height:normal;*/
+    /*height: 1.612rem;*/
+  /*}*/
   .topest{
     background-color: #F8F8F8;
     height: 10px;
@@ -95,7 +95,7 @@
     font-size: 15px;
     color:#55A8FD;
     position: absolute;
-    margin-top:-0.5rem;
+    margin-top:-0.47rem;
     top: 50%;
     right:0.35rem;
     /*margin-top: -1.34rem;*/
@@ -120,6 +120,14 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    border-radius: 0;
+  }
+  .write::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Regular;
+    font-size: 0.453rem;
+    color: #999999;
+    /*line-height:normal;*/
+    height: 1.4rem;
   }
   .margin-block {
     height: 1.9rem;

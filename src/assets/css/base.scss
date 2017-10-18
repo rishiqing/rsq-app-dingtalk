@@ -7,7 +7,9 @@ html, body {
     width: 100%;
     display: inline-block;
 }
-
+*{
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 /* 基本布局 */
 .fixed-view {
     position: fixed;overflow: auto;left:0;right:0;top: 0;bottom: 0;
@@ -107,10 +109,10 @@ div.div-editable.editable-blank {
   float: left;
 }
 .itm-icon-img-wrap {
-  position: absolute;
-  top: 0.3rem;
+  //position: absolute;
+  //top: 0.3rem;
   //left: 5.7rem;
-  width: 4rem;
+  //width: 4rem;
 }
 .itm-icon-img {width: 24px;height: 24px;vertical-align: middle;margin-right: 5px;display: inline-block}
 

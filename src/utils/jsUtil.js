@@ -321,5 +321,36 @@ export default {
     } else if (num > 1000000) {
       return Math.ceil(num / 100000) / 10 + 'M'
     }
+  },
+  SendConversationTime (item) {
+    var time = ''
+    if (item.clock !== null) {
+      time = item.clock.startTime + '-' + item.clock.endTime
+    } else {
+      time = '全天'
+    }
+    return time
+  },
+  SendConversationDate (item) {
+    var date = ''
+    if (item.startDate !== null) {
+      if (item.startDate === item.endDate) {
+        date = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+      } else {
+        var start = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+        var end = item.endDate.substring(5, 7) + '月' + item.endDate.substring(8, 10) + '日'
+        date = start + '-' + end
+      }
+    } else {
+      var dateArray = item.dates.split(',')
+      // console.log(dateArray)
+      for (var i = 0; i < dateArray.length; i++) {
+        date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
+      }
+      if (date.length > 11) {
+        date = date.substring(0, 11) + '...'
+      }
+    }
+    return date
   }
 }

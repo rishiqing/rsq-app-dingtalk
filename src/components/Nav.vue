@@ -2,7 +2,7 @@
   <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
       <div class="left">
         <v-touch class="left-sche" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
-          <i class="icon2-schedule richeng" :class="{'is-active': '/sche' == currentPath}"></i>
+          <span><i class="icon2-schedule richeng" :class="{'is-active': '/sche' == currentPath}"></i></span>
           <p class="sche " :class="{'is-active': '/sche' == currentPath}">日程</p>
         </v-touch>
       </div>
@@ -12,7 +12,7 @@
         </v-touch>
       </div>
       <div class="right">
-        <v-touch class="text-icon" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
+        <v-touch class="right-me" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
           <i class="icon2-member me" :class="{'is-active': '/me' == currentPath}"></i>
           <p class="my" :class="{'is-active': '/me' == currentPath}">我</p>
         </v-touch>
@@ -54,21 +54,13 @@
   }
 </script>
 <style scoped>
-  .left-sche{
-      height:1.306rem;
-    /*display: flex;*/
-    /*align-items: center;*/
-  }
-  .text-icon{
-    height:1.306rem;
-  }
   .is-active{
     color:#55A8FD
   }
   .richeng {
-    font-size: 25px;
+    font-size:0.586rem;
     color:  #999999;
-    /*display: block;*/
+    display: block;
   }
   .bot{
     display: flex;
@@ -79,7 +71,7 @@
     background-color: #FDFDFF;;
   }
   .richeng{
-    font-size: 22px;
+    font-size: 0.586rem;
     color: #999999;
     /*display: block;*/
   }
@@ -90,10 +82,11 @@
     letter-spacing: 0;
     margin:0;
     padding:0;
-    margin-top:-4px;
+    margin-top:0.053rem;
   }
   .me{
-    font-size: 22px;
+    display: block;
+    font-size: 0.586rem;
     color:   #999999;;
   }
   .my{
@@ -104,16 +97,18 @@
     margin: 0;
     padding:0;
     margin:0 auto;
-    margin-top:-5px;
+    margin-top:0.053rem;
   }
   .left{
     position: absolute;
     left: 2.053rem;
-    bottom:0.2rem;
+    /*bottom:0.23rem;*/
     /*padding-bottom:0.026rem;*/
     height: 1.306rem;
-    /*display: flex;*/
-    /*align-items: center;*/
+    /*top:50%;*/
+    /*margin-top: -0.453rem;*/
+    display: flex;
+    align-items: center;
     /*justify-content: center;*/
   }
   .right{
@@ -121,10 +116,12 @@
     /*padding-bottom:0.026rem;*/
     position: absolute;
     right: 2.11rem;
-    bottom:0.2rem;
-    /*height: 1.306rem;*/
-    /*display: flex;*/
-    /*align-items: center;*/
+    /*bottom:0.23rem;*/
+    /*bottom:50%;*/
+    /*margin-bottom: -0.45rem;*/
+    height: 1.306rem;
+    display: flex;
+    align-items: center;
     /*justify-content: center;*/
   }
   .mid{

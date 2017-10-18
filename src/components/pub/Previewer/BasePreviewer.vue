@@ -3,7 +3,8 @@
     <div class="preview-mask"></div>
     <div class="preview-head">
       <div class="preview-title">{{fileName}}</div>
-      <v-touch  class="preview-close"@tap="closePreview">×</v-touch>
+      <v-touch  @tap="closePreview">
+        <i class="icon2-error deleteComent preview-close"></i></v-touch>
     </div>
     <div class="preview-img-wrap" v-show="previewImage.id">
       <img class="preview-img"
@@ -21,12 +22,17 @@
   .preview-head {position: fixed;top: 0;left: 0;width: 100%;overflow:hidden;
     text-align: center;cursor: default;background: rgba(0,0,0,.86);z-index: 1530;}
   .preview-close {
-    position:fixed;width: 0.7rem;
-    border-radius: 50%;line-height: 0.65rem;
-    top: 0.35rem;right: 0.35rem;
-    color: #000;background: #fff;
-    padding-bottom: 0.1rem;
-    padding-left: 0.04rem;
+    position:fixed;
+    /*width: 0.7rem;*/
+    border-radius: 50%;
+    /*line-height: 0.65rem;*/
+    top: 0.45rem;
+    right: 0.35rem;
+    font-size: 22px;
+    color: #fff;
+    background: #000;
+    /*padding-bottom: 0.1rem;*/
+    /*padding-left: 0.04rem;*/
     /*display: flex;*/
     /*align-items: center;*/
     /*justify-content: center;*/

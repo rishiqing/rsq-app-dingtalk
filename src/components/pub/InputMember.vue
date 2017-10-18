@@ -1,12 +1,12 @@
 <template>
   <div class="outer">
-    <v-touch class="" @tap="showMemberEdit">
+    <v-touch class="touch-memmber" @tap="showMemberEdit">
       <div class="execute">
         {{indexTitle}}
       </div>
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
         <div v-if="newTime === true">
-          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
             <avatar v-for="item in selectedLocalList"
                     :key="item.rsqUserId"
                     :src="item.avatar"
@@ -17,10 +17,10 @@
         </div>
         <div v-else="">
           <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
-            <avatar v-for="item in selectedLocalList"
-                    :key="item.rsqUserId"
-                    :src="item.avatar"
-                    :username="item.name"></avatar>
+            <div class="wrap-member">
+              <span class="select-member" v-for="item in selectedLocalList">
+                   {{item.name}}、</span>
+            </div>
             <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
           </div>
           <i class="icon2-arrow-right-small arrow"></i>
@@ -28,7 +28,7 @@
       </div>
       <div class="" v-else>
         <div v-if="newTime === true">
-          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
             <avatar v-for="item in selectedItems"
                     :key="item.rsqUserId"
                     :src="item.avatar"
@@ -40,10 +40,10 @@
         </div>
         <div v-else="">
           <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
-            <avatar v-for="item in selectedItems"
-                    :key="item.rsqUserId"
-                    :src="item.avatar"
-                    :username="item.name"></avatar>
+            <div class="wrap-member">
+              <span class="select-member" v-for="item in selectedItems">
+                   {{item.name}}、</span>
+            </div>
             <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
           </div>
           <i class="icon2-arrow-right-small arrow"></i>
@@ -53,6 +53,32 @@
   </div>
 </template>
 <style scoped>
+  .itm-icon-img-wrap-new>*{
+    float: right;
+  }
+  .itm-icon-img-wrap-new{
+    width: 2.5rem;
+  }
+  .touch-memmber{
+    display: flex;
+    align-items: center;
+  }
+  .wrap-member{
+    max-width: 5.4rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height:1.3rem
+  }
+  .select-member{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #999999;
+    letter-spacing: 0;
+    display: block;
+    /*margin-left: 2px;*/
+    float: left;
+  }
   .execute{
     font-family: PingFangSC-Regular;
     font-size: 17px;
@@ -61,13 +87,13 @@
   }
   .new-padding-left{
     /*left:5.3rem*/
-    left:4.4rem
+    margin-left:4.2rem
   }
   .edit-padding-left{
-    left:1.8rem
+    /*margin-left:1.8rem*/
   }
   .edit-padding-left-count{
-    left:4.4rem
+    margin-left:4.4rem
   }
   /*.new-padding-left-count{*/
     /*right:0.94rem;*/
@@ -76,8 +102,9 @@
     float: left;
     /* position: absolute; */
     display: inline-block;
+    margin-left: 2px;
     /* top: 0.05rem; */
-    margin-top: -0.3rem;
+    /*margin-top: -0.3rem;*/
   }
   .outer{
     border-bottom: 1px solid #E0E0E0;
@@ -162,7 +189,10 @@
     },
     methods: {
       showMemberEdit (e) {
-        if (this.disabled) return
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {

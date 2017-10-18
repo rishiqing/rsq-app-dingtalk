@@ -19,10 +19,11 @@
   .file-input {
     cursor: pointer;
     position:absolute;
-    top: 4.3rem;
+    top: 4.75rem;
     font-size:30px;
-    left: -3.5rem;
-    width:5.648rem;
+    left:0.3rem;
+    width:0.848rem;
+    height: 0.7rem;
     /*Opacity settings for all browsers*/
     opacity: 0;
     -moz-opacity: 0;
