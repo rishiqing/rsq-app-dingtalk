@@ -140,7 +140,10 @@
         autoEnd: true,
         isChecked: true,
         isAllDay: true,
-        clock: {}
+        clock: {
+          startTime: '',
+          endTime: ''
+        }
       }
     },
     computed: {
@@ -180,7 +183,7 @@
        */
       initData () {
         //  检查pub区是否有缓存，有缓存则读缓存，否则从currentTodo上读取
-//        console.log('进来一次')
+        console.log('进来一次')
         jsUtil.extendObject(this.clock, this.todoTime.clock)
         this.isAllDay = !this.clock.startTime
         this.isChecked = this.isAllDay
@@ -213,15 +216,14 @@
           //  如果是自动调整结束时间，那么将结束时间调整至开始时间后1小时
           if (this.autoEnd) {
             base = moment(this.clock.startTime, 'HH:mm')
-//            this.clock.endTime = base.add(1, 'h').format('HH:mm')
-            this.$set(this.clock, 'endTime', base.add(1, 'h').format('HH:mm'))
+            this.clock.endTime = base.add(1, 'h').format('HH:mm')
           }
         }
-//        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
+        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
       },
       empty () {},
       toggleAllDay (e) {
-//        console.log('toggleAllDay是' + JSON.stringify(this.clock))
+        console.log('toggleAllDay是' + JSON.stringify(this.clock))
         this.isAllDay = !this.isAllDay
         this.isChecked = this.isAllDay
       },
@@ -234,9 +236,7 @@
         window.rsqadmg.exec('timePicker', {
           strInit: that.clock.startTime,
           success (result) {
-//            console.log('result是' + JSON.stringify(result))
             that.clock.startTime = result.value
-//            console.log(' that.clock是' + JSON.stringify(that.clock))
             that.autoStart = false
             that.autoChangeTime()
           }
@@ -254,9 +254,7 @@
             if (result.value < that.clock.startTime) {
               alert('结束时间不能小于开始时间')
             } else {
-              that.$set(that.clock, 'endTime', result.value)
-//              that.clock.endTime = result.value
-//              alert(JSON.stringify(that.clock))
+              that.clock.endTime = result.value
               that.autoEnd = false
               that.autoChangeTime()
             }
@@ -275,7 +273,10 @@
        * 检查是提醒时间是否早于当前时间
        */
       checkWarn () {
-        if (!this.isAllDay && this.clockData.alert && this.clockData.alert.length > 0 && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
+        if (!this.isAllDay &&
+          this.clockData.alert &&
+          this.clockData.alert.length > 0 &&
+          moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
