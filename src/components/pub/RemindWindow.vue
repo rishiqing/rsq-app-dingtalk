@@ -8,8 +8,8 @@
       </div>
       <div class="window-middle">
         <p class="window-title">日事清v2.0上线了</p>
-        <p class="window-content">1现在创建任务的时候可以发DING<br/>
-          2计划功能挪到pc端了，钉钉日事清pc端稍后上线
+        <p class="window-content">1现在创建任务的时候可以发DING了<br/>
+          2计划功能移至pc端了，钉钉日事清pc端稍后上线
         <p class="more-content">点击查看更多，了解本次更新全部内容</p>
       </div>
       <div class="window-bottom">

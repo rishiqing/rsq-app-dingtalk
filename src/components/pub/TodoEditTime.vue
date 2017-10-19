@@ -323,7 +323,7 @@
        */
       submitTodo (next) {
         if (this.isEdit) {
-          window.rsqadmg.exec('showLoader')
+          window.rsqadmg.exec('showLoader', {text: '保存中'})
         }
         //  在有提醒的情况下返回值中居然不包括clock.alert的数据，需要前端组合传入
         var clockObject = JSON.parse(JSON.stringify(this.clockData || {}))

@@ -22,27 +22,32 @@
             <template v-if="(file.contentType.toUpperCase() === 'PNG'||file.contentType.toUpperCase() === 'JPEG'|| file.contentType.toUpperCase() === 'JPG')">
               <img class="comment-photo file-touch" :src="file.realPath"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
-              <span class="file-name file-touch">{{file.size}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() == 'PDF'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/pdf.692b9767b9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'ZIP'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/zip.f9f2049911.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'DOC' || file.contentType.toUpperCase() === 'DOC'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
             <template v-else-if="file.contentType.toUpperCase() === 'PPT' || file.contentType.toUpperCase() === 'PPTX'">
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
             <template v-else>
               <img class="comment-photo file-touch" src="https://res-front-cdn.timetask.cn/beta/images/file.46449ccbd9.png"  alt="">
               <span class="file-name file-touch">{{getFileName(file.name)}}</span>
+              <span class="file-size file-touch">{{getFileSize(file.size)}}</span>
             </template>
           </v-touch>
         </div>
@@ -69,6 +74,12 @@
     font-size: 13px;
     color: #BFBFBF;
     margin-left: 10px;
+  }
+  .file-size{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #BFBFBF;
+    margin-left:1.9rem;
   }
   .comment-photo{
     width: 25px;
@@ -124,7 +135,7 @@
     width: 94%;
     font-family: STHeitiSC-Light;
     font-size: 15px;
-    color: #8C8C8C;
+    color: #111111;
     letter-spacing: 0;
     line-height: 21px;
   }
@@ -168,6 +179,15 @@
         if (!orgName) return ''
         var arr = orgName.split('/')
         return arr[arr.length - 1].substr(14, 33)
+      },
+      getFileSize (fileSize) {
+        if (fileSize > 1024) {
+          return parseInt(fileSize / 1024) + 'KB'
+        } else if (fileSize > 1048576) {
+          return parseInt(fileSize / (1024 * 1024)) + 'MB'
+        } else {
+          return fileSize
+        }
       },
       deleteComment (item) {
         var that = this

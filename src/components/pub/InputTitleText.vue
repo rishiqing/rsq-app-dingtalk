@@ -21,7 +21,7 @@
       <input type="text" placeholder="输入任务标题"
               ref="titleInput"
               :value="itemTitle"
-              class="padding-left-input-"
+              class="word-color"
               @input="inputChange($event.target.value)"
               @blur="inputBlur($event.target.value)"
               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit}"
@@ -31,6 +31,9 @@
   </div>
 </template>
 <style scoped>
+  .word-color{
+    font-family: PingFangSC-Medium;
+  }
   .wrap-icon{
     display: flex;
     align-items: center;
@@ -62,7 +65,7 @@
     white-space:nowrap
   }
   .select-title{
-    color:black;
+    color:#666;
     font-size: 0.506rem;
     /*position: absolute;*/
     top:0.39rem;
@@ -98,14 +101,14 @@
     padding-left: 0.3rem;
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
-    font-family: PingFangSC-Regular;
+    /*font-family: PingFangSC-Regular;*/
     font-size: 0.506rem;
     color: #8C8C8C;
     letter-spacing: 0;
     padding-left: 0.1rem;
   }
   input[type='text']{
-    font-family: PingFangSC-Regular;
+    /*font-family: PingFangSC-Regular;*/
     /*height:1.458rem;*/
     background: #FFFFFF;
     /*border-top:1px solid #E0E0E0 ;*/

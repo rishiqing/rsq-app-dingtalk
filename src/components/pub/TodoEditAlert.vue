@@ -74,7 +74,7 @@
       padding:5px;
       line-height: 0.912rem;
       height: 0.912rem;
-      border-bottom: 0.5px solid #E3E3E3;
+      border-bottom: 1px solid #E3E3E3;
       font-family: PingFangSC-Regular;
       font-size: 17px;
       color: #3D3D3D;
@@ -83,7 +83,6 @@
       border:none;
     }
   }
-
 </style>
 <script>
   import jsUtil from 'ut/jsUtil'
@@ -145,6 +144,8 @@
       },
       initRuleList () {
         var noAlert = true
+        console.log(JSON.stringify(this.sysRuleList))
+        console.log(JSON.stringify(this.displayedRuleList))
         this.sysRuleList.forEach(remoteAlert => {
           for (let i = 0; i < this.displayedRuleList.length; i++) {
             const localAlert = this.displayedRuleList[i]
@@ -229,9 +230,13 @@
       },
       //  比对displayedRuleList与sysRuleList，计算最终的提醒列表
       mergeRuleList () {
-        var selected = this.getSelected(this.displayedRuleList)
+        var selected = this.getSelected(this.displayedRuleList) // 这一步是拿到选中状态的list
         var result = []
-        //  执行merge算法
+        console.log('--------')
+        console.log(JSON.stringify(selected))
+        console.log(JSON.stringify(this.sysRuleList))
+        console.log('--------')
+        //  执行merge算法(selected本身就是和sysRuleList一致得把为什么还要filter,意思是后来又添加或者修改的selected？？？？？)
         selected.forEach(s => {
           var orgObjArray = this.sysRuleList.filter(org => {
             return org.schedule === s.schedule

@@ -1,5 +1,5 @@
 <template>
-  <div class="outer-date">
+  <div class="outer-date":class="{'hasPadding':newItem}">
     <v-touch class="" @tap="gotoDate">
       <span class="date">日期</span>
       <span class="now" :class="{'edit-padding-left':editTime}">{{ dateString }}</span>
@@ -14,10 +14,12 @@
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
     border-bottom:1px solid #E0E0E0;
     /*border-top:1px solid #E0E0E0;*/
     background-color: white;
+  }
+  .hasPadding{
+    padding-left: 3%;
   }
   .arrow{
     color: #999999;
@@ -40,7 +42,7 @@
     letter-spacing: 0;
   }
   .edit-padding-left{
-    left:1.5rem
+    left:1.3rem
   }
   .date{
     font-family: PingFangSC-Regular;
@@ -62,7 +64,8 @@
       disabled: Boolean,
       item: Object,
       sep: String,
-      editTime: Boolean
+      editTime: Boolean,
+      newItem: Boolean
     },
     computed: {
       dateString () {

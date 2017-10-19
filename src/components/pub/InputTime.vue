@@ -1,5 +1,5 @@
 <template>
-  <v-touch class="outertime" @tap="gotoTodoTime">
+  <v-touch class="outertime" @tap="gotoTodoTime" :class="{'hasPadding':newItem}">
     <span class="date">时间</span>
     <span class="now" :class="{'edit-padding-left':editTime}">{{timeValue}}</span>
     <i class="icon2-arrow-right-small arrow"></i>
@@ -10,8 +10,10 @@
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
     background-color: white;
+  }
+  .hasPadding{
+    padding-left:3% ;
   }
   .arrow{
     color: #999999;
@@ -25,14 +27,15 @@
     /*top:0.04rem;*/
     top:50%;
     margin-top: -0.65rem;
-    right: 0.94rem;
+    /*right: 0.94rem;*/
+    /*left:0.4rem;*/
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
   }
   .edit-padding-left{
-    left:1.5rem
+    left:1.3rem
   }
   span{
     display: block;
@@ -62,7 +65,8 @@
     props: {
       item: Object,
       editTime: Boolean,
-      disabled: Boolean
+      disabled: Boolean,
+      newItem: Boolean
     },
     methods: {
       gotoTodoTime () {
