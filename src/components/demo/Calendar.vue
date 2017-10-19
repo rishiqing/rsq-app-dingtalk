@@ -1,5 +1,5 @@
 <template>
-  <v-touch id="vMain" class="c-cal-main"
+  <v-touch class="c-cal-main"
            :class="{'animate': transDirection === 'v'}"
            :style="{'height': (topBase + titleHeight + calHeight) + 'px'}"
            @panstart="onPanMove"
@@ -7,14 +7,14 @@
            @panend="onPanEnd"
            @pancancel="onPanEnd"
            :pan-options="{ direction: 'all', threshold: 10 }">
-  <div class="cal-title z-index-m">
-      <span>{{currentView.focusDate ? months[currentView.focusDate.getMonth()] : ''}}月</span>
-      <span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}</span>
+  <!--<div class="cal-title z-index-m">-->
+      <!--<span>{{currentView.focusDate ? months[currentView.focusDate.getMonth()] : ''}}月</span>-->
+      <!--<span>{{currentView.focusDate ? currentView.focusDate.getFullYear() : ''}}</span>-->
       <!--<v-touch tag="span" class="cal-title-today"-->
             <!--@tap="backToToday"-->
             <!--v-show="!isToday">今</v-touch>-->
-    </div>
-    <div class="cal-week-title z-index-2xs">
+    <!--</div>-->
+    <div class="cal-week-title z-index-2xs" :style="{height: titleHeight + 'px', top: topBase + 'px'}">
       <table>
         <tr>
           <td class="cal-weekday" v-for="week in weeks">{{week}}</td>
@@ -69,7 +69,7 @@
     data () {
       return {
         selectDate: null,  //  当前选中（高亮显示）的日期
-        topBase: 53,  //  顶部的高度，bar和pane都相对于此高度
+        topBase: 0,  //  顶部的高度，bar和pane都相对于此高度
         titleHeight: 31,
         barView: {
           type: 'bar',
