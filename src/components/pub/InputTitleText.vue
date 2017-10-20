@@ -65,7 +65,7 @@
     white-space:nowrap
   }
   .select-title{
-    color:#666;
+    color:#b1b1b1;
     font-size: 0.506rem;
     /*position: absolute;*/
     top:0.39rem;

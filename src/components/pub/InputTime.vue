@@ -1,7 +1,7 @@
 <template>
   <v-touch class="outertime" @tap="gotoTodoTime" :class="{'hasPadding':newItem}">
     <span class="date">时间</span>
-    <span class="now" :class="{'edit-padding-left':editTime}">{{timeValue}}</span>
+    <span class="now" :class="{'edit-padding-left':editTime,'new-padding-right':newItem}">{{timeValue}}</span>
     <i class="icon2-arrow-right-small arrow"></i>
   </v-touch>
 </template>
@@ -33,6 +33,9 @@
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
+  }
+  .new-padding-right{
+    right: 0.94rem;
   }
   .edit-padding-left{
     left:1.3rem

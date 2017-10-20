@@ -53,7 +53,7 @@
 <style scoped>
   .itm-icon-img-wrap-new>*{
     float: right;
-    margin-right: 0.1rem;
+    margin-right: 0.15rem;
   }
   .itm-icon-img-wrap-new{
     width: 2.5rem;

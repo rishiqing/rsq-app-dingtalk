@@ -283,14 +283,14 @@
     -webkit-appearance: none;
     /*display: block;*/
     /*text-align: center;*/
-    /*display: flex;*/
+    display: flex;
     /*align-items: center;*/
-    /*justify-content: center;*/
+    justify-content: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
     height: 0.666rem;
     /*line-height: 0.76rem;*/
-    width:1.4rem;
+    /*width:1.4rem;*/
     font-size: 0.4rem;
     color:#55A8FD;
     position: fixed;
