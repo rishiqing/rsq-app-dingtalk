@@ -15,7 +15,7 @@
         <div class="pulldown-label">{{pullDownTip}}</div>
       </div>
     </div>
-    <div id="listContainer" class="list-container" style="height: 300px;overflow-y: auto;">
+    <div id="listContainer" class="list-container" style="overflow-y: auto;">
       <slot></slot>
     </div>
   </v-touch>

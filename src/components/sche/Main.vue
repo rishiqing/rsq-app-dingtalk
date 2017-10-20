@@ -185,12 +185,6 @@
       main.addEventListener('webkitTransitionEnd', () => {
         this.isShowAnimate = false
       })
-//      main.addEventListener('scroll', () => {
-//        if (main.scrollTop === 0) {
-//          this.enablePullToRefresh = true
-//        }
-//      })
-//      main.scrollTop = 10
     }
   }
 </script>
