@@ -14,7 +14,7 @@
     <i class="icon2-arrow-right icon-arrow"></i>
   </v-touch>
 </template>
-<style>
+<style scoped>
   .sche-test{
     margin-left: 10px;
   }
