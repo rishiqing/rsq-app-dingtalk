@@ -46,8 +46,8 @@
   .comentlist{
     background-color: white;
     margin-top: 10px;
-    margin-bottom: 5rem;
-    padding-bottom: 2.6rem;
+    /*margin-bottom: 5rem;*/
+    padding-bottom: 2.9rem;
     /*margin-bottom: 1.4rem;*/
     /*border-top: 1px solid #E0E0E0;*/
   }

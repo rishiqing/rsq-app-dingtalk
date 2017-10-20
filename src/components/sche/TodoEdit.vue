@@ -18,6 +18,7 @@
           <v-touch @tap="SwitchToDesp">
             <div id="noteEditable" contenteditable="true" class="desp editor-style"
                  name="note" rows="5"
+                 :class="{'remindColor':hasDecrip(),'contentColor':!hasDecrip(),'inbox-padding':isInbox,'sche-padding':!isInbox}"
                  placeholder="添加任务描述..." onfocus="this.blur();">
               添加任务描述...
             </div>
@@ -83,6 +84,12 @@
   </div>
 </template>
 <style scoped>
+  .remindColor{
+    color: #A5A5A5;
+  }
+  .contentColor{
+    color: #333333
+  }
   .first-date{
     position: relative;
     padding-left: 1.1rem;
@@ -115,19 +122,24 @@
   .desp{
     /*border-bottom: 1px solid #E0E0E0;*/
     margin-bottom: 10px;
-    padding-left: 1.1rem;
     padding-top:0.193rem ;
     padding-bottom: 0.293rem;
     padding-right: 0.3rem;
     line-height: 0.586rem;
     font-family: PingFangSC-Regular;
     font-size: 0.373rem;
-    color: #333333;
+    /*color: #333333;*/
     letter-spacing: 0;
     background-color: white;
     min-height:0.586rem;
     /*display: flex;*/
     /*align-items: center;*/
+  }
+  .inbox-padding{
+    padding-left: 0.3rem;
+  }
+  .sche-padding{
+    padding-left: 1.1rem;
   }
   input{
     line-height: 0.933rem;
@@ -308,6 +320,12 @@
       'r-send-conversation': SendConversation
     },
     methods: {
+      hasDecrip () {
+        var description = document.getElementById('noteEditable')
+        if (description) {
+          return description.innerText === '添加任务描述...'
+        }
+      },
       //  过去的日程不允许更新日程详情
       checkEdit () {
         var enabled = this.currentNumDate + 24 * 3600 * 1000 > new Date().getTime()

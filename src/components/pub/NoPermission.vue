@@ -54,8 +54,8 @@
       }
     }
 //    beforeRouteLeave (to, from, next) {
-//      //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
-//      next({ path: '/sche' })
+//      this.$router.replace('/sche')
+//      next('/sche')
 //    }
   }
 </script>

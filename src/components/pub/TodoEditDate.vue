@@ -236,6 +236,8 @@
     methods: {
       initData () {
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
+        console.log('this.currentTodoDate是' + this.currentTodoDate)
+        console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
@@ -286,8 +288,10 @@
       resetMonth (offset) {
         if (offset) {
           this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, offset)
+          console.log('this.focusdate是' + this.focusDate)
         }
         this.days = dateUtil.getMonthDays(this.focusDate)
+        console.log('this.days是' + this.days)
         this.selectDays()
       },
       toggleSelect (day) {
@@ -343,6 +347,7 @@
         }
       },
       clearSelected () {
+        console.log('clearSelected之前')
         this.days.forEach(function (array) {
           array.forEach(function (obj) {
             obj.isSelected = false
@@ -359,6 +364,7 @@
             obj.isSelected = self.isInSelect(self.dateType, obj.date, self.selectNumDate)
           })
         })
+        console.log('selectDays中的this.days是' + JSON.stringify(this.days))
       },
       isInSelect (type, date, selectNumDate) { // 不懂
         var numDate = date.getTime()

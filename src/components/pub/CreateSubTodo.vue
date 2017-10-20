@@ -10,7 +10,7 @@
     <div v-else class="anotherTop">
       <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <button value="创建" class="create" >创建</button>
+        <button class="create" ><span>创建</span></button>
       </v-touch>
     </div>
     <div class="margin-block"></div>
@@ -21,12 +21,13 @@
           <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
           <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
         </v-touch>
-        <v-touch class="">
+        <v-touch class="wrap-input">
            <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
                     ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
         </v-touch>
       </li>
     </ul>
+    <div class="remind-subtodo">*清空标题可删除任务</div>
   </div>
 </template>
 <script>
@@ -130,11 +131,22 @@
   }
 </script>
 <style scoped>
+  .remind-subtodo{
+    font-family: PingFangSC-Regular;
+    color:#A3A3A3;
+    font-size: 0.32rem;
+    margin-top:0.16rem ;
+    padding-left: 0.6rem;
+  }
   .wrap-sub-icon{
-    height: 1.28rem;
+    height: 1.22rem;
     display: flex;
     align-items: center;
     position: relative;
+  }
+  .wrap-input{
+    display: flex;
+    align-items: center;
   }
   .for-cover{
     height: 0.266rem;
@@ -155,6 +167,7 @@
     /*top: 0.4rem;*/
     /*color:#b9b9bc;*/
     /*left:0.02rem*/
+    color: #B1B1B1;
   }
   .sublist{
     background-color: white;
@@ -182,11 +195,11 @@
   }
   .sublistItem{
     position: relative;
-    padding-top: 0.1rem;
+    /*padding-top: 0.1rem;*/
     border-bottom:1px solid #DADADA ;
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    color: #222222;
+    /*color: #222222;*/
     /*padding: 0.33rem 0 0.15rem 0*/
     height: 1.22rem;
     display: flex;
@@ -210,6 +223,7 @@
     border: 1px solid #55A8FD;
     border-radius: 50%;
     left:0.55rem;
+    -webkit-appearance: none;
   }
   .title-todo input{
     border: none;
@@ -268,23 +282,23 @@
   .create{
     -webkit-appearance: none;
     /*display: block;*/
-    text-align: center;
+    /*text-align: center;*/
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     justify-content: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
     height: 0.666rem;
     /*line-height: 0.76rem;*/
-    width:1.4rem;
-    font-size: 15px;
+    /*width:1.4rem;*/
+    font-size: 0.4rem;
     color:#55A8FD;
     position: fixed;
     top:0.57rem;
     right:0.35rem;
     z-index:2;
     background-color: white;
-    padding-left: 0.26rem;
+    /*padding-left: 0.26rem;*/
   }
   .write{
     background: #FFFFFF;
@@ -296,8 +310,8 @@
     z-index: 1;
     line-height: 0.6rem;
     padding-right: 2.432rem;
-    padding-top: 0.28rem;
-    padding-bottom: 0.28rem;
+    padding-top: 0.313rem;
+    padding-bottom: 0.313rem;
   }
   .margin-block {
     height: 50px;

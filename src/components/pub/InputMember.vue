@@ -1,12 +1,12 @@
 <template>
-  <div class="outer">
+  <div class="outer" :class="{'hasPadding':newTime}">
     <v-touch class="touch-memmber" @tap="showMemberEdit">
       <div class="execute">
         {{indexTitle}}
       </div>
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
         <div v-if="newTime === true">
-          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left-less-three':newMemberlessThree,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
             <avatar v-for="item in selectedLocalList"
                     :key="item.rsqUserId"
                     :src="item.avatar"
@@ -18,8 +18,7 @@
         <div v-else="">
           <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
             <div class="wrap-member">
-              <span class="select-member" v-for="item in selectedLocalList">
-                   {{item.name}}、</span>
+              {{nameConcat}}
             </div>
             <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
           </div>
@@ -28,23 +27,22 @@
       </div>
       <div class="" v-else>
         <div v-if="newTime === true">
-          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left-more-three':newMemberMoreThree,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
             <avatar v-for="item in selectedItems"
                     :key="item.rsqUserId"
                     :src="item.avatar"
                     :username="item.name">
             </avatar>
           </div>
-          <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          <span :class="{'people':newTime,'people-left':editTime}">等{{selectedLocalList.length}}人</span>
           <i class="icon2-arrow-right-small arrow"></i>
         </div>
         <div v-else="">
           <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
             <div class="wrap-member">
-              <span class="select-member" v-for="item in selectedItems">
-                   {{item.name}}、</span>
+              {{nameConcat}}
             </div>
-            <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+            <span :class="{'people':newTime,'people-left':editTime}">等{{selectedLocalList.length}}人</span>
           </div>
           <i class="icon2-arrow-right-small arrow"></i>
         </div>
@@ -55,6 +53,7 @@
 <style scoped>
   .itm-icon-img-wrap-new>*{
     float: right;
+    margin-right: 0.15rem;
   }
   .itm-icon-img-wrap-new{
     width: 2.5rem;
@@ -68,16 +67,20 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    height:1.3rem
-  }
-  .select-member{
+    height:1.3rem;
+    margin-left: 0.2rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
+  }
+  .select-member{
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 17px;*/
+    /*color: #999999;*/
     letter-spacing: 0;
     display: block;
     /*margin-left: 2px;*/
-    float: left;
+    /*float: left;*/
   }
   .execute{
     font-family: PingFangSC-Regular;
@@ -85,7 +88,11 @@
     color: #333333;
     letter-spacing: 0;
   }
-  .new-padding-left{
+  .new-padding-left-more-three{
+    /*left:5.3rem*/
+    margin-left:3.7rem
+  }
+  .new-padding-left-less-three{
     /*left:5.3rem*/
     margin-left:4.2rem
   }
@@ -103,6 +110,7 @@
     /* position: absolute; */
     display: inline-block;
     margin-left: 2px;
+    color:#999999
     /* top: 0.05rem; */
     /*margin-top: -0.3rem;*/
   }
@@ -111,8 +119,10 @@
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
     background-color: white;
+  }
+  .hasPadding{
+    padding-left:3% ;
   }
   .people{
     position:absolute;
@@ -171,6 +181,22 @@
       },
       selectedItems () {
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
+      },
+      nameConcat () {
+        var nameString = ''
+        for (var i = 0; i < this.selectedLocalList.length - 1; i++) {
+          nameString += this.selectedLocalList[i].name + '、'
+        }
+        return nameString + this.selectedLocalList[i].name
+      },
+      memberCount () {
+        return this.selectedLocalList.length <= 3
+      },
+      newMemberlessThree () {
+        return this.newTime && this.memberCount
+      },
+      newMemberMoreThree () {
+        return this.newTime && !this.memberCount
       }
     },
     watch: {

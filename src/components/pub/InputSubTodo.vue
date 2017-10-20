@@ -13,7 +13,7 @@
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
+    /*padding-left:3% ;*/
     /*border-bottom:1px solid #E3E3E3;*/
   }
   .arrow{
@@ -33,7 +33,7 @@
     letter-spacing: 0;
   }
   .edit-padding-left{
-    left:1.9rem
+    left:1.7rem
   }
   span{
     display: block;

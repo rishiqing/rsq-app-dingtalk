@@ -17,9 +17,11 @@
               <r-input-date
                 :item="editItem"
                 :sep="'/'"
+                :newItem="true"
               ></r-input-date>
               <r-input-time
                 :item="editItem"
+                :newItem="true"
               ></r-input-time>
             </div>
             <div class="secondGroup">
