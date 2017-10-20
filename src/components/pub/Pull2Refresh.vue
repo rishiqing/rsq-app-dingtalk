@@ -15,7 +15,9 @@
         <div class="pulldown-label">{{pullDownTip}}</div>
       </div>
     </div>
-    <slot></slot>
+    <div id="listContainer" class="list-container" style="height: 300px;overflow-y: auto;">
+      <slot></slot>
+    </div>
   </v-touch>
 </template>
 <style lang="scss" scoped>
@@ -166,6 +168,13 @@
 //      this.$refs.touchList.disable('pancancel')
 //      var list = document.getElementById('touchList')
 //      list.style.touchAction = 'auto'
+//      var list = document.getElementById('listContainer')
+//      list.addEventListener('scroll', (e) => {
+//        console.log('=====' + list.scrollTop)
+//        e.preventDefault()
+//        e.stopPropagation()
+//        return false
+//      })
     }
   }
 </script>

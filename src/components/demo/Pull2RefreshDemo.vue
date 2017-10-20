@@ -1,8 +1,18 @@
 <template>
   <div>
     <p>pull 2 refresh demo</p>
+    <v-touch @panstart="onPanMove"
+             @panmove="onPanMove"
+             @panend="onPanEnd"
+             @pancancel="onPanEnd" >
+      <div style="overflow-y:auto;height:200px;">
+        <div style="width:100%;height:1000px;background:#f00;"></div>
+      </div>
+    </v-touch>
     <div class="container">
-      <r-pull-to-refresh @on-pull-down="pullRefresh">
+      <r-pull-to-refresh
+        :enabled="true"
+        @on-pull-down="pullRefresh">
         <ul>
           <li v-for="i in items" :key="i.id">{{i.name}}</li>
         </ul>
@@ -18,7 +28,7 @@
   }
 </style>
 <script>
-  import Pull from 'com/demo/Pull2Refresh'
+  import Pull from 'com/pub/Pull2Refresh'
   export default {
     data () {
       return {
@@ -46,14 +56,17 @@
       'r-pull-to-refresh': Pull
     },
     methods: {
+      onPanMove (e) {
+        console.log('onPanMove:' + e.deltaY)
+      },
+      onPanEnd (e) {
+        console.log('onPanEnd')
+      },
       pullRefresh (cb) {
         setTimeout(() => {
-          this.items = [
-            {id: 11, name: 'aaa000'},
-            {id: 12, name: 'bbb000'},
-            {id: 13, name: 'ccc000'},
-            {id: 14, name: 'ddd000'}
-          ]
+          var val = new Date().getTime()
+          this.items.push({id: 1 + '-' + val, name: 'a' + val})
+          this.items.push({id: 2 + '-' + val, name: 'b' + val})
           cb()
         }, 1000)
       }
