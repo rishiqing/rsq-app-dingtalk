@@ -96,6 +96,7 @@ export default {
     }).then(function (result) {
       var credential = JSON.parse(result.data)
       return new OSS({
+        secure: true,  //  https
         region: region,
         accessKeyId: credential.AccessKeyId,
         accessKeySecret: credential.AccessKeySecret,
