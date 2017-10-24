@@ -6,8 +6,8 @@
             v-for="day in week"
             :key="day.date.getTime()"
         >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <v-touch class="cal-day" @tap="calDayClick(day.date)"
+          <div v-if="day.isInMonth" class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
+          <v-touch v-if="day.isInMonth" class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
           </v-touch>

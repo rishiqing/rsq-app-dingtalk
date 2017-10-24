@@ -329,6 +329,7 @@
           if (this.isBar) {
             this.isShowBar = true
           }
+          this.$emit('after-cal-switch', {type: this.currentView.type, daysArray: this.currentView.daysArray})
         }
       }
     },
@@ -343,6 +344,8 @@
       this.translateY = this.currentView.targetY
       this.$emit('cal-ready', {type: this.currentView.type, daysArray: this.currentView.daysArray})
       this.triggerSelectDate(this.defaultSelectDate)
+
+      this.$emit('after-cal-ready', {type: this.currentView.type, daysArray: this.currentView.daysArray})
 
       //  给周视图加动画结束的方法
       var ele1 = document.getElementById('hMoveBar')

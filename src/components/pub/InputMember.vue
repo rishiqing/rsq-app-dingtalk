@@ -183,11 +183,9 @@
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
       },
       nameConcat () {
-        var nameString = ''
-        for (var i = 0; i < this.selectedLocalList.length - 1; i++) {
-          nameString += this.selectedLocalList[i].name + '、'
-        }
-        return nameString + this.selectedLocalList[i].name
+        return this.selectedLocalList.map(function (o) {
+          return o.name
+        }).join('、')
       },
       memberCount () {
         return this.selectedLocalList.length <= 3

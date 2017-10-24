@@ -6,7 +6,9 @@
        :style="{'padding-top': paddingTop + 'px'}">
     <r-calendar
       @click-cal-day="fetchItems"
+      @after-cal-ready="fetchDatesHasTodo"
       @after-cal-swipe="fetchDatesHasTodo"
+      @after-cal-switch="fetchDatesHasTodo"
       @on-cal-pan="onPanMove"
       @on-cal-pan-end="onPanEnd"
       :default-select-date="dateSelect"
@@ -128,29 +130,18 @@
           })
       },
       fetchDatesHasTodo (p) {
-        //  如果dateSelect已经显示，则设置为dateSelect的月份，否则设置标题为当周所在的月份，以当周的第一天为准
-//        var numDate = this.dateSelect.getTime()
-//        var titleDate = firstDate
-//        if (numDate > firstDate.getTime() && numDate < lastDate.getTime()) {
-//          titleDate = this.dateSelect
-//        }
-        //  如果是bar，显示的月份以周三所在的日期为准，如果是pane，则直接说当月
-        var titleDate
-        //  给日期加角标，值计算p.daysArray中的中间一个数组
-        var weekArray = p.daysArray[1]
-        var firstDate
-        var lastDate
         if (p.type === 'bar') {
-          firstDate = weekArray[0].date
-          lastDate = weekArray[weekArray.length - 1].date
-          titleDate = weekArray[3].date
+          this.fetchBarHasTodo(p)
         } else {
-          firstDate = weekArray[0][0].date
-          lastDate = weekArray[weekArray.length - 1][6].date
-          titleDate = weekArray[1][0].date
+          this.fetchPaneHasTodo(p)
         }
+      },
+      fetchBarHasTodo (p) {
+        var weekArray = p.daysArray[1]
+        var firstDate = weekArray[0].date
+        var lastDate = weekArray[weekArray.length - 1].date
+        var titleDate = weekArray[3].date
         window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(titleDate)})
-
         this.$store.dispatch('getDatesHasTodo', {
           startDate: firstDate,
           endDate: lastDate
@@ -159,6 +150,25 @@
             if (res.indexOf(String(day.date.getTime())) !== -1) {
               this.$set(day, 'showTag', true)
             }
+          })
+        })
+      },
+      fetchPaneHasTodo (p) {
+        var weekArray = p.daysArray[1]
+        var firstDate = weekArray[0][0].date
+        var lastDate = weekArray[weekArray.length - 1][6].date
+        var titleDate = weekArray[1][0].date
+        window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(titleDate)})
+        this.$store.dispatch('getDatesHasTodo', {
+          startDate: firstDate,
+          endDate: lastDate
+        }).then(res => {
+          weekArray.forEach(week => {
+            week.forEach(day => {
+              if (res.indexOf(String(day.date.getTime())) !== -1) {
+                this.$set(day, 'showTag', true)
+              }
+            })
           })
         })
       }

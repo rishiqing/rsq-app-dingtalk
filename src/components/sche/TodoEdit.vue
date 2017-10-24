@@ -555,10 +555,8 @@
                     var d = dateUtil.repeatDate2Text(that.currentTodo)
                     var clock = that.currentTodo.clock || {}
                     var t = clock.startTime ? clock.startTime + '-' + clock.endTime : '全天'
-                    var note = that.editItem.pNote
-//                    console.log(note)
+                    var note = that.editItem.pNote || ''
                     var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
-//                    var newNote = newnote.replace(/ /g, '')
                     var params = {
                       corpId: that.corpId, // that.loginUser.authUser.corpId,
                       data: {
