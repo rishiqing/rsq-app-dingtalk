@@ -21,18 +21,20 @@
       <input type="text" placeholder="输入任务标题"
               ref="titleInput"
               :value="itemTitle"
-              class="word-color"
               @input="inputChange($event.target.value)"
               @blur="inputBlur($event.target.value)"
-              :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit}"
+              :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit,'edit-text-font':isEdit,'new-text-font':newCheckable}"
               @focus="IsDisabled($event)"/>
         <!--@blur="inputBlur($event.target.value)"-->
     </div>
   </div>
 </template>
 <style scoped>
-  .word-color{
+  .edit-text-font{
     font-family: PingFangSC-Medium;
+  }
+  .new-text-font{
+    font-family: PingFangSC-Regular;
   }
   .wrap-icon{
     display: flex;
@@ -150,6 +152,10 @@
       isEdit: Boolean
     },
     methods: {
+      onPanMove () {
+        console.log('jjjjjjj')
+        alert('Hhh')
+      },
       isMaxlength (title) {
         title = title || ''
         return title.length > 15

@@ -158,6 +158,7 @@
   .wrap-input{
     display: flex;
     align-items: center;
+    width: 90%;
   }
   .for-cover{
     height: 0.266rem;
@@ -197,7 +198,7 @@
     font-family: PingFangSC-Regular;
     /*line-height: 0.2rem;*/
     font-size: 17px;
-    width: 85%;
+    width: 98%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space:nowrap;
@@ -256,7 +257,7 @@
     margin-left: 0.8rem;
     font-family:PingFangSC-Regular;
     font-size: 17px;
-    color: #333333;
+    color: #55A8FD;
   }
   .hide{
     display: none;

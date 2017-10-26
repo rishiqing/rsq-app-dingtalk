@@ -16,13 +16,16 @@
     border-bottom:1px solid #E0E0E0 ;
     border-top:1px solid #DADADA ;
     padding-left: 3%;
+    height: 12.6rem;
+    overflow: auto;
+    /*margin-top: 45px;*/
   }
   .itemList{
     padding-bottom:1.306rem;
   }
-  li:last-child{
-    border-bottom: none;
-  }
+  /*li:last-child{*/
+    /*border-bottom: none;*/
+  /*}*/
 </style>
 <script>
   import TodoItem from 'com/sche/TodoItem'

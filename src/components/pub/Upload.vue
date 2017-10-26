@@ -84,7 +84,13 @@
         for (var i = 0; i < files.length; i++) {
           var file = files[i]
           if (parseInt(file.size) > 50 * 1024 * 1024) {
-            alert('上传文件最大不能超过50M')
+            window.dd.device.notification.alert({
+              message: '上传文件最大容量不超过50M',
+              title: '提示', // 可传空
+              buttonName: '确定',
+              onSuccess: function () {
+              }
+            })
           } else {
             var url = URL.createObjectURL(file)
             this.taskList.push({
