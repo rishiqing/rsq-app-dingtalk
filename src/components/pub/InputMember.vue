@@ -20,6 +20,7 @@
             <div class="wrap-member">
               {{nameConcat}}
             </div>
+
             <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
           </div>
           <i class="icon2-arrow-right-small arrow"></i>
@@ -51,6 +52,9 @@
   </div>
 </template>
 <style scoped>
+  .member-length{
+    display: none;
+  }
   .itm-icon-img-wrap-new>*{
     float: right;
     margin-right: 0.15rem;
@@ -109,7 +113,7 @@
     float: left;
     /* position: absolute; */
     display: inline-block;
-    margin-left: 2px;
+    margin-left: 0;
     color:#999999
     /* top: 0.05rem; */
     /*margin-top: -0.3rem;*/
@@ -184,13 +188,26 @@
       },
       nameConcat () {
         var nameString = ''
-        for (var i = 0; i < this.selectedLocalList.length - 1; i++) {
-          nameString += this.selectedLocalList[i].name + '、'
+        if (this.selectedLocalList && this.selectedLocalList.length > 0) {
+          for (var i = 0; i < this.selectedLocalList.length - 1; i++) {
+            nameString += this.selectedLocalList[i].name + '、'
+          }
+          return nameString + this.selectedLocalList[i].name
         }
-        return nameString + this.selectedLocalList[i].name
       },
       memberCount () {
         return this.selectedLocalList.length <= 3
+      },
+      memberLength () {
+        if (this.nameConcat !== undefined) {
+          return this.nameConcat.length < 4
+        }
+//        var count = 0
+//        for (var i = 0; i < this.selectedLocalList.length; i++) {
+//          count += this.selectedLocalList[i].length
+//        }
+//        console.log(count)
+//        return count < 14
       },
       newMemberlessThree () {
         return this.newTime && this.memberCount
@@ -297,7 +314,7 @@
       }
     },
     mounted () {
-//      console.log('传进来的selectedRsqIds' + this.selectedRsqIds)
+      console.log('长度是' + this.nameConcat + this.memberLength)
     }
   }
 </script>

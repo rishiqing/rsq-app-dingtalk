@@ -236,9 +236,13 @@
         window.rsqadmg.exec('timePicker', {
           strInit: that.clock.startTime,
           success (result) {
-            that.clock.startTime = result.value
-            that.autoStart = false
-            that.autoChangeTime()
+            if (result.value > that.clock.endTime) {
+              alert('开始时间不能晚于结束时间')
+            } else {
+              that.clock.startTime = result.value
+              that.autoStart = false
+              that.autoChangeTime()
+            }
           }
         })
       },
@@ -252,7 +256,7 @@
           strInit: that.clock.endTime,
           success (result) {
             if (result.value < that.clock.startTime) {
-              alert('结束时间不能小于开始时间')
+              alert('结束时间不能早于开始时间')
             } else {
               that.clock.endTime = result.value
               that.autoEnd = false

@@ -95,7 +95,8 @@
     border: 1px solid white;
   }
   .padding-left-input{
-    margin-left: 0.32rem;
+    margin-left: 0.1rem;
+    padding-left: 0.2rem;
   }
   .inbox-padding-left{
     padding-left: 0.3rem;

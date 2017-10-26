@@ -79,7 +79,9 @@
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #BFBFBF;
-    margin-left:1.9rem;
+    /*display: block;*/
+    margin-left:0.4rem;
+    /*float: right;*/
   }
   .comment-photo{
     width: 25px;
@@ -178,7 +180,7 @@
       getFileName (orgName) {
         if (!orgName) return ''
         var arr = orgName.split('/')
-        return arr[arr.length - 1].substr(14, 33)
+        return arr[arr.length - 1].substr(14, 25)
       },
       getFileSize (fileSize) {
         if (fileSize > 1024) {

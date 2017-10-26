@@ -64,6 +64,7 @@
         return date.getFullYear() + '年' + (date.getMonth() + 1) + '月'
       },
       fetchItems (strDate) {
+        console.log('fetchItems传进来的strdate是' + strDate)
         window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(strDate)})
         this.$store.dispatch('fetchScheduleItems', { strDate })
       },
