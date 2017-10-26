@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="" style="position:relative;">
       <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
       <ul class="ul-list">
         <r-upload-item
@@ -19,7 +19,7 @@
   .file-input {
     cursor: pointer;
     position:absolute;
-    top: 4.75rem;
+    top: -1rem;
     font-size:30px;
     left:0.3rem;
     width:0.848rem;

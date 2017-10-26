@@ -105,13 +105,13 @@ export default {
    * @param state
    * @param strDate
    */
-  fetchScheduleItems ({commit, state}, {strDate}) {
+  fetchScheduleItems ({commit, state}, {strDate, sync}) {
     if (strDate instanceof Date) {
       strDate = moment(strDate).format('YYYY-MM-DD')
     }
     let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
     let dateItems = state.dateTodosCache
-    if (dateItems[strCurrentDate]) {
+    if (!sync && dateItems[strCurrentDate]) {
       return Promise.resolve().then(() => {
         commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
       })

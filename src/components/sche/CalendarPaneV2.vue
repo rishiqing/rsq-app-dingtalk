@@ -5,9 +5,9 @@
         <td class="cal-weekday"
             v-for="day in week"
             :key="day.date.getTime()"
-            >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <v-touch class="cal-day" @tap="calDayClick(day.date)"
+        >
+          <div v-if="day.isInMonth" class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
+          <v-touch v-if="day.isInMonth" class="cal-day" @tap="calDayClick(day.date)"
                    :class="{'cal-day--focus': isHighLight(day.date)}">
             {{dateText(day)}}
           </v-touch>
@@ -55,7 +55,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;display: inline-block;
+    top: 0;display: inline-block;background: #458CDA;
   }
   .cal-table {
     border-collapse: collapse;
