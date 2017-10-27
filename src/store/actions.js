@@ -1,6 +1,6 @@
 import { Promise } from 'es6-promise'
 import api from 'api/index'
-import util from 'ut/JsUtil'
+import util from 'ut/jsUtil'
 import dateUtil from 'ut/dateUtil'
 import moment from 'moment'
 
