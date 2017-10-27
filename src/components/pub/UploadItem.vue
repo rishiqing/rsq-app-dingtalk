@@ -38,6 +38,10 @@
   .word{
     font-size: 13px;
     color: #3D3D3D;
+    width: 85%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .file-size {
     font-size: 12px;color: #9B9B9B;

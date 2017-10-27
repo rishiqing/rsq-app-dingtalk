@@ -2,7 +2,7 @@
   <li class="todoItem">
     <v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">
       <div class="title-todo" :class="{'margin-left':!isCheckable}">
-        <span class="todo-content-sche" :class="{ 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
+        <span class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
         <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
         <span v-if="!isCheckable" v-show="isFromSche" class="receive">我收到的</span>
         <span v-if="!isCheckable" v-show="isFromKanban" class="receive">来自计划</span>
@@ -51,9 +51,14 @@
     font-size: 17px;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 66%;
     height: 1.6rem;
     white-space:nowrap
+  }
+  .delay-width{
+    width: 70%;
+  }
+  .common-width{
+    width: 95%;
   }
   .hide{
     display: none;
