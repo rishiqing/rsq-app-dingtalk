@@ -3,7 +3,7 @@
 import 'as/css/index.scss'
 
 import 'as/js/rsqAdapterManager.js'
-import 'as/js/rsqDdmAdapter.js'
+import 'as/js/rsqQywxmAdapter.js'
 // xss漏洞
 import 'as/js/xssFilter.js'
 
@@ -20,7 +20,6 @@ import store from './store'
 //  sentry相关
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
-import growingUtil from './utils/growingUtil'
 //  正式环境下配置sentry
 if (window.rsqConfig.env === 'prod') {
   Raven
@@ -39,8 +38,6 @@ window.rsqadmg.exec('auth', {
       rsqUser: rsqUser,
       authUser: authUser
     }
-    // console.log(JSON.stringify(rsqUser))
-    growingUtil.growingIoMethod(rsqUser)
     //  去掉iOS的回弹效果
     window.rsqadmg.exec('disableBounce')
 

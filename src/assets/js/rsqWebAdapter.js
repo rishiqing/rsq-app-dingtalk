@@ -47,7 +47,7 @@ rsqAdapterManager.register({
       rsqUsername: 'www123@qq.com',
       rsqSecret: '123456'
     };
-    rsqAdapterManager.ajax.post(rsqConfig.apiServer + '/task/j_spring_security_check', {
+    rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
       j_username: sign.rsqUsername, j_password: sign.rsqSecret, _spring_security_remember_me: true
     }, function(result){
       var resJson = JSON.parse(result);

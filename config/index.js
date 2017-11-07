@@ -57,9 +57,9 @@ module.exports = {
     cssSourceMap: true,
     hotPath: '/__webpack_hmr',
     // 日事清api的后台地址
-    apiServer: 'http://dd.rsq.etoutiao.cn/',
+    apiServer: 'http://qywx.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
+    authServer: 'http://qywx.rsq.etoutiao.cn/qywxauth/',
     // 日事清前端文件地址
     frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
     // 阿里云OSS STS认证的server地址
