@@ -56,7 +56,12 @@ window.rsqadmg.exec('auth', {
     })
   },
   error: function () {
-    alert('验证失败')
+    window.rsqadmg.exec('alert', {
+      message: '企业成员数据同步中，请稍后……',
+      success: function () {
+        window.location.href = 'https://www.rishiqing.com'
+      }
+    })
   }
 })
 

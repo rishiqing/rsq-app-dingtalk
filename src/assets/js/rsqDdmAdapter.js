@@ -74,16 +74,18 @@ rsqAdapterManager.register({
             success: function(authUser){
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
-              rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
-                j_username: authUser.rsqUsername, j_password: authUser.rsqPassword, _spring_security_remember_me: true
-              }, function(result){
+              rsqAdapterManager.ajax.get(rsqConfig.apiServer + 'task/dingtalkOauth/tokenLogin', {
+                token: authUser.unionId
+              }, [function(result){
                 var resJson = JSON.parse(result);
                 if(resJson.success){
                   rsqChk(params.success, [resJson, authUser]);
                 }else{
                   rsqChk(params.error, [resJson]);
                 }
-              });
+              }, function(err){
+                rsqChk(params.error, [err]);
+              }]);
             },
             error: function(authResult){
               rsqChk(params.error, [authResult]);
