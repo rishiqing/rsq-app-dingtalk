@@ -5,6 +5,14 @@ var ip = require('ip')
 var devPort = 8090
 var stsPort = 8300
 
+//  为了防止jenkins构建错误，需要在这里做处理
+var devIp
+try {
+  devIp = ip.address('WLAN', 'ipv4')
+} catch(e){
+  devIp = ip.address()
+}
+
 module.exports = {
   build: {
     env: require('./prod.env'),
@@ -61,7 +69,7 @@ module.exports = {
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dd.rsq.etoutiao.cn/rsqdevauth/',
     // 日事清前端文件地址
-    frontServer: 'http://' + ip.address('WLAN', 'ipv4') + ':' + (process.env.PORT || devPort) + '/',
+    frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
     stsServer: 'http://182.92.222.40:8300/sts/',
