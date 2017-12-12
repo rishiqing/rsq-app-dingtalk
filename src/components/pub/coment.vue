@@ -84,6 +84,9 @@
       'r-upload': Upload
     },
     computed: {
+      defaultTaskDate () {
+        return this.$store.getters.defaultTaskDate
+      }
     },
     methods: {
       setFileId (p) {
@@ -103,9 +106,11 @@
 //          return window.rsqadmg.execute('alert', {message: '任务评论不能为空'})
 //        }
         var that = this
-        this.$store.dispatch('postTodoComment', {commentContent: newTitle, fileIds: this.fileId})
-          .then(() => {
+//        console.log('this.currentdate是' + this.defaultTaskDate)
+        this.$store.dispatch('postTodoComment', {commentContent: newTitle, fileIds: this.fileId, createTaskDate: this.defaultTaskDate})
+          .then((com) => {
             that.$router.replace(window.history.back())
+            alert(JSON.stringify(com))
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '保存成功'})
           })

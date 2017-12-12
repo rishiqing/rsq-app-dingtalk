@@ -43,7 +43,7 @@
     }
     ul{
       position: relative;
-      border-bottom: 0.5px solid #E3E3E3;
+      border-bottom: 1px solid #E3E3E3;
       border-top: 0.5px solid #E3E3E3;
       background: #FFFFFF;
     }
@@ -68,7 +68,7 @@
       padding:2px;
       height: 1.112rem;
       line-height:  1.112rem;;
-      border-bottom: 0.5px solid #E3E3E3;
+      border-bottom: 1px solid #E3E3E3;
       font-family: PingFangSC-Regular;
       font-size: 17px;
       color: #3D3D3D;
@@ -143,7 +143,7 @@
       currentTodo () {
         return this.$store.state.todo.currentTodo
       },
-      //  根据currentTodo来判断是否显示重复
+      //  根据currentTodo来判断是否显示重复,目前看来每次都返回为真??
       showShortcut () {
         return !this.currentTodo.id || !this.currentTodo.repeatType
       },
@@ -160,7 +160,7 @@
         }
         return text ? text + '重复' : ''
       },
-      comRepeat () {
+      comRepeat () { //  有点懵
         var type = null
         var baseArray = []
         var isLastDate = false
@@ -184,14 +184,16 @@
       initData () {
         //  有修改缓存读修改缓存，否则从原数据读
         var t = this.todoDate
-        if (t._selected || t._uRepeatType) {
+        console.log('t是' + JSON.stringify(t))
+        if (t._selected || t._uRepeatType) { // 无论是自定义的还是按照系统选的，总之就是有重复值
           this.uRepeatType = t._uRepeatType
           this.uRepeatStrTimeArray = t._uRepeatStrTimeArray
           this.uIsLastDate = t._uIsLastDate
           if (t._selected) {
-            this.selected = this.findSelect(t._selected.cid)
+            this.selected = this.findSelect(t._selected.cid) // 直接赋值不就好了吗，为啥还得调用这个方法
+            console.log('this.selected是' + JSON.stringify(this.selected))
           }
-        } else {
+        } else { // 一开始都是空的没有选择，赋值与没赋值有什么区别呢？
           this.uRepeatType = t.repeatType
           var base = t.repeatBaseTime
           this.uRepeatStrTimeArray = (base === null || base === '' ? [] : base.split(','))
@@ -236,12 +238,13 @@
           strTimeArray = [moment(this.baseNumTime).format('YYYYMMDD')]
         }
         var that = this
-        selectRepeat.show({
+        selectRepeat.show({ // 这个函数的作用很简单，就是把数据传过来然后把结果数据再传给this,只是这几个属性要好好理解下
           baseNumTime: that.baseNumTime,
           repeatType: that.uRepeatType || 'everyDay',
           repeatStrTimeArray: strTimeArray,
           isLastDate: that.uIsLastDate,
           success: function (result) {
+            console.log('result是' + JSON.stringify(result))
             if (result.repeatType) {
               that.selected = null
             }

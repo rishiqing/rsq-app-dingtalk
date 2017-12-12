@@ -50,6 +50,9 @@ function deleteCookie(name)
   if(cval!=null)
     document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }
+function makeToken(corpId, userId){
+  return corpId + '--' + userId
+}
 rsqadmg.store = {
   app: getJsonFromUrl()
 };
@@ -74,16 +77,19 @@ rsqAdapterManager.register({
             success: function(authUser){
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
-              rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
-                j_username: authUser.rsqUsername, j_password: authUser.rsqPassword, _spring_security_remember_me: true
-              }, function(result){
+              var token = makeToken(authUser.corpId, authUser.userId);
+              rsqAdapterManager.ajax.get(rsqConfig.apiServer + 'task/dingtalkOauth/tokenLogin', {
+                token: token
+              }, [function(result){
                 var resJson = JSON.parse(result);
                 if(resJson.success){
                   rsqChk(params.success, [resJson, authUser]);
                 }else{
                   rsqChk(params.error, [resJson]);
                 }
-              });
+              }, function(err){
+                rsqChk(params.error, [err]);
+              }]);
             },
             error: function(authResult){
               rsqChk(params.error, [authResult]);

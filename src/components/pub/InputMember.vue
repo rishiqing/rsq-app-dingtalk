@@ -109,8 +109,9 @@
     float: left;
     /* position: absolute; */
     display: inline-block;
-    margin-left: 2px;
-    color:#999999
+    margin-left: 0;
+    color:#999999;
+    margin-right: 0.156rem;
     /* top: 0.05rem; */
     /*margin-top: -0.3rem;*/
   }

@@ -8,7 +8,7 @@
       </v-touch>
     </div>
     <div v-else class="anotherTop">
-      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
+      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle" >
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <button class="create" ><span>创建</span></button>
       </v-touch>
@@ -22,12 +22,12 @@
           <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
         </v-touch>
         <v-touch class="wrap-input">
-           <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
-                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
+           <input   class="list-below" @focus="IsDisabled($event,item.isDone)" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
+                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable,'is-editable':item.isDone}">
         </v-touch>
       </li>
     </ul>
-    <div class="remind-subtodo">*清空标题可删除任务</div>
+    <div class="remind-subtodo" :class="{IsDisplayRemind:haschild}">*清空标题可删除任务</div>
   </div>
 </template>
 <script>
@@ -56,6 +56,11 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      IsDisabled (e, pIsDone) {
+        if (pIsDone) {
+          e.target.blur()
+        }
+      },
       change () {
         this.seen = false
       },
@@ -131,6 +136,12 @@
   }
 </script>
 <style scoped>
+  .is-editable{
+    disabled:true
+  }
+  .IsDisplayRemind{
+    display: none;
+  }
   .remind-subtodo{
     font-family: PingFangSC-Regular;
     color:#A3A3A3;
@@ -147,15 +158,18 @@
   .wrap-input{
     display: flex;
     align-items: center;
+    width: 90%;
   }
   .for-cover{
     height: 0.266rem;
     z-index:1;
-    /*background-color: rebeccapurple;*/
+    width: 100%;
+    background-color: #F8F8F8;
     position: fixed;
-    top:0;
-    left:0;
-    right: 0;
+    /*top:0;*/
+    /*left:0;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
@@ -175,8 +189,8 @@
     z-index: 0;
   }
   .hasborder{
-    /*border-top:1px solid #E0E0E0;*/
-    /*border-bottom:1px solid #E0E0E0;*/
+    border-top:1px solid #E0E0E0;
+    border-bottom:1px solid #E0E0E0;
   }
   .list-below{
     border:none;
@@ -184,7 +198,7 @@
     font-family: PingFangSC-Regular;
     /*line-height: 0.2rem;*/
     font-size: 17px;
-    width: 85%;
+    width: 98%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space:nowrap;
@@ -243,7 +257,7 @@
     margin-left: 0.8rem;
     font-family:PingFangSC-Regular;
     font-size: 17px;
-    color: #333333;
+    color: #55A8FD;
   }
   .hide{
     display: none;

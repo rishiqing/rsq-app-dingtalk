@@ -43,7 +43,7 @@
             <v-touch tag="td" v-for="day in weekArray" :key="day.date.getTime()"
                      @tap="tapDay($event, day)">
               <div class="dp-day"
-                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected}">
+                   :class="{'dp-grey': !day.isInMonth, 'dp-selected': day.isSelected,'is-today':isToday(day)}">
                 {{day.date.getTime() === numToday ? '今' : day.date.getDate()}}
               </div>
             </v-touch>
@@ -61,6 +61,9 @@
   </div>
 </template>
 <style lang="scss">
+  .dp-content .dp-table .is-today{
+    color:#67B2FE
+  }
   .edit-date {
     .light-color {color: #999999;}
     .date-picker {
@@ -234,13 +237,17 @@
       }
     },
     methods: {
+      isToday (day) {
+        return day.date.getTime() === this.numToday
+      },
       initData () {
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
-        console.log('this.currentTodoDate是' + this.currentTodoDate)
+        console.log('this.currentTodoDate是' + JSON.stringify(this.currentTodoDate))
         console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
+        console.log('this.focusDate是' + this.focusDate)
         this.resetType()
       },
       clearType () {
@@ -287,11 +294,12 @@
       },
       resetMonth (offset) {
         if (offset) {
+          console.log('开始this.focusdate是' + this.focusDate)
           this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, offset)
-          console.log('this.focusdate是' + this.focusDate)
+          console.log('之后this.focusdate是' + this.focusDate)
         }
-        this.days = dateUtil.getMonthDays(this.focusDate)
-        console.log('this.days是' + this.days)
+        this.days = dateUtil.getMonthDays(this.focusDate) //  this.days数据结构很有意思
+//        console.log('this.days是' + JSON.stringify(this.days))
         this.selectDays()
       },
       toggleSelect (day) {
@@ -321,11 +329,12 @@
       selectRange (obj) {
         var val = obj.date.getTime()
         //  如果之前选择过range，则重置选择
+//        console.log(this.selectNumDate.length)
         if (this.selectNumDate.length >= 2) {
           this.selectNumDate = []
           this.clearSelected()
         }
-        if (this.selectNumDate.length === 0) {
+        if (this.selectNumDate.length === 0) { // 什么时候为0呢
           this.selectNumDate = [val]
           obj.isSelected = true
         } else {
@@ -347,7 +356,6 @@
         }
       },
       clearSelected () {
-        console.log('clearSelected之前')
         this.days.forEach(function (array) {
           array.forEach(function (obj) {
             obj.isSelected = false
@@ -364,7 +372,7 @@
             obj.isSelected = self.isInSelect(self.dateType, obj.date, self.selectNumDate)
           })
         })
-        console.log('selectDays中的this.days是' + JSON.stringify(this.days))
+//        console.log('selectDays中的this.days是' + JSON.stringify(this.days))
       },
       isInSelect (type, date, selectNumDate) { // 不懂
         var numDate = date.getTime()
@@ -400,7 +408,9 @@
       },
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
+        console.log('saveTodoDateState的sorted是' + sorted)
         var resObj = dateUtil.frontend2backend({dateType: this.dateType, dateResult: sorted, sep: '/'})
+        console.log('saveTodoDateState的resobj是' + resObj)
         //  如果不是repeat类型，那么清除
         if (this.dateType !== 'repeat') {
           resObj['repeatType'] = null
@@ -444,6 +454,7 @@
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
           }
           var editItem = this.getSubmitResult()
+          console.log('submitTodo的editItem是' + editItem)
           //  如果日期均为空，则容器为收纳箱
           if (!editItem.startDate && !editItem.endDate && !editItem.dates) {
             editItem['pContainer'] = 'inbox'

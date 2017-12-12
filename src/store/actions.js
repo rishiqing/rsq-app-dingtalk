@@ -207,6 +207,7 @@ export default {
    */
   createSingleScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    console.log('strdate是' + strDate)
     var itemCache = state.dateTodosCache
     //  读取顺序号
     return dispatch('fetchScheduleItems', {strDate})
@@ -309,8 +310,10 @@ export default {
       })
   },
   submitSubTodoFinish ({commit}, p) {
-    return api.todo.putSubTodoProps({id: p.item.id, pIsDone: p.status})
-      .then(() => {
+    // console.log('p,status是' + p.status)
+    return api.todo.putSubTodoProps({id: p.item.id, isDone: p.status})
+      .then((item) => {
+        // console.log('和后台拿数据回来' + JSON.stringify(item))
         commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
       })
   },
@@ -756,25 +759,26 @@ export default {
     })
   },
   postTodoComment ({commit, state}, props) {
-    if (props.commentContent) {
-      var currentItem = state.todo.currentTodo
-      var replyId = state.replyId
-      var replyName = state.replyName
-      props['todoId'] = currentItem.id
-      props['type'] = 0
-      if (replyId !== null) {
-        props['atIds'] = replyId
-        props.commentContent = '@' + replyName + '&' + props.commentContent
-      }
-
-      return api.todo.postComment(props)
-        .then((com) => {
-          com.type = 0
-          commit('TD_COMMENT_CREATED', {comment: com})
-        })
-    } else {
-      return Promise.resolve()
+    // if (props.commentContent) {
+    var currentItem = state.todo.currentTodo
+    var replyId = state.replyId
+    var replyName = state.replyName
+    props['todoId'] = currentItem.id
+    props['type'] = 0
+    if (replyId !== null) {
+      props['atIds'] = replyId
+      props.commentContent = '@' + replyName + '&' + props.commentContent
     }
+
+    return api.todo.postComment(props)
+      .then((com) => {
+        com.type = 0
+        commit('TD_COMMENT_CREATED', {comment: com})
+        return com
+      })
+    // } else {
+    //   return Promise.resolve()
+    // }
   },
   ReplyCommentItem ({commit, state}, props) {
     commit('REPLY_COMMENT_CREATED', {item: props.item})

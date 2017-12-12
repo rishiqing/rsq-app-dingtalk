@@ -1,11 +1,11 @@
 <template>
-  <div class="outer-date":class="{'hasPadding':newItem}">
-    <v-touch class="" @tap="gotoDate">
+  <v-touch class="" @tap="gotoDate">
+    <div class="outer-date":class="{'hasPadding':newItem}">
       <span class="date">日期</span>
       <span class="now" :class="{'edit-padding-left':editTime}">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
-    </v-touch>
-  </div>
+    </div>
+  </v-touch>
 </template>
 <style lang="" scoped>
   .outer-date{

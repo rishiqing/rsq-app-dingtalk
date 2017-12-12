@@ -60,7 +60,7 @@
 <style scoped>
   .wrap{
     position: fixed;
-    height: 1.68rem;
+    height: 1.45rem;
     width: 100%;
     top: 10px;
     left: 0;
@@ -95,7 +95,7 @@
     font-size: 15px;
     color:#55A8FD;
     position: absolute;
-    margin-top:-0.47rem;
+    margin-top:-0.4rem;
     top: 50%;
     right:0.35rem;
     /*margin-top: -1.34rem;*/

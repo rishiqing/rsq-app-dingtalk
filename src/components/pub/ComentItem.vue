@@ -9,7 +9,7 @@
       </div>
       <div class="right">
         <div class="top">
-          <span class="author">{{item.authorName}}</span>
+          <span class="author">{{item.authorName.substr(9)}}</span>
           <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
         </div>
         <div class="bottom">
@@ -74,12 +74,18 @@
     font-size: 13px;
     color: #BFBFBF;
     margin-left: 10px;
+    width: 70%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .file-size{
     font-family: PingFangSC-Regular;
     font-size: 13px;
     color: #BFBFBF;
-    margin-left:1.9rem;
+    /*display: block;*/
+    margin-left:0.4rem;
+    /*float: right;*/
   }
   .comment-photo{
     width: 25px;
@@ -178,10 +184,10 @@
       getFileName (orgName) {
         if (!orgName) return ''
         var arr = orgName.split('/')
-        return arr[arr.length - 1].substr(14, 33)
+        return arr[arr.length - 1].substr(14, 25)
       },
       getFileSize (fileSize) {
-        if (fileSize > 1024) {
+        if (fileSize > 1024 && fileSize < 1048576) {
           return parseInt(fileSize / 1024) + 'KB'
         } else if (fileSize > 1048576) {
           return parseInt(fileSize / (1024 * 1024)) + 'MB'
