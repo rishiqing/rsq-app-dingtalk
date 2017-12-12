@@ -14,13 +14,18 @@ try {
 }
 
 module.exports = {
-  build: {
-    env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/',
+  release: {
+    env: require('./release.env.js'),
+    // /build/utils.js和vue-loader中使用
+    cssLoader: {
+      minimize: true,
+      extract: true
+    },
     productionSourceMap: true,
+    index: path.resolve(__dirname, '../dist/release/mobile/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/release/mobile/'),
+    assetsSubDirectory: './',
+    assetsPublicPath: '/dingtalk/release/mobile/',
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -50,8 +55,54 @@ module.exports = {
     },
     version: 2000000
   },
+  beta: {
+    env: require('./beta.env'),
+    // /build/utils.js和vue-loader中使用
+    cssLoader: {
+      minimize: true,
+      extract: true
+    },
+    productionSourceMap: true,
+    index: path.resolve(__dirname, '../dist/beta/mobile/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/beta/mobile/'),
+    assetsSubDirectory: './',
+    assetsPublicPath: '/dingtalk/beta/mobile/',
+    // Gzip off by default as many popular static hosts such as
+    // Surge or Netlify already gzip all static assets for you.
+    // Before setting to `true`, make sure to:
+    // npm install --save-dev compression-webpack-plugin
+    productionGzip: false,
+    productionGzipExtensions: ['js', 'css'],
+    // Run the build command with an extra argument to
+    // View the bundle analyzer report after build finishes:
+    // `npm run build --report`
+    // Set to `true` or `false` to always turn it on or off
+    bundleAnalyzerReport: process.env.npm_config_report,
+    // 日事清api的后台地址
+    apiServer: 'http://beta.dd.rsq.etoutiao.cn/',
+    // apiServer: 'http://dd.rsq.etoutiao.cn/',
+    // 日事清-portlet的权限认证后台地址
+    authServer: 'http://beta.dd.rsq.etoutiao.cn/main/',
+    // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
+    // 日事清前端文件地址
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/',
+    // 阿里云OSS STS认证的server地址，临时！！！！注意更新
+    stsServer: 'http://182.92.222.40:8300/sts/',
+    // stsServer: 'http://182.92.222.40:8300/sts/',
+    aliOSS: {
+      region: 'oss-cn-beijing',
+      bucket: 'rishiqing-file',
+      root: 'dingtalk/'
+    },
+    version: 2000000
+  },
   dev: {
     env: require('./dev.env'),
+    // /build/utils.js和vue-loader中使用
+    cssLoader: {
+      minimize: false,
+      extract: false
+    },
     port: devPort,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static/',
