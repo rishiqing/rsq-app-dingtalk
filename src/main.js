@@ -20,7 +20,7 @@ import store from './store'
 //  sentry相关
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
-import growingUtil from './utils/growingUtil'
+// import growingUtil from './utils/growingUtil'
 //  正式环境下配置sentry
 if (window.rsqConfig.env === 'prod') {
   Raven
@@ -40,7 +40,7 @@ window.rsqadmg.exec('auth', {
       authUser: authUser
     }
     // console.log(JSON.stringify(rsqUser))
-    growingUtil.growingIoMethod(rsqUser)
+    // growingUtil.growingIoMethod(rsqUser)
     //  去掉iOS的回弹效果
     window.rsqadmg.exec('disableBounce')
 
