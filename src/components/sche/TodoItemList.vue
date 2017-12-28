@@ -16,12 +16,12 @@
     /*border-bottom:1px solid #E0E0E0 ;*/
     border-top:1px solid #DADADA ;
     padding-left: 3%;
-    max-height: 13rem;
+    max-height: 15rem;
     overflow: auto;
     /*margin-top: 45px;*/
   }
   .itemList{
-    padding-bottom:1.306rem;
+    /*padding-bottom:1.306rem;*/
   }
   /*li:last-child{*/
     /*border-bottom: none;*/
