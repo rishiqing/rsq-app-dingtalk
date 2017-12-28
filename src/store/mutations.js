@@ -119,6 +119,7 @@ export default {
    * @constructor
    */
   CHILDTASK_TODO_CREATED (state, p) {
+    console.log('现在的currentTodo是' + JSON.stringify(state.todo.currentTodo))
     state.todo.currentTodo.subTodos.unshift(p.item)
   },
   INB_TODO_CREATED (state, p) {
