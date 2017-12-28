@@ -84,8 +84,10 @@
     height: 100%;
   }
   .start-img{
-    width: 181px;
-    height: 281px;
+    /*width: 181px;*/
+    /*height: 281px;*/
+    width: 4.826rem;
+    height: 7.493rem;
   }
   .start-text{
     font-family: PingFangSC-Semibold;
