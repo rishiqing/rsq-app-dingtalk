@@ -16,7 +16,7 @@
     /*border-bottom:1px solid #E0E0E0 ;*/
     border-top:1px solid #DADADA ;
     padding-left: 3%;
-    /*max-height: 13rem;*/
+    max-height: 13rem;
     overflow: auto;
     /*margin-top: 45px;*/
   }
