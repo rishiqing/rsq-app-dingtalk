@@ -22,7 +22,7 @@
 </template>
 <style lang="scss" scoped>
   .list-container{
-    margin-top: 2.191rem
+    /*margin-top: 2.191rem*/
   }
   .pull-container {
     overflow: hidden;
