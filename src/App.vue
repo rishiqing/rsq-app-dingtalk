@@ -54,7 +54,7 @@
 //      }
       window.setTimeout(
         () => {
-          console.log(this)
+//          console.log(this)
           this.engine = false
         }, 2000
       )
@@ -86,8 +86,10 @@
   .start-img{
     /*width: 181px;*/
     /*height: 281px;*/
-    width: 4.826rem;
-    height: 7.493rem;
+    /*width: 4.826rem;*/
+    /*height: 7.493rem;*/
+    width: 7.493rem;
+    height: 4.826rem;
   }
   .start-text{
     font-family: PingFangSC-Semibold;
