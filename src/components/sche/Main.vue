@@ -87,6 +87,9 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      onSwipeLeft () {
+        console.log('滑动了')
+      },
       onPanMove (p) {
         this.paddingTop = CAL_STATE[p.type].value + p.deltaY
       },

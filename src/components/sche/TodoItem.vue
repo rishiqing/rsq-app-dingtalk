@@ -1,5 +1,5 @@
 <template>
-  <li class="todoItem">
+  <li class="todoItem" :class="{'list-margin':listMargin}" @touchstart="showColor" @touchend="hideColor" ref="scheListItem">
     <v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">
       <div class="title-todo" :class="{'margin-left':!isCheckable}">
         <span class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
@@ -17,6 +17,12 @@
   </li>
 </template>
 <style lang="scss" scoped>
+  .list-margin{
+    margin-left: -1rem;
+  }
+  .delete{
+    font-size: 17px;
+  }
   .isfrom{
     display: none;
   }
@@ -94,7 +100,9 @@
     position: relative;
     border-bottom:1px solid #E0E0E0 ;
   }
-  .todoItem{}
+  /*.todoItem:active{*/
+    /*background: #F2F2F2;*/
+  /*}*/
   .item-title{}
   .select{
     color:#b9b9bc;
@@ -106,7 +114,7 @@
     /*<!--top:50%;-->*/
     /*<!--margin-top: -0.22rem;-->*/
     /*left:0.2rem;*/
-    background: #FFFFFF;
+    /*background: #FFFFFF;*/
     border-radius: 1px;
   }
   .todo-checkbox {
@@ -123,7 +131,9 @@
   export default {
     name: 'TodoItem',
     data () {
-      return {}
+      return {
+        listMargin: false
+      }
     },
     props: {
       item: Object,
@@ -146,9 +156,30 @@
       },
       isFromKanban () {
         return this.item.isFrom === 'kanban'
+      },
+      currentNumDate () {
+        return this.$store.getters.defaultNumTaskDate
+      },
+      IsDisabled () {
+        var enabled = this.currentNumDate + 24 * 3600 * 1000 < new Date().getTime()
+        return enabled
       }
     },
     methods: {
+      showColor () {
+        this.$refs.scheListItem.style.backgroundColor = '#F2F2F2'
+        console.log('触摸进来了')
+      },
+      hideColor () {
+        this.$refs.scheListItem.style.backgroundColor = '#FFFFFF'
+      },
+      onSwipeRight () {
+        this.listMargin = false
+      },
+      onSwipeLeft () {
+        console.log('滑动了')
+        this.listMargin = true
+      },
       isMaxlength (item) {
         return item.pTitle.length > 10
       },
@@ -160,6 +191,11 @@
         }
       },
       clickCheckOut (e) {
+//        console.log('this.currentNumDate' + new Date(this.currentNumDate))
+        if (this.IsDisabled) {
+//          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
         e.preventDefault()
       }

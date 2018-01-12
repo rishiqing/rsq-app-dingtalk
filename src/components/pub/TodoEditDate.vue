@@ -242,12 +242,12 @@
       },
       initData () {
         var dateStruct = dateUtil.backend2frontend(this.currentTodoDate)
-        console.log('this.currentTodoDate是' + JSON.stringify(this.currentTodoDate))
-        console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
+//        console.log('this.currentTodoDate是' + JSON.stringify(this.currentTodoDate))
+//        console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetType()
       },
       clearType () {

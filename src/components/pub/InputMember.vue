@@ -201,6 +201,7 @@
     watch: {
       userRsqIds (ids) {
         this.fetchUserIds(ids, 'localList')
+        console.log('localList' + this.localList)
       },
       selectedRsqIds (ids) {
         this.fetchUserIds(ids, 'selectedLocalList')
@@ -218,7 +219,8 @@
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
         }
-        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
+//        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
+        this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {
         var that = this
@@ -291,6 +293,7 @@
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
             this[targetListName] = util.getMapValuePropArray(idMap)
+//            console.log('this[targetListName]' + JSON.stringify(this[targetListName]))
 //            window.rsqadmg.exec('hideLoader')
           })
       }

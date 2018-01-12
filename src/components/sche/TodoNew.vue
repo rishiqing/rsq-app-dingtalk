@@ -265,7 +265,9 @@
           .then(item => {
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '创建成功'})
+            console.log(item.receiverIds)
             if (item.receiverIds) {
+//            debugger
               var time = jsUtil.SendConversationTime(item)
               var date = jsUtil.SendConversationDate(item)
               var url = window.location.href.split('#')
@@ -290,23 +292,28 @@
                   }
                 }
               }
-              var sendID = item.senderTodo.pUserId
-//              console.log(sendID)
+    //            var sendID = item.senderTodo.pUserId
+              var sendID = item.pUserId
+              console.log(sendID)
+//              if (item.receiverIds) {
               var IDArrays = item.receiverIds.split(',')
-              for (var i = 0; i < IDArrays.length; i++) {
-                if (sendID === parseInt(IDArrays[i])) {
-                  IDArrays.splice(i, 1)
-                  break
-                }
-              }
+//              } else {
+//                IDArrays = [sendID]
+//              }
+    //            for (var i = 0; i < IDArrays.length; i++) {
+    //              if (sendID === parseInt(IDArrays[i])) {
+    //                IDArrays.splice(i, 1)
+    //                break
+    //              }
+    //            }
               var empIDArray = []
-//              console.log(IDArrays)
+    //              console.log(IDArrays)
               this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
                 .then(idMap => {
                   for (var i = 0; i < IDArrays.length; i++) {
                     empIDArray.push(idMap[IDArrays[i]].emplId)
                   }
-//                  console.log(JSON.stringify(empIDArray))
+    //                  console.log(JSON.stringify(empIDArray))
                   data['userid_list'] = empIDArray.toString()
                   that.$store.dispatch('sendAsyncCorpMessage', {
                     corpId: that.loginUser.authUser.corpId,
@@ -321,7 +328,13 @@
                 })
             }
             if (this.editItem.isChecked) {
-              IDArrays = item.receiverIds.split(',')
+//              debugger
+              if (item.receiverIds) {
+                IDArrays = item.receiverIds.split(',')
+              } else {
+                IDArrays = [item.pUserId]
+              }
+//              console.log(IDArrays)
               empIDArray = []
               this.$store.dispatch('fetchUseridFromRsqid', {corpId: this.corpId, idArray: IDArrays})
                 .then(idMap => {

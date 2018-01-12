@@ -17,7 +17,8 @@
     border-top:1px solid #DADADA ;
     padding-left: 3%;
     max-height: 15rem;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     /*margin-top: 45px;*/
   }
   .itemList{

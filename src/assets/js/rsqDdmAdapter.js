@@ -232,7 +232,8 @@ rsqAdapterManager.register({
         }
       });
       dd.biz.navigation.setMenu({
-        // backgroundColor : "#ADD8E6",
+        backgroundColor : "black",
+        textColor : "#ADD8E611",
         items : items,
         onSuccess: function(data) {
           var btn = {};
@@ -246,6 +247,7 @@ rsqAdapterManager.register({
           rsqChk(params.success, [btn]);
         },
         onFail: function(err) {
+          console.log('失败了')
           alert(JSON.stringify(err));
         }
       });

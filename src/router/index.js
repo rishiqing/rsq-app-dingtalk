@@ -3,6 +3,9 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
+import test from 'com/test'
+import test1 from 'com/test1'
+import draw from 'com/drawer'
 // import Init from 'com/Init'
 // import Upload from 'com/demo/Upload'
 // import SendConversation from 'com/demo/SendConversation'
@@ -35,6 +38,25 @@ const router = new Router({
     {
       path: '/',
       redirect: '/sche'
+      // redirect: '/draw'
+    },
+    {
+      path: '/draw',
+      name: 'SubTodoEdit',
+      component: draw,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/test1',
+      name: 'SubTodoEdit',
+      component: test1,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/test',
+      name: 'SubTodoEdit',
+      component: test,
+      meta: {requireAuth: true}
     },
     {
       path: '/sche',

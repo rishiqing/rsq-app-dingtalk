@@ -34,11 +34,16 @@
     },
     components: {},
     methods: {
+      isToday (day) {
+        console.log(this.todayValue === day.date.getTime())
+        return this.todayValue === day.date.getTime()
+      },
       dateText (day) {
         //  如果是当天，则显示“今”这个字
         return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
       },
       isHighLight (date) {
+//        console.log('进来isHighLight')
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
       },
       calDayClick (date) {
@@ -51,6 +56,10 @@
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
+  .todayColor{
+    background: rgba(50,150,250,0.29);
+    color:white
+  }
   .cal-bar {
     position: absolute;
     width: 100%;
