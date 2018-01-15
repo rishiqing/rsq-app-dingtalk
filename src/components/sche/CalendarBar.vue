@@ -72,7 +72,7 @@
     color: #FFFFFF;
     line-height: 12px;
   }
-  .cal-day-tag {position:absolute;top:5px;right: 23px;border-radius:50%;}
+  .cal-day-tag {position:absolute;top:5px;right: 0.66rem;border-radius:50%;}
   .tag-active {width:4px;height:4px;background:#30FFA8;}
   .cal-day {
     margin:0 auto;

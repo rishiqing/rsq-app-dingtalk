@@ -26,9 +26,16 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      env: 'dev',
       backendServer: config.dev.backendServer,
       authServer: config.dev.authServer,
       apiServer: config.dev.apiServer,
+      stsServer: config.dev.stsServer,
+      remindServer: config.dev.remindServer,
+      ossRegion: config.dev.aliOSS.region,
+      ossBucket: config.dev.aliOSS.bucket,
+      ossRoot: config.dev.aliOSS.root,
+      version: config.dev.version,
       filename: 'index.html',
       template: 'index.html',
       inject: true

@@ -39,7 +39,7 @@
     }
     input.mui-switch {
       display: block;
-      width: 52px;
+      width: 50px;
       height: 31px;
       border: 1px solid #dfdfdf;
       background-color: #fdfdfd;
@@ -56,7 +56,7 @@
     input.mui-switch:before {
       content: '';
       width: 29px;
-      height: 29px;
+      height: 30px;
       position: absolute;
       top: 0px;
       left: 0;
@@ -140,7 +140,10 @@
         autoEnd: true,
         isChecked: true,
         isAllDay: true,
-        clock: {}
+        clock: {
+          startTime: '',
+          endTime: ''
+        }
       }
     },
     computed: {
@@ -165,7 +168,6 @@
             if (!a.isUserDefined) {
               str = jsUtil.alertCode2Text(a.schedule)
             } else {
-              //  如何显示？
               str = jsUtil.alertCode2Text(a.schedule)
             }
             return str
@@ -181,8 +183,8 @@
        */
       initData () {
         //  检查pub区是否有缓存，有缓存则读缓存，否则从currentTodo上读取
-        var clock = this.todoTime.clock || this.currentTodo.clock
-        jsUtil.extendObject(this.clock, clock)
+        console.log('进来一次')
+        jsUtil.extendObject(this.clock, this.todoTime.clock)
         this.isAllDay = !this.clock.startTime
         this.isChecked = this.isAllDay
 
@@ -217,9 +219,11 @@
             this.clock.endTime = base.add(1, 'h').format('HH:mm')
           }
         }
+        console.log('autoChangeTime的clock是' + JSON.stringify(this.clock))
       },
       empty () {},
       toggleAllDay (e) {
+        console.log('toggleAllDay是' + JSON.stringify(this.clock))
         this.isAllDay = !this.isAllDay
         this.isChecked = this.isAllDay
       },
@@ -232,9 +236,13 @@
         window.rsqadmg.exec('timePicker', {
           strInit: that.clock.startTime,
           success (result) {
-            that.clock.startTime = result.value
-            that.autoStart = false
-            that.autoChangeTime()
+            if (result.value > that.clock.endTime) {
+              alert('开始时间不能晚于结束时间')
+            } else {
+              that.clock.startTime = result.value
+              that.autoStart = false
+              that.autoChangeTime()
+            }
           }
         })
       },
@@ -247,9 +255,13 @@
         window.rsqadmg.exec('timePicker', {
           strInit: that.clock.endTime,
           success (result) {
-            that.clock.endTime = result.value
-            that.autoEnd = false
-            that.autoChangeTime()
+            if (result.value < that.clock.startTime) {
+              alert('结束时间不能早于开始时间')
+            } else {
+              that.clock.endTime = result.value
+              that.autoEnd = false
+              that.autoChangeTime()
+            }
           }
         })
       },
@@ -262,10 +274,13 @@
         this.$router.push('/todoEdit/alert')
       },
       /**
-       * 检查是提醒时间是否遭遇当前时间
+       * 检查是提醒时间是否早于当前时间
        */
       checkWarn () {
-        if (!this.isAllDay && moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
+        if (!this.isAllDay &&
+          this.clockData.alert &&
+          this.clockData.alert.length > 0 &&
+          moment().isAfter(moment(this.clock.startTime, 'HH:mm'))) {
           return '提醒时间早于当前时间，可能不会收到提醒!'
         }
       },
@@ -275,7 +290,7 @@
        * currentTodo.id存在（更新）：比对localTodoTime和todoTime的每一项是否都一样
        */
       isModified () {
-        return !jsUtil.objectEqual(this.clockData, this.currentTodo.clock)
+        return !jsUtil.objectEqual(this.clockData, (this.currentTodo.clock || {}))
       },
       /**
        * 保存todoTime的状态到state中
@@ -283,28 +298,53 @@
       saveTodoTimeState () {
         this.$store.commit('PUB_TODO_TIME_SET', {data: {clock: this.clockData}})
       },
+      beforeSubmitTodo (next) {
+        if (this.isModified()) {
+          //  提交
+          var that = this
+          var warn = this.checkWarn()
+          if (warn) {
+            window.rsqadmg.exec('confirm', {
+              message: warn,
+              success () {
+                that.submitTodo(next)
+              },
+              cancel () {
+                next(false)
+              }
+            })
+          } else {
+            that.submitTodo(next)
+          }
+        } else {
+          next()
+        }
+      },
       /**
        * 提交todoTime的更新
        * @param next
        * @returns {Promise<U>|Promise.<TResult>|*|Thenable<U>}
        */
       submitTodo (next) {
-        if (this.isModified()) {
-          if (this.isEdit) {
-            window.rsqadmg.exec('showLoader')
-          }
-          return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
-            .then(() => {
-              this.$store.commit('PUB_TODO_TIME_DELETE')
-              if (this.isEdit) {
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '保存成功'})
-              }
-              next()
-            })
-        } else {
-          next()
+        if (this.isEdit) {
+          window.rsqadmg.exec('showLoader', {text: '保存中'})
         }
+        //  在有提醒的情况下返回值中居然不包括clock.alert的数据，需要前端组合传入
+        var clockObject = JSON.parse(JSON.stringify(this.clockData || {}))
+
+        return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
+          .then(item => {
+            jsUtil.extendObject(item.clock, clockObject)
+            return this.$store.dispatch('handleRemind', {item})
+          })
+          .then(() => {
+            this.$store.commit('PUB_TODO_TIME_DELETE')
+            if (this.isEdit) {
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '保存成功'})
+            }
+            next()
+          })
       }
     },
     created () {
@@ -327,23 +367,7 @@
       if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
         return next()
       }
-
-      //  提交
-      var that = this
-      var warn = this.checkWarn()
-      if (warn) {
-        window.rsqadmg.exec('confirm', {
-          message: warn,
-          success () {
-            that.submitTodo(next)
-          },
-          cancel () {
-            next(false)
-          }
-        })
-      } else {
-        that.submitTodo(next)
-      }
+      this.beforeSubmitTodo(next)
     }
   }
 </script>

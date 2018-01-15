@@ -5,6 +5,7 @@
       'auth', 'sign',
       'init',
       'log',
+      'disableBounce',
       'setTitle', 'setOptionButtons', 'selectDeptMember', 'selectMember',
       'alert',
       'confirm',
@@ -13,7 +14,8 @@
       'hideLoader',
       'actionsheet',
       'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
-      'notify'
+      'notify','pickConversation', 'getItem', 'setItem', 'deleteItem',
+      'checkVersion', 'upgradeVersion'
     ];
   function register(adapter){
     extend(mgrObj, adapter);
@@ -60,6 +62,19 @@
   };
 
   ajax.send = function (url, callback, method, data, async) {
+    //  callback可以为function, 也可以为Array
+    var empty = function () {};
+    var funSuccess = empty;
+    var funError = empty;
+    if (callback) {
+      if (typeof callback == 'function') {
+        funSuccess = callback;
+        funError = empty;
+      } else if (callback instanceof Array && callback.length > 1) {
+        funSuccess = callback[0];
+        funError = callback[1];
+      }
+    }
     if (async === undefined) {
       async = true;
     }
@@ -68,9 +83,9 @@
     x.onreadystatechange = function () {
       if (x.readyState == 4) {
         if(x.status == 200){
-          callback(x.responseText)
+          funSuccess(x.responseText)
         }else{
-          alert('http error:' + x.status);
+          funError({status: x.status})
         }
       }
     };

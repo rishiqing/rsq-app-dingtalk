@@ -31,6 +31,16 @@ import util from 'ut/jsUtil'
  */
 export default {
   /**
+   * 是否显示引导弹窗
+   * @param state
+   * @param p
+   * @constructor
+   */
+  SYS_GUIDE_SHOW (state, p) {
+    var show = p ? p.isShow : true
+    state.env.isShowGuide = show
+  },
+  /**
    * 登录后设置全局loginUser
    * @param state
    * @param p
@@ -109,6 +119,7 @@ export default {
    * @constructor
    */
   CHILDTASK_TODO_CREATED (state, p) {
+    console.log('现在的currentTodo是' + JSON.stringify(state.todo.currentTodo))
     state.todo.currentTodo.subTodos.unshift(p.item)
   },
   INB_TODO_CREATED (state, p) {
@@ -154,6 +165,15 @@ export default {
     delete state.dateTodosCache[p.strCurrentDate]
   },
   /**
+   * 清除所有缓存
+   * @param state
+   * @param p
+   * @constructor
+   */
+  SCH_TODO_CACHE_DELETE_ALL (state, p) {
+    state.dateTodosCache = {}
+  },
+  /**
    * 新建todo
    * @param state
    * @param p
@@ -195,6 +215,33 @@ export default {
   TD_CURRENT_TODO_SET (state, p) {
     state.todo.currentTodo = p.item
   },
+  TD_CURRENT_TODO_REPEAT_SET (state, p) {
+    var i = p.item
+    state.todo.currentTodoRepeat = {
+      id: i.id,
+      pTitle: i.pTitle,
+      pNote: i.pNote || null,
+      oldPTitle: i.pTitle,
+      oldPNote: i.pNote || null,
+      oldSubTodos: JSON.parse(JSON.stringify(i.subTodos || [])),
+      createTaskDate: 'not set',
+      type: 'not set'
+    }
+    state.todo.isRepeatFieldEdit = false
+  },
+  TD_CURRENT_TODO_REPEAT_EDITED (state, p) {
+    // console.log('进来了')
+    p = p || {}
+    state.todo.isRepeatFieldEdit = true
+    // console.log('p.pTitle')
+    if (p.pTitle) {
+      state.todo.currentTodoRepeat.pTitle = p.pTitle
+    }
+    if (p.pNote) {
+      state.todo.currentTodoRepeat.pNote = p.pNote
+    }
+    // console.log('执行完毕')
+  },
   /**
    * 更新当前的todo
    * @param state
@@ -222,7 +269,10 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
+    // console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
+    // console.log('p.todo是' + JSON.stringify(p.todo))
     util.extendObject(state.todo.currentTodo, p.todo)
+    // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos
@@ -245,6 +295,15 @@ export default {
     let index = items.indexOf(p.item)
     if (index > -1) {
       items.splice(index, 1)
+    }
+  },
+  TD_COMMENT_DELETE (state, p) {
+    let items = state.todo.currentTodo.comments
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+        break
+      }
     }
   },
   TD_SUBTODO_DELETE  (state, p) {
@@ -280,6 +339,15 @@ export default {
    */
   TD_DATE_HAS_TD_CACHE_DELETE (state, p) {
     delete state.dayHasTodoCache[p.numDate]
+  },
+  /**
+   * 清除所有日程是否含有todo的缓存
+   * @param state
+   * @param p
+   * @constructor
+   */
+  TD_DATE_HAS_TD_CACHE_DELETE_ALL (state, p) {
+    state.dayHasTodoCache = {}
   },
   /**
    * 新建评论
@@ -323,6 +391,9 @@ export default {
   },
   TD_DESP_CREATED (state, p) {
     state.todo.currentTodo.pNote = p.desp.pNote
+  },
+  REPLY_COMMENT_CREATED (state, p) {
+    state.replyId = p.item.authorId
+    state.replyName = p.item.authorName
   }
-  /* --------------------------------- */
 }

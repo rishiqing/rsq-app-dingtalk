@@ -3,9 +3,12 @@ export default {
    * 环境变量
    */
   env: {
+    version: {name: 'rsq-app-version', value: window.rsqConfig.version},
     //  是否在页面上添加nav元素，只有当页面添加了nav元素，且isShowNav为true的时候才会显示nav
     isAddNav: false,
-    isShowNav: false
+    isShowNav: false,
+    //  是否显示引导页
+    isShowGuide: false
   },
   /**
    * 默认字段设置
@@ -16,7 +19,8 @@ export default {
    */
   sys: {
     //  当前路由的路径
-    currentPath: ''
+    currentPath: '',
+    appId: window.rsqadmg.store.app.appid
   },
   /**
    * 当前登录的用户，基本结构如下：
@@ -55,11 +59,13 @@ export default {
   todo: {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
     currentTodo: {
-      subTodos: {
-      },
-      comments: {
-      }
-    }
+      subTodos: [],
+      comments: []
+    },
+    //  用于处理重复的任务修改时，需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
+    currentTodoRepeat: {},
+    //  重复相关的字段是否修改过，目前的条件是如果title/note/subTodos修改过，认为修改过
+    isRepeatFieldEdit: false
   },
   /**
    * 组件之间需要共享的临时数据
@@ -100,5 +106,7 @@ export default {
   /**
    * 每一天是否含有todo的cache，以date.getTime()的Number类型作为key值，true和false作为value值
    */
-  dayHasTodoCache: {}
+  dayHasTodoCache: {},
+  replyId: null,
+  replyName: null
 }

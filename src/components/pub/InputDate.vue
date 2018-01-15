@@ -1,11 +1,11 @@
 <template>
-  <div class="outer-date">
-    <v-touch class="" @tap="gotoDate">
+  <v-touch class="" @tap="gotoDate">
+    <div class="outer-date":class="{'hasPadding':newItem}">
       <span class="date">日期</span>
-      <span class="now">{{ dateString }}</span>
+      <span class="now" :class="{'edit-padding-left':editTime}">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
-    </v-touch>
-  </div>
+    </div>
+  </v-touch>
 </template>
 <style lang="" scoped>
   .outer-date{
@@ -14,26 +14,35 @@
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
     border-bottom:1px solid #E0E0E0;
-    border-top:1px solid #E0E0E0;
+    /*border-top:1px solid #E0E0E0;*/
     background-color: white;
+  }
+  .hasPadding{
+    padding-left: 3%;
   }
   .arrow{
     color: #999999;
     font-size: 21px;
     position: absolute;
-    top:0.38rem;
-    right: 0.3rem;
+    /*top:0.38rem;*/
+    top:50%;
+    margin-top: -0.25rem;
+    right: 0.2rem;
   }
   .now {
     position: absolute;
-    top:0.04rem;
+    /*top:0.04rem;*/
+    top:50%;
+    margin-top: -0.65rem;
     right: 0.94rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #999999;
     letter-spacing: 0;
+  }
+  .edit-padding-left{
+    left:1.3rem
   }
   .date{
     font-family: PingFangSC-Regular;
@@ -42,7 +51,6 @@
   }
   span{
     display: block;
-
   }
 </style>
 <script>
@@ -53,33 +61,45 @@
       return {}
     },
     props: {
+      disabled: Boolean,
       item: Object,
-      sep: String
+      sep: String,
+      editTime: Boolean,
+      newItem: Boolean
     },
     computed: {
       dateString () {
-        var t = this.item
-        if (!t.dates && !t.startDate && !t.endDate) {
-          return ''
-        }
-        var parsed = dateUtil.backend2frontend({
-          dates: t.dates,
-          startDate: t.startDate,
-          endDate: t.endDate,
-          repeatType: t.repeatType,
-          repeatBaseTime: t.repeatBaseTime
-        })
-        var result
-        if (parsed.dateType === 'repeat') {
-          result = dateUtil.repeatDayText(t.repeatType, t.repeatBaseTime.split(',')) + '重复'
+        if (this.item.pContainer === 'inbox') {
+          return '添至日程'
         } else {
-          result = dateUtil.formatDateDisplay(parsed.dateType, parsed.dateResult)
+          var result = dateUtil.repeatDate2Text(this.item)
+//          console.log(result.length)
+          if (result.length > 20) {
+            result = result.substring(0, 21)
+          }
+          var time = new Date()
+          var newTime = time.getMonth() + 1 + '月' + time.getDate() + '日'
+          return newTime === result ? '今天' : result
         }
-        return result
       }
     },
     methods: {
       gotoDate () {
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
+        //  将需要用到的属性设置到currentTodoDate中
+        var c = this.item
+        var obj = {
+          startDate: c.startDate || null,
+          endDate: c.endDate || null,
+          dates: c.dates || null,
+          repeatType: c.repeatType || null,
+          repeatBaseTime: c.repeatBaseTime || null,
+          isLastDate: c.isLastDate === undefined || false
+        }
+        this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')
 //        // 显示之前先将所有获得焦点的元素失去焦点
 //        if (document.activeElement) {

@@ -187,9 +187,8 @@ export default {
    * @param prop
    */
   extractProp (array, prop) {
-    return array.map(obj => {
-      return obj[prop]
-    })
+    return array.filter(obj => { return obj[prop] })
+      .map(obj => { return obj[prop] })
   },
   /**
    * 从map中提取出有value object 中的prop组成的数组
@@ -241,7 +240,6 @@ export default {
   objectEqual (obj1, obj2) {
     return JSON.stringify(obj1) === JSON.stringify(obj2)
   },
-
   /**
    * 提醒时将code值转换为text, code为形如“begin_-5_min”的字符串
    * @param code
@@ -259,6 +257,23 @@ export default {
     var numDir = num < 0 ? '前' : '后'
     var last = codeArr[2] === 'min' ? '分钟' : '小时'
     return pre + numDir + Math.abs(num) + last
+  },
+  alertCode2RemindText (code) {
+    var codeArr = code
+    if (typeof code === 'string') {
+      codeArr = code.split('_')
+    }
+    if (Number(codeArr[1]) === 0) {
+      return codeArr[0] === 'begin' ? '任务已经开始' : '任务已经结束'
+    }
+    var point = codeArr[0] === 'begin' ? '开始' : '结束'
+    var num = Number(codeArr[1])
+    var unit = codeArr[2] === 'min' ? '分钟' : '小时'
+    if (num < 0) {
+      return '任务还有' + Math.abs(num) + unit + point
+    } else {
+      return '任务已经' + point + Math.abs(num) + unit
+    }
   },
   /**
    * 将提醒的规则转换为具体的提醒时间
@@ -284,5 +299,58 @@ export default {
       num /= 60
     }
     return pre + '_' + num + '_' + unit
+  },
+  /**
+   * 将list中的元素去重
+   * @param list
+   */
+  unique (list) {
+    return list.filter((value, index, self) => {
+      return self.indexOf(value) === index
+    })
+  },
+  /**
+   * 将以B为单位的num转换为K，M或者G为单位
+   * @param num
+   */
+  formatUnit (num) {
+    if (num < 1000) {
+      return num + 'B'
+    } else if (num > 1000 && num < 1000000) {
+      return Math.ceil(num / 100) / 10 + 'K'
+    } else if (num > 1000000) {
+      return Math.ceil(num / 100000) / 10 + 'M'
+    }
+  },
+  SendConversationTime (item) {
+    var time = ''
+    if (item.clock !== null) {
+      time = item.clock.startTime + '-' + item.clock.endTime
+    } else {
+      time = '全天'
+    }
+    return time
+  },
+  SendConversationDate (item) {
+    var date = ''
+    if (item.startDate !== null) {
+      if (item.startDate === item.endDate) {
+        date = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+      } else {
+        var start = item.startDate.substring(5, 7) + '月' + item.startDate.substring(8, 10) + '日'
+        var end = item.endDate.substring(5, 7) + '月' + item.endDate.substring(8, 10) + '日'
+        date = start + '-' + end
+      }
+    } else {
+      var dateArray = item.dates.split(',')
+      // console.log(dateArray)
+      for (var i = 0; i < dateArray.length; i++) {
+        date += dateArray[i].substring(4, 6) + '月' + dateArray[i].substring(6, 8) + '日,'
+      }
+      if (date.length > 11) {
+        date = date.substring(0, 11) + '...'
+      }
+    }
+    return date
   }
 }

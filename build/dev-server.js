@@ -12,8 +12,8 @@ var ip = require('ip')
 var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
-var webpackConfig = process.env.NODE_ENV === 'testing'
-  ? require('./webpack.prod.conf')
+const webpackConfig = process.env.NODE_ENV === 'testing'
+  ? require('./webpack.release.conf.js')
   : require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
@@ -51,6 +51,12 @@ app.use(function(req, res, next) {
   next();
 });
 
+//  upload server
+app.post('/rsqddmdevapp/upload', function(req, res){
+  console.log(chalk.blue('>>>>receiving upload files'))
+  require('./dev-upload-server')(req,  res)
+})
+
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
@@ -74,7 +80,7 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://' + ip.address() + ':' + port + '/'
+var uri = 'http://' + ip.address('WLAN', 'ipv4') + ':' + port + '/'
 
 var _resolve
 var readyPromise = new Promise(resolve => {

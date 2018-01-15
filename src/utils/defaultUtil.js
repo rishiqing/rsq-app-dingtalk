@@ -1,9 +1,13 @@
+import dateUtil from 'ut/dateUtil'
 import store from '@/store'
 
 export default {
   defaultTodo () {
     var state = store.state
     var userId = state.loginUser ? state.loginUser.rsqUser.id : 0
+
+    var strDate = dateUtil.dateNum2Text(dateUtil.dateText2Num(state.schedule.strCurrentDate), '/')
+
     return {
       pTitle: '',
       pDisplayOrder: 0,
@@ -13,8 +17,8 @@ export default {
       pIsDone: false,
       pFinishedTime: null,
       pPlanedTime: '',
-      startDate: null,
-      endDate: null,
+      startDate: strDate,
+      endDate: strDate,
       dates: null,
       senderId: null,
       receiverIds: null,
@@ -36,5 +40,15 @@ export default {
       comments: [],
       noteFiles: []
     }
+  },
+  allDefaultTodo () {
+    var obj = this.defaultTodo()
+    obj['alwaysRepeat'] = true
+    obj['isCloseRepeat'] = true
+    obj['isLastDate'] = false
+    obj['repeatType'] = null
+    obj['repeatBaseTime'] = null
+    obj['repeatOverDate'] = ''
+    return obj
   }
 }

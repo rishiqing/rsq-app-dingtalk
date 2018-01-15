@@ -14,7 +14,7 @@
     </ul>
     <ul class="alert-list">
       <v-touch tag="li" @tap="selectAlert(alert)" v-for="(alert, index) in displayedTimeList" :key="index">
-        <span>{{parseTimeText(alert.numTime)}}-{{alert.selected}}</span>
+        <span>{{parseTimeText(alert.numTime)}}</span>
         <i class="icon2-selected finish" v-show="alert.selected"></i>
       </v-touch>
     </ul>
@@ -57,7 +57,7 @@
       background: #FFFFFF;
     }
     .top-ul {
-      margin-top:1.938rem;
+      margin-top:0.266rem;
     }
     .sec{
       margin-top: 0.373rem;
@@ -74,7 +74,7 @@
       padding:5px;
       line-height: 0.912rem;
       height: 0.912rem;
-      border-bottom: 0.5px solid #E3E3E3;
+      border-bottom: 1px solid #E3E3E3;
       font-family: PingFangSC-Regular;
       font-size: 17px;
       color: #3D3D3D;
@@ -83,7 +83,6 @@
       border:none;
     }
   }
-
 </style>
 <script>
   import jsUtil from 'ut/jsUtil'
@@ -96,7 +95,7 @@
         //  系统的提醒时间
         //  {cid: 0, schedule: 'begin_0_min', selected: false}
         displayedRuleList: [
-          {schedule: 'begin_0_min', selected: false},
+          {schedule: 'begin_0_hour', selected: false},
           {schedule: 'begin_-5_min', selected: false},
           {schedule: 'begin_-15_min', selected: false},
           {schedule: 'begin_-30_min', selected: false},
@@ -145,7 +144,10 @@
       },
       initRuleList () {
         var noAlert = true
+        console.log('initRuleList中的是sysRuleList' + JSON.stringify(this.sysRuleList))
+        console.log('initRuleList中的是displayedRuleList' + JSON.stringify(this.displayedRuleList))
         this.sysRuleList.forEach(remoteAlert => {
+          console.log('remoteAlert是' + JSON.stringify(remoteAlert))
           for (let i = 0; i < this.displayedRuleList.length; i++) {
             const localAlert = this.displayedRuleList[i]
             if (localAlert.schedule === remoteAlert.schedule) {
@@ -155,13 +157,17 @@
             }
           }
         })
+        console.log('initRuleList完之后displayedRuleList是' + JSON.stringify(this.displayedRuleList))
         this.noAlert = noAlert
       },
       initTimeList () {
         this.userRuleList.forEach(t => {
+          console.log('t是' + t)
           var obj = this.parseTimeObj(t)
+          console.log('解析后的t是' + obj)
           this.displayedTimeList.push(obj)
           this.selectAlert(obj)
+          console.log('改变选中状态后的t是' + obj)
         })
       },
       showTimePicker () {
@@ -170,12 +176,14 @@
 //        var obj = {numTime: this.getNumDateTime(time), selected: false}
 //        this.displayedTimeList.push(obj)
 //        this.selectAlert(obj)
+        var that = this
         window.rsqadmg.exec('timePicker', {
           strInit: moment().format('HH:mm'),
           success (result) {
-            var obj = {numTime: this.getNumDateTime(result.value), selected: false}
-            this.displayedTimeList.push(obj)
-            this.selectAlert(obj)
+            var obj = {numTime: that.getNumDateTime(result.value), selected: false}
+            that.displayedTimeList.push(obj)
+            that.selectAlert(obj)
+            console.log('selectAlert之后obj是' + obj)
           }
         })
       },
@@ -199,6 +207,7 @@
       },
       //  将'HH:mm'类型的时间根据baseDate转换成mills值
       getNumDateTime (time) {
+        console.log('拿到的时间格式是' + time)
         return moment(this.baseDate + ' ' + time, 'YYYYMMDD HH:mm').valueOf()
       },
       parseTimeObj (obj) {
@@ -226,38 +235,46 @@
             }
           })
       },
-      //  比对displayedRuleList与sysRuleList，计算最终的提醒列表
+      //  比对displayedRuleList与sysRuleList，计算最终的提醒列表,为什么不以displayedRuleList为标准？
       mergeRuleList () {
-        var selected = this.getSelected(this.displayedRuleList)
+        var selected = this.getSelected(this.displayedRuleList) // 这一步是拿到选中状态的list
         var result = []
-        //  执行merge算法
+        console.log('mergeRuleList中的selected是' + JSON.stringify(selected))
+        console.log('mergeRuleList中的displayedRuleList是' + JSON.stringify(this.displayedRuleList))
+        //  执行merge算法(selected本身就是和sysRuleList一致得把为什么还要filter,意思是后来又添加或者修改的selected？？？？？)
         selected.forEach(s => {
-          var orgObj = this.sysRuleList.find(org => {
+          var orgObjArray = this.sysRuleList.filter(org => {
             return org.schedule === s.schedule
           })
-          if (orgObj) {
-            result.push(orgObj)
+          console.log('mergeRuleList中的orgObjArray是' + orgObjArray)
+          if (orgObjArray.length > 0) {
+            result.push(orgObjArray[0])
           } else {
             result.push({
+              id: null,
               schedule: s.schedule,
               isUserDefined: false
             })
           }
         })
+        console.log('mergeRuleList中的result是' + result)
         return result
       },
       //  比对displayedTimeList与userRuleList，计算最终的提醒列表
       //  统一解析成时间来做判断是否相等
       mergeTimeList () {
+        console.log('拿到的displayedTimeList是' + JSON.stringify(this.displayedTimeList))
         var selected = this.getSelected(this.displayedTimeList)
+        console.log('拿到的selected是' + JSON.stringify(selected))
         var result = []
         //  执行merge算法
         selected.forEach(s => {
-          var orgObj = this.userRuleList.find(org => {
+          var orgObjArray = this.userRuleList.filter(org => {
             return s.numTime === jsUtil.alertRule2Time(org.schedule, this.numStartTime, this.numEndTime)
           })
-          if (orgObj) {
-            result.push(orgObj)
+          console.log('mergeTimeList中的orgObjArray是' + orgObjArray)
+          if (orgObjArray.length > 0) {
+            result.push(orgObjArray[0])
           } else {
             result.push({
               schedule: jsUtil.alertTime2Rule(s.numTime, this.numStartTime, this.numEndTime),
@@ -265,6 +282,7 @@
             })
           }
         })
+        console.log('mergeTimeList中的result是' + result)
         return result
       },
       mergeList () {

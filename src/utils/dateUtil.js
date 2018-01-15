@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export default {
   /**
    * date的周次偏移offset之后所在周的第一天，offset为0或者不传值表示当前周
@@ -162,9 +164,9 @@ export default {
    * repeatParams.repeatBaseTime
    * 返回值如下：
    */
-  backend2frontend ({dates, startDate, endDate, repeatType, repeatBaseTime}) {
+  backend2frontend ({dates, startDate, endDate, isCloseRepeat, repeatType, repeatBaseTime}) {
     var type, arr
-    if (repeatType) {
+    if (!isCloseRepeat && repeatType) {
       type = 'repeat'
       arr = repeatBaseTime.split(',').map(this.dateText2Num)
     } else if (dates) {
@@ -189,7 +191,7 @@ export default {
       dateType: type,
       repeatType: repeatType,
       dateResult: arr,
-      currentDate: arr ? new Date(arr[0]) : null  //  实际上是起始日期
+      currentDate: arr ? new Date(arr[0]) : null
     }
   },
   /**
@@ -221,7 +223,7 @@ export default {
    * 转换方法，将前台的type/selectDateArray的格式转换为后台的dates/itemStartDate/itemEndDate格式
    */
   frontend2backend ({dateType, dateResult, repeatType, sep}) {
-    if (dateResult.length === 0) {
+    if (dateType === 'none' || dateResult.length === 0) {
       dateType = ''
     }
     sep = sep || '/'
@@ -305,5 +307,81 @@ export default {
         break
     }
     return text
+  },
+  /**
+   * 将重复及日期转换为显示的文字
+   * @param t
+   */
+  repeatDate2Text (t) {
+    if (!t.dates && !t.startDate && !t.endDate) {
+      return ''
+    }
+    var parsed = this.backend2frontend({
+      dates: t.dates,
+      startDate: t.startDate,
+      endDate: t.endDate,
+      isCloseRepeat: t.isCloseRepeat,
+      repeatType: t.repeatType,
+      repeatBaseTime: t.repeatBaseTime
+    })
+    var result
+    if (parsed.dateType === 'repeat') {
+      result = this.repeatDayText(t.repeatType, t.repeatBaseTime.split(','))
+      if (t.isLastDate) {
+        result += ',最后一天'
+      }
+      result += '重复'
+    } else {
+      result = this.formatDateDisplay(parsed.dateType, parsed.dateResult)
+    }
+    return result
+  },
+  /**
+   * 获取延期日期的方法，由大磊哥帮助提供
+   * @param model
+   * @param atDate
+   * @param inWindow
+   * @returns {*}
+   */
+  getDelayDays (model, atDate, inWindow) { // YYYYMMDD
+    const dates = model['dates']
+    const today = moment().format('YYYYMMDD')
+    const fd = model['pFinishedTime'] ? moment(model['pFinishedTime'], 'YYYY-MM-DD').format('YYYYMMDD') : null
+    let endDate = model['endDate']
+    if (model['isRepeatTodo']) {
+      return false
+    }
+    if (!model['pIsDone']) {
+      if (atDate !== today) {
+        return false
+      }
+    } else {
+      if (!inWindow) {
+        return false
+      }
+    }
+    if (dates) { // 离散日期
+      const args = dates.split(',')
+      const lastDateStr = args[args.length - 1]
+      endDate = moment(lastDateStr, 'YYYY/MM/DD').format('YYYYMMDD')
+    } else {
+      endDate = endDate ? moment(endDate, 'YYYY-MM-DD').format('YYYYMMDD') : null
+    }
+    if (!endDate) {
+      return false
+    }
+    if (!model['pIsDone']) {
+      if (endDate < today) {
+        return moment(today, 'YYYYMMDD').diff(moment(endDate, 'YYYYMMDD'), 'days')
+      } else {
+        return false
+      }
+    } else {
+      if (endDate < fd) {
+        return moment(fd, 'YYYYMMDD').diff(moment(endDate, 'YYYYMMDD'), 'days')
+      } else {
+        return false
+      }
+    }
   }
 }

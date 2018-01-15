@@ -1,49 +1,129 @@
 <template>
-  <div class="outer">
-    <v-touch class="" @tap="showMemberEdit">
+  <div class="outer" :class="{'hasPadding':newTime}">
+    <v-touch class="touch-memmber" @tap="showMemberEdit">
       <div class="execute">
         {{indexTitle}}
       </div>
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
-        <!--<div v-for="item in localList">{{item.avatar}}</div>-->
-        <!--<img class="itm-icon-img" v-for="item in selectedLocalList" track-by="rsqUserId" :src="item.avatar" />-->
-        <div class="itm-icon-img-wrap">
-          <avatar v-for="item in selectedLocalList"
-                  :key="item.rsqUserId"
-                  :src="item.avatar"
-                  :username="item.name"></avatar>
+        <div v-if="newTime === true">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left-less-three':newMemberlessThree,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <avatar v-for="item in selectedLocalList"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name"></avatar>
+          </div>
+          <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          <i class="icon2-arrow-right-small arrow"></i>
         </div>
-        <span class="people">{{selectedLocalList.length}}人</span>
-        <i class="icon2-arrow-right-small arrow"></i>
+        <div v-else="">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <div class="wrap-member">
+              {{nameConcat}}
+            </div>
+            <span :class="{'people':newTime,'people-left':editTime}">{{selectedLocalList.length}}人</span>
+          </div>
+          <i class="icon2-arrow-right-small arrow"></i>
+        </div>
       </div>
       <div class="" v-else>
-        <div class="itm-icon-img-wrap" v-if="selectedLocalList.length>3">
-          <avatar v-for="item in selectedItems"
-                  :key="item.rsqUserId"
-                  :src="item.avatar"
-                  :username="item.name">
-          </avatar>
+        <div v-if="newTime === true">
+          <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left-more-three':newMemberMoreThree,'itm-icon-img-wrap-right': newTime,'itm-icon-img-wrap-left':editTime}" v-if="selectedLocalList.length>3">
+            <avatar v-for="item in selectedItems"
+                    :key="item.rsqUserId"
+                    :src="item.avatar"
+                    :username="item.name">
+            </avatar>
+          </div>
+          <span :class="{'people':newTime,'people-left':editTime}">等{{selectedLocalList.length}}人</span>
+          <i class="icon2-arrow-right-small arrow"></i>
         </div>
-        <span class="people">{{selectedLocalList.length}}人</span>
-        <i class="icon2-arrow-right-small arrow"></i>
+        <div v-else="">
+          <div class="itm-icon-img-wrap" :class="{'edit-padding-left':editTime,'new-padding-left':newTime,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
+            <div class="wrap-member">
+              {{nameConcat}}
+            </div>
+            <span :class="{'people':newTime,'people-left':editTime}">等{{selectedLocalList.length}}人</span>
+          </div>
+          <i class="icon2-arrow-right-small arrow"></i>
+        </div>
       </div>
     </v-touch>
   </div>
 </template>
 <style scoped>
+  .itm-icon-img-wrap-new>*{
+    float: right;
+    margin-right: 0.15rem;
+  }
+  .itm-icon-img-wrap-new{
+    width: 2.5rem;
+  }
+  .touch-memmber{
+    display: flex;
+    align-items: center;
+  }
+  .wrap-member{
+    max-width: 5.4rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height:1.3rem;
+    margin-left: 0.2rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #999999;
+  }
+  .select-member{
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 17px;*/
+    /*color: #999999;*/
+    letter-spacing: 0;
+    display: block;
+    /*margin-left: 2px;*/
+    /*float: left;*/
+  }
   .execute{
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
     letter-spacing: 0;
   }
+  .new-padding-left-more-three{
+    /*left:5.3rem*/
+    margin-left:3.7rem
+  }
+  .new-padding-left-less-three{
+    /*left:5.3rem*/
+    margin-left:4.2rem
+  }
+  .edit-padding-left{
+    /*margin-left:1.8rem*/
+  }
+  .edit-padding-left-count{
+    margin-left:4.4rem
+  }
+  /*.new-padding-left-count{*/
+    /*right:0.94rem;*/
+  /*}*/
+  .people-left{
+    float: left;
+    /* position: absolute; */
+    display: inline-block;
+    margin-left: 0;
+    color:#999999;
+    margin-right: 0.156rem;
+    /* top: 0.05rem; */
+    /*margin-top: -0.3rem;*/
+  }
   .outer{
     border-bottom: 1px solid #E0E0E0;
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    padding-left:3% ;
     background-color: white;
+  }
+  .hasPadding{
+    padding-left:3% ;
   }
   .people{
     position:absolute;
@@ -68,7 +148,7 @@
     font-size: 21px;
     position: absolute;
     top:0.38rem;
-    right: 0.3rem;
+    right: 0.2rem;
   }
 </style>
 <script>
@@ -86,12 +166,15 @@
       }
     },
     props: {
+      disabled: Boolean,
       isNative: Boolean,  //  是否使用钉钉应用本地的选择框
       indexTitle: String,
       selectTitle: String,
       userRsqIds: Array,    //  可选人
       selectedRsqIds: Array,  //  当前选中的人
-      disabledRsqIds: Array   //  不可选的人
+      disabledRsqIds: Array,   //  不可选的人
+      newTime: Boolean,
+      editTime: Boolean
     },
     computed: {
       loginUser () {
@@ -99,6 +182,20 @@
       },
       selectedItems () {
         return this.selectedLocalList.slice(this.selectedLocalList.length - 3)
+      },
+      nameConcat () {
+        return this.selectedLocalList.map(function (o) {
+          return o.name
+        }).join('、')
+      },
+      memberCount () {
+        return this.selectedLocalList.length <= 3
+      },
+      newMemberlessThree () {
+        return this.newTime && this.memberCount
+      },
+      newMemberMoreThree () {
+        return this.newTime && !this.memberCount
       }
     },
     watch: {
@@ -117,13 +214,20 @@
     },
     methods: {
       showMemberEdit (e) {
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {
         var that = this
         var corpId = that.loginUser.authUser.corpId
+//        console.log('提取之前内容是' + JSON.stringify(this.selectedLocalList))
         var selectedArray = util.extractProp(this.selectedLocalList, 'userId')
+//        console.log('提取之后内容是' + (selectedArray))
         var disabledArray = util.extractProp(this.disabledLocalList, 'userId')
+//        console.log('提取之后禁止内容是' + (selectedArray))
         window.rsqadmg.exec('selectDeptMember', {
           btnText: '确定',  //  选择器按钮文本，pc端需要的参数
           multiple: true, //  默认false，选择单人
@@ -138,13 +242,15 @@
             if (res.length === 0) {
               return this.$emit('member-changed', [])
             }
-
+//            console.log('返回来的res是' + JSON.stringify(res))
             var idArray = util.extractProp(res, 'emplId')
+//            console.log('返回来的idarray是' + idArray)
             window.rsqadmg.exec('showLoader')
             that.$store.dispatch('fetchRsqidFromUserid', {corpId: corpId, idArray: idArray})
                 .then(function (idMap) {
                   window.rsqadmg.exec('hideLoader')
                   var userArray = util.getMapValuePropArray(idMap)
+//                  console.log('userId是' + JSON.stringify(userArray))
                   var rsqIdArray = util.extractProp(userArray, 'rsqUserId')
                   that.$emit('member-changed', rsqIdArray)
                 })
@@ -180,14 +286,17 @@
           return Promise.resolve()
         }
         var corpId = this.loginUser.authUser.corpId
-        window.rsqadmg.exec('showLoader')
+        //  暂时去掉loader
+//        window.rsqadmg.exec('showLoader')
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
             this[targetListName] = util.getMapValuePropArray(idMap)
-            window.rsqadmg.exec('hideLoader')
+//            window.rsqadmg.exec('hideLoader')
           })
       }
     },
-    mounted () {}
+    mounted () {
+//      console.log('传进来的selectedRsqIds' + this.selectedRsqIds)
+    }
   }
 </script>

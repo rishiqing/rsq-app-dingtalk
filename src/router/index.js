@@ -3,8 +3,11 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
-import Init from 'com/Init'
-import Demo from 'com/demo'
+// import Init from 'com/Init'
+// import Upload from 'com/demo/Upload'
+// import SendConversation from 'com/demo/SendConversation'
+// import Scroll from 'com/demo/Scroll'
+// import CalendarDemo from 'com/demo/CalendarDemo'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -18,7 +21,13 @@ import TodoEditRepeat from 'com/pub/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 import desp from 'com/pub/desp'
+import Explain from 'com/pub/Explain'
 import CreateSubTodo from 'com/pub/CreateSubTodo'
+import RemindWindow from 'com/pub/RemindWindow'
+import NoPermission from 'com/pub/NoPermission'
+import CheckFailure from 'com/pub/CheckFailure'
+import pcEnd from 'com/me/pcEnd'
+// import test from 'com/demo/test'
 Vue.use(Router)
 
 const router = new Router({
@@ -31,18 +40,64 @@ const router = new Router({
       path: '/sche',
       name: 'sche',
       component: Sche,
+      meta: {requireAuth: true},
+      beforeEnter: (to, from, next) => {
+        // window.rsqadmg.exec('removeItem', store.state.env.version)
+        window.rsqadmg.exec('getItem', {
+          name: store.state.env.version.name,
+          success (p) {
+            var localVersion = Number(p.value)
+            var currentVersion = Number(window.rsqConfig.version)
+            //  副版本更新时才显示
+            if (isNaN(localVersion) || currentVersion - localVersion >= 1000) {
+              //  显示引导页
+              store.commit('SYS_GUIDE_SHOW')
+            }
+            next()
+          }
+        })
+      }
+    },
+    {
+      path: '/pub/noPermission',
+      name: 'noPermission',
+      component: NoPermission,
+      meta: {requireAuth: true}
+    },
+    // {
+    //   path: '/demo/test',
+    //   name: 'test',
+    //   component: test,
+    //   meta: {requireAuth: true}
+    // },
+    {
+      path: '/me/pcEnd',
+      name: 'pcEnd',
+      component: pcEnd,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/CheckFailure',
+      name: 'CheckFailure',
+      component: CheckFailure,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/RemindWindow',
+      name: 'RemindWindow',
+      component: RemindWindow,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/explain',
+      name: 'explain',
+      component: Explain,
       meta: {requireAuth: true}
     },
     {
       path: '/pub/coment',
       name: 'coment',
       component: coment,
-      meta: {requireAuth: true}
-    },
-    {
-      path: '/demo',
-      name: 'demo',
-      component: Demo,
       meta: {requireAuth: true}
     },
     {
@@ -122,19 +177,37 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
-    },
-    {
-      //  用来测试
-      path: '/demo',
-      name: 'demo',
-      component: Demo
-    },
-    {
-      //  用来测试
-      path: '/init',
-      name: 'init',
-      component: Init
     }
+    // {
+    //   //  用来测试
+    //   path: '/init',
+    //   name: 'init',
+    //   component: Init
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/upload',
+    //   name: 'upload',
+    //   component: Upload
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/sendConversation',
+    //   name: 'sendConversation',
+    //   component: SendConversation
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/scroll',
+    //   name: 'scroll',
+    //   component: Scroll
+    // },
+    // {
+    //   //  用来测试
+    //   path: '/calendar',
+    //   name: 'calendar',
+    //   component: CalendarDemo
+    // }
   ]
 })
 

@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul :class="{'itemList':itemcount}" class="sche-list">
     <r-todo-item
         v-for="item in items"
         :item="item"
@@ -11,15 +11,21 @@
   </ul>
 </template>
 <style lang="scss" scoped>
-  ul{
+  .sche-list{
     background-color: white;
-    border-bottom:1px solid #DADADA ;
+    /*border-bottom:1px solid #E0E0E0 ;*/
     border-top:1px solid #DADADA ;
     padding-left: 3%;
+    max-height: 15rem;
+    overflow: auto;
+    /*margin-top: 45px;*/
   }
-  li:last-child{
-    border-bottom: none;
+  .itemList{
+    /*padding-bottom:1.306rem;*/
   }
+  /*li:last-child{*/
+    /*border-bottom: none;*/
+  /*}*/
 </style>
 <script>
   import TodoItem from 'com/sche/TodoItem'
@@ -32,6 +38,11 @@
     props: {
       items: Array,
       isCheckable: Boolean    //  是否显示完成复选框
+    },
+    computed: {
+      itemcount () {
+        return this.items.length >= 8 && this.isCheckable
+      }
     },
     components: {
       'r-todo-item': TodoItem
@@ -46,7 +57,6 @@
             .then(function () {
               this.$store.dispatch('saveTodoAction', {editItem: {status: status}})
                 .then(() => {
-                  console.log('saveTodoAction走完了')
                 })
             })
       }

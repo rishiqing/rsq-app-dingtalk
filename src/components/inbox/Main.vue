@@ -1,15 +1,20 @@
 <template>
   <div class="">
+    <div class="topest"></div>
+    <div class="wrap">
       <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
         <input value="创建" class="create"/>
       </v-touch>
+    </div>
     <div class="margin-block"></div>
-    <r-todo-item-list
-      :items="items"
-      :is-checkable="false"
-      v-if="items != null && items.length > 0"
-    ></r-todo-item-list>
+    <div class="InboxItem">
+      <r-todo-item-list
+        :items="items"
+        :is-checkable="false"
+        v-if="items != null && items.length > 0"
+      ></r-todo-item-list>
+    </div>
   </div>
 </template>
 <script>
@@ -53,40 +58,80 @@
   }
 </script>
 <style scoped>
-  input::-webkit-input-placeholder { /* WebKit browsers */
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    color: #999999;
-    line-height: 22px;
+  .wrap{
+    position: fixed;
+    height: 1.45rem;
+    width: 100%;
+    top: 10px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  /*input::-webkit-input-placeholder { !* WebKit browsers *!*/
+    /*font-family: PingFangSC-Regular;*/
+    /*font-size: 0.453rem;*/
+    /*color: #999999;*/
+    /*line-height:normal;*/
+    /*height: 1.612rem;*/
+  /*}*/
+  .topest{
+    background-color: #F8F8F8;
+    height: 10px;
+    z-index: 2;
+    position: fixed;
+    width: 100%;
   }
   .create{
+    -webkit-appearance: none;
     display: block;
     text-align: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
-    height: 0.666rem;
-    line-height: 0.76rem;
+    /*height: 0.666rem;*/
+    line-height: 0.66rem;
+    display: flex;
+    align-items: center;
     width:1.413rem;
     font-size: 15px;
     color:#55A8FD;
-    position: fixed;
-    top:1rem;
+    position: absolute;
+    margin-top:-0.4rem;
+    top: 50%;
     right:0.35rem;
-    z-index: 2;
+    /*margin-top: -1.34rem;*/
+    /*margin-right:0.4rem;*/
+    /*float: right;*/
+    z-index: 3;
   }
   .write{
-    height:1.226rem;
-    position: fixed;
-    background: #FFFFFF;
+    line-height: 0.612rem;
+    padding-bottom: 0.4rem;
+    padding-top: 0.4rem;
     border-bottom:1px solid #E3E3E3;
     border-top:1px solid #E3E3E3;
-    margin-top: 0.574rem;
+    /*position: fixed;*/
+    /*top:10px;*/
+    background: #FFFFFF;
     padding-left:0.3rem;
+    padding-right: 2.432rem;
     margin-bottom: 0.224rem;
-    z-index: 1;
+    z-index: 2;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    border-radius: 0;
+  }
+  .write::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: PingFangSC-Regular;
+    font-size: 0.453rem;
+    color: #999999;
+    /*line-height:normal;*/
+    height: 1.4rem;
   }
   .margin-block {
-    height: 83px;
+    height: 1.9rem;
+    z-index: 1;
   }
   .input-panel {
     position: fixed;

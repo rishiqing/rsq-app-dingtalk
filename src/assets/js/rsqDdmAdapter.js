@@ -50,6 +50,9 @@ function deleteCookie(name)
   if(cval!=null)
     document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }
+function makeToken(corpId, userId){
+  return corpId + '--' + userId
+}
 rsqadmg.store = {
   app: getJsonFromUrl()
 };
@@ -74,16 +77,19 @@ rsqAdapterManager.register({
             success: function(authUser){
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
-              rsqAdapterManager.ajax.post(rsqConfig.apiServer + 'task/j_spring_security_check', {
-                j_username: authUser.rsqUsername, j_password: authUser.rsqPassword, _spring_security_remember_me: true
-              }, function(result){
+              var token = makeToken(authUser.corpId, authUser.userId);
+              rsqAdapterManager.ajax.get(rsqConfig.apiServer + 'task/dingtalkOauth/tokenLogin', {
+                token: token
+              }, [function(result){
                 var resJson = JSON.parse(result);
                 if(resJson.success){
                   rsqChk(params.success, [resJson, authUser]);
                 }else{
                   rsqChk(params.error, [resJson]);
                 }
-              });
+              }, function(err){
+                rsqChk(params.error, [err]);
+              }]);
             },
             error: function(authResult){
               rsqChk(params.error, [authResult]);
@@ -105,8 +111,10 @@ rsqAdapterManager.register({
       var resJson = JSON.parse(resSign);
       rsqChk(params.success, [resJson]);
     });
+    // rsqChk(params.success, [{}]);
   },
   init: function(params){
+    // rsqChk(params.success, [{rsqUsername: 'KGcPR_1484054002748@dingtalk.rishiqing.com', rsqPassword: 'YcCTVA'}]);
     dd.config({
       "agentId": params.agentId,
       "corpId": rsqadmg.store.app.corpid,
@@ -317,6 +325,7 @@ rsqAdapterManager.register({
   showLoader: function(params){
     params = params || {};
     var text = params.text || '';
+    console.log(text)
     dd.device.notification.showPreloader({
       text: text, //loading显示的字符，空表示不显示文字
       showIcon: true, //是否显示icon，默认true
@@ -391,7 +400,7 @@ rsqAdapterManager.register({
   },
   selectDeptMember: function(params){
     dd.biz.contact.choose({
-      startWithDepartmentId: -1, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
+      startWithDepartmentId: 0, //-1表示打开的通讯录从自己所在部门开始展示, 0表示从企业最上层开始，(其他数字表示从该部门开始:暂时不支持)
       multiple: params.multiple, //是否多选： true多选 false单选； 默认true
       users: params.selectedIds, //默认选中的用户列表，userid；成功回调中应包含该信息
       disabledUsers:params.disabledIds || [],//['10001', '10002', ...],// 不能选中的用户列表，员工userid
@@ -505,9 +514,86 @@ rsqAdapterManager.register({
       }
     })
   },
+  disableBounce: function(){
+    //  去掉iOS的回弹效果
+    dd.ui.webViewBounce.disable();
+  },
   /**
    * 钉钉中发Ding
    * @param params
    */
-  notify: function(params) {}
+  notify: function(params) {
+    dd.biz.ding.post({
+      users: params.userIds, // 用户列表，工号
+      corpId: params.corpId, // 企业id
+      type: 2, // 钉类型 1：image  2：link
+      alertType: 2,
+      alertDate: {'format': 'yyyy-MM-dd HH:mm', 'value': params.alertTime},
+      attachment: {
+        title: '',
+        url: '',
+        image: '',
+        text: ''
+      },
+      text: params.title, // 消息
+      onSuccess: function () {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {}
+    })
+  },
+  /**
+   * 发送到聊天
+   * @param prams
+   */
+  pickConversation: function(params) {
+    dd.biz.chat.pickConversation({
+      corpId: params.corpId, // 企业id
+      isConfirm: 'true', // 是否弹出确认窗口，默认为true
+      onSuccess: function (res) {
+        rsqChk(params.success, [res]);
+      },
+      onFail: function () {
+      }
+    })
+  },
+  /**
+   * 从localStorage中获取值
+   * @param params
+   */
+  getItem: function(params) {
+    //  检查是否存在version信息，version信息以整数为准，初始值为1
+    dd.util.domainStorage.getItem({
+      name: params.name , // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  setItem: function(params) {
+    dd.util.domainStorage.setItem({
+      name: params.name, // 存储信息的key值
+      value: params.value, // 存储信息的Value值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
+  removeItem: function(params) {
+    dd.util.domainStorage.removeItem({
+      name: params.name, // 存储信息的key值
+      onSuccess : function(info) {
+        rsqChk(params.success, [info]);
+      },
+      onFail : function(err) {
+        alert(JSON.stringify(err));
+      }
+    });
+  },
 })

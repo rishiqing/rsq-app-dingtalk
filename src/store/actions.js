@@ -105,13 +105,13 @@ export default {
    * @param state
    * @param strDate
    */
-  fetchScheduleItems ({commit, state}, {strDate}) {
+  fetchScheduleItems ({commit, state}, {strDate, sync}) {
     if (strDate instanceof Date) {
       strDate = moment(strDate).format('YYYY-MM-DD')
     }
     let strCurrentDate = strDate || moment().format('YYYY-MM-DD')
     let dateItems = state.dateTodosCache
-    if (dateItems[strCurrentDate]) {
+    if (!sync && dateItems[strCurrentDate]) {
       return Promise.resolve().then(() => {
         commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: dateItems[strCurrentDate]})
       })
@@ -119,6 +119,11 @@ export default {
       return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
         .then(todos => {
           let reverseTodo = todos.reverse()
+          //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
+          var compareDate = moment(strDate).format('YYYYMMDD')
+          reverseTodo = reverseTodo.filter(t => {
+            return t.deletedDate !== compareDate
+          })
           commit('SCH_TODO_READY', {strCurrentDate: strCurrentDate, items: reverseTodo})
           commit('SCH_TODO_CACHED', {strCurrentDate: strCurrentDate, items: reverseTodo})
         })
@@ -154,8 +159,7 @@ export default {
     var newItem = p.newItem
 
     newItem['pContainer'] = 'IE'
-    // return
-    var dateStruct = dateUtil.backend2frontend({dates: newItem.dates, startDate: newItem.startDate, endDate: newItem.endDate})
+    var dateStruct = dateUtil.backend2frontend(newItem)
     p['dateStruct'] = dateStruct
     switch (dateStruct.dateType) {
       case 'single':
@@ -180,8 +184,11 @@ export default {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
           .then(item => {
-            //  TODO  根据重复来让cache中某个缓存的日程列表失效
+            //  TODO  让所有缓存都失效，暂时这么处理
+            commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+            commit('SCH_TODO_CACHE_DELETE_ALL')
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -200,6 +207,7 @@ export default {
    */
   createSingleScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
+    console.log('strdate是' + strDate)
     var itemCache = state.dateTodosCache
     //  读取顺序号
     return dispatch('fetchScheduleItems', {strDate})
@@ -208,6 +216,7 @@ export default {
         return api.todo.postNewTodo(newItem)
           .then(item => {
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -240,11 +249,13 @@ export default {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
         return api.todo.postNewTodo(newItem)
           .then(item => {
+            console.log('createDiscreteScheduleItem的item是' + item)
             //  清除缓存，强制从服务器获取数据
             dateStruct.dateResult.forEach(valDate => {
               commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: valDate})
               return commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(valDate).format('YYYY-MM-DD')})
             })
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -275,6 +286,8 @@ export default {
               commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: i})
               commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: moment(i).format('YYYY-MM-DD')})
             }
+            console.log('createRangeScheduleItem的item是' + item)
+            return item
           })
       }).catch(err => {
         alert(JSON.stringify(err))
@@ -297,8 +310,10 @@ export default {
       })
   },
   submitSubTodoFinish ({commit}, p) {
-    return api.todo.putSubTodoProps({id: p.item.id, pIsDone: p.status})
-      .then(() => {
+    // console.log('p,status是' + p.status)
+    return api.todo.putSubTodoProps({id: p.item.id, isDone: p.status})
+      .then((item) => {
+        // console.log('和后台拿数据回来' + JSON.stringify(item))
         commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
       })
   },
@@ -310,6 +325,8 @@ export default {
    */
   setCurrentTodo ({commit}, item) {
     commit('TD_CURRENT_TODO_SET', {item: item})
+    //  鉴于重复功能的需要，如果item是重复的日程，这里需要暂存重复的原始值
+    commit('TD_CURRENT_TODO_REPEAT_SET', {item})
   },
   updateCurrentTodo ({ commit }, item) {
     commit('TD_CURRENT_TODO_UPDATE', {item})
@@ -333,6 +350,10 @@ export default {
         .then(result => {
           result.cDetail = true
           commit('TD_TODO_GET', {todo: result})
+          //  如果currentTodo不存在，那么设置currentTodo为getTodo得到的item
+          if (!state.todo.currentTodo.id) {
+            commit('TD_CURRENT_TODO_SET', {item: result})
+          }
           return result
         })
     } else {
@@ -359,26 +380,20 @@ export default {
    * @param p.editItem
    * @returns {*}
    */
-  updateTodoDate ({commit, state, dispatch}, p) {
-    // console.log('updateTodoDate进来了')
+  updateTodoDate ({commit, state, dispatch, getters}, p) {
     var todo = p.todo || state.todo.currentTodo
     var editItem = p.editItem
-    //  如果日期均为空，则容器为收纳箱
-    if (editItem.startDate == null &&
-      editItem.endDate == null &&
-      editItem.dates == null) {
-      editItem['pContainer'] = 'inbox'
-    }
+    editItem.createTaskDate = todo.createTaskDate || getters.defaultTaskDate
+
     var promise
     if (todo.id) {
       //  如果id存在，则ajax更新
       editItem['id'] = todo.id
-      console.log('=@_@===editItem===#_#=' + JSON.stringify(editItem))
       promise = api.todo.putTodoProps(editItem)
         .then(resTodo => {
           //  处理缓存数据
-          var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
-          var targetDateStruct = dateUtil.backend2frontend({dates: editItem.dates, startDate: editItem.startDate, endDate: editItem.endDate})
+          var sourceDateStruct = dateUtil.backend2frontend(todo)
+          var targetDateStruct = dateUtil.backend2frontend(editItem)
           var curArrayIndex = todo.pContainer === 'inbox'
             ? 0
             : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
@@ -386,9 +401,8 @@ export default {
           if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
             commit('TD_TODO_DELETED', {item: todo})
           }
-          dispatch('invalidateDateItems', {targetDateStruct, curArrayIndex})
-          dispatch('invalidateDateItems', {sourceDateStruct, curArrayIndex})
-
+          dispatch('invalidateDateItems', {dateStruct: targetDateStruct, exceptDateNum: curArrayIndex})
+          dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
           commit('TD_TODO_UPDATED', {todo: resTodo})
         })
     } else {
@@ -417,7 +431,6 @@ export default {
     switch (dateStruct.dateType) {
       case 'single':
       case 'discrete':
-        // console.log('----------')
         dateStruct.dateResult.forEach(timeNum => {
           if (timeNum !== exceptDateNum) {
             commit('SCH_TODO_CACHE_DELETE', {strCurrentDate: dateUtil.dateNum2Text(timeNum, '-')})
@@ -432,12 +445,17 @@ export default {
           commit('TD_DATE_HAS_TD_CACHE_DELETE', {numDate: String(i)})
         }
         break
+      case 'repeat':
+        //  如果更新的是重复，暂时让所有的缓存失效
+        commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+        commit('SCH_TODO_CACHE_DELETE_ALL')
+        break
       default:
         break
     }
   },
   /**
-   * 提交当前选中的item的属性数据到服务器，以进行更改
+   * 提交当前选中的item的属性数据到服务器，以进行更改,更改标题更改执行人更改完成状态都可以共用一个方法
    * 如果更改的是日期，由于涉及到日程的移动，不能使用这个方法，而应当使用updateTodoDate
    * @param commit
    * @param state
@@ -456,6 +474,22 @@ export default {
     return api.todo.putTodoProps(editItem)
       .then(todo => {
         commit('TD_TODO_UPDATED', {todo: todo})
+        return todo
+      })
+  },
+  //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
+  updateRepeatTodo ({commit, state, getters}, p) {
+    var repeat = state.todo.currentTodoRepeat
+    util.extendObject(repeat, p)
+    repeat.createTaskDate = getters.defaultTaskDate
+    //  如果id存在，则ajax更新
+    return api.todo.putTodoProps(repeat)
+      .then(todo => {
+        // commit('TD_TODO_UPDATED', {todo: todo})
+        //  TODO  让所有缓存都失效，暂时这么处理
+        commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+        commit('SCH_TODO_CACHE_DELETE_ALL')
+        return todo
       })
   },
   saveTodoAction ({commit, state}, p) {
@@ -481,42 +515,36 @@ export default {
     }
     return api.todo.putRecordProps(editItem)
       .then(record => {
+        console.log('putRecordProps回来了吗')
         commit('TD_COMMENT_CREATED', {comment: record})
       })
   },
   updateSubTodo ({commit, state}, p) {
-    //  p.todo不存在，则默认读取currentTodo
-    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
+    //  p.todo不存在，则默认读取currentTod
     // var id = state.todo.currentTodo.subTodos[0].id
     // var id = p.item.id
     p.item.name = p.name
     var item = p.item
-    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
     //  如果id存在，则ajax更新
     // var editItem = p.editItem
     // console.log('todo的id是' + id)
     // editItem['id'] = id
     return api.todo.putSubTodoProps(item)
       .then(subTodo => {
-        // console.log('返回来的subTodo是' + subTodo.name)
         commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
   updateSubTodoCheck ({commit, state}, p) {
     //  p.todo不存在，则默认读取currentTodo
-    // console.log(JSON.stringify(state.todo.currentTodo.subTodos))
     // var id = state.todo.currentTodo.subTodos[0].id
     // var id = p.item.id
     p.item.name = p.name
     var item = p.item
-    // console.log('p.name的值是' + p.name + '  p.item的内容' + p.item.name)
     //  如果id存在，则ajax更新
     // var editItem = p.editItem
-    // console.log('todo的id是' + id)
     // editItem['id'] = id
     return api.todo.putSubTodoProps(item)
       .then(subTodo => {
-        // console.log('返回来的subTodo是' + subTodo.name)
         commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
@@ -532,9 +560,6 @@ export default {
   updateTodoTime ({ commit, state, getters, dispatch }, p) {
     p = p || {}
     var todo = state.todo.currentTodo
-    if (p.clock.alwaysAlert === undefined) {
-      p.clock.alwaysAlert = true
-    }
     var promise
     //  如果this.currentTodo.id存在，则更新currentTodo
     if (todo.id) {
@@ -546,8 +571,12 @@ export default {
         }
       })
     } else {
+      if (p.clock.alwaysAlert === undefined) {
+        p.clock.alwaysAlert = true
+      }
       promise = Promise.resolve().then(() => {
         commit('TD_CURRENT_TODO_UPDATE', {item: p})
+        return todo
       })
     }
     return promise
@@ -562,18 +591,29 @@ export default {
    * @param p.todo
    * @returns {*|Promise|Function|any|Promise.<TResult>}
    */
-  deleteTodo ({commit, state, dispatch}, p) {
-    console.log('action-deleteTodo进来了')
+  deleteTodo ({commit, state, dispatch, getters}, p) {
     var todo = p.todo || state.todo.currentTodo
-    return api.todo.deleteTodo(todo)
-      .then(() => {
-        console.log('api-delete已完成')
-        commit('TD_TODO_DELETED', {item: todo})
-        //  清除缓存数据
-        var sourceDateStruct = dateUtil.backend2frontend({dates: todo.dates, startDate: todo.startDate, endDate: todo.endDate})
-        var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
+    var promise
+    if (p.isRepeat) {
+      var params = {id: todo.id, createTaskDate: getters.defaultTaskDate, type: p.type}
+      promise = api.todo.deleteRepeatTodo(params)
+    } else {
+      promise = api.todo.deleteTodo(todo)
+    }
+    return promise.then(() => {
+      //  清除缓存数据
+      var sourceDateStruct = dateUtil.backend2frontend(todo)
+      var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
 
-        dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
+      dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
+      commit('TD_TODO_DELETED', {item: todo})
+    })
+  },
+  deleteCommentItem ({commit, state, dispatch}, p) {
+    var item = p.item
+    return api.todo.deleteCommentItem(item)
+      .then(() => {
+        commit('TD_COMMENT_DELETE', {item: item})
       })
   },
   deleteSubTodo ({commit, state, dispatch}, p) {
@@ -605,7 +645,10 @@ export default {
     if (hasCache) {
       promise = Promise.resolve()
     } else {
-      promise = api.todo.getDatesHasTodo(p)
+      promise = api.todo.getDatesHasTodo({
+        startDate: dateUtil.dateNum2Text(start, '-'),
+        endDate: dateUtil.dateNum2Text(end, '-')
+      })
         .then(result => {
           p.daysHasTodo = result.date.split(',').map(text => {
             return moment(text).valueOf()
@@ -716,18 +759,29 @@ export default {
     })
   },
   postTodoComment ({commit, state}, props) {
-    if (props.commentContent) {
-      var currentItem = state.todo.currentTodo
-      props['todoId'] = currentItem.id
-      props['type'] = 0
-      return api.todo.postComment(props)
-        .then((com) => {
-          com.type = 0
-          commit('TD_COMMENT_CREATED', {comment: com})
-        })
-    } else {
-      return Promise.resolve()
+    // if (props.commentContent) {
+    var currentItem = state.todo.currentTodo
+    var replyId = state.replyId
+    var replyName = state.replyName
+    props['todoId'] = currentItem.id
+    props['type'] = 0
+    if (replyId !== null) {
+      props['atIds'] = replyId
+      props.commentContent = '@' + replyName + '&' + props.commentContent
     }
+
+    return api.todo.postComment(props)
+      .then((com) => {
+        com.type = 0
+        commit('TD_COMMENT_CREATED', {comment: com})
+        return com
+      })
+    // } else {
+    //   return Promise.resolve()
+    // }
+  },
+  ReplyCommentItem ({commit, state}, props) {
+    commit('REPLY_COMMENT_CREATED', {item: props.item})
   },
   postdesp ({commit, state}, props) {
     if (props.pNote) {
@@ -740,5 +794,153 @@ export default {
     } else {
       return Promise.resolve()
     }
+  },
+  toRsqServer ({commit, state}, p) {
+    var p1 = p
+    p1['fileName'] = p.name.substr(28)
+    p1['filePath'] = p.name
+    return api.todo.getFileFromAli(p1)
+      .then((file) => {
+        return file
+      })
+  },
+  /**
+   * 上传文件到阿里云OSS
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {Promise<any>|Promise.<*>|Promise<TAll[]>}
+   */
+  uploadToOSS ({commit, state}, p) {
+    //  使用pathId做权限，用户只能操作特定pathId下的文件
+    var pathId = p.pathId
+    var time = moment().format('YYYYMMDDHHmmss')
+    var path = window.rsqConfig.ossRoot + pathId + '/' + time
+    var list = p.list
+    return api.system.getOSSClient({pathId: pathId})
+      .then(client => {
+        return Promise.all(list.map(t => {
+          var f = t.file
+          var name = path + f.name
+          return client.multipartUpload(name, f, {
+            progress: function (p) {
+              return function (done) {
+                var pro = Math.floor(p * 100)
+                t.progress = pro
+                if (pro >= 1) {
+                  t.finished = true
+                }
+                done()
+              }
+            }
+          })
+        }))
+      })
+  },
+  /**
+   * 取消上传
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {*}
+   */
+  cancelUploadToOSS ({commit, state}, p) {
+    var pathId = p.pathId
+    return api.system.getOSSClient({pathId: pathId})
+      .then(client => {
+        client.listUploads({query: 'dddd'})
+          .then(res => {
+            alert(JSON.stringify(res))
+          })
+      })
+  },
+  //  dingtalk/130350304726297460/2126PictureUnlock_haokan1171162_16:9.pictureunlock.jpg
+  getOSSUrl ({commit, state}, p) {},
+  /**
+   * 发送到聊天
+   * @param commit
+   * @param state
+   * @param p
+   * @returns {*}
+   */
+  sendToConversation ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendToConversation({
+      urlParams,
+      data: p.data
+    })
+  },
+  sendAsyncCorpMessage ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendAsyncCorpMessage({
+      urlParams,
+      data: p.data
+    })
+  },
+  handleRemind ({commit, state, dispatch}, p) {
+    var item = p.item
+    var promise
+
+    //  不管是新增还是编辑，这里的item始终是有id的
+    if (item.id) {
+      var c = item.clock || {}
+      var alert = c.alert || []
+      var url = window.location.href.split('#')
+      var millsArray = alert.map(a => {
+        const numStart = moment(c.taskDate + c.startTime, 'YYYYMMDDHH:mm').valueOf()
+        const numEnd = moment(c.taskDate + c.endTime, 'YYYYMMDDHH:mm').valueOf()
+        return util.alertRule2Time(a.schedule, numStart, numEnd)
+      })
+      var remindArray = alert.map(a => {
+        return util.alertCode2RemindText(a.schedule) + '，请点击查看详情'
+      })
+      let data = {
+        todo_id: item.id,
+        mills_array: millsArray,
+        remind_array: remindArray,
+        userid_list: state.loginUser.authUser.userId,
+        msgtype: 'oa',
+        msgcontent: {
+          message_url: url[0] + '#' + '/todo/' + item.id,
+          head: {
+            text: '日事清',
+            bgcolor: 'FF55A8FD'
+          },
+          body: {
+            title: '任务提醒',
+            form: [
+              {key: '任务名称：', value: item.pTitle},
+              {key: '时间：', value: c.startTime + '-' + c.endTime}
+            ]
+          }
+        }
+      }
+      promise = dispatch('sendRemind', {corpId: state.loginUser.authUser.corpId, data: data})
+    } else {
+      promise = Promise.resolve()
+    }
+
+    return promise.then(() => {
+      return item
+    })
+  },
+  sendRemind ({commit, state}, p) {
+    var appId = state.sys.appId
+    var urlParams = {
+      corpid: p.corpId,
+      appid: appId
+    }
+    return api.appAuth.sendRemind({
+      urlParams,
+      data: p.data
+    })
   }
 }

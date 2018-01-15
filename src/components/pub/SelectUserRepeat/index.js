@@ -14,8 +14,6 @@ function getSelectDateModal (options) {
   if (!selectUserRepeat) {
     selectUserRepeat = new SelectUserRepeat()
     selectUserRepeat.$on('self-close', close)
-    selectUserRepeat.$on('select-user-repeat-confirm', options.success || function () {})
-    selectUserRepeat.$on('select-user-repeat-cancel', options.cancel || function () {})
   }
   return selectUserRepeat
 }
@@ -23,9 +21,12 @@ function getSelectDateModal (options) {
 function show (options) {
   options = options || {}
   var vm = getSelectDateModal(options)
+  vm.$on('select-user-repeat-confirm', options.success || function () {})
+  vm.$on('select-user-repeat-cancel', options.cancel || function () {})
   vm.baseNumTime = options.baseNumTime
   vm.repeatType = options.repeatType || ''
   vm.repeatStrTimeArray = options.repeatStrTimeArray || []
+  vm.isLastDate = options.isLastDate || false
 
   //  append to body
   Vue.nextTick(function () {
@@ -36,7 +37,11 @@ function show (options) {
 
 function close () {
   var vm = getSelectDateModal()
-  vm.$el.remove()
+  if (vm.$el) {
+    vm.$off('select-user-repeat-confirm')
+    vm.$off('select-user-repeat-cancel')
+    vm.$el.remove()
+  }
 }
 
 export default {

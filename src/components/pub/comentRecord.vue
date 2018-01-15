@@ -25,37 +25,44 @@
               <span class="content">{{item.commentContent}}</span>
               <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
             </div>
-            <div else>
+            <div v-else>
               <div v-if="item.type==10" class="comentrecord">
                 <span class="icon"><i class="icon-format_list_bulleted"></i></span>
                 <span class="content">{{item.commentContent}}</span>
                 <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
               </div>
-              <div else>
+              <div v-else>
                 <div v-if="item.type==8" class="comentrecord">
                   <span class="icon"><i class="icon-description"></i></span>
                   <span class="content">{{item.commentContent}}</span>
                   <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
                   <p class="child-item">{{item.idOrContent.substring(3,item.idOrContent.length-4)}}</p>
                 </div>
-                <div else>
+                <div v-else>
                   <div v-if="item.type==1" class="comentrecord">
                     <span class="icon"><i class="icon-add_circle"></i></span>
                     <span class="content">{{item.commentContent}}</span>
                     <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
                   </div>
-                  <div else>
+                  <div v-else>
                     <div v-if="item.type==6" class="comentrecord">
                       <span class="icon"><i class="icon-check_box_outline_blank"></i></span>
                       <span class="content">{{item.commentContent}}</span>
                       <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
                     </div>
+                    <div v-else>
+                      <div v-if="item.type==2" class="comentrecord">
+                        <span class="icon"><i class="icon-insert_invitation"></i></span>
+                        <span class="content">{{item.commentContent}}</span>
+                        <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
   </li>
 </template>
@@ -88,7 +95,6 @@
   .child-item{
     margin-left: 1rem;
     margin-bottom: 0;
-    /*margin-top: 5px;*/
     background-color: lightyellow;
     width: 84%;
   }
@@ -101,7 +107,6 @@
     text-align: left;
     font-size: 16px;
     color:#ACACAC;
-    /*margin-left:0.4rem*/
   }
   .time{
     font-size: 0.34rem;
@@ -112,7 +117,6 @@
 </style>
 <script>
   import Avatar from 'com/pub/TextAvatar'
-
   export default {
     data () {
       return {

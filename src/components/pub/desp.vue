@@ -1,6 +1,6 @@
 <template>
     <div id="noteEditable" contenteditable="true" class="descrip"
-         :class="{'editable-blank': isBlank}"
+         :class="{'editable-blank': isBlank,'edit-color': remindColor}"
          name="note" rows="5"
          @focus="inputFocus"
          @input="inputChange">输入任务描述</div>
@@ -19,6 +19,12 @@
     computed: {
       pNote () {
         return this.$store.state.todo.currentTodo.pNote
+      },
+      remindColor () {
+        var noteElement = document.getElementById('noteEditable')
+        if (noteElement.innerHTML === '输入任务描述') {
+          return true
+        }
       }
     }, // 定义事件
     methods: {
@@ -48,7 +54,9 @@
           noteElement.innerHTML = this.DEFAULT_NOTE
         }
         var that = this
-        this.$store.dispatch('postdesp', {pNote: this.newItemNote}).then(() => {
+        var params = {pNote: this.newItemNote}
+        this.$store.dispatch('postdesp', params).then(() => {
+          that.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
           that.$router.replace(window.history.back())
         })
       }
@@ -89,14 +97,20 @@
     border-top: 1px solid #E0E0E0;
     margin-top: 10px;
     padding: 3%;
-    width: 100%;
     line-height: 0.7rem;
-    font-family: STHeitiSC-Light;
+    font-family: PingFangSC-Regular;
     font-size: 17px;
-    color: black;
     letter-spacing: 0;
     background-color: white;
-    height: 200px;
+    /*height: 200px;*/
     box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom:0;
+  }
+  .editable-blank{
+    color: #A5A5A5;
   }
 </style>
