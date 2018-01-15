@@ -43,7 +43,7 @@ const router = new Router({
     },
     {
       path: '/draw',
-      name: 'SubTodoEdit',
+      name: 'draw',
       component: draw,
       meta: {requireAuth: true}
     },
@@ -55,13 +55,13 @@ const router = new Router({
     },
     {
       path: '/test1',
-      name: 'SubTodoEdit',
+      name: 'test1',
       component: test1,
       meta: {requireAuth: true}
     },
     {
       path: '/test',
-      name: 'SubTodoEdit',
+      name: 'test',
       component: test,
       meta: {requireAuth: true}
     },

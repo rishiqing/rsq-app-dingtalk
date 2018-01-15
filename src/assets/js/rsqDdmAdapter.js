@@ -78,6 +78,8 @@ rsqAdapterManager.register({
               // var authUser = authResult.user;
               //  从authServer获取到用户数据后进行登录
               var token = makeToken(authUser.corpId, authUser.userId);
+              console.log('rsqConfig.apiServer' + rsqConfig.apiServer)
+              // console.log('token' + token)
               rsqAdapterManager.ajax.get(rsqConfig.apiServer + 'task/dingtalkOauth/tokenLogin', {
                 token: token
               }, [function(result){
@@ -88,6 +90,7 @@ rsqAdapterManager.register({
                   rsqChk(params.error, [resJson]);
                 }
               }, function(err){
+                alert(JSON.stringify(err))
                 rsqChk(params.error, [err]);
               }]);
             },
