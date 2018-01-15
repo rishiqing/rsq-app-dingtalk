@@ -11,6 +11,7 @@ import draw from 'com/drawer'
 // import SendConversation from 'com/demo/SendConversation'
 // import Scroll from 'com/demo/Scroll'
 // import CalendarDemo from 'com/demo/CalendarDemo'
+import TodoEditPriority from 'com/pub/TodoEditPriority'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -38,12 +39,18 @@ const router = new Router({
     {
       path: '/',
       redirect: '/sche'
-      // redirect: '/draw'
+      // redirect: '/test'
     },
     {
       path: '/draw',
       name: 'SubTodoEdit',
       component: draw,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/TodoEditPriority',
+      name: 'TodoEditPriority',
+      component: TodoEditPriority,
       meta: {requireAuth: true}
     },
     {

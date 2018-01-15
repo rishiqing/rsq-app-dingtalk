@@ -1,6 +1,7 @@
 <template>
   <div class="outer" :class="{'hasPadding':newTime}">
     <v-touch class="touch-memmber" @tap="showMemberEdit">
+      <i class="icon2-member member"></i>
       <div class="execute">
         {{indexTitle}}
       </div>
@@ -51,6 +52,10 @@
   </div>
 </template>
 <style scoped>
+  .member{
+    color: #55A8FD;
+    font-size: 18px;
+  }
   .itm-icon-img-wrap-new>*{
     float: right;
     margin-right: 0.15rem;
@@ -87,6 +92,7 @@
     font-size: 17px;
     color: #333333;
     letter-spacing: 0;
+    margin-left: 2.5%;
   }
   .new-padding-left-more-three{
     /*left:5.3rem*/
@@ -94,7 +100,7 @@
   }
   .new-padding-left-less-three{
     /*left:5.3rem*/
-    margin-left:4.2rem
+    margin-left:3.5rem
   }
   .edit-padding-left{
     /*margin-left:1.8rem*/

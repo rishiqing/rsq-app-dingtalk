@@ -9,7 +9,7 @@
     <div class="bottom" v-show="mainPage">
       <v-touch @tap="showkind">
         <div class="first" >
-          <span>重复</span>
+          <span>重复------</span>
           <span>{{kind}}</span>
         </div>
       </v-touch>

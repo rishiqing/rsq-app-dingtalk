@@ -1,6 +1,7 @@
 <template>
   <v-touch class="" @tap="gotoDate">
     <div class="outer-date":class="{'hasPadding':newItem}">
+      <i class="icon2-schedule schedule"></i>
       <span class="date">日期</span>
       <span class="now" :class="{'edit-padding-left':editTime}">{{ dateString }}</span>
       <i class="icon2-arrow-right-small arrow"></i>
@@ -8,6 +9,10 @@
   </v-touch>
 </template>
 <style lang="" scoped>
+  .schedule {
+    color: #55A8FD;
+    font-size: 18px;
+  }
   .outer-date{
     display: flex;
     align-items: center;
@@ -48,6 +53,7 @@
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
+    margin-left: 2.5%;
   }
   span{
     display: block;

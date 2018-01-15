@@ -35,6 +35,10 @@
                 :disabled-rsq-ids="[]"
                 @member-changed="saveMember"
               ></r-input-member>
+              <!--<r-input-priority-->
+                <!--:new-priority="true"-->
+              <!--&gt;-->
+              <!--</r-input-priority>-->
               <div class="ding">
                 <div class="bottom">
                   <p class="">DING</p>
@@ -150,6 +154,7 @@
   import InputTime from 'com/pub/InputTime'
   import dateUtil from 'ut/dateUtil'
   import jsUtil from 'ut/jsUtil'
+  import InputPriority from 'com/pub/InputPriority'
   export default {
     data () {
       return {
@@ -184,7 +189,8 @@
       'r-input-title': InputTitleText,
       'r-input-date': InputDate,
       'r-input-time': InputTime,
-      'r-input-member': InputMember
+      'r-input-member': InputMember,
+      'r-input-priority': InputPriority
     },
     beforeRouteEnter (to, from, next) {
       next()

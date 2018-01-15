@@ -18,18 +18,34 @@
         <div class="hide" :class="{'for-hide-title':itemChecked}"></div>
         <i class="icon2-selected hide" :class="{'isdisplay-title':itemChecked}"></i>
       </v-touch>
-      <input type="text" placeholder="输入任务标题"
+      <textarea type="text" placeholder="输入任务标题"
               ref="titleInput"
               :value="itemTitle"
+                class="text-input"
               @input="inputChange($event.target.value)"
               @blur="inputBlur($event.target.value)"
               :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit,'edit-text-font':isEdit,'new-text-font':newCheckable}"
-              @focus="IsDisabled($event)"/>
+              @focus="IsDisabled($event)">
+      </textarea>
         <!--@blur="inputBlur($event.target.value)"-->
     </div>
   </div>
 </template>
 <style scoped>
+  .text-input{
+    background: #FFFFFF;
+    /*border-top:1px solid #E0E0E0 ;*/
+    line-height:0.72rem ;
+    padding-bottom:0.305rem ;
+    padding-top: 0.305rem;
+    font-size: 0.506rem;
+    border-radius: 0;
+    height: 2.666rem;
+    width: 100%;
+    /*white-space: pre-wrap;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
   .edit-text-font{
     font-family: PingFangSC-Medium;
   }
@@ -55,16 +71,16 @@
     border-bottom: 1px solid #e0e0e0;
   }
   .edit{
-    display: flex;
-    align-items: center;
+    /*display: flex;*/
+    /*align-items: center;*/
     position: relative;
     background-color: white;
   }
   .real-width{
     /*width:88%;*/
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space:nowrap
+    /*text-overflow: ellipsis;*/
+    /*overflow: hidden;*/
+    /*white-space:nowrap*/
   }
   .select-title{
     color:#b1b1b1;
@@ -109,6 +125,7 @@
     color: #8C8C8C;
     letter-spacing: 0;
     padding-left: 0.1rem;
+    padding-top: 0;
   }
   input[type='text']{
     /*font-family: PingFangSC-Regular;*/
@@ -120,6 +137,7 @@
     padding-top: 0.305rem;
     font-size: 0.506rem;
     border-radius: 0;
+    height: 2.666rem;
   }
   /*.padding-left-input-{*/
     /*padding-left:0.3rem;*/
@@ -180,9 +198,16 @@
         }
         this.$emit('click-checkout', !this.itemChecked)
       }
-    }
-//    beforeRouteLeave (to, from, next) {
+    },
+    mounted () {
+//      var that = this
+//      if (that.newCheckable) {
+//        that.$refs.titleInput.focus()
+//      }
+    },
+    beforeRouteLeave (to, from, next) {
+      console.log('触发了')
 //      this.$emit('text-blur', this.content)
-//    }
+    }
   }
 </script>

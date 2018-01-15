@@ -8,9 +8,9 @@
            :style='deleteSlider'
       >
         <slot></slot>
-      </div>
-      <div class="remove active" ref='remove' @click="handleClick">
-        删除
+        <div class="remove" ref='remove' @click="handleClick">
+          <span>删除</span>
+        </div>
       </div>
     </div>
 
@@ -41,7 +41,7 @@
         this.deleteSlider = 'transform:translateX(0px)'
       },
       touchStart (ev) {
-        console.log('进入touchStart')
+//        console.log('进入touchStart')
         ev = ev || event
         if (ev.touches.length === 1) {
           // 记录开始位置
@@ -49,7 +49,7 @@
         }
       },
       touchMove (ev) {
-        console.log('进入touchMove')
+//        console.log('进入touchMove')
         ev = ev || event
         let wd = this.$refs.remove.offsetWidth
         if (ev.touches.length === 1) {
@@ -70,17 +70,19 @@
         }
       },
       touchEnd (ev) {
-        console.log('进入touchEnd')
+//        console.log('进入touchEnd')
         ev = ev || event
 //        console.log(ev)
         let wd = this.$refs.remove.offsetWidth
+        console.log('wd' + wd)
         if (ev.changedTouches.length === 1) {
           let endX = ev.changedTouches[0].clientX
-
           this.disX = this.startX - endX
           if ((this.disX * 5) < (wd / 2)) {
+            console.log('不到一半' + this.disX)
             this.deleteSlider = 'transform:translateX(0px)'
           } else {
+            console.log('超过一半' + this.disX)
             this.deleteSlider = 'transform:translateX(-' + wd + 'px)'
           }
         }
@@ -90,34 +92,39 @@
 </script>
 <style scoped>
   .slider {
-    width: 100%;
-    height: 100px;
+    width: 140%;
+    height: 1.612rem;
     position: relative;
     user-select: none;
   }
     .content{
-      position: absolute;
-      left: 0;
+      display: flex;
+      align-items: center;
+      height: 1.612rem;
+      /*position: absolute;*/
+      /*left: 0;*/
       /*right: 0;*/
-      top: 0;
-      bottom: 0;
-      background:green;
+      /*top: 0;*/
+      /*bottom: 0;*/
+      /*background:green;*/
       z-index: 100;
       //  设置过渡动画
       transition: 2s;
 
     }
     .remove{
-      position: absolute;
-      width:100px;
-      height:100px;
+      /*position: absolute;*/
+      /*width:1.84rem;*/
+      /*height:1.6rem;*/
+      width: 1.84rem;
+      height: 1.5rem;
       background:red;
-      right: 0;
-      top: 0;
+      /*right: 0;*/
+      /*top: 0;*/
       color:#fff;
       text-align: center;
-      font-size: 32px;
-      line-height: 100px;
+      font-size: 17px;
+      /*line-height: 100px;*/
     }
 
 </style>

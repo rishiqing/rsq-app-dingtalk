@@ -1,4 +1,5 @@
 <template>
+  <leftSlider @msg-from-child="getMsgFromChild(item)">
   <li class="todoItem" :class="{'list-margin':listMargin}" @touchstart="showColor" @touchend="hideColor" ref="scheListItem">
     <v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">
       <div class="title-todo" :class="{'margin-left':!isCheckable}">
@@ -15,6 +16,7 @@
       <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
     </v-touch>
   </li>
+  </leftSlider>
 </template>
 <style lang="scss" scoped>
   .list-margin{
@@ -100,9 +102,9 @@
     position: relative;
     border-bottom:1px solid #E0E0E0 ;
   }
-  /*.todoItem:active{*/
-    /*background: #F2F2F2;*/
-  /*}*/
+  .todoItem{
+    width: 72%;
+  }
   .item-title{}
   .select{
     color:#b9b9bc;
@@ -127,13 +129,16 @@
 </style>
 <script>
   import dateUtil from 'ut/dateUtil'
-
+  import leftSlider from 'com/slider_delete'
   export default {
     name: 'TodoItem',
     data () {
       return {
         listMargin: false
       }
+    },
+    components: {
+      'leftSlider': leftSlider
     },
     props: {
       item: Object,
