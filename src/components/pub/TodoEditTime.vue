@@ -331,7 +331,6 @@
         }
         //  在有提醒的情况下返回值中居然不包括clock.alert的数据，需要前端组合传入
         var clockObject = JSON.parse(JSON.stringify(this.clockData || {}))
-
         return this.$store.dispatch('updateTodoTime', {clock: this.clockData})
           .then(item => {
             jsUtil.extendObject(item.clock, clockObject)

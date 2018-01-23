@@ -114,6 +114,31 @@ export default {
     }
     return arr
   },
+  getMonthDaysByMyself () {
+    var arr = []
+    var weekArr = []
+    var year = new Date().getFullYear()
+    var month = new Date().getMonth()
+    for (var j = 0; j <= 4; j++) {
+      weekArr = []
+      for (var i = 7 * j + 1; i < 7 * j + 8; i++) {
+        if (i > 31) {
+          break
+        } else {
+          var thisDate = new Date(year, month, i)
+          var obj = {
+            date: thisDate,
+            // isFocused: this.isSameDate(focusDate, thisDate),
+            isSelected: false
+            // isInMonth: thisDate.getMonth() === focusDate.getMonth()
+          }
+          weekArr.push(obj)
+        }
+      }
+      arr.push(weekArr)
+    }
+    return arr
+  },
   /**
    * 格式化输出日期
    * single类型：直接输出arr中的单日期，如“xx月xx日”
@@ -383,5 +408,21 @@ export default {
         return false
       }
     }
+  },
+  getStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var str = ''
+    var year = date.getFullYear()
+    if (date.getMonth() + 1 >= 10) {
+      var month = date.getMonth() + 1
+    } else {
+      month = '0' + (date.getMonth() + 1)
+    }
+    var day = date.getDate()
+    if (day < 10) {
+      day = '0' + day
+    }
+    // console.log('出来DATe是' + year + month + day)
+    return str + year + month + day
   }
 }

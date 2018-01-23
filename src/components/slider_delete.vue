@@ -8,9 +8,11 @@
            :style='deleteSlider'
       >
         <slot></slot>
-        <div class="remove" ref='remove' @click="handleClick">
+        <v-touch @tap="handleClick">
+        <div class="remove" ref='remove'>
           <span>删除</span>
         </div>
+        </v-touch>
       </div>
     </div>
 
@@ -36,8 +38,10 @@
     },
 
     methods: {
-      handleClick (v) {
-        this.$emit('msg-from-child', this.val)
+      handleClick () {
+        console.log('进来了')
+        this.$emit('getMsgFromChild')
+        console.log('handleClick发出去了')
         this.deleteSlider = 'transform:translateX(0px)'
       },
       touchStart (ev) {

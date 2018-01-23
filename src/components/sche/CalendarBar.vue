@@ -8,7 +8,7 @@
             >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           <v-touch class="cal-day" @tap="calDayClick(day.date)"
-                   :class="{'cal-day--focus': isHighLight(day.date)}">
+                   :class="{'cal-day--focus': isHighLight(day.date), 'todayColor': isToday(day.date)}">
             {{dateText(day)}}
           </v-touch>
         </td>
@@ -35,8 +35,10 @@
     components: {},
     methods: {
       isToday (day) {
-        console.log(this.todayValue === day.date.getTime())
-        return this.todayValue === day.date.getTime()
+//        console.log('isToday进来了' + this.todayValue === day.date.getTime())
+//        console.log(this.todayValue === day.date.getTime())
+//        return true
+//        return this.todayValue === day.date.getTime()
       },
       dateText (day) {
         //  如果是当天，则显示“今”这个字
@@ -58,7 +60,7 @@
   @import '../../assets/css/variables.scss';
   .todayColor{
     background: rgba(50,150,250,0.29);
-    color:white
+    color:yellow
   }
   .cal-bar {
     position: absolute;
@@ -82,7 +84,7 @@
     line-height: 12px;
   }
   .cal-day-tag {position:absolute;top:5px;right: 0.66rem;border-radius:50%;}
-  .tag-active {width:4px;height:4px;background:#30FFA8;}
+  .tag-active {width:4px;height:4px;background:#26CC17;}
   .cal-day {
     margin:0 auto;
     width:30px;

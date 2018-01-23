@@ -26,6 +26,9 @@
         appear: false
       }
     },
+    props: {
+      appear: Boolean
+    },
     methods: {
       come () {
         this.appear = !this.appear

@@ -1,10 +1,14 @@
 <template>
-  <div>
+  <div class="repeatWindow" :class="{'come': appear}">
     <div class="firstpage" v-show="main">
       <div class="head">
-        <span class="cancel">取消</span>
+        <v-touch @tap="hideRepeat">
+          <span class="cancel">取消</span>
+        </v-touch>
         <span class="title">重复周期</span>
-        <span class="confirm">确定</span>
+        <v-touch @tap="saveRepeat">
+          <span class="confirm">确定</span>
+        </v-touch>
       </div>
       <div class="content">
       <v-touch @tap="showkind">
@@ -71,6 +75,7 @@
   import repeatFrequency from 'com/pub/repeatFrequency'
   import repeatMonth from 'com/pub/repeatMonth'
   export default {
+    name: 'test1',
     data () {
       return {
         kind: '每天', // 这里是从后台拿数据然后进行赋值
@@ -93,6 +98,27 @@
       appear: Boolean
     },
     methods: {
+      getResult () {
+        //  表示选择的是“不重复”
+//        params['isCloseRepeat'] = false
+//        params['repeatType'] = this.comRepeat.type
+//        params['isLastDate'] = this.comRepeat.isLastDate
+//        params['repeatBaseTime'] = this.comRepeat.baseArray.join(',')
+//        var strDate = dateUtil.dateNum2Text(this.baseNumTime, '/')
+//        params['startDate'] = strDate
+//        params['endDate'] = strDate
+//        return params
+      },
+      saveTodoRepeatState () {
+        var res = this.getResult()
+        this.$store.commit('PUB_TODO_DATE_UPDATE', {data: res})
+      },
+      saveRepeat () {
+        this.$emit('hideRepeat')
+      },
+      hideRepeat () {
+        this.$emit('hideRepeat')
+      },
       hideMonth () {
         this.repeatMonth = false
         this.main = true
@@ -140,7 +166,7 @@
           var data = this.$store.state.repeatWeek
           if (data.length > 0) {
             for (var i = 0; i < data.length - 1; i++) {
-              text += data[i] + ','
+              text += data[i].week + ','
             }
             text += data[i]
           }
@@ -160,6 +186,18 @@
   }
 </script>
 <style>
+  .repeatWindow{
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: white;
+    bottom: -200px;
+    transition: 0.1s;
+  }
+  div.come{
+    bottom: 0;
+  }
   .repeatWord{
     margin-right: 5px;
   }

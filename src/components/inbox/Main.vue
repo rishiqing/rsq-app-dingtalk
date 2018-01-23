@@ -1,19 +1,46 @@
 <template>
   <div class="">
-    <div class="topest"></div>
-    <div class="wrap">
-      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
-      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" class="create"/>
+    <div class="inbox-top">
+      <v-touch @tap="setIndex(1)">
+        <div :class="{'inbox-active': currentIndex === 1}" class="top-select">全部任务</div>
+      </v-touch>
+      <v-touch @tap="setIndex(2)">
+        <div :class="{'inbox-active': currentIndex === 2}"  class="top-select">我创建的</div>
+      </v-touch>
+      <v-touch @tap="setIndex(3)">
+        <div :class="{'inbox-active': currentIndex === 3}"  class="top-select">我收到的</div>
       </v-touch>
     </div>
-    <div class="margin-block"></div>
+    <!--<div class="topest"></div>-->
+    <div class="wrap" v-show="this.showInput">
+      <input class="write" type="text" placeholder="输入任务标题" v-model="inputTitle">
+      <v-touch @tap="saveTodo" class="btn-create">
+        创建
+      </v-touch>
+    </div>
+    <!--<div class="margin-block"></div>-->
     <div class="InboxItem">
-      <r-todo-item-list
-        :items="items"
-        :is-checkable="false"
-        v-if="items != null && items.length > 0"
-      ></r-todo-item-list>
+      <div v-if="currentIndex === 1">
+        <r-todo-item-list
+          :items="items"
+          :is-checkable="false"
+          v-if="items != null && items.length > 0"
+        ></r-todo-item-list>
+      </div>
+      <div v-if="currentIndex === 2">
+        <r-todo-item-list
+          :items="createItems"
+          :is-checkable="false"
+          v-if="createItems != null && createItems.length > 0"
+        ></r-todo-item-list>
+      </div>
+      <div v-if="currentIndex === 3">
+        <r-todo-item-list
+          :items="receiveItems"
+          :is-checkable="false"
+          v-if="receiveItems != null && receiveItems.length > 0"
+        ></r-todo-item-list>
+      </div>
     </div>
   </div>
 </template>
@@ -24,18 +51,33 @@
     data () {
       return {
         titleName: '收纳箱',
-        inputTitle: ''
+        inputTitle: '',
+        currentIndex: 1,
+        showInput: false
       }
     },
     computed: {
       items () {
         return this.$store.state.inbox.items
+      },
+      receiveItems () {
+        return this.$store.state.inbox.items.filter((item) => {
+          return item.from !== null
+        })
+      },
+      createItems () {
+        return this.$store.state.inbox.items.filter((item) => {
+          return item.from === null
+        })
       }
     },
     components: {
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      setIndex (index) {
+        this.currentIndex = index
+      },
       fetchItems () {
         this.$store.dispatch('fetchInboxItems')
       },
@@ -52,20 +94,66 @@
     mounted () {
       this.fetchItems()
       window.rsqadmg.exec('setTitle', {title: this.titleName})
-      window.rsqadmg.exec('setOptionButtons', {hide: true})
+//      window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
+      var btnParams
+      var that = this
+      btnParams = {
+        btns: [{key: 'submitTodo', name: '创建'}],
+        success: function (res) {
+          if (res.key === 'submitTodo') {
+//            that.showInput = true
+            that.$router.push('/newInbox')
+          }
+        }
+      }
+      window.rsqadmg.execute('setOptionButtons', btnParams)
     }
   }
 </script>
 <style scoped>
-  .wrap{
-    position: fixed;
-    height: 1.45rem;
-    width: 100%;
-    top: 10px;
-    left: 0;
+  .InboxItem{
+    margin-top: 0.5rem;
+  }
+  .inbox-top{
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    background-color: white;
+  }
+  .top-select{
+    font-family: PingFangSC-Medium;
+    font-size: 14px;
+    color: #3D3D3D;
+    letter-spacing: 0.87px;
+    width: 3.35rem;
+    height: 1.066rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #979797;
+  }
+  div.inbox-active:after{
+    content: " ";
+    position: absolute;
+    /*height: 3px;*/
     right: 0;
-    z-index: 2;
+    bottom: -10px;
+    left:0;
+    background-color: #55A8FD;
+    border-bottom: 3px solid #55A8FD;
+    width: 40%;
+    margin: 0 auto;
+  }
+  div.inbox-active{
+    color: #3296FA;
+    position: relative;
+  }
+  .wrap{
+    padding: 0.3rem;
+    padding-bottom: 0;
+    display: flex;
+    align-items: center;
   }
   /*input::-webkit-input-placeholder { !* WebKit browsers *!*/
     /*font-family: PingFangSC-Regular;*/
@@ -83,40 +171,40 @@
   }
   .create{
     -webkit-appearance: none;
-    display: block;
-    text-align: center;
-    border: 1px solid #55A8FD;
-    border-radius: 2px;
-    /*height: 0.666rem;*/
-    line-height: 0.66rem;
-    display: flex;
-    align-items: center;
-    width:1.413rem;
-    font-size: 15px;
-    color:#55A8FD;
-    position: absolute;
-    margin-top:-0.4rem;
-    top: 50%;
-    right:0.35rem;
+    background: blue;
+    font-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #FFFFFF;
     /*margin-top: -1.34rem;*/
     /*margin-right:0.4rem;*/
     /*float: right;*/
     z-index: 3;
   }
+  .btn-create{
+    width: 19%;
+    height: 1.466rem;
+    ont-family: PingFangSC-Regular;
+    font-size: 16px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: blue;
+  }
   .write{
     line-height: 0.612rem;
     padding-bottom: 0.4rem;
     padding-top: 0.4rem;
-    border-bottom:1px solid #E3E3E3;
-    border-top:1px solid #E3E3E3;
+    /*border-bottom:1px solid #E3E3E3;*/
+    /*border-top:1px solid #E3E3E3;*/
     /*position: fixed;*/
     /*top:10px;*/
     background: #FFFFFF;
     padding-left:0.3rem;
-    padding-right: 2.432rem;
-    margin-bottom: 0.224rem;
+    /*padding-right: 2.432rem;*/
+    /*margin-bottom: 0.224rem;*/
     z-index: 2;
-    width: 100%;
+    width: 80%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

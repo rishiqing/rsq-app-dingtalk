@@ -11,6 +11,7 @@ import draw from 'com/drawer'
 // import SendConversation from 'com/demo/SendConversation'
 // import Scroll from 'com/demo/Scroll'
 // import CalendarDemo from 'com/demo/CalendarDemo'
+import editTitle from 'com/pub/editTitle'
 import TodoEditPriority from 'com/pub/TodoEditPriority'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
@@ -31,6 +32,7 @@ import RemindWindow from 'com/pub/RemindWindow'
 import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
 import pcEnd from 'com/me/pcEnd'
+import newInbox from 'com/inbox/newInbox'
 // import test from 'com/demo/test'
 Vue.use(Router)
 
@@ -39,12 +41,24 @@ const router = new Router({
     {
       path: '/',
       redirect: '/sche'
-      // redirect: '/test'
+      // redirect: '/test1'
+    },
+    {
+      path: '/newInbox',
+      name: 'newInbox',
+      component: newInbox,
+      meta: {requireAuth: true}
     },
     {
       path: '/draw',
       name: 'draw',
       component: draw,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/editTitle',
+      name: 'editTitle',
+      component: editTitle,
       meta: {requireAuth: true}
     },
     {

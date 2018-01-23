@@ -1,15 +1,6 @@
 <template>
   <div class="">
-    <div class="edit" >
-        <!--<textarea type="text"-->
-                  <!--class="edit-text"-->
-                  <!--v-if="isEdit"-->
-               <!--ref="titleInput"-->
-               <!--:value="itemTitle"-->
-                  <!--@blur="inputBlur($event.target.value)"-->
-               <!--@input="inputChange($event.target.value)"-->
-                  <!--:class="{'padding-left-input':isCheckable}"-->
-                  <!--@focus="IsDisabled($event)"></textarea>-->
+    <div class="edit" :class="{editInput: !isEdit}">
       <v-touch class="wrap-icon"
                v-if="isCheckable"
                @tap="clickCheckOut">
@@ -21,30 +12,49 @@
       <textarea type="text" placeholder="输入任务标题"
               ref="titleInput"
               :value="itemTitle"
-                class="text-input"
+              class="text-input"
               @input="inputChange($event.target.value)"
               @blur="inputBlur($event.target.value)"
-              :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit,'edit-text-font':isEdit,'new-text-font':newCheckable}"
+              :class="{'isEdit': isEdit, 'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit,'edit-text-font':isEdit,'new-text-font':newCheckable}"
               @focus="IsDisabled($event)">
       </textarea>
-        <!--@blur="inputBlur($event.target.value)"-->
     </div>
   </div>
 </template>
 <style scoped>
+  .text-grey{
+
+  }
+  .text-mid-line{
+
+  }
+  .editInput{
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
+  }
+  .edit .isEdit{
+    height: 1.193rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 8.5rem;
+    border: 0px;
+    display: block;
+  }
   .text-input{
     background: #FFFFFF;
-    /*border-top:1px solid #E0E0E0 ;*/
     line-height:0.72rem ;
     padding-bottom:0.305rem ;
     padding-top: 0.305rem;
     font-size: 0.506rem;
     border-radius: 0;
     height: 2.666rem;
-    width: 100%;
-    /*white-space: pre-wrap;*/
+    resize: none;
+    /*width: 8rem;*/
     text-overflow: ellipsis;
     overflow: hidden;
+    color:#3D3D3D;
+    display: block;
   }
   .edit-text-font{
     font-family: PingFangSC-Medium;
@@ -71,16 +81,12 @@
     border-bottom: 1px solid #e0e0e0;
   }
   .edit{
-    /*display: flex;*/
-    /*align-items: center;*/
     position: relative;
     background-color: white;
-  }
-  .real-width{
-    /*width:88%;*/
-    /*text-overflow: ellipsis;*/
-    /*overflow: hidden;*/
-    /*white-space:nowrap*/
+    display: flex;
+    align-items: center;
+    /*border-bottom: 1px solid #e0e0e0;*/
+    border-top: 1px solid #e0e0e0;
   }
   .select-title{
     color:#b1b1b1;
@@ -96,7 +102,6 @@
     display: block;
     position:absolute;
     top:0.3rem;
-    /*margin-top: -0.29rem;*/
     left: 0.46rem;
     font-size: 15px;
     color:#55A8FD;
@@ -104,7 +109,6 @@
   .for-hide-title{
     position: absolute;
     top:0.35rem;
-    /*margin-top: -0.29rem;*/
     left: 0.75rem;
     display: block;
     width: 2px;
@@ -128,10 +132,7 @@
     padding-top: 0;
   }
   input[type='text']{
-    /*font-family: PingFangSC-Regular;*/
-    /*height:1.458rem;*/
     background: #FFFFFF;
-    /*border-top:1px solid #E0E0E0 ;*/
     line-height:0.72rem ;
     padding-bottom:0.305rem ;
     padding-top: 0.305rem;
@@ -139,11 +140,7 @@
     border-radius: 0;
     height: 2.666rem;
   }
-  /*.padding-left-input-{*/
-    /*padding-left:0.3rem;*/
-  /*}*/
   .padding-left-input{
-    /*padding-left: 1.5rem;*/
   }
 </style>
 <script>
@@ -170,9 +167,12 @@
       isEdit: Boolean
     },
     methods: {
+      toEditText () {
+        this.$route.push('/editTitle')
+      },
       onPanMove () {
-        console.log('jjjjjjj')
-        alert('Hhh')
+//        console.log('jjjjjjj')
+//        alert('Hhh')
       },
       isMaxlength (title) {
         title = title || ''
@@ -183,6 +183,8 @@
           e.target.blur()
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
+        } else if (this.isEdit) {
+          this.$router.push('/editTitle')
         }
       },
       inputBlur (value) {

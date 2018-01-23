@@ -9,7 +9,7 @@
       </div>
       <div class="right">
         <div class="top">
-          <span class="author">{{item.authorName.substr(9)}}</span>
+          <span class="author">{{item.authorName}}</span>
           <span class="time">{{item.dateCreated.substring(5,7)}}月{{item.dateCreated.substring(8,16)}}</span>
         </div>
         <div class="bottom">
