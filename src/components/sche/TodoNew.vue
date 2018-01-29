@@ -335,9 +335,7 @@
                     alertTime: standardTime,
                     title: item.pTitle,
                     success: () => {
-                      console.log('发送成功')
-//                      window.history.back()
-//                      that.$router.replace('/sche')// 这里跳到日程列表页面
+                      that.$router.replace(window.history.back())
                     }
                   })
                   that.$router.replace('/sche')

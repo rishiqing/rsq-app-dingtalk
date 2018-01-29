@@ -4,30 +4,29 @@
     <div class="topSubtodo" v-if="seen" >
       <v-touch @tap="change">
         <v-touch ><i class="icon2-add-circle add"></i></v-touch>
-        <span class="new-create">新建子任务</span>
+        <span>新建子任务</span>
       </v-touch>
     </div>
     <div v-else class="anotherTop">
-      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle" >
+      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle">
       <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <button class="create" ><span>创建</span></button>
+        <input value="创建" class="create" disabled="disabled"/>
       </v-touch>
     </div>
     <div class="margin-block"></div>
     <ul class="sublist" :class="{hasborder:!haschild}">
       <li v-for="item in items" v-if="items" class="sublistItem">
-        <v-touch class="wrap-sub-icon" v-if="" @tap="clickCheckOut(item)">
-          <i class="icon2-check-box select-sub"></i>
-          <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
-          <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
-        </v-touch>
-        <v-touch class="wrap-input">
-           <input   class="list-below" @focus="IsDisabled($event,item.isDone)" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
-                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable,'is-editable':item.isDone}">
+        <v-touch class="">
+           <input   class="list-below" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
+                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable}">
+          <v-touch class="" v-if="" @tap="clickCheckOut(item)">
+            <i class="icon2-check-box select-sub"></i>
+            <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
+            <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
+          </v-touch>
         </v-touch>
       </li>
     </ul>
-    <div class="remind-subtodo" :class="{IsDisplayRemind:haschild}">*清空标题可删除任务</div>
   </div>
 </template>
 <script>
@@ -90,9 +89,15 @@
 //            window.rsqadmg.exec('showLoader', {text: '保存中...'})
             this.$store.dispatch('updateSubTodo', {item: item, name: value})
               .then(() => {
-//                console.log('updateSubTodo执行完成')
+                console.log('updateSubTodo执行完成')
                 //  触发标记重复修改
                 this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
+//                this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: value, type: 10}})
+//                  .then(() => {
+//                  })
+//                console.log('马上就要成功')
+//                window.rsqadmg.exec('hideLoader')
+//                window.rsqadmg.execute('toast', {message: '保存成功'})
               })
           }
         }
@@ -130,9 +135,6 @@
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
     }
-//    beforeRouteLeave (to, from, next) {
-//      this.inputBlur()
-//    }
   }
 </script>
 <style scoped>
@@ -163,13 +165,11 @@
   .for-cover{
     height: 0.266rem;
     z-index:1;
-    width: 100%;
-    background-color: #F8F8F8;
+    /*background-color: rebeccapurple;*/
     position: fixed;
-    /*top:0;*/
-    /*left:0;*/
-    /*right: 0;*/
-    /*bottom: 0;*/
+    top:0;
+    left:0;
+    right: 0;
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
@@ -177,11 +177,10 @@
     color: #999999;
   }
   .select-sub{
-    /*position: absolute;*/
-    /*top: 0.4rem;*/
-    /*color:#b9b9bc;*/
-    /*left:0.02rem*/
-    color: #B1B1B1;
+    position: absolute;
+    top: 0.41rem;
+    color:#b9b9bc;
+    left:0.02rem
   }
   .sublist{
     background-color: white;
@@ -194,31 +193,18 @@
   }
   .list-below{
     border:none;
-    margin-left: 0.35rem;
+    margin-left: 0.9rem;
     font-family: PingFangSC-Regular;
-    /*line-height: 0.2rem;*/
     font-size: 17px;
-    width: 98%;
+    width: 85%;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space:nowrap;
-    padding-top: 0.08rem;
+    white-space:nowrap
   }
   .sublistItem:last-child{
     border-bottom: none;
   }
-  .sublistItem{
-    position: relative;
-    /*padding-top: 0.1rem;*/
-    border-bottom:1px solid #DADADA ;
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    /*color: #222222;*/
-    /*padding: 0.33rem 0 0.15rem 0*/
-    height: 1.22rem;
-    display: flex;
-    align-items: center;
-  }
+  .sublistItem{}
   .topSubtodo{
     position:fixed;
     background-color: white;
@@ -237,7 +223,6 @@
     border: 1px solid #55A8FD;
     border-radius: 50%;
     left:0.55rem;
-    -webkit-appearance: none;
   }
   .title-todo input{
     border: none;
@@ -252,12 +237,12 @@
     font-size: 17px;
     color: #55A8FD;
   }
-  .new-create{
+  span{
     display: block;
     margin-left: 0.8rem;
     font-family:PingFangSC-Regular;
     font-size: 17px;
-    color: #55A8FD;
+    color: #333333;
   }
   .hide{
     display: none;
@@ -271,14 +256,19 @@
     padding-left: 5%;
   }
   li{
-
+    line-height: 1.226rem;
+    position: relative;
+    border-bottom:1px solid #DADADA ;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #222222;
   }
   li:first-child{
   }
   .isdisplay-sub{
     display: block;
     position:absolute;
-    top:0.27rem;
+    top:0.25rem;
     left: 0.13rem;
     font-size: 15px;
     color:#55A8FD;
@@ -296,23 +286,22 @@
   .create{
     -webkit-appearance: none;
     /*display: block;*/
-    /*text-align: center;*/
+    text-align: center;
     display: flex;
-    /*align-items: center;*/
+    align-items: center;
     justify-content: center;
     border: 1px solid #55A8FD;
     border-radius: 2px;
     height: 0.666rem;
     /*line-height: 0.76rem;*/
-    /*width:1.4rem;*/
-    font-size: 0.4rem;
+    width:1.413rem;
+    font-size: 15px;
     color:#55A8FD;
     position: fixed;
-    top:0.57rem;
+    top:0.55rem;
     right:0.35rem;
     z-index:2;
     background-color: white;
-    /*padding-left: 0.26rem;*/
   }
   .write{
     background: #FFFFFF;
@@ -324,8 +313,8 @@
     z-index: 1;
     line-height: 0.6rem;
     padding-right: 2.432rem;
-    padding-top: 0.313rem;
-    padding-bottom: 0.313rem;
+    padding-top: 0.405rem;
+    padding-bottom: 0.405rem;
   }
   .margin-block {
     height: 50px;

@@ -57,8 +57,8 @@
   .edit{
     display: flex;
     align-items: center;
+    border-bottom:1px solid #E0E0E0 ;
     position: relative;
-    background-color: white;
   }
   .real-width{
     /*width:88%;*/
@@ -152,10 +152,6 @@
       isEdit: Boolean
     },
     methods: {
-      onPanMove () {
-        console.log('jjjjjjj')
-        alert('Hhh')
-      },
       isMaxlength (title) {
         title = title || ''
         return title.length > 15
@@ -180,9 +176,9 @@
         }
         this.$emit('click-checkout', !this.itemChecked)
       }
+    },
+    beforeRouteLeave (to, from, next) {
+      this.$emit('text-blur', this.content)
     }
-//    beforeRouteLeave (to, from, next) {
-//      this.$emit('text-blur', this.content)
-//    }
   }
 </script>
