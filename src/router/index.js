@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
-import test from 'com/test'
+// import test from 'com/test'
 import test1 from 'com/test1'
 import draw from 'com/drawer'
 // import Init from 'com/Init'
@@ -73,12 +73,12 @@ const router = new Router({
       component: test1,
       meta: {requireAuth: true}
     },
-    {
-      path: '/test',
-      name: 'test',
-      component: test,
-      meta: {requireAuth: true}
-    },
+    // {
+    //   path: '/test',
+    //   name: 'test',
+    //   component: test,
+    //   meta: {requireAuth: true}
+    // },
     {
       path: '/sche',
       name: 'sche',

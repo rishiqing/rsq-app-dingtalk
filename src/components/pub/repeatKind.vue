@@ -1,6 +1,6 @@
 <template>
   <div class="repeatKind">
-    <div class="kind-head">
+    <div class="kind-head kind-special">
       <v-touch @tap="cancel" class="kind-head">
         <span class="cancel">取消</span>
       </v-touch>
@@ -13,11 +13,24 @@
         </v-touch>
       </div>
     </div>
+    <div class="bottom-text">
+      <span class="bottom-text-content">{{final}}</span>
+    </div>
   </div>
 </template>
 <style>
+  .kind-special{
+    height: 1.5rem;
+    padding-left: 0.5rem;
+  }
+  .bottom-text{
+    height: 1.5rem;
+  }
+  .bottom-text-content{
+    margin-left: 0.5rem;
+  }
   .wrap-list{
-    padding-left: 0.6rem;
+    padding-left: 0.5rem;
     border-top: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;
   }
@@ -27,8 +40,8 @@
   .kind-head{
     display: flex;
     align-items: center;
-    height: 1.5rem;
-    padding-left: 0.3rem;
+    /*height: 1.5rem;*/
+    /*padding-left: 0.3rem;*/
   }
   .dp-selected {
     background: #55A8FD !important;
@@ -47,9 +60,14 @@
         ]
       }
     },
+    computed: {
+      final () {
+        return this.$store.state.final
+      }
+    },
     methods: {
       cancel () {
-        this.$emit('hideKind')
+        this.$emit('NoKind')
       },
       gotokind (item) {
         this.$emit('hideKind', item.text)

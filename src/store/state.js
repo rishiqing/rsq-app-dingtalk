@@ -87,6 +87,7 @@ export default {
   record: [],
   comment: [],
   title: '',
+  final: '',
   /**
    * 组件之间需要共享的临时数据
    */

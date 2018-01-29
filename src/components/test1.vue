@@ -6,7 +6,7 @@
         <span class="title">重复周期</span>
         <span class="confirm">确定</span>
       </div>
-      <div class="content">
+      <div class="below-content">
       <v-touch @tap="showkind">
         <div class="first" >
           <span class="repeatStyle">重复方式</span>
@@ -139,19 +139,19 @@
         if (this.kind === '每周') {
           var data = this.$store.state.repeatWeek
           if (data.length > 0) {
-            for (var i = 0; i < data.length - 1; i++) {
-              text += data[i] + ','
+            for (var i = 0; i < data.length; i++) {
+              text += data[i]
             }
-            text += data[i]
+//            text += data[i].week
           }
+          console.log('text' + text)
           return text
         } else {
-          data = this.$store.state.repeatMonth
-          if (data.length > 0) {
-            for (i = 0; i < data.length - 1; i++) {
-              text += data[i] + ','
+          var Monthdata = this.$store.state.repeatMonth
+          if (Monthdata.length > 0) {
+            for (i = 0; i < Monthdata.length; i++) {
+              text += new Date(Monthdata[i]).getDate() + ','
             }
-            text += data[i]
           }
           return text
         }
@@ -167,7 +167,7 @@
     display: flex;
     align-items: center;
   }
-  .content{
+  .below-content{
     padding: 0 0.5rem;
     border-top: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;

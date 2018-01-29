@@ -4,7 +4,7 @@
       <v-touch @tap="back" class="kind-head">
         <span class="cancel">取消</span>
       </v-touch>
-      <span class="title">重复周</span>
+      <span class="title">重复日期</span>
       <v-touch @tap="confirm"class="kind-head"><span class="cancel">确定</span></v-touch>
     </div>
     <ul class="week-list">
@@ -14,6 +14,9 @@
         </v-touch>
       </li>
     </ul>
+    <div class="another-bottom">
+      <span class="another-bottom-text">{{final}}</span>
+    </div>
   </div>
 </template>
 <style>
@@ -28,7 +31,10 @@
     /*align-items: center;*/
     /*white-space: normal;*/
     /*justify-content: space-around;*/
-    height: 10rem;
+    height: 5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
     /*justify-content: flex-start;*/
   }
   .word{
@@ -61,7 +67,37 @@
         ]
       }
     },
+    props: {
+      kind: String
+    },
+    computed: {
+      final () {
+        return this.$store.state.final
+      }
+    },
     methods: {
+      initdata () {
+        var week = this.$store.state.repeatWeek
+        if (week && week.length === 0) {
+          if (new Date().getDay() === 0) {
+            this.weekArray[6].isSelected = true
+            this.$store.state.repeatWeek.push({'week': '周日', 'flag': 7})
+            this.$store.commit('SAVE_REPEAT_BASETIME')
+          } else {
+            this.weekArray[new Date().getDay() - 1].isSelected = true
+            this.$store.state.repeatWeek.push({'week': this.weekArray[new Date().getDay() - 1].week, 'flag': this.weekArray[new Date().getDay() - 1].flag})
+            this.$store.commit('SAVE_REPEAT_BASETIME')
+          }
+        } else {
+          for (var j = 0; j < week.length; j++) {
+            for (var i = 0; i < this.weekArray.length; i++) {
+              if (week[j].week === this.weekArray[i].week) {
+                this.weekArray[i].isSelected = true
+              }
+            }
+          }
+        }
+      },
       Islarge (item) {
         return item.week === '周五' || item.week === '周六' || item.week === '周日'
       },
@@ -69,7 +105,7 @@
         return item.week === '周五'
       },
       confirm () {
-//        console.log('确定')
+//        console.log(JSON.stringify(this.$store.state.repeatWeek))
         this.$store.state.repeatWeek.splice(0, this.$store.state.repeatWeek.length)
         for (var i = 0; i < this.weekArray.length; i++) {
           if (this.weekArray[i].isSelected) {
@@ -86,6 +122,11 @@
       clickWeek (obj) {
         obj.isSelected = !obj.isSelected
       }
+    },
+    mounted () {
+//      if (this.kind === '每周') {
+      this.initdata()
+//      }
     }
   }
 </script>

@@ -37,11 +37,13 @@ export default {
     params.isFrom = 'web'
     params.isGetDelay = true
     let path = mapping.GET_SCHEDULE_TODOS + '?' + util.combineUrlParams(params)
+    console.log('进来getScheduleTodos')
     return new Promise((resolve, reject) => {
       Vue.http.get(path)
         .then(res => {
           resolve(res.json())
         }, err => {
+          console.log('进来错误了')
           window.rsqadmg.log(JSON.stringify(err))
           reject(err)
         })
@@ -173,11 +175,13 @@ export default {
     })
   },
   getDatesHasTodo (props) {
+    console.log('getDatesHasTodo进来了')
     return new Promise((resolve, reject) => {
       Vue.http.post(mapping.POST_DATES_HAS_TODO, props)
         .then(res => {
           resolve(res.json())
         }, err => {
+          console.log('进入错误了')
           window.rsqadmg.log(JSON.stringify(err))
           reject(err)
         })

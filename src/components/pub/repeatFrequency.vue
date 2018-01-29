@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="kind-head">
+    <div class="frequent-head">
       <v-touch @tap="backToKind" class="kind-head">
         <span class="cancel">取消</span>
       </v-touch>
@@ -13,9 +13,19 @@
         </v-touch>
       </li>
     </ul>
+    <div class="another-bottom">
+      <span class="another-bottom-text">{{deadlineText}}</span>
+    </div>
   </div>
 </template>
-<style></style>
+<style>
+  .frequent-head{
+    display: flex;
+    align-items: center;
+    height: 1.5rem;
+    padding-left: 0.5rem;
+  }
+</style>
 <script>
   export default {
     data () {

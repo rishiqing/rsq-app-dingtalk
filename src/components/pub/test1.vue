@@ -2,21 +2,21 @@
   <div class="repeatWindow" :class="{'come': appear}">
     <div class="firstpage" v-show="main">
       <div class="head">
-        <v-touch @tap="hideRepeat">
+        <v-touch @tap="hideRepeat" class="wrap-cancel">
           <span class="cancel">取消</span>
         </v-touch>
         <span class="title">重复周期</span>
-        <v-touch @tap="saveRepeat">
+        <v-touch @tap="saveRepeat" class="wrap-cancel">
           <span class="confirm">确定</span>
         </v-touch>
       </div>
-      <div class="content">
+      <div class="below-content">
       <v-touch @tap="showkind">
         <div class="first" >
           <span class="repeatStyle">重复方式</span>
           <div class="wrap-content">
             <span class="repeatWord">{{kind}}</span>
-            <i class="icon2-arrow-right arrow"></i>
+            <i class="icon2-arrow-right test-arrow"></i>
           </div>
         </div>
       </v-touch>
@@ -25,7 +25,7 @@
           <span class="repeatStyle">重复频率</span>
           <div class="wrap-content">
           <span class="repeatWord">{{frequency}}</span>
-          <i class="icon2-arrow-right arrow"></i>
+          <i class="icon2-arrow-right test-arrow"></i>
           </div>
         </div>
       </v-touch>
@@ -34,27 +34,34 @@
           <span class="repeatStyle">选择日期</span>
         <div class="wrap-content">
           <span class="repeatWord">{{dateText}}</span>
-          <i class="icon2-arrow-right arrow"></i>
+          <i class="icon2-arrow-right test-arrow"></i>
         </div>
         </div>
       </v-touch>
-      <div class="first">
-        <span class="repeatStyle">截止日期</span>
-        <div class="wrap-content">
-        <span class="repeatWord">{{frequency}}</span>
-        <i class="icon2-arrow-right arrow"></i>
+      <v-touch @tap="showDeadLine">
+        <div class="first">
+          <span class="repeatStyle">截止日期</span>
+          <div class="wrap-content">
+          <span class="repeatWord">{{deadlineText}}</span>
+          <i class="icon2-arrow-right test-arrow"></i>
+          </div>
         </div>
-      </div>
+      </v-touch>
+    </div>
+      <div class="bottom-text">
+        <span class="bottom-text-content">{{repeatConcat}}</span>
       </div>
     </div>
     <repeatKind
       v-show="repeatKind"
       @hideKind="hideKind"
+      @NoKind="NoKind"
     >
     </repeatKind>
     <repeatWeek
       v-show="repeatWeek"
       @hideWeek="hideWeek"
+      :kind="kind"
     >
     </repeatWeek>
     <repeatFrequency
@@ -63,10 +70,16 @@
     >
     </repeatFrequency>
     <repeatMonth
+      :kind="kind"
       v-show="repeatMonth"
       @hideMonth="hideMonth"
     >
     </repeatMonth>
+    <DeadLine
+      v-show="deadLine"
+      @hideDeadline="hideDeadline"
+    >
+    </DeadLine>
   </div>
 </template>
 <script>
@@ -74,6 +87,7 @@
   import repeatWeek from 'com/pub/repeatWeek'
   import repeatFrequency from 'com/pub/repeatFrequency'
   import repeatMonth from 'com/pub/repeatMonth'
+  import DeadLine from 'com/pub/DeadLine'
   export default {
     name: 'test1',
     data () {
@@ -85,19 +99,29 @@
         frequency: '',
         dateSelect: false,
         main: true,
-        repeatMonth: false
+        repeatMonth: false,
+        deadLine: false
       }
     },
     components: {
       'repeatKind': repeatKind,
       'repeatWeek': repeatWeek,
       'repeatFrequency': repeatFrequency,
-      'repeatMonth': repeatMonth
+      'repeatMonth': repeatMonth,
+      'DeadLine': DeadLine
     },
     props: {
       appear: Boolean
     },
     methods: {
+      showDeadLine () {
+        this.deadLine = true
+        this.main = false
+      },
+      hideDeadline () {
+        this.deadLine = false
+        this.main = true
+      },
       getResult () {
         //  表示选择的是“不重复”
 //        params['isCloseRepeat'] = false
@@ -109,12 +133,30 @@
 //        params['endDate'] = strDate
 //        return params
       },
+      initData () {
+        if (this.repeat.repeatType) {
+          if (this.repeat.repeatType === 'everyDay') {
+            this.kind = '每天'
+          } else if (this.repeat.repeatType === 'everyWeek') {
+            this.kind = '每周'
+          } else if (this.repeat.repeatType === 'everyMonth') {
+            this.kind = '每月'
+          } else if (this.repeat.repeatType === 'everyYear') {
+            this.kind = '每年'
+          }
+        } else {
+          this.kind = '每天'
+        }
+      },
       saveTodoRepeatState () {
         var res = this.getResult()
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: res})
       },
       saveRepeat () {
-        this.$emit('hideRepeat')
+        if (!this.repeat.repeatType) {
+          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: 'everyDay'})
+        }
+        this.$emit('setRepeat')
       },
       hideRepeat () {
         this.$emit('hideRepeat')
@@ -143,7 +185,11 @@
       hideKind (item) {
         this.repeatKind = false
         this.main = true
-        this.kind = item || '每天'
+        this.kind = item
+      },
+      NoKind () {
+        this.repeatKind = false
+        this.main = true
       },
       gotoFrequent () {
         this.repeatFrequency = true
@@ -166,33 +212,82 @@
           var data = this.$store.state.repeatWeek
           if (data.length > 0) {
             for (var i = 0; i < data.length - 1; i++) {
-              text += data[i].week + ','
+              text += data[i].week + '、'
             }
-            text += data[i]
+            text += data[i].week
           }
           return text
         } else {
           data = this.$store.state.repeatMonth
-          if (data.length > 0) {
+          if (data.length > 0 && !data[data.length - 1].text) {
             for (i = 0; i < data.length - 1; i++) {
-              text += data[i] + ','
+              text += new Date(data[i]).getDate() + '、'
             }
-            text += data[i]
+            text += new Date(data[i]).getDate()
+          } else if (data.length > 0 && data[data.length - 1].text) {
+            for (i = 0; i < data.length - 1; i++) {
+              text += new Date(data[i]).getDate() + '、'
+            }
+            text += '最后一天'
           }
           return text
         }
+      },
+      repeat () {
+        return this.$store.state.repeat
+      },
+      deadlineText () {
+        return this.repeat.repeatOverDate ? this.repeat.repeatOverDate.substring(0, 10) : '永不截止'
+      },
+      repeatConcat () {
+        if ((this.kind === '每天') || (this.kind === '每年')) {
+          var final = this.kind + '重复'
+          this.$store.commit('SAVE_TEXT', final)
+          return final
+        } else {
+          if (this.kind === '每周') {
+            final = '每周的' + this.dateText + '重复'
+            this.$store.commit('SAVE_TEXT', final)
+            return final
+          } else if (this.kind === '每月') {
+            var data = this.$store.state.repeatMonth
+            var text = ''
+            if (data.length > 0 && !data[data.length - 1].text) {
+              for (var i = 0; i < data.length - 1; i++) {
+                text += new Date(data[i]).getDate() + '日、'
+              }
+              text += new Date(data[i]).getDate() + '日'
+            } else if (data.length > 0 && data[data.length - 1].text) {
+              for (i = 0; i < data.length - 1; i++) {
+                text += new Date(data[i]).getDate() + '、'
+              }
+              text += '最后一天'
+            }
+            final = '每月的' + text + '重复'
+            this.$store.commit('SAVE_TEXT', final)
+            return final
+          }
+        }
       }
+    },
+    created () {
+      this.initData()
     }
   }
 </script>
 <style>
+  .bottom-text-content {
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #3B9BFB;
+  }
   .repeatWindow{
     position: fixed;
     left: 0;
     right: 0;
     z-index: 1000;
     background-color: white;
-    bottom: -200px;
+    bottom: -8.8rem;
     transition: 0.1s;
   }
   div.come{
@@ -205,7 +300,7 @@
     display: flex;
     align-items: center;
   }
-  .content{
+  .below-content{
     padding: 0 0.5rem;
     border-top: 1px solid #E0E0E0;
     border-bottom: 1px solid #E0E0E0;
@@ -218,7 +313,7 @@
     justify-content: space-between;
     height: 1.5rem;
   }
-  .arrow{
+  .test-arrow{
     /*transform: rotate(-315deg);*/
     color: rgba(25,31,37,0.28);
     font-size: 16px;
@@ -230,7 +325,7 @@
   }
   .repeatWord{
     font-family: PingFangSC-Regular;
-    font-size: 15px;
+    font-size: 13px;
     color: #9B9B9B;
   }
   .title{
@@ -244,7 +339,7 @@
     color: #3B9BFB;
   }
   .selectedWeek{
-    background-color: #5EADFD;
+    background-color: #3B9BFB;
     color:white !important;
   }
   .weekSelect{

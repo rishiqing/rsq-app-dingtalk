@@ -220,6 +220,9 @@
       }
     },
     computed: {
+      repeat () {
+        return this.$store.state.repeat
+      },
       moreToShow () {
         return this.$store.state.moreToShow
       },
@@ -287,6 +290,12 @@
       /**
        * 从startDate endDate dates三个字段中转换成用户前台显示的date结构
        */
+      clearRepeat () {
+        this.repeat.repeatBaseTime = []
+        this.repeat.repeatType = ''
+        this.$store.state.repeatMonth = []
+        this.$store.state.repeatWeek = []
+      },
       getPlanedTime () {
         var ei = this.editItem
         var result = dateUtil.backend2frontend({dates: ei.dates, startDate: ei.startDate, endDate: ei.endDate})
@@ -357,7 +366,10 @@
         .then(item => {
           window.rsqadmg.exec('hideLoader')
           window.rsqadmg.execute('toast', {message: '创建成功'})
-//          console.log(item.receiverIds)
+          this.repeat['repeatType'] = null
+          this.repeat['repeatBaseTime'] = []
+          this.$store.state.repeatMonth.splice(0, this.$store.state.repeatMonth.length)
+          this.$store.state.repeatWeek.splice(0, this.$store.state.repeatWeek.length)
           if (item.receiverIds) {
 //            debugger
             var time = jsUtil.SendConversationTime(item)

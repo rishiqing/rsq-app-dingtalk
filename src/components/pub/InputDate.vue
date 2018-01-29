@@ -117,6 +117,7 @@
           repeatBaseTime: c.repeatBaseTime || null,
           isLastDate: c.isLastDate === undefined || false
         }
+        console.log('传过来的时间' + obj.repeatType)
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: obj})
         this.$router.push('/todoEdit/date')
 //        // 显示之前先将所有获得焦点的元素失去焦点
