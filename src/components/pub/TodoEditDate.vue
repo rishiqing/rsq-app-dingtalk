@@ -606,14 +606,14 @@
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       },
       getSubmitResult () {
-//        var d = this.currentTodoDate
+        var d = this.currentTodoDate
         console.log('currentTodoDate是' + JSON.stringify(this.currentTodoDate))
         console.log('repeat是' + JSON.stringify(this.repeat))
         var c = this.repeat
         var o = {
-          startDate: c.startDate,
-          endDate: c.endDate,
-          dates: c.dates
+          startDate: d.startDate,
+          endDate: d.endDate,
+          dates: d.dates
         }
         //  如果重复相关属性存在，那么处理重复相关的其他属性
         if (c.repeatType) {
