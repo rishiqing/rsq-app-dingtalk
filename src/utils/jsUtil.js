@@ -352,5 +352,21 @@ export default {
       }
     }
     return date
+  },
+  getStandardTime (date) {
+    // console.log('进来DATe是' + date)
+    var str = ''
+    var year = date.getFullYear()
+    if (date.getMonth() + 1 >= 10) {
+      var month = date.getMonth() + 1
+    } else {
+      month = '0' + (date.getMonth() + 1)
+    }
+    var day = date.getDate()
+    if (day < 10) {
+      day = '0' + day
+    }
+    // console.log('出来DATe是' + year + month + day)
+    return str + year + month + day
   }
 }

@@ -244,7 +244,7 @@
           repeatStrTimeArray: strTimeArray,
           isLastDate: that.uIsLastDate,
           success: function (result) {
-            console.log('result是' + JSON.stringify(result))
+//            console.log('result是' + JSON.stringify(result))
             if (result.repeatType) {
               that.selected = null
             }

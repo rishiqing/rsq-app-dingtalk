@@ -1,25 +1,43 @@
 <template>
-  <v-touch class="outertime" @tap="gotoTodoTime" :class="{'hasPadding':newItem}">
-    <span class="date">时间</span>
-    <span class="now" :class="{'edit-padding-left':editTime,'new-padding-right':newItem}">{{timeValue}}</span>
-    <i class="icon2-arrow-right-small arrow"></i>
+  <v-touch @tap="gotoTodoTime" :class="{'hasPadding':newItem}">
+    <div class="outertime">
+      <i class="icon2-alarm alarm"></i>
+      <span class="time" v-show="!editTime">时间提醒</span>
+      <span class="now" :class="{'edit-padding-left':editTime,'new-padding-right':newItem}">{{timeValue}}</span>
+      <i class="icon2-arrow-right-small arrow"></i>
+    </div>
   </v-touch>
 </template>
 <style lang="" scoped>
+  .time{
+    margin-left: 2.5%;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #191F25;
+  }
+  .alarm{
+    color: #55A8FD;
+    font-size: 18px;
+  }
   .outertime{
     position: relative;
-    /*height:1.3rem;*/
+    height:1.3rem;
     line-height: 1.3rem;
     background-color: white;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E0E0E0;
   }
   .hasPadding{
     padding-left:3% ;
+    background-color: white;
   }
   .arrow{
-    color: #999999;
-    font-size: 21px;
+    /*color: #999999;*/
+    color: rgba(25,31,37,0.28);
+    font-size: 25px;
     position: absolute;
-    top:0.38rem;
+    top:0.31rem;
     right: 0.2rem;
   }
   .now {
@@ -37,8 +55,9 @@
   .new-padding-right{
     right: 0.94rem;
   }
-  .edit-padding-left{
-    left:1.3rem
+  span.edit-padding-left{
+    left:0.8rem;
+    color:#3D3D3D
   }
   span{
     display: block;
@@ -62,7 +81,13 @@
         return !this.itemClock.startTime
       },
       timeValue () {
-        return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
+        if (this.itemClock.alert) {
+          var remind = this.itemClock.alert[0].schedule
+          var number = remind.split('_')[1].substr(1)
+          return this.itemClock.startTime + '-' + this.itemClock.endTime + '  提前' + number + '分钟提醒'
+        } else {
+          return this.isAllDay ? '全天' : this.itemClock.startTime + '-' + this.itemClock.endTime
+        }
       }
     },
     props: {

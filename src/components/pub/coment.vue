@@ -110,7 +110,7 @@
         this.$store.dispatch('postTodoComment', {commentContent: newTitle, fileIds: this.fileId, createTaskDate: this.defaultTaskDate})
           .then((com) => {
             that.$router.replace(window.history.back())
-            alert(JSON.stringify(com))
+//            alert(JSON.stringify(com))
             window.rsqadmg.exec('hideLoader')
             window.rsqadmg.execute('toast', {message: '保存成功'})
           })

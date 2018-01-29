@@ -66,7 +66,22 @@
 //        console.log(JSON.stringify(items))
         if (items !== null && items.length !== 0) {
           for (var i = 0; i < items.length; i++) {
-            if (!items[i].pIsDone) {
+            if (!items[i].pIsDone && items[i].pContainer === 'IE') {
+              newItems.push(items[i])
+            }
+          }
+          for (i = 0; i < items.length; i++) {
+            if (!items[i].pIsDone && items[i].pContainer === 'IU') {
+              newItems.push(items[i])
+            }
+          }
+          for (i = 0; i < items.length; i++) {
+            if (!items[i].pIsDone && items[i].pContainer === 'UE') {
+              newItems.push(items[i])
+            }
+          }
+          for (i = 0; i < items.length; i++) {
+            if (!items[i].pIsDone && items[i].pContainer === 'UU') {
               newItems.push(items[i])
             }
           }
@@ -87,6 +102,9 @@
       'r-todo-item-list': TodoItemList
     },
     methods: {
+      onSwipeLeft () {
+//        console.log('滑动了')
+      },
       onPanMove (p) {
         this.paddingTop = CAL_STATE[p.type].value + p.deltaY
       },

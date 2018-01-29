@@ -29,7 +29,7 @@ function show (options) {
   vm.success = options.success || function () {}
   vm.cancel = options.cancel || function () {}
   vm.$on('self-close', close)
-
+  console.log(vm.memberList)
   //  append to body
   Vue.nextTick(function () {
     vm.$mount()

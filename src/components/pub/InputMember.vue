@@ -1,9 +1,11 @@
 <template>
-  <div class="outer" :class="{'hasPadding':newTime}">
-    <v-touch class="touch-memmber" @tap="showMemberEdit">
-      <div class="execute">
+  <div class="outer" :class="{'hasPadding':newTime, 'subtodo-border': subNewItem, 'moreBorder': !moreToShow}">
+    <v-touch class="touch-memmber" @tap="showMemberEdit" :class="{'lessBorder': !moreToShow}">
+      <i class="icon2-member member"></i>
+      <div class="execute" v-show="!editTime">
         {{indexTitle}}
       </div>
+      <div v-if="!this.subNewItem">
       <div class="" v-if="selectedLocalList.length <= 3 && selectedLocalList.length > 0">
         <div v-if="newTime === true">
           <div class="itm-icon-img-wrap-new" :class="{'edit-padding-left':editTime,'new-padding-left-less-three':newMemberlessThree,'itm-icon-img-wrap-right':newTime,'itm-icon-img-wrap-left':editTime}">
@@ -47,10 +49,25 @@
           <i class="icon2-arrow-right-small arrow"></i>
         </div>
       </div>
+      </div>
+      <i class="icon2-arrow-right-small arrow" v-show="this.subNewItem"></i>
     </v-touch>
   </div>
 </template>
 <style scoped>
+  .moreBorder{
+    border-bottom: 1px solid #E0E0E0;
+  }
+  div .lessBorder{
+    border-bottom: none
+  }
+  div.subtodo-border{
+    border-bottom: none;
+  }
+  .member{
+    color: #55A8FD;
+    font-size: 18px;
+  }
   .itm-icon-img-wrap-new>*{
     float: right;
     margin-right: 0.15rem;
@@ -61,6 +78,7 @@
   .touch-memmber{
     display: flex;
     align-items: center;
+    border-bottom: 1px solid #E0E0E0;
   }
   .wrap-member{
     max-width: 5.4rem;
@@ -68,10 +86,10 @@
     overflow: hidden;
     white-space: nowrap;
     height:1.3rem;
-    margin-left: 0.2rem;
+    margin-left: 0.3rem;
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    color: #999999;
+    color: #3D3D3D;
   }
   .select-member{
     /*font-family: PingFangSC-Regular;*/
@@ -85,8 +103,9 @@
   .execute{
     font-family: PingFangSC-Regular;
     font-size: 17px;
-    color: #333333;
+    color: #191F25;
     letter-spacing: 0;
+    margin-left: 0.3rem;
   }
   .new-padding-left-more-three{
     /*left:5.3rem*/
@@ -94,7 +113,7 @@
   }
   .new-padding-left-less-three{
     /*left:5.3rem*/
-    margin-left:4.2rem
+    margin-left:3.5rem
   }
   .edit-padding-left{
     /*margin-left:1.8rem*/
@@ -116,7 +135,6 @@
     /*margin-top: -0.3rem;*/
   }
   .outer{
-    border-bottom: 1px solid #E0E0E0;
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
@@ -144,10 +162,12 @@
     /*line-height: 1.458rem;*/
   }
   .arrow{
-    color: #999999;
-    font-size: 21px;
+    /*color: #999999;*/
+    /*font-size: 21px;*/
+    color: rgba(25,31,37,0.28);
+    font-size: 25px;
     position: absolute;
-    top:0.38rem;
+    top:0.31rem;
     right: 0.2rem;
   }
 </style>
@@ -174,7 +194,9 @@
       selectedRsqIds: Array,  //  当前选中的人
       disabledRsqIds: Array,   //  不可选的人
       newTime: Boolean,
-      editTime: Boolean
+      editTime: Boolean,
+      subNewItem: Boolean,
+      moreToShow: Boolean
     },
     computed: {
       loginUser () {
@@ -201,6 +223,7 @@
     watch: {
       userRsqIds (ids) {
         this.fetchUserIds(ids, 'localList')
+        console.log('localList' + this.localList)
       },
       selectedRsqIds (ids) {
         this.fetchUserIds(ids, 'selectedLocalList')
@@ -218,7 +241,8 @@
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
         }
-        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
+//        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
+        this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {
         var that = this
@@ -291,6 +315,7 @@
         return this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: ids})
           .then(idMap => {
             this[targetListName] = util.getMapValuePropArray(idMap)
+//            console.log('this[targetListName]' + JSON.stringify(this[targetListName]))
 //            window.rsqadmg.exec('hideLoader')
           })
       }

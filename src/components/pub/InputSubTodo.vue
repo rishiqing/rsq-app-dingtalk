@@ -1,20 +1,35 @@
 <template>
-  <div class="subtodo">
-    <v-touch class="" @tap="showSubTodo">
-      <span class="date">子任务</span>
-      <span class="now" :class="{'edit-padding-left':editTime}">{{subtodoString}}</span>
-      <i class="icon2-arrow-right-small arrow"></i>
+  <div class="subtodo" :class="{hasBorder: hasSubtodo}">
+    <v-touch class="subtodo-wrap" @tap="showSubTodo">
+      <img src="../../assets/img/subtodo.png" alt="" class="subtodo-icon">
+      <span class="date addSub">添加子任务</span>
+      <!--<span class="now" :class="{'edit-padding-left':editTime}">{{subtodoString}}</span>-->
+      <!--<i class="icon2-arrow-right-small arrow"></i>-->
     </v-touch>
   </div>
 </template>
 <style lang="" scoped>
+  .hasBorder{
+    border-bottom:1px solid #E3E3E3;
+  }
+  .addSub{
+    margin-left: 0.3rem;
+  }
+  .subtodo-icon{
+    width: 16px;
+    height: 16px;
+  }
   .subtodo{
     background-color: white;
     position: relative;
     /*height:1.3rem;*/
     line-height: 1.3rem;
-    /*padding-left:3% ;*/
-    /*border-bottom:1px solid #E3E3E3;*/
+      /*padding-left:3% ;*/
+    border-bottom:1px solid #E0E0E0;
+  }
+  .subtodo-wrap{
+    display: flex;
+    align-items: center;
   }
   .arrow{
     color: #999999;
@@ -43,6 +58,7 @@
   }
 </style>
 <script>
+  import def from 'ut/defaultUtil'
   export default {
     data () {
       return {}
@@ -58,9 +74,7 @@
         var unfinishcount = 0
         var result = null
         var subtodo = this.item.subTodos
-        // console.log('---' + subtodo + '----') // 这一行输出两次
         if (subtodo === undefined) {
-          // console.log('果然相等')
           return ''
         } else {
           for (var i = 0; i < subtodo.length; i++) {
@@ -78,6 +92,9 @@
           }
         }
       }
+//      hasSubtodo () {
+//        return this.$store.state.todo.currentTodo.subTodos.length > 0
+//      }
     },
     methods: {
       showSubTodo () {
@@ -85,6 +102,8 @@
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
         }
+        this.$store.dispatch('setCurrentTodo', def.allDefaultTodo())
+        this.$store.commit('SAVE_ID', {'id': this.item.id})
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

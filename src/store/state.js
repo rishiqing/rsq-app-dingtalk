@@ -44,6 +44,8 @@ export default {
     //  收纳箱日程列表
     items: null
   },
+  priority: '重要且紧急',
+  priorityState: '',
   /**
    * 日程页面基础数据结构
    */
@@ -67,6 +69,25 @@ export default {
     //  重复相关的字段是否修改过，目前的条件是如果title/note/subTodos修改过，认为修改过
     isRepeatFieldEdit: false
   },
+  repeatWeek: [],
+  repeatMonth: [],
+  repeat: {
+    startDate: '',
+    endDate: '',
+    dates: '',
+    createTaskDate: '',
+    alwaysRepeat: true,
+    isCloseRepeat: false,
+    isLastDate: false,
+    repeatBaseTime: [],
+    repeatOverDate: '',
+    repeatType: ''
+  },
+  moreToShow: false,
+  record: [],
+  comment: [],
+  title: '',
+  final: '',
   /**
    * 组件之间需要共享的临时数据
    */
@@ -108,5 +129,6 @@ export default {
    */
   dayHasTodoCache: {},
   replyId: null,
-  replyName: null
+  replyName: null,
+  id: ''
 }
