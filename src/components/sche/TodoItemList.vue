@@ -13,14 +13,13 @@
 <style lang="scss" scoped>
   .sche-list{
     background-color: white;
-    /*border-bottom:1px solid #E0E0E0 ;*/
+    border-bottom:1px solid #E0E0E0 ;
     border-top:1px solid #DADADA ;
+    /*padding-left: 3%;*/
     max-height: 15rem;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-left: 3%;
-    max-height: 15rem;
-    overflow: auto;
+    /*margin-top: 45px;*/
   }
   .itemList{
     /*padding-bottom:1.306rem;*/
