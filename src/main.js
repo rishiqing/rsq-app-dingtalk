@@ -3,7 +3,7 @@
 import 'as/css/index.scss'
 
 import 'as/js/rsqAdapterManager.js'
-import 'as/js/rsqQywxmAdapter.js'
+import 'as/js/rsqDdmAdapter.js'
 // xss漏洞
 import 'as/js/xssFilter.js'
 
@@ -20,6 +20,7 @@ import store from './store'
 //  sentry相关
 import Raven from 'raven-js'
 import RavenVue from 'raven-js/plugins/vue'
+// import growingUtil from './utils/growingUtil'
 //  正式环境下配置sentry
 if (window.rsqConfig.env === 'prod') {
   Raven
@@ -38,6 +39,8 @@ window.rsqadmg.exec('auth', {
       rsqUser: rsqUser,
       authUser: authUser
     }
+    // console.log(JSON.stringify(rsqUser))
+    // growingUtil.growingIoMethod(rsqUser)
     //  去掉iOS的回弹效果
     window.rsqadmg.exec('disableBounce')
 
@@ -53,7 +56,12 @@ window.rsqadmg.exec('auth', {
     })
   },
   error: function () {
-    alert('验证失败')
+    window.rsqadmg.exec('alert', {
+      message: '企业成员数据同步中，请稍后……',
+      success: function () {
+        window.location.href = 'https://www.rishiqing.com'
+      }
+    })
   }
 })
 
