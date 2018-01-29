@@ -241,6 +241,7 @@
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
         }
+        this.$router.push('/pub/MemberEdit')
 //        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
 //        this.showWebMemberEdit(e)
       },

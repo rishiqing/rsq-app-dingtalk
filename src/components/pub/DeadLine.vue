@@ -63,7 +63,7 @@
     <div class="deadline-bottom">
       <span class="never">永不截止</span>
       <v-touch @tap="toggleAllDay">
-        <input class="mui-switch dealine-switch" type="checkbox" checked="true">
+        <input class="mui-switch dealine-switch" type="checkbox">
       </v-touch>
     </div>
     <div class="another-bottom">
@@ -427,20 +427,23 @@
         console.log('处理过后的dateStruct是' + JSON.stringify(dateStruct))
         this.selectNumDate = dateStruct.dateResult || []
         if (this.$store.state.repeat.repeatOverDate) {
-          var year = this.$store.state.repeat.repeatOverDate.getFullYear()
-          var month = this.$store.state.repeat.repeatOverDate.getMonth()
-          var date = this.$store.state.repeat.repeatOverDate.getDate()
+          var year = this.$store.state.repeat.repeatOverDate.substring(0, 4)
+          var month = this.$store.state.repeat.repeatOverDate.substring(5, 7)
+          var date = this.$store.state.repeat.repeatOverDate.substring(8, 10)
+//          console.log(year + month + date)
           this.focusDate = new Date(year, month - 1, date)
         } else {
           this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
+          this.select = false
         }
         this.resetType()
         var that = this
         if (this.$store.state.repeat.repeatOverDate) {
           this.days.forEach(function (array) {
             array.forEach(function (obj) {
-              if (obj.date.getDate() === that.$store.state.repeat.repeatOverDate.substring(6, 8)) {
-                obj.selected = true
+              console.log(obj.date.getDate() + ':' + parseInt(that.$store.state.repeat.repeatOverDate.substring(8, 10)))
+              if (obj.date.getDate() === parseInt(that.$store.state.repeat.repeatOverDate.substring(8, 10))) {
+                obj.isSelected = true
               }
             })
           })
@@ -473,7 +476,7 @@
       },
       tapDay (e, obj) {
         if (!this.select) {
-          console.log('进来了')
+//          console.log('进来了')
           this.clearSelected()
           obj.isSelected = !obj.isSelected
 //        this.$emit('selectedDate', obj)

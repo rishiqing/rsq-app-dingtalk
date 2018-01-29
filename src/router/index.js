@@ -11,6 +11,8 @@ import draw from 'com/drawer'
 // import SendConversation from 'com/demo/SendConversation'
 // import Scroll from 'com/demo/Scroll'
 // import CalendarDemo from 'com/demo/CalendarDemo'
+import MemberList from 'com/pub/MemberList'
+import MemberEdit from 'com/pub/MemberEdit'
 import editTitle from 'com/pub/editTitle'
 import TodoEditPriority from 'com/pub/TodoEditPriority'
 import Login from 'com/Login'
@@ -73,12 +75,18 @@ const router = new Router({
       component: test1,
       meta: {requireAuth: true}
     },
-    // {
-    //   path: '/test',
-    //   name: 'test',
-    //   component: test,
-    //   meta: {requireAuth: true}
-    // },
+    {
+      path: '/pub/MemberEdit',
+      name: 'MemberEdit',
+      component: MemberEdit,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/MemberList',
+      name: 'MemberList',
+      component: MemberList,
+      meta: {requireAuth: true}
+    },
     {
       path: '/sche',
       name: 'sche',

@@ -498,6 +498,9 @@ export default {
   },
   SAVE_USER (state, p) {
     // console.log('拿到的列表' + JSON.stringify(p.item[0].childList))
-    state.userList = p.item[0].childList
+    state.userList = p.item[0].childList[0].childList
+  },
+  SAVE_MEMBER (state, p) {
+    state.memberList = p
   }
 }
