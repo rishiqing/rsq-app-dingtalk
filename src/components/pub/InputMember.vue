@@ -242,7 +242,7 @@
           return
         }
 //        return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
-        this.showWebMemberEdit(e)
+//        this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {
         var that = this
