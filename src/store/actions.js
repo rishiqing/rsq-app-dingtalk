@@ -960,5 +960,12 @@ export default {
         commit('SAVE_COMMENT', {item: item})
         return item
       })
+  },
+  fetchUsers ({commit, state}, p) {
+    return api.todo.fetchUsers(p)
+      .then((item) => {
+        commit('SAVE_USER', {item: item})
+        return item
+      })
   }
 }

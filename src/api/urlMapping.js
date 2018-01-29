@@ -30,5 +30,6 @@ export default {
   'POST_RECORD_COMMENT': 'task/rsqTodoAction/saveTodoAction',
   'GET_FILE_FROM_AlI': 'task/v2/folders/file/getFileFromAli',
   'GET_RECORD': 'task/v2/todo/getTodoActions',
-  'GET_COMMENT': 'task/v2/todo/getTodoComments'
+  'GET_COMMENT': 'task/v2/todo/getTodoComments',
+  'GET_USER': 'task/department/getTeamTree'
 }

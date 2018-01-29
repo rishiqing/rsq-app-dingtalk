@@ -43,7 +43,7 @@ export default {
         .then(res => {
           resolve(res.json())
         }, err => {
-          console.log('进来错误了')
+          // console.log('进来错误了')
           window.rsqadmg.log(JSON.stringify(err))
           reject(err)
         })
@@ -249,6 +249,18 @@ export default {
   getComment (props) {
     return new Promise((resolve, reject) => {
       var path = mapping.GET_COMMENT + '?id=' + props.id
+      Vue.http.get(path)
+        .then(res => {
+          resolve(res.json())
+        }, err => {
+          window.rsqadmg.log(JSON.stringify(err))
+          reject(err)
+        })
+    })
+  },
+  fetchUsers () {
+    return new Promise((resolve, reject) => {
+      var path = mapping.GET_USER
       Vue.http.get(path)
         .then(res => {
           resolve(res.json())

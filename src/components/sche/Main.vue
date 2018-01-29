@@ -189,6 +189,9 @@
             })
           })
         })
+      },
+      fetchUsers () {
+        this.$store.dispatch('fetchUsers')
       }
     },
     mounted () {
@@ -203,6 +206,7 @@
           }
         }
       }
+      this.fetchUsers()
       window.rsqadmg.execute('setOptionButtons', btnParams)
       this.$store.dispatch('setNav', {isShow: true})
 

@@ -495,5 +495,9 @@ export default {
   },
   SAVE_TEXT (state, p) {
     state.final = p
+  },
+  SAVE_USER (state, p) {
+    // console.log('拿到的列表' + JSON.stringify(p.item[0].childList))
+    state.userList = p.item[0].childList
   }
 }

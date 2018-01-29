@@ -88,6 +88,7 @@ export default {
   comment: [],
   title: '',
   final: '',
+  userList: [],
   /**
    * 组件之间需要共享的临时数据
    */
