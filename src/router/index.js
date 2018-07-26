@@ -3,11 +3,18 @@ import Router from 'vue-router'
 import store from '@/store'
 import api from '@/api'
 import coment from 'com/pub/coment'
+// import test from 'com/test'
+import test1 from 'com/test1'
+import draw from 'com/drawer'
 // import Init from 'com/Init'
 // import Upload from 'com/demo/Upload'
 // import SendConversation from 'com/demo/SendConversation'
 // import Scroll from 'com/demo/Scroll'
 // import CalendarDemo from 'com/demo/CalendarDemo'
+import MemberList from 'com/pub/MemberList'
+import MemberEdit from 'com/pub/MemberEdit'
+import editTitle from 'com/pub/editTitle'
+import TodoEditPriority from 'com/pub/TodoEditPriority'
 import Login from 'com/Login'
 import Sche from 'com/sche/Main'
 import Inbox from 'com/inbox/Main'
@@ -27,6 +34,7 @@ import RemindWindow from 'com/pub/RemindWindow'
 import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
 import pcEnd from 'com/me/pcEnd'
+import newInbox from 'com/inbox/newInbox'
 // import test from 'com/demo/test'
 Vue.use(Router)
 
@@ -35,6 +43,49 @@ const router = new Router({
     {
       path: '/',
       redirect: '/sche'
+      // redirect: '/test1'
+    },
+    {
+      path: '/newInbox',
+      name: 'newInbox',
+      component: newInbox,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/draw',
+      name: 'draw',
+      component: draw,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/editTitle',
+      name: 'editTitle',
+      component: editTitle,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/TodoEditPriority',
+      name: 'TodoEditPriority',
+      component: TodoEditPriority,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/test1',
+      name: 'test1',
+      component: test1,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/MemberEdit',
+      name: 'MemberEdit',
+      component: MemberEdit,
+      meta: {requireAuth: true}
+    },
+    {
+      path: '/pub/MemberList',
+      name: 'MemberList',
+      component: MemberList,
+      meta: {requireAuth: true}
     },
     {
       path: '/sche',

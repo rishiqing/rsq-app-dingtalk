@@ -158,7 +158,8 @@ export default {
     //  暂时这么处理----日程任务默认为重要紧急，后面加上选择优先级功能之后再修改
     var newItem = p.newItem
 
-    newItem['pContainer'] = 'IE'
+    newItem['pContainer'] = p.pContainer
+    newItem['pNote'] = p.pNote
     var dateStruct = dateUtil.backend2frontend(newItem)
     p['dateStruct'] = dateStruct
     switch (dateStruct.dateType) {
@@ -224,7 +225,9 @@ export default {
   },
   createSubTodo ({commit, state, dispatch}, p) {
     var name = p.newItem.pTitle
-    return api.todo.postSubTodo({name: name, todoId: p.todoId})
+    var startDate = p.startDate
+    var endDate = p.endDate
+    return api.todo.postSubTodo({name: name, todoId: p.todoId, startDate: startDate, endDate: endDate})
       .then(item => {
         commit('CHILDTASK_TODO_CREATED', {item: item})
       })
@@ -519,18 +522,11 @@ export default {
       })
   },
   updateSubTodo ({commit, state}, p) {
-    //  p.todo不存在，则默认读取currentTod
-    // var id = state.todo.currentTodo.subTodos[0].id
-    // var id = p.item.id
     p.item.name = p.name
     var item = p.item
-    //  如果id存在，则ajax更新
-    // var editItem = p.editItem
-    // console.log('todo的id是' + id)
-    // editItem['id'] = id
     return api.todo.putSubTodoProps(item)
       .then(subTodo => {
-        commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
+        // commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
       })
   },
   updateSubTodoCheck ({commit, state}, p) {
@@ -941,5 +937,34 @@ export default {
       urlParams,
       data: p.data
     })
+  },
+  changePriority ({commit, state}, p) {
+    return api.todo.changePriority(p)
+      .then((item) => {
+        commit('CHANGE_TODO_PRIORITY', {id: p.id, pContainer: p.pContainer, item: item})
+      })
+    // commit('CHANGE_PRIORITY', {id: p.id, pContainer: p.pContainer})
+  },
+  getRecord ({commit, state}, p) {
+    return api.todo.getRecord(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('SAVE_RECORD', {item: item})
+        return item
+      })
+  },
+  getComment ({commit, state}, p) {
+    return api.todo.getComment(p)
+      .then((item) => {
+        commit('SAVE_COMMENT', {item: item})
+        return item
+      })
+  },
+  fetchUsers ({commit, state}, p) {
+    return api.todo.fetchUsers(p)
+      .then((item) => {
+        commit('SAVE_USER', {item: item})
+        return item
+      })
   }
 }

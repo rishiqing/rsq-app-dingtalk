@@ -173,7 +173,7 @@
   .cal-week-title {
     position: fixed;top: 0px;left: 0;right: 0;width: 100%;
     padding: 0;height: 31px;line-height: 30px;
-    margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
+    margin-bottom: -1px;color:white;background: white;font-size:1.2rem;
     -webkit-transform: translate3d(0px,0px,0px);
   }
   .c-cal-main table {
@@ -189,6 +189,7 @@
     position: fixed; top: 30px;left: 0;right: 0;padding:0;
     width: 100%;height:40px;overflow: hidden;background: #458CDA;
     -webkit-transform: translate3d(0px,0px,0px);
+    border-bottom: 1px solid #E0E0E0;
   }
   .cal-outer {position:relative;width:100%;height:100%;overflow:hidden;}
   .cal-inner {

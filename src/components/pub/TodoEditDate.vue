@@ -4,22 +4,22 @@
       <div class="dp-sel-type">
         <v-touch class="dp-btn"
                  @tap="tapChangeType($event, 'single')"
-                 :class="{'is-active': dateType=='single'}">单日</v-touch>
+                 :class="{'is-active-date': dateType=='single'}">单日</v-touch>
         <div class="dp-v-line"><div class="dp-v-sep v-h-center"></div></div>
         <v-touch class="dp-btn"
                  @tap="tapChangeType($event, 'discrete')"
-                 :class="{'is-active': dateType=='discrete'}">多日</v-touch>
+                 :class="{'is-active-date': dateType=='discrete'}">多日</v-touch>
         <div class="dp-v-line"><div class="dp-v-sep v-h-center"></div></div>
         <v-touch class="dp-btn"
                  @tap="tapChangeType($event, 'range')"
-                 :class="{'is-active': dateType=='range'}">起止</v-touch>
+                 :class="{'is-active-date': dateType=='range'}">起止</v-touch>
       </div>
       <div class="dp-title">
         <!--<v-touch class="dp-title-tag u-pull-left" @tap="tapEmpty($event)">空</v-touch>-->
         <!--<v-touch class="dp-title-tag u-pull-right" @tap="tapBackToday($event)">今</v-touch>-->
-        <v-touch tag="i" class="icon icon-keyboard_arrow_left u-pull-left"
+        <v-touch tag="i" class="icon-date icon-keyboard_arrow_left u-pull-left"
                  @tap="tapChangeMonth($event, -1)"></v-touch>
-        <v-touch tag="i" class="icon icon-keyboard_arrow_right u-pull-right"
+        <v-touch tag="i" class="icon-date icon-keyboard_arrow_right u-pull-right"
                  @tap="tapChangeMonth($event, 1)"></v-touch>
         <div class="dp-title-text">
           {{focusDate.getFullYear()}}年{{focusDate.getMonth() + 1}}月
@@ -29,14 +29,22 @@
         <table class="dp-table">
           <thead>
           <tr>
-            <td  class="week-ri">日</td>
-            <td  class="week">一</td>
-            <td  class="week">二</td>
-            <td  class="week">三</td>
-            <td  class="week">四</td>
-            <td  class="week">五</td>
-            <td  class="week-six">六</td>
+            <td  class="week">周日</td>
+            <td  class="week">周一</td>
+            <td  class="week">周二</td>
+            <td  class="week">周三</td>
+            <td  class="week">周四</td>
+            <td  class="week">周五</td>
+            <td  class="week">周六</td>
           </tr>
+          <tr class="distance">
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td> </td></tr>
           </thead>
           <tbody>
           <tr v-for="weekArray in days">
@@ -55,22 +63,88 @@
     <v-touch class="date-repeat" @tap="gotoRepeat">
       <span class="list-key u-pull-left">重复</span>
       <i class="icon2-arrow-right arrow u-pull-right light-color"></i>
-      <span class="list-value u-pull-right light-color">{{repeatText}}</span>
+      <span class="list-value u-pull-right light-color">{{final}}</span>
     </v-touch>
     <v-touch tag="p" class="date-clear" @tap="tapEmpty">清除日期放入收纳箱</v-touch>
+    <!--<div class="test" :class="{'come': appear}">哈哈</div>-->
+    <test1
+      :appear="appear"
+      @hideRepeat="hideRepeat"
+      @setRepeat="setRepeat"
+    ></test1>
+    <div class="mask" v-show="appear"></div>
   </div>
 </template>
 <style lang="scss">
+  .distance td{
+    border: none;
+  }
+  .distance{
+    height: 0.5rem;
+  }
+  .mask{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: gainsboro;
+    opacity: 0.5;
+  }
+  .test{
+    width: 100%;
+    height:100px;
+    background-color: yellow;
+    position: absolute;
+    bottom: -100px;
+    transition: 0.1s;
+    z-index: 100;
+  }
+  .come{
+    bottom: 0;
+  }
+  .dp-table tbody {
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+    margin-top: 0.2rem;
+  }
+  .dp-table thead{
+    margin-bottom: 0.2rem;
+  }
+  .dp-table tbody td{
+    border-right: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .is-active-date:after{
+    content: " ";
+    position: absolute;
+    /*height: 3px;*/
+    right: 0;
+    bottom: 0;
+    left:0;
+    background-color: #55A8FD;
+    border-bottom: 3px solid #55A8FD;
+    width: 1rem;
+    margin: 0 auto;
+  }
+   .edit-date div.is-active-date {
+     font-family: PingFangSC-Regular;
+     font-size: 15px;
+     color: #55A8FD;
+   }
   .dp-content .dp-table .is-today{
-    color:#67B2FE
+    /*color:#67B2FE;*/
+    opacity: 0.29;
+    background: #3B9BFB;
+    color:white
   }
   .edit-date {
     .light-color {color: #999999;}
     .date-picker {
       box-sizing: border-box;margin-top: 0.25rem;background: #fff;
       border-top: 1px solid #E0E0E0;
-      border-bottom:1px solid #E0E0E0 ;
-      padding-bottom: 0.4rem;
+      /*border-bottom:1px solid #E0E0E0 ;*/
+      /*padding-bottom: 0.4rem;*/
     }
     .dp-title {
       height: 72px;line-height: 72px;
@@ -78,24 +152,26 @@
       font-size: 19px;
       color: #000000;
       letter-spacing: -0.46px;
-      padding: 0 0.4rem;
+      padding: 0 2.4rem;
     }
     .dp-title-text {
       text-align: center;
       font-family: PingFangSC-Regular;
-      font-size: 19px;
+      font-size: 17px;
       color: #3D3D3D;
     }
-    .dp-title .icon {
-      font-size: 0.6rem;
-      color: #333333;
+    .dp-title .icon-date {
+      font-size: 0.7rem;
+      color: #3D3D3D;
     }
     .dp-title .dp-title-tag {font-size: 0.4rem;line-height:1;margin-top:12px;padding:5px;border: solid 1px #e8e8e8;border-radius: 50%;}
     .dp-table {width:100%;height:8rem;text-align: center;}
     .dp-grey {color: #a8a8a8;}
     .dp-table .dp-selected {
       background: #55A8FD;
-      color:white;}
+      color:white;
+      opacity: 1;
+    }
     .dp-sel-type {position: relative;border-bottom: solid 1px #e4e4e4;overflow: hidden;
       height: 40px;line-height: 40px;}
     .dp-btn {
@@ -104,8 +180,10 @@
       text-align: center;
       font-family: PingFangSC-Regular;
       font-size: 15px;
-      color: #666666;
-      line-height: 40px;}
+      color: #8C8C8C;
+      line-height: 40px;
+      position: relative;
+    }
     .dp-v-line {
       float: left;
       position: relative;
@@ -118,21 +196,23 @@
     .dp-v-sep {
       width: 1px; height: 0.64rem;background: #979797;
     }
-    .week{
+    .dp-table .week{
       font-family: PingFangSC-Regular;
       font-size: 11px;
-      color: #666666;
+      color: #8C8C8C;
+      border: none;
     }
     .dp-day {
       margin:0 auto;
-      width:30px;
-      height:30px;
-      line-height:30px;
+      /*width:30px;*/
+      /*height:30px;*/
+      height: 55px;
+      line-height:55px;
       text-align: center;
-      border-radius: 50%;
-      font-family: PingFangSC-Medium;
-      font-size: 17px;
-      color: #666666;
+      /*border-radius: 50%;*/
+      font-family: PingFangSC-Regular;
+      font-size: 13px;
+      color: #3D3D3D;
     }
     .edit-date div{
 
@@ -140,12 +220,12 @@
     .week-six{
       font-family: PingFangSC-Regular;
       font-size: 11px;
-      color: #FF7A7A;
+      /*color: #FF7A7A;*/
     }
     .week-ri{
       font-family: PingFangSC-Regular;
       font-size: 11px;
-      color: #FF7A7A;
+      /*color: #FF7A7A;*/
     }
     .arrow{
       font-size:17px;
@@ -181,7 +261,7 @@
 </style>
 <script>
   import dateUtil from 'ut/dateUtil'
-
+  import test1 from 'com/pub/test1'
   /**
    * 主model：state.pub.currentTodoDate，带下划线的是用于不同页面数据共享的属性，不会存储在后台
    * {
@@ -207,10 +287,32 @@
         days: [],
         //  重复功能相关
         dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复，none表示dateType被清空
-        selectNumDate: null  //  表示重复当前选中的日期
+        selectNumDate: null,  //  表示重复当前选中的日期
+        appear: false,
+        weekArray: [
+          {week: '周日', isSelected: false, flag: 0},
+          {week: '周一', isSelected: false, flag: 1},
+          {week: '周二', isSelected: false, flag: 2},
+          {week: '周三', isSelected: false, flag: 3},
+          {week: '周四', isSelected: false, flag: 4},
+          {week: '周五', isSelected: false, flag: 5},
+          {week: '周六', isSelected: false, flag: 6}
+        ]
       }
     },
+    components: {
+      'test1': test1
+    },
     computed: {
+      repeat () {
+        return this.$store.state.repeat
+      },
+      dateTextMonth () {
+        return this.$store.state.repeatMonth
+      },
+      dateTextWeek () {
+        return this.$store.state.repeatWeek
+      },
       numToday () {
         return dateUtil.clearTime(new Date()).getTime()
       },
@@ -223,20 +325,64 @@
       currentTodoDate () {
         return this.$store.state.pub.currentTodoDate
       },
-      repeatText () {
-        var text
-        var c = this.currentTodoDate
-        if (this.dateType === 'repeat' && c.repeatType) {
-          var arr = this.currentTodoDate.repeatBaseTime.split(',')
-          text = dateUtil.repeatDayText(c.repeatType, arr)
-          if (c.isLastDate) {
-            text += '、最后一天'
-          }
-        }
-        return (text || '不') + '重复'
+      final () {
+        return this.repeat.repeatType ? this.$store.state.final : '请选择重复周期'
+//        if (c)
+//        return this.$store.state.final
       }
+//      repeatText () {
+//        var c = this.repeat.repeatType
+//        console.log(JSON.stringify(this.repeat))
+//        if (c === 'everyDay') {
+//          return '每天重复'
+//        } else if (c === 'everyWeek') {
+//          var text = ''
+//          for (var i = 0; i < this.dateTextWeek.length; i++) {
+//            console.log(this.dateTextWeek[i].week)
+//            text += this.dateTextWeek[i].week
+//          }
+//          return text + '重复'
+//        } else if (c === 'everyMonth') {
+//          text = ''
+//          for (i = 0; i < this.dateTextMonth.length; i++) {
+//            console.log(new Date(this.dateTextMonth[i]).getDate() + '---------')
+//            text += new Date(this.dateTextMonth[i]).getDate()
+//          }
+//          console.log(text)
+//          return '每月' + text + '重复'
+//        } else if (c === 'everyYear') {
+//          return '每年重复'
+//        }
+//        return '请选择重复周期'
+//        var c = this.currentTodoDate
+//        if (this.dateType === 'repeat' && c.repeatType) {
+//          var arr = this.currentTodoDate.repeatBaseTime.split(',')
+//          text = dateUtil.repeatDayText(c.repeatType, arr)
+//          if (c.isLastDate) {
+//            text += '、最后一天'
+//          }
+//        }
+//        return (text || '不') + '重复'
+//        return text ? text + '重复' : '选择重复周期'
+//      }
     },
     methods: {
+      setRepeat () {
+        this.appear = false
+        this.dateType = 'repeat'
+      },
+      hideRepeat () {
+        this.appear = false
+//        console.log(JSON.stringify(this.currentTodo))
+        if (this.currentTodo.isCloseRepeat) {
+          console.log('不是重复')
+          this.repeat['repeatType'] = null
+          this.repeat['repeatBaseTime'] = []
+          this.repeat['repeatOverDate'] = null
+          this.$store.state.repeatMonth.splice(0, this.$store.state.repeatMonth.length)
+          this.$store.state.repeatWeek.splice(0, this.$store.state.repeatWeek.length)
+        }
+      },
       isToday (day) {
         return day.date.getTime() === this.numToday
       },
@@ -247,8 +393,34 @@
         this.dateType = dateStruct.dateType || 'single'
         this.selectNumDate = dateStruct.dateResult || []
         this.focusDate = dateStruct.dateResult ? new Date(dateStruct.dateResult[0]) : new Date()
-        console.log('this.focusDate是' + this.focusDate)
+//        console.log('this.focusDate是' + this.focusDate)
         this.resetType()
+//        if (this.currentTodo.isCloseRepeat) {
+//          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: dateStruct.repeatType})
+//        }
+        if (!this.currentTodo.isCloseRepeat && dateStruct.repeatType === 'everyWeek') {
+          this.$store.state.repeatWeek.splice(0, this.$store.state.repeatWeek.length)
+          for (var i = 0; i < dateStruct.dateResult.length; i++) {
+            var index = new Date(dateStruct.dateResult[i]).getDay()
+            this.$store.state.repeatWeek.push({'week': this.weekArray[index].week, 'flag': this.weekArray[index].flag})
+          }
+          this.$store.commit('SAVE_REPEAT_BASETIME')
+          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: 'everyWeek'})
+        } else if (!this.currentTodo.isCloseRepeat && dateStruct.repeatType === 'everyMonth') {
+          this.$store.state.repeatMonth.splice(0, this.$store.state.repeatMonth.length)
+          for (var j = 0; j < dateStruct.dateResult.length; j++) {
+            this.$store.state.repeatMonth.push(new Date(dateStruct.dateResult[j]))
+            console.log('塞进去的值为' + new Date(dateStruct.dateResult[j]))
+          }
+          this.$store.commit('SAVE_REPEAT_MONTH')
+          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: 'everyMonth'})
+        } else if (!this.currentTodo.isCloseRepeat) {
+          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: dateStruct.repeatType})
+          this.$store.state.repeat['isLastDate'] = this.currentTodo.isLastDate
+          if (this.currentTodo.isLastDate) {
+            this.$store.state.repeatMonth.push({text: '最后一天'})
+          }
+        }
       },
       clearType () {
         this.dateType = 'none'
@@ -294,9 +466,9 @@
       },
       resetMonth (offset) {
         if (offset) {
-          console.log('开始this.focusdate是' + this.focusDate)
+//          console.log('开始this.focusdate是' + this.focusDate)
           this.focusDate = dateUtil.firstDayOfMonth(this.focusDate, offset)
-          console.log('之后this.focusdate是' + this.focusDate)
+//          console.log('之后this.focusdate是' + this.focusDate)
         }
         this.days = dateUtil.getMonthDays(this.focusDate) //  this.days数据结构很有意思
 //        console.log('this.days是' + JSON.stringify(this.days))
@@ -395,7 +567,8 @@
       isModified () {
         //  TODO  判断是否更新过
         var oldObj = this.currentTodo
-        var newObj = this.currentTodoDate
+//        var newObj = this.currentTodoDate
+        var newObj = this.repeat
         return newObj.startDate !== oldObj.startDate ||
           newObj.endDate !== oldObj.endDate ||
           newObj.dates !== oldObj.dates ||
@@ -404,13 +577,18 @@
           newObj.isLastDate !== oldObj.isLastDate
       },
       gotoRepeat () {
-        this.$router.push('/todoEdit/repeat')
+//        this.$router.push('/todoEdit/repeat')
+        this.appear = true
+//        console.log(dateUtil.backend2frontend(this.currentTodoDate).repeatType)
+//        if (!dateUtil.backend2frontend(this.currentTodoDate).repeatType) {
+//          this.$store.commit('SAVE_REPEAT', {type: 'repeatType', value: 'everyDay'})
+//        }
       },
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
-        console.log('saveTodoDateState的sorted是' + sorted)
+//        console.log('saveTodoDateState的sorted是' + JSON.stringify(sorted))
         var resObj = dateUtil.frontend2backend({dateType: this.dateType, dateResult: sorted, sep: '/'})
-        console.log('saveTodoDateState的resobj是' + resObj)
+//        console.log('saveTodoDateState的resobj是' + JSON.stringify(sorted))
         //  如果不是repeat类型，那么清除
         if (this.dateType !== 'repeat') {
           resObj['repeatType'] = null
@@ -418,22 +596,29 @@
           resObj['_selected'] = null
           resObj['_uRepeatType'] = null
           resObj['_uIsLastDate'] = false
-          resObj['_uRepeatStrTimeArray'] = null
+          this.repeat['repeatType'] = null
+          this.repeat['repeatBaseTime'] = []
+          this.$store.state.repeatMonth.splice(0, this.$store.state.repeatMonth.length)
+          this.$store.state.repeatWeek.splice(0, this.$store.state.repeatWeek.length)
+//          console.log('都清空了')
         }
 
         this.$store.commit('PUB_TODO_DATE_UPDATE', {data: resObj})
       },
       getSubmitResult () {
-        var c = this.currentTodoDate
+        var d = this.currentTodoDate
+        console.log('currentTodoDate是' + JSON.stringify(this.currentTodoDate))
+        console.log('repeat是' + JSON.stringify(this.repeat))
+        var c = this.repeat
         var o = {
-          startDate: c.startDate,
-          endDate: c.endDate,
-          dates: c.dates
+          startDate: d.startDate,
+          endDate: d.endDate,
+          dates: d.dates
         }
         //  如果重复相关属性存在，那么处理重复相关的其他属性
         if (c.repeatType) {
           o.repeatType = c.repeatType
-          o.repeatBaseTime = c.repeatBaseTime
+          o.repeatBaseTime = c.repeatBaseTime.toString()
           o.alwaysRepeat = c.alwaysRepeat
           o.isCloseRepeat = false
           o.isLastDate = c.isLastDate
@@ -449,27 +634,32 @@
         return o
       },
       submitTodo (next) {
+        var that = this
         if (this.isModified()) {
           if (this.isEdit) {
             window.rsqadmg.exec('showLoader', {text: '保存中...'})
           }
           var editItem = this.getSubmitResult()
-          console.log('submitTodo的editItem是' + editItem)
+//          console.log('submitTodo的editItem是' + editItem)
           //  如果日期均为空，则容器为收纳箱
           if (!editItem.startDate && !editItem.endDate && !editItem.dates) {
             editItem['pContainer'] = 'inbox'
           } else {
             editItem['pContainer'] = 'IE'
           }
+          console.log('发送前的edittiem' + JSON.stringify(editItem))
           return this.$store.dispatch('updateTodoDate', {editItem: editItem})
             .then(() => {
               this.$store.commit('PUB_TODO_DATE_DELETE')
               if (this.isEdit) {
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '保存成功'})
+                that.$store.state.repeatWeek.splice(0, that.$store.state.repeatWeek.length)
+                that.$store.state.repeatMonth.splice(0, that.$store.state.repeatMonth.length)
               }
               next()
             })
+//          next()
         } else {
           next()
         }
@@ -489,12 +679,15 @@
       })
       this.$store.dispatch('setNav', {isShow: false})
     },
+    mounted () {
+//      this.initData()
+    },
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存
       this.saveTodoDateState()
-      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
-        return next()
-      }
+//      if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
+//        return next()
+//      }
 //      next()
       this.submitTodo(next)
     }

@@ -8,7 +8,7 @@
         >
           <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           <v-touch class="cal-day" @tap="calDayClick(day.date)"
-                   :class="{'cal-day--focus': isHighLight(day.date)}">
+                   :class="{'cal-day--focus': isHighLight(day.date), 'todayColor': isToday(day.date)}">
             {{dateText(day)}}
           </v-touch>
         </td>
@@ -34,6 +34,11 @@
     },
     components: {},
     methods: {
+      isToday (day) {
+//        console.log(this.todayValue === day.date.getTime())
+//        return true
+        return this.todayValue === day.getTime()
+      },
       dateText (day) {
         //  如果是当天，则显示“今”这个字
         return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
@@ -51,13 +56,18 @@
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
+  .cal-table .todayColor{
+    background: rgba(50,150,250,0.29);
+    color:white;
+    border-radius: 50%;
+  }
   .cal-bar {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;display: inline-block;
     /*background: #F00;*/
-    background: #458CDA;
+    background: white;
   }
   .cal-table {
     border-collapse: collapse;
@@ -69,9 +79,9 @@
   }
   .cal-weekday {
     position:relative;
-    font-family: PingFangSC-Medium;
+    font-family: PingFangSC-Regular;
     font-size: 11px;
-    color: #FFFFFF;
+    color: #999999;
     line-height: 12px;
   }
   .cal-day-tag {position:absolute;top:5px;right: 23px;border-radius:50%;}
@@ -81,13 +91,15 @@
     width:30px;
     height:30px;
     line-height:30px;
-    font-family: PingFangSC-Medium;
+    font-family: PingFangSC-Regular;
     font-size: 15px;
-    color: #FFFFFF;
+    color: #000000;
   }
   .cal-day--focus {
-    background:white;
-    color:#479AEF;
+    /*background:white;*/
+    /*color:#479AEF;*/
+    background: #48A1FA !important;
+    color:white !important;
     border-radius: 50%;
     font-size: 17px;
   }

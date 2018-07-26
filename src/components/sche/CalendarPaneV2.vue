@@ -8,7 +8,7 @@
         >
           <div v-if="day.isInMonth" class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
           <v-touch v-if="day.isInMonth" class="cal-day" @tap="calDayClick(day.date)"
-                   :class="{'cal-day--focus': isHighLight(day.date)}">
+                   :class="{'cal-day--focus': isHighLight(day.date), 'todayColor': isToday(day.date)}">
             {{dateText(day)}}
           </v-touch>
         </td>
@@ -34,6 +34,11 @@
     },
     components: {},
     methods: {
+      isToday (day) {
+//        console.log(this.todayValue === day.date.getTime())
+//        return true
+        return this.todayValue === day.getTime()
+      },
       dateText (day) {
         //  如果是当天，则显示“今”这个字
         return this.todayValue === day.date.getTime() ? '今' : day.date.getDate()
@@ -51,11 +56,16 @@
 </script>
 <style lang="scss" scope>
   @import '../../assets/css/variables.scss';
+  .cal-table .todayColor{
+    background: rgba(50,150,250,0.29);
+    color:white;
+    border-radius: 50%;
+  }
   .cal-pane {
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;display: inline-block;background: #458CDA;
+    top: 0;display: inline-block;background: white;
   }
   .cal-table {
     border-collapse: collapse;
@@ -67,7 +77,7 @@
   }
   .cal-weekday {
     position:relative;
-    font-family: PingFangSC-Medium;
+    font-family: PingFangSC-Regular;
     font-size: 11px;
     color: #FFFFFF;
     line-height: 12px;

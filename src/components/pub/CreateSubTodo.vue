@@ -1,37 +1,48 @@
 <template>
   <div class="">
-    <div class="for-cover"></div>
-    <div class="topSubtodo" v-if="seen" >
-      <v-touch @tap="change">
-        <v-touch ><i class="icon2-add-circle add"></i></v-touch>
-        <span class="new-create">新建子任务</span>
-      </v-touch>
+    <textarea name="" id="" cols="30" rows="10" placeholder="请输入子任务标题" class="subtodoInput" :value="title"
+              @blur="saveTitle($event.target.value)"
+              @input="inputChange($event.target.value)"
+    ></textarea>
+    <div class="subtodo-padding">
+      <r-input-date
+        :sub-new-item="true"
+        :item="currentTodo"
+      ></r-input-date>
     </div>
-    <div v-else class="anotherTop">
-      <input class="write" type="text" placeholder="输入子任务标题" v-model="inputTitle" >
-      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <button class="create" ><span>创建</span></button>
-      </v-touch>
-    </div>
-    <div class="margin-block"></div>
-    <ul class="sublist" :class="{hasborder:!haschild}">
-      <li v-for="item in items" v-if="items" class="sublistItem">
-        <v-touch class="wrap-sub-icon" v-if="" @tap="clickCheckOut(item)">
-          <i class="icon2-check-box select-sub"></i>
-          <div class="hide" :class="{'for-hide-sub':item.isDone}"></div>
-          <i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>
-        </v-touch>
-        <v-touch class="wrap-input">
-           <input   class="list-below" @focus="IsDisabled($event,item.isDone)" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"
-                    ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable,'is-editable':item.isDone}">
-        </v-touch>
-      </li>
-    </ul>
-    <div class="remind-subtodo" :class="{IsDisplayRemind:haschild}">*清空标题可删除任务</div>
+    <!--<v-touch @tap="saveTodo">-->
+      <!--<button>提交</button>-->
+    <!--</v-touch>-->
+    <!--<div class="subtodo-padding-second">-->
+      <!--<r-input-member-->
+        <!--:sub-new-item="true"-->
+        <!--:is-native="true"-->
+        <!--:index-title="'参与人'"-->
+        <!--:selected-rsq-ids="joinUserRsqIds"-->
+        <!--:disabled-rsq-ids="[]"-->
+        <!--@member-changed="saveMember"-->
+        <!--&gt;</r-input-member>-->
+    <!--</div>-->
+    <!--<ul class="sublist" :class="{hasborder:!haschild}">-->
+      <!--<li v-for="item in items" v-if="items" class="sublistItem">-->
+        <!--<v-touch class="wrap-sub-icon" v-if="" @tap="clickCheckOut(item)">-->
+          <!--<i class="icon2-check-box select-sub"></i>-->
+          <!--<div class="hide" :class="{'for-hide-sub':item.isDone}"></div>-->
+          <!--<i class="icon2-selected hide" :class="{'isdisplay-sub':item.isDone}"></i>-->
+        <!--</v-touch>-->
+        <!--<v-touch class="wrap-input">-->
+           <!--<input   class="list-below" @focus="IsDisabled($event,item.isDone)" @blur="inputBlur($event.target.value, item)"  @input="inputChange($event.target.value)"-->
+                    <!--ref="titleInput" :value=item.name   :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable,'is-editable':item.isDone}">-->
+        <!--</v-touch>-->
+      <!--</li>-->
+    <!--</ul>-->
+    <!--<div class="remind-subtodo" :class="{IsDisplayRemind:haschild}">*清空标题可删除任务</div>-->
   </div>
 </template>
 <script>
   import TodoItemList from 'com/sche/TodoItemList'
+  import InputDate from 'com/pub/InputDate'
+  import InputMember from 'com/pub/InputMember'
   export default {
     data () {
       return {
@@ -50,12 +61,29 @@
       },
       haschild () {
         return this.$store.state.todo.currentTodo.subTodos.length === 0
+      },
+      currentTodo () {
+        return this.$store.state.todo.currentTodo
+      },
+      title () {
+        return this.$store.state.title
+      },
+      mainID () {
+        return this.$store.state.id
       }
     },
     components: {
-      'r-todo-item-list': TodoItemList
+      'r-todo-item-list': TodoItemList,
+      'r-input-date': InputDate,
+      'r-input-member': InputMember
     },
     methods: {
+      inputChange (value) {
+        this.$store.commit('SAVE_TITLE', {'title': value})
+      },
+      saveTitle (value) {
+        this.$store.commit('SAVE_TITLE', {'title': value})
+      },
       IsDisabled (e, pIsDone) {
         if (pIsDone) {
           e.target.blur()
@@ -97,24 +125,34 @@
           }
         }
       },
-      inputChange (value) {
-        this.$refs.titleInput.value = value
-      },
+//      inputChange (value) {
+//        this.$refs.titleInput.value = value
+//      },
       saveTodo () {
-        window.rsqadmg.execute('showLoader', {text: '创建中...'})
-        this.$store.dispatch('createSubTodo', {newItem: {pTitle: this.inputTitle}, todoId: this.todoid})
-          .then(() => {
-            //  触发标记重复修改
-//            console.log('创建完成了')
-            this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
-//            this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: this.inputTitle, type: 7}})
-//              .then(() => {
-//                console.log('saveTodoAction资格行完成')
-//              })
-            this.inputTitle = ''
-            window.rsqadmg.exec('hideLoader')
-            window.rsqadmg.execute('toast', {message: '创建成功'})
-          })
+//        console.log(this.currentTodo.id)
+        if (this.currentTodo.id) {
+          window.rsqadmg.execute('showLoader', {text: '更新中...'})
+          this.$store.dispatch('updateSubTodo', {item: this.currentTodo, name: this.title})
+            .then(() => {
+//              console.log('updateSubTodo执行完成')
+              //  触发标记重复修改
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '更新成功'})
+              this.$router.push(window.history.back())
+              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
+            })
+        } else {
+          window.rsqadmg.execute('showLoader', {text: '创建中...'})
+          this.$store.dispatch('createSubTodo', {newItem: {pTitle: this.title}, todoId: this.mainID, startDate: this.currentTodo.startDate, endDate: this.currentTodo.endDate})
+            .then(() => {
+              console.log('创建成功')
+              window.rsqadmg.exec('hideLoader')
+              window.rsqadmg.execute('toast', {message: '创建成功'})
+              this.$router.push(window.history.back())
+              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED')
+              this.$store.commit('SAVE_TITLE', { 'title': '哈哈哈' })
+            })
+        }
       },
       clickCheckOut (item) {
         this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
@@ -125,9 +163,22 @@
             })
       }
     },
+    created () {
+      var btnParams
+      var that = this
+      btnParams = {
+        btns: [{key: 'subtodo', name: '保存'}],
+        success: function (res) {
+          if (res.key === 'subtodo') {
+            that.saveTodo()
+          }
+        }
+      }
+      window.rsqadmg.execute('setOptionButtons', btnParams)
+    },
     mounted () {
       window.rsqadmg.exec('setTitle', {title: this.titleName})
-      window.rsqadmg.exec('setOptionButtons', {hide: true})
+//      window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.$store.dispatch('setNav', {isShow: false})
     }
 //    beforeRouteLeave (to, from, next) {
@@ -136,6 +187,26 @@
   }
 </script>
 <style scoped>
+  .subtodo-padding{
+    padding-left: 0.3rem;
+    background-color: white;
+    margin-top: 0.2rem;
+    border-top: 1px solid #E0E0E0;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .subtodo-padding-second{
+    padding-left: 0.3rem;
+    background-color: white;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .subtodoInput{
+    resize: none;
+    height: 2.666rem;
+    margin-top: 0.3rem;
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
+    padding-left: 0.2rem;
+  }
   .is-editable{
     disabled:true
   }
@@ -275,7 +346,7 @@
   }
   li:first-child{
   }
-  .isdisplay-sub{
+  i.isdisplay-sub{
     display: block;
     position:absolute;
     top:0.27rem;

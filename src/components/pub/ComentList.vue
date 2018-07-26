@@ -1,9 +1,14 @@
 <template>
-  <ul class="comentlist">
-    <v-touch @tap="changeState()">
-      <div :class="{'isDisplay': !more}" class="operation">收起操作记录</div>
-      <div :class="{'isDisplay': more}" class="operation">显示操作记录</div>
-    </v-touch>
+  <ul class="comentlist" :class="{'noComentHeight':!comentCount}">
+    <div class="comment-border">
+      <v-touch @tap="setCurrentIndex(1)">
+        <div class="discuss" :class="{'active':currentIndex === 1}">讨论</div>
+      </v-touch>
+      <v-touch @tap="setCurrentIndex(2)" >
+        <div class="operation" :class="{'active':currentIndex === 2}">操作记录</div>
+      </v-touch>
+    </div>
+    <div v-show="currentIndex === 2">
     <r-record-coment
       v-for="item in recordItems"
       :disabled="disabled"
@@ -11,6 +16,8 @@
       :key="item.id"
       :more="more"
     ></r-record-coment>
+    </div>
+    <div v-show="currentIndex === 1">
     <r-todo-coment
       v-for="item in commentItems"
       :disabled="disabled"
@@ -18,13 +25,50 @@
       :key="item.id"
       @comment-file-touch="showAction"
     ></r-todo-coment>
-    <div v-if="comentCount" class="noComent">
+    </div>
+    <div v-if="!comentCount && currentIndex === 1" class="noComent">
       <img src="../../assets/img/nocoment.png" alt="">
-      <p class="noComentContent">暂无评论</p>
+      <p class="noComentContent">暂无消息</p>
     </div>
   </ul>
 </template>
 <style>
+  /*ul.noComentHeight{*/
+    /*padding-bottom: 20px;*/
+  /*}*/
+  .comment-border{
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.3rem;
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
+  }
+  .discuss,.operation{
+    font-family: PingFangSC-Regular;
+    font-size: 15px;
+    color: #8C8C8C;
+    padding-bottom: 9px;
+    padding-top: 9px;
+  }
+  .operation{
+    margin-left: 0.5rem;
+  }
+  div.active{
+    color:#55A8FD;
+    position: relative;
+    /*border-bottom: 3px solid #55A8FD;*/
+  }
+  div.active::after{
+    content: " ";
+    position: absolute;
+    /*height: 3px;*/
+    right: 0;
+    bottom: 0;
+    left:0;
+    background-color: #55A8FD;
+    border-bottom: 3px solid #55A8FD;
+  }
   .noComent{
     text-align: center;
     height: 3rem;
@@ -36,9 +80,10 @@
   }
   .noComentContent{
     font-family: PingFangSC-Regular;
-    font-size: 15px;
-    color: #55A8FD;
+    font-size: 17px;
+    color: rgba(25,31,37,0.40);
     letter-spacing: 0;
+    margin-top: 10px;
   }
   .isDisplay{
     display: none;
@@ -46,21 +91,12 @@
   .comentlist{
     background-color: white;
     margin-top: 10px;
+    min-height: 3rem;
     max-height: 9rem;
     /*margin-bottom: 5rem;*/
     padding-bottom: 2.9rem;
     /*margin-bottom: 1.4rem;*/
     /*border-top: 1px solid #E0E0E0;*/
-  }
-  .operation{
-    line-height:1.083rem;
-    padding-left: 0.333rem;
-    font-family: PingFangSC-Regular;
-    color:#55A8FD;
-    font-size:15px ;
-    background-color: white;
-    border-bottom: 1px solid #E0E0E0;
-    border-bottom: 1px solid #E0E0E0;
   }
 </style>
 <script>
@@ -70,14 +106,16 @@
   export default {
     data () {
       return {
-        more: false
+        more: false,
+        currentIndex: 1
       }
     },
     name: 'ComentList',
     props: {
       disabled: Boolean,
       items: Array,
-      commentContent: String
+      commentContent: String,
+      id: Number
     },
     components: {
       'r-todo-coment': ComentItem,
@@ -85,29 +123,49 @@
     },
     computed: {
       recordItems () {
-        return this.items.filter(i => {
-          return i.type !== 0
-        })
+        return this.$store.state.record
+//        if (this.items) {
+//          return this.items.filter(i => {
+//            return i.type !== 0
+//          })
+//        }
       },
       commentItems () {
-        return this.items.filter(i => {
-          return i.type === 0
-        })
+        return this.$store.state.comment
       },
+//      recordItems () {
+//        return this.items.filter(i => {
+//          return i.type !== 0
+//        })
+//      },
+//      commentItems () {
+//        return this.items.filter(i => {
+//          return i.type === 0
+//        })
+//      },
       comentCount () {
-        if (this.items === undefined) {
-          return
-        } else {
-          for (var i = 0; i < this.items.length; i++) {
-            if (this.items[i].type === 0) {
-              return false
-            }
-          }
-          return true
-        }
+        return this.commentItems.length
+//        if (this.items === undefined) {
+//          return
+//        } else {
+//          for (var i = 0; i < this.items.length; i++) {
+//            if (this.items[i].type === 0) {
+//              return false
+//            }
+//          }
+//          return true
+//        }
       }
     },
     methods: {
+      setCurrentIndex (index) {
+        if (index === 1) {
+          this.$store.dispatch('getComment', {id: this.id})
+        } else {
+          this.$store.dispatch('getRecord', {id: this.id})
+        }
+        this.currentIndex = index
+      },
       getFileName (file) {
         if (!file.name) return ''
         var arr = file.name.split('/')

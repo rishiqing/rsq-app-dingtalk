@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fixed-view" style="background:#fff;z-index:999;" transition="expand">
+    <div class="fixed-view" style="background:#fff;z-index:1999;" transition="expand">
       <div class="itm-outer">
         <div class="itm-inner">
           <div class="itm-title u-padding-left-40">
@@ -58,6 +58,15 @@
   }
   .expand-leave {
     transform: translateY(100%);
+  }
+  .fixed-view{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
   }
 </style>
 <script>
@@ -140,7 +149,7 @@
         e.preventDefault()
       }
     },
-    attached () {
+    mounted () {
       this.localList = this.makeLocalList()
       var that = this
       //  如果通过任意方式跳出页面了，那么关闭当前选择框

@@ -383,7 +383,7 @@
   .cal-week-title {
     position: fixed;top: 53px;left: 0;right: 0;width: 100%;
     padding: 0;height: 31px;line-height: 30px;
-    margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
+    margin-bottom: -1px;color: #999999;background: white;font-size:1.2rem;
   }
   .c-cal-main table {
     text-align: center;table-layout: fixed;
@@ -396,6 +396,7 @@
   }
   .cal-content {
     position: fixed;left: 0;right: 0;top:84px;padding:0;overflow:hidden;
+    border-bottom: 1px solid #E0E0E0;
   }
   .cal-outer {position:relative;width:100%;overflow:visible;}
   .cal-inner {

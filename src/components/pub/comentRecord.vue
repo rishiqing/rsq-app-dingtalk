@@ -1,5 +1,5 @@
 <template>
-  <li class="list" :class="{ 'isDisplay': !more}">
+  <li class="list">
       <div v-if="item.type==9" class="comentrecord">
         <span class="icon"><i class="icon-description"></i></span>
         <span class="content">{{item.commentContent}}</span>

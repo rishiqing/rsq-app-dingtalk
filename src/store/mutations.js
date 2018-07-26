@@ -1,5 +1,5 @@
 import util from 'ut/jsUtil'
-
+import dateUtil from 'ut/dateUtil'
 /**
  * mutation命名规则：
  * 模块前缀_主要操作实体_操作动作
@@ -275,13 +275,18 @@ export default {
     // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
+    console.log('进来了mutation')
     let items = state.todo.currentTodo.subTodos
+    console.log(items.length)
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
+        console.log('相等了')
+        console.log(JSON.stringify(items[i]) + ':' + JSON.stringify(p.subTodo))
         util.extendObject(items[i], p.subTodo)
         break
       }
     }
+    console.log('mutation已执行完')
   },
   /**
    * 删除todo
@@ -298,7 +303,8 @@ export default {
     }
   },
   TD_COMMENT_DELETE (state, p) {
-    let items = state.todo.currentTodo.comments
+    // let items = state.todo.currentTodo.comments
+    let items = state.comment
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
         items.splice(i, 1)
@@ -356,7 +362,8 @@ export default {
    * @constructor
    */
   TD_COMMENT_CREATED (state, p) {
-    state.todo.currentTodo.comments.push(p.comment)
+    // state.todo.currentTodo.comments.push(p.comment)
+    state.comment.push(p.comment)
   },
   /**
    * 重置用于提醒的时间model
@@ -395,5 +402,105 @@ export default {
   REPLY_COMMENT_CREATED (state, p) {
     state.replyId = p.item.authorId
     state.replyName = p.item.authorName
+  },
+  CHANGE_PRIORITY (state, p) {
+    state.priority = p.text
+  },
+  PRIORITYSTATE (state, p) {
+    state.priorityState = p.state
+  },
+  CHANGE_TODO_PRIORITY (state, p) {
+    state.todo.currentTodo.pContainer = p.pContainer
+  },
+  SHOW_MORE (state, p) {
+    state.moreToShow = p.showState
+  },
+  SET_PRIORITY (state, p) {
+    state.priority = p.showState
+  },
+  SAVE_RECORD (state, p) {
+    state.record = p.item
+  },
+  SAVE_COMMENT (state, p) {
+    state.comment = p.item
+  },
+  SAVE_TITLE (state, p) {
+    state.title = p.title
+  },
+  SAVE_ID (state, p) {
+    state.id = p.id
+  },
+  SAVE_REPEAT (state, p) {
+    state.repeat[p.type] = p.value
+    state.repeat['repeatOverDate'] = state.todo.currentTodo.repeatOverDate
+    var currentTodo = state.todo.currentTodo
+    if (currentTodo.startDate) {
+      console.log('进来了' + currentTodo.startDate)
+      state.repeat['startDate'] = currentTodo.startDate
+      state.repeat['endDate'] = currentTodo.startDate
+      state.repeat['createTaskDate'] = currentTodo.startDate
+    } else if (currentTodo.dates) {
+      state.repeat['startDate'] = currentTodo.dates[0]
+      state.repeat['endDate'] = currentTodo.dates[0]
+      state.repeat['createTaskDate'] = currentTodo.dates[0]
+    } else {
+      var date = dateUtil.getStandardTime(new Date())
+      state.repeat['startDate'] = date
+      state.repeat['endDate'] = date
+      state.repeat['createTaskDate'] = date
+    }
+    if ((p.value === 'everyDay') || (p.value === 'everyYear')) {
+      console.log(state.repeat['startDate'].substring(0, 4) + ':' + state.repeat['startDate'].substring(5, 7) + ':' + state.repeat['startDate'].substring(8, 10))
+      state.repeat['repeatBaseTime'].push(state.repeat['startDate'].substring(0, 4) + state.repeat['startDate'].substring(5, 7) + state.repeat['startDate'].substring(8, 10))
+    }
+  },
+  SAVE_REPEAT_BASETIME (state) {
+    var repeatWeek = state.repeatWeek
+    var year = parseInt(state.repeat['startDate'].substring(0, 4))
+    var month = parseInt(state.repeat['startDate'].substring(5, 7))
+    var day = parseInt(state.repeat['startDate'].substring(8, 10))
+    var week = new Date(year, month - 1, day).getDay()
+    state.repeat['repeatBaseTime'].splice(0, state.repeat['repeatBaseTime'].length)
+    for (var i = 0; i < repeatWeek.length; i++) {
+      if (repeatWeek[i].flag > week) {
+        if (day + repeatWeek[i].flag - day > 31) {
+          state.repeat['repeatBaseTime'].push(dateUtil.getStandardTime(new Date(year, month + 1, day + repeatWeek[i].flag - week - 31)))
+        } else {
+          state.repeat['repeatBaseTime'].push(dateUtil.getStandardTime(new Date(year, month - 1, day + repeatWeek[i].flag - week)))
+        }
+      } else {
+        state.repeat['repeatBaseTime'].push(dateUtil.getStandardTime(new Date(year, month - 1, day + repeatWeek[i].flag - week + 7)))
+      }
+    }
+  },
+  SAVE_REPEAT_MONTH (state) {
+    var repeatMonth = state.repeatMonth
+    console.log(state.repeat.repeatBaseTime)
+    if (state.repeat['repeatBaseTime']) {
+      state.repeat['repeatBaseTime'] = []
+    }
+    // state.repeat['repeatBaseTime'].splice(0, state.repeat['repeatBaseTime'].length)
+    if (repeatMonth[repeatMonth.length - 1].text) {
+      for (var i = 0; i < repeatMonth.length - 1; i++) {
+        state.repeat.repeatBaseTime.push(dateUtil.getStandardTime(repeatMonth[i]))
+      }
+    } else {
+      for (i = 0; i < repeatMonth.length; i++) {
+        // console.log('变了')
+        state.repeat.repeatBaseTime.push(dateUtil.getStandardTime(repeatMonth[i]))
+        console.log(state.repeat.repeatBaseTime)
+      }
+    }
+    // console.log('最后的repest是' + JSON.stringify(state.repeat))
+  },
+  SAVE_TEXT (state, p) {
+    state.final = p
+  },
+  SAVE_USER (state, p) {
+    // console.log('拿到的列表' + JSON.stringify(p.item[0].childList))
+    state.userList = p.item[0].childList[0].childList
+  },
+  SAVE_MEMBER (state, p) {
+    state.memberList = p
   }
 }

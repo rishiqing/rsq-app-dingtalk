@@ -26,27 +26,13 @@
           <div class="itm--edit-todo ">
             <div class="edit-padding-left">
               <div class="first-date">
-                <i class="icon2-schedule sche"></i>
+                <!--<i class="icon2-schedule sche"></i>-->
                 <r-input-date
                   :disabled="!checkEdit()"
                   :item="editItem"
                   :sep="'/'"
                   :edit-time="true"
                 ></r-input-date>
-              </div>
-              <div class="first-date" v-show="!isInbox">
-                <div class="time-border">
-                  <i class="icon2-alarm sche"></i>
-                  <r-input-time
-                    :disabled="!checkEdit()"
-                    :item="editItem"
-                    :edit-time="true"
-                    v-if="editItem.pContainer !== 'inbox'"
-                  ></r-input-time>
-                </div>
-              </div>
-              <div class="first-date">
-                <i class="icon2-member sche"></i>
                 <r-input-member
                   :disabled="!checkEdit()"
                   :edit-time="true"
@@ -58,25 +44,54 @@
                   :disabled-rsq-ids="[]"
                   @member-changed="saveMember"
                 ></r-input-member>
+                <r-input-time
+                  :disabled="!checkEdit()"
+                  :item="editItem"
+                  :edit-time="true"
+                  v-if="editItem.pContainer !== 'inbox'"
+                ></r-input-time>
+                <r-input-priority
+                  :edit-priority="true"
+                  :PriorityKind="currentTodo.pContainer"
+                  v-if="editItem.pContainer !== 'inbox'"
+                >
+                </r-input-priority>
               </div>
-              <div class="first-date">
-                <i class="icon2-subplan-web sche"></i>
+              <div class="first-date editSubtodo">
                 <r-input-sub-todo
                   :disabled="!checkEdit()"
                   :item="currentTodo"
                   :edit-time="true"
                 ></r-input-sub-todo>
+                <ul class="sublist">
+                  <li v-for="item in items" v-if="items" class="sublistItem">
+                    <v-touch class="wrap-sub-icon" v-if="" @tap="clickCheckOut(item)">
+                      <i class="icon2-check-box select-sub"></i>
+                      <div :class="{'for-hide-sub':item.isDone, 'hide': !item.isDone}"></div>
+                      <i class="icon2-selected" :class="{'hide': !item.isDone, 'isdisplay-sub':item.isDone}"></i>
+                    </v-touch>
+                    <v-touch class="wrap-input" @tap="editSubtodo(item)">
+                      <div   class="list-below" @focus="IsDisabled($event,item.isDone)"
+                               ref="titleInput" :class="{ 'text-grey': item.isDone, 'text-mid-line': item.isDone,'margin-left':isCheckable,'is-editable':item.isDone}">
+                        {{item.name}}
+                      </div>
+                    </v-touch>
+                  </li>
+                </ul>
               </div>
             </div>
             <r-comment-list
               :disabled="!checkEdit()"
               :items="todoComments"
+              :id="currentTodo.id"
               ></r-comment-list>
-            <div class="bottom">
               <v-touch @tap="SwitchToComent">
-                <input type="text" class="bot" placeholder="输入讨论内容或发送文件" onfocus="this.blur();">
+                <div class="bottom">
+                  <img src="../../assets/img/nocoment.png" alt="" class="noComment">
+                  <div class="postComment">参与讨论</div>
+                </div>
+                <!--<input type="text" class="bot" placeholder="参与讨论" onfocus="this.blur();">-->
               </v-touch>
-            </div>
           </div>
         </div>
       </div>
@@ -84,6 +99,78 @@
   </div>
 </template>
 <style scoped>
+  .for-hide-sub{
+    position: absolute;
+    top:0.36rem;
+    left: 0.39rem;
+    display: block;
+    width: 2px;
+    height: 2px;
+    background-color: white;
+    border: 1px solid white;
+  }
+  .isdisplay-sub{
+    display: block;
+    position:absolute;
+    top:0.27rem;
+    left: 0.13rem;
+    font-size: 15px;
+    color:#55A8FD;
+  }
+  .hide{
+    display: none;
+  }
+  .select-sub{
+    color: #B1B1B1;
+  }
+  .list-below{
+    border: none;
+    margin-left: 0.3rem;
+    width: 8rem;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .wrap-sub-icon{
+    height: 1.22rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  .sublistItem:last-child{
+    border-bottom: none;
+  }
+  .sublistItem{
+    position: relative;
+    /*padding-top: 0.1rem;*/
+    border-bottom:1px solid #DADADA ;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    /*color: #222222;*/
+    /*padding: 0.33rem 0 0.15rem 0*/
+    height: 1.22rem;
+    display: flex;
+    align-items: center;
+    padding-left: 0.8rem;
+  }
+  .sublist{
+    background-color: white;
+    z-index: 0;
+  }
+  .postComment{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #4A4A4A;
+    letter-spacing: 0;
+    margin-left: 10px;
+  }
+  .noComment{
+    width: 20px;
+    height: 20px;
+  }
+  .editSubtodo{
+    margin-top: 0.3rem;
+  }
   .remindColor{
     color: #A5A5A5;
   }
@@ -92,7 +179,10 @@
   }
   .first-date{
     position: relative;
-    padding-left: 1.1rem;
+    padding-left: 0.3rem;
+    background-color: white;
+    border-bottom: 1px solid #E0E0E0;
+    border-top: 1px solid #E0E0E0;
   }
   .sche{
     font-size:0.586rem;
@@ -103,7 +193,7 @@
     left:0.3rem
   }
   .edit-padding-left{
-    background-color: white;
+    /*background-color: white;*/
   }
   .time-border{
     border-bottom: 1px solid #E0E0E0;
@@ -120,7 +210,7 @@
     background-color: white;
   }
   .desp{
-    /*border-bottom: 1px solid #E0E0E0;*/
+    border-bottom: 1px solid #E0E0E0;
     margin-bottom: 10px;
     padding-top:0.193rem ;
     padding-bottom: 0.293rem;
@@ -139,7 +229,7 @@
     padding-left: 0.3rem;
   }
   .sche-padding{
-    padding-left: 1.1rem;
+    padding-left: 0.3rem;
   }
   input{
     line-height: 0.933rem;
@@ -163,7 +253,7 @@
     padding-left: 2%;
     width:9.2rem;
     height:0.945rem ;
-    border:1px solid #E0E0E0 ;
+    /*border:0px;*/
     border-radius: 4px;
   }
   .send>input{
@@ -251,6 +341,7 @@
   import util from 'ut/jsUtil'
   import dateUtil from 'ut/dateUtil'
   import ComentList from 'com/pub/ComentList'
+  import InputPriority from 'com/pub/InputPriority'
   export default {
     data () {
       return {
@@ -259,6 +350,12 @@
       }
     },
     computed: {
+      items () {
+        return this.$store.state.todo.currentTodo.subTodos// 其实有没有必要写这个呢，因为currenttodo是动态变化的，只要重新和后台打交道setcurrent以后自然可以变化
+      },
+      todoid () {
+        return this.$store.state.todo.currentTodo.id
+      },
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
       },
@@ -302,8 +399,6 @@
         }
         return newArray
       },
-      fileCount () {
-      },
       time () {
         var dates = this.$store.state.todo.currentTodo.clock
         return dates.startTime + '-' + dates.endTime
@@ -317,9 +412,20 @@
       'r-input-sub-todo': InputSubTodo,
 //      'r-input-note': InputNoteText,
       'r-comment-list': ComentList,
-      'r-send-conversation': SendConversation
+      'r-send-conversation': SendConversation,
+      'r-input-priority': InputPriority
     },
     methods: {
+      editSubtodo (item) {
+        this.$store.dispatch('setCurrentTodo', item)
+        this.$store.commit('SAVE_TITLE', {'title': item.name})
+        this.$router.push('/todo/' + this.editItem.id + '/subTodo')
+      },
+      clickCheckOut (item) {
+        this.$store.dispatch('submitSubTodoFinish', {item: item, status: !item.isDone})
+          .then(function () {
+          })
+      },
       hasDecrip () {
         var description = document.getElementById('noteEditable')
         if (description) {
@@ -408,9 +514,6 @@
             })
             .then(() => {
               this.editItem.pTitle = newTitle
-//              this.editItem.pTitle = newTitle
-//              window.rsqadmg.exec('hideLoader')
-//              window.rsqadmg.execute('toast', {message: '保存成功'})
             })
         } else {
           return Promise.resolve()
@@ -483,9 +586,6 @@
         if (status !== this.editItem.isDone) {
           this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
               .then(() => {
-//                this.$store.dispatch('saveTodoAction', {editItem: {status: status, type: 5}})
-//                  .then(() => {
-//                  })
                 this.editItem.pIsDone = status
                 var str = status ? '任务已完成' : '任务已重启'
                 window.rsqadmg.execute('toast', {message: str})
@@ -677,6 +777,13 @@
       })
     },
     mounted () {
+      this.$on('changeTitle', function (title) {
+        this.editItem.pTitle = title
+      })
+      this.$on('delete', function () {
+        console.log('监听到了')
+        this.prepareDelete()
+      })
 //      console.log('编辑界面的url是' + window.location.href)
     },
     beforeRouteEnter (to, from, next) {

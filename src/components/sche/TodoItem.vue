@@ -1,10 +1,23 @@
 <template>
-  <li class="todoItem">
+  <!--<leftSlider @getMsgFromChild="getMsgFromChild()">-->
+  <li class="todoItem" :class="{'inboxDistance': !isCheckable, 'list-margin':listMargin, 'IEBorder': IEcolor(item), 'IUBorder': IUcolor(item), 'UEBorder': UEcolor(item), 'UUBorder': UUcolor(item)}" @touchstart="showColor" @touchend="hideColor" ref="scheListItem" >
     <v-touch class="" @tap="clickItem($event)" style="margin-left: 1rem">
-      <div class="title-todo" :class="{'margin-left':!isCheckable}">
-        <span class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
+      <div class="title-todo" :class="{'marginLeft':!isCheckable}">
+        <!--<span class="time" v-if="item.clock !== null">{{item.clock.startTime}}</span>-->
+        <div v-if="!isCheckable">
+          <span class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
+        </div>
+        <div v-else>
+          <span v-if="item.clock !== null"class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{item.clock.startTime}}  {{ item.pTitle }}</span>
+          <span v-if="item.clock === null"class="todo-content-sche" :class="{'delay-width':isDelay,'common-width':!isDelay, 'text-grey': item.pIsDone, 'text-mid-line': item.pIsDone,'real-width-sche':isMaxlength(item)}">{{ item.pTitle }}</span>
+        </div>
         <span class="delayer" :class="{'is-alert': isDelay}" v-show="isDelay">延期{{delayDays}}天</span>
-        <span v-if="!isCheckable" v-show="isFromSche" class="receive">我收到的</span>
+        <span v-if="!isCheckable && item.from !== null" v-show="isFromSche" class="receive">
+           <avatar :src="item.authorAvatar"
+                   :username="item.from.levelOneName"
+                   :size="30">
+        </avatar>
+        </span>
         <span v-if="!isCheckable" v-show="isFromKanban" class="receive">来自计划</span>
       </div>
     </v-touch>
@@ -15,8 +28,33 @@
       <i class="icon2-selected hide" :class="{'isdisplay':item.pIsDone}"></i>
     </v-touch>
   </li>
+  <!--</leftSlider>-->
 </template>
 <style lang="scss" scoped>
+  .time{
+    margin-right: 0.2rem;
+  }
+  li.inboxDistance{
+    border-bottom: none ;
+  }
+  .IEBorder{
+    border-left: 4px solid  #F25643;
+  }
+  .IUBorder{
+    border-left: 4px solid  #F0C02B;
+  }
+  .UEBorder{
+    border-left: 4px solid  #7FBDF2;
+  }
+  .UUBorder{
+    border-left: 4px solid  #ABF27F;
+  }
+  .list-margin{
+    margin-left: -1rem;
+  }
+  .delete{
+    font-size: 17px;
+  }
   .isfrom{
     display: none;
   }
@@ -24,7 +62,7 @@
 
   }
   .receive{
-    border: 1px solid #55A8FD;
+    /*border: 1px solid #55A8FD;*/
     border-radius: 2px;
     width: 1.513rem;
     height: 0.594rem;
@@ -41,9 +79,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 1.612rem;
   }
-  .margin-left{
-    margin-left:-1rem
+  .marginLeft{
+    margin-left:-0.5rem;
+    border-bottom: 1px solid rgba(25,31,37,0.08);
   }
   .real-width-sche{}
   .todo-content-sche{
@@ -52,13 +92,15 @@
     text-overflow: ellipsis;
     overflow: hidden;
     height: 1.6rem;
-    white-space:nowrap
+    white-space:nowrap;
+    display: block;
   }
   .delay-width{
-    width: 70%;
+    /*width: 70%;*/
+    width: 6rem;
   }
   .common-width{
-    width: 95%;
+    width: 8rem;
   }
   .hide{
     display: none;
@@ -91,10 +133,15 @@
   li{
     padding:0;
     line-height:1.612rem ;
+    height:1.612rem ;
     position: relative;
+    /*border-bottom:1px solid #E0E0E0 ;*/
+  }
+  .todoItem{
+    /*width: 72%;*/
+    padding-left: 1.7%;
     border-bottom:1px solid #E0E0E0 ;
   }
-  .todoItem{}
   .item-title{}
   .select{
     color:#b9b9bc;
@@ -106,24 +153,31 @@
     /*<!--top:50%;-->*/
     /*<!--margin-top: -0.22rem;-->*/
     /*left:0.2rem;*/
-    background: #FFFFFF;
+    /*background: #FFFFFF;*/
     border-radius: 1px;
   }
   .todo-checkbox {
     position: absolute;
     top: 0;
-    left: -0.1rem;
+    left: 0.1rem;
     width: 1rem;
     height: 1.6rem;
   }
 </style>
 <script>
   import dateUtil from 'ut/dateUtil'
-
+  import leftSlider from 'com/slider_delete'
+  import Avatar from 'com/pub/TextAvatar'
   export default {
     name: 'TodoItem',
     data () {
-      return {}
+      return {
+        listMargin: false
+      }
+    },
+    components: {
+      'leftSlider': leftSlider,
+      'avatar': Avatar
     },
     props: {
       item: Object,
@@ -146,9 +200,47 @@
       },
       isFromKanban () {
         return this.item.isFrom === 'kanban'
+      },
+      currentNumDate () {
+        return this.$store.getters.defaultNumTaskDate
+      },
+      IsDisabled () {
+        var enabled = this.currentNumDate + 24 * 3600 * 1000 < new Date().getTime()
+        return enabled
       }
     },
     methods: {
+      getMsgFromChild () {
+        this.$store.dispatch('setCurrentTodo', this.item)
+        this.$emit('delete')
+//        console.log('getMsgFromChild发出去了')
+      },
+      IEcolor (item) {
+        return item.pContainer === 'IE' && !item.pIsDone
+      },
+      IUcolor (item) {
+        return item.pContainer === 'IU' && !item.pIsDone
+      },
+      UEcolor (item) {
+        return item.pContainer === 'UE' && !item.pIsDone
+      },
+      UUcolor (item) {
+        return item.pContainer === 'UU' && !item.pIsDone
+      },
+      showColor () {
+        this.$refs.scheListItem.style.backgroundColor = '#48A1FA'
+//        console.log('触摸进来了')
+      },
+      hideColor () {
+        this.$refs.scheListItem.style.backgroundColor = '#FFFFFF'
+      },
+      onSwipeRight () {
+        this.listMargin = false
+      },
+      onSwipeLeft () {
+//        console.log('滑动了')
+        this.listMargin = true
+      },
       isMaxlength (item) {
         return item.pTitle.length > 10
       },
@@ -160,6 +252,11 @@
         }
       },
       clickCheckOut (e) {
+//        console.log('this.currentNumDate' + new Date(this.currentNumDate))
+        if (this.IsDisabled) {
+//          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         this.$emit('todo-item-check', this.item, !this.item.pIsDone)
         e.preventDefault()
       }
