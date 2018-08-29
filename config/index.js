@@ -120,16 +120,16 @@ module.exports = {
     cssSourceMap: true,
     hotPath: '/__webpack_hmr',
     // 日事清api的后台地址
-    apiServer: 'http://dd.rsq.etoutiao.cn/',
+    apiServer: 'http://betading.rishiqing.com/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dd.rsq.etoutiao.cn/main/',
+    authServer: 'http://betading.rishiqing.com/',
     // 日事清前端文件地址
     frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
     stsServer: 'http://182.92.222.40:8300/sts/',
     // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'http://dd.rsq.etoutiao.cn/remind/',
+    remindServer: 'http://betading.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
