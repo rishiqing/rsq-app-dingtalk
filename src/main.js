@@ -13,6 +13,9 @@ Pro.polyfill()
 
 import Vue from 'vue'
 import VueTouch from 'vue-touch'
+
+import { RRule } from 'rrule'
+
 import App from './App'
 import router from './router'
 import store from './store'
@@ -30,6 +33,8 @@ if (window.rsqConfig.env === 'prod') {
 }
 
 Vue.use(VueTouch)
+
+Vue.prototype.$rrule = RRule
 
 Vue.config.productionTip = false
 

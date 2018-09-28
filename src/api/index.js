@@ -12,12 +12,12 @@ Vue.use(VueResource)
 Vue.http.options.root = window.rsqConfig.apiServer
 
 Vue.http.interceptors.push((request, next) => {
-        request.headers.set('from', 'dd'); //setting request.headers
-        next((response) => {
-            return response
-     })
+  request.headers.set('from', 'dd')
+  next(
+    (response) => {
+      return response
+    })
 })
-
 
 export default {
   todo,
