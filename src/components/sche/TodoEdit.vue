@@ -378,17 +378,17 @@
           })
       },
       SwitchToComent () {
-        if (!this.checkEdit()) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
+        // if (!this.checkEdit()) {
+        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+        //   return
+        // }
         this.$router.push('/pub/coment')
       },
       SwitchToDesp () {
-        if (!this.checkEdit()) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
+        // if (!this.checkEdit()) {
+        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+        //   return
+        // }
         this.$router.push('/pub/desp')
       },
       saveTitle (newTitle) {

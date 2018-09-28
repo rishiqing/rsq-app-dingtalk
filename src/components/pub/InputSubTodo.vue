@@ -81,10 +81,10 @@
     },
     methods: {
       showSubTodo () {
-        if (this.disabled) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
+        // if (this.disabled) {
+        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+        //   return
+        // }
         this.$router.push('/todo/' + this.item.id + '/subTodo')
       }
     }

@@ -161,11 +161,11 @@
         return title.length > 15
       },
       IsDisabled (e) {
-        if (this.disabled) {
-          e.target.blur()
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
+        // if (this.disabled) {
+        e.target.blur()
+        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+        //   return
+        // }
       },
       inputBlur (value) {
         this.$emit('text-blur', value)
