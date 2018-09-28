@@ -214,10 +214,10 @@
     },
     methods: {
       showMemberEdit (e) {
-        // if (this.disabled) {
-        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-        //   return
-        // }
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         return this.isNative ? this.showNativeMemberEdit(e) : this.showWebMemberEdit(e)
       },
       showNativeMemberEdit () {

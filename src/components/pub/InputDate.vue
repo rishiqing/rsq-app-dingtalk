@@ -85,10 +85,10 @@
     },
     methods: {
       gotoDate () {
-        // if (this.disabled) {
-        //   window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-        //   return
-        // }
+        if (this.disabled) {
+          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
+          return
+        }
         //  将需要用到的属性设置到currentTodoDate中
         var c = this.item
         var obj = {
