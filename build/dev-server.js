@@ -80,7 +80,7 @@ app.use(hotMiddleware)
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://' + ip.address('WLAN', 'ipv4') + ':' + port + '/'
+var uri = 'http://' + ip.address() + ':' + '8090' + '/'
 
 var _resolve
 var readyPromise = new Promise(resolve => {
