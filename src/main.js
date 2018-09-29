@@ -44,7 +44,7 @@ window.rsqadmg.exec('auth', {
       rsqUser: rsqUser,
       authUser: authUser
     }
-    // console.log(JSON.stringify(rsqUser))
+    console.log(rsqUser, authUser)
     // growingUtil.growingIoMethod(rsqUser)
     //  去掉iOS的回弹效果
     window.rsqadmg.exec('disableBounce')

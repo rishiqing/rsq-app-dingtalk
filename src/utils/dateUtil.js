@@ -1,4 +1,5 @@
 import moment from 'moment'
+import jsUtiles from './jsutils.js'
 
 export default {
   /**
@@ -382,6 +383,50 @@ export default {
       } else {
         return false
       }
+    }
+  },
+  /**
+   * 日期单独转换时间戳
+   * @author lumozx
+   * @param  {string} date 日期
+   * @return {number}      时间戳
+   */
+  dateTotimestamp (date) {
+    return moment(date, 'YYYY.MM.DD').valueOf()
+  },
+  /**
+   * rrule转字符串
+   * @author lumozx
+   * @param  {object} obj rrule对象
+   * @param  {string} obj 日期对象
+   * @return {string}     转换结果
+   */
+  rruleToText (obj, day) {
+    let weekArr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    if (obj.freq === 0) {
+      let date = new Date(this.dateTotimestamp(day))
+      return `每年${date.getMonth() + 1}月${date.getDate()}日重复`
+    } else if (obj.freq === 1) {
+      let arr = []
+      arr = jsUtiles.toArray(obj.bymonthday)
+      for (let i = 0, len = arr.length; i < len; i++) {
+        if (arr[i] === -1) {
+          arr[i] = '最后一天'
+          break
+        }
+        arr[i] = arr[i] + '日'
+      }
+      return '每月' + arr.toString() + '重复'
+    } else if (obj.freq === 2) {
+      let week = []
+      for (let i = 0, len = obj.byweekday.length; i < len; i++) {
+        week.push(weekArr[obj.byweekday[i].weekday + 1])
+      }
+      return '每' + week.join('、') + '重复'
+    } else if (obj.freq === 3) {
+      return '每天重复'
+    } else {
+      return '不重复'
     }
   }
 }

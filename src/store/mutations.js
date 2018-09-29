@@ -395,5 +395,8 @@ export default {
   REPLY_COMMENT_CREATED (state, p) {
     state.replyId = p.item.authorId
     state.replyName = p.item.authorName
+  },
+  SAVE_CURRENT_RRULE (state, p) {
+    state.todo.currentTodo.rrule = p.rrule
   }
 }
