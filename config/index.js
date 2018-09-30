@@ -120,11 +120,13 @@ module.exports = {
     cssSourceMap: true,
     hotPath: '/__webpack_hmr',
     // 日事清api的后台地址
-    apiServer: 'http://betading.rishiqing.com/',
+    apiServer: 'http://dev1.ngrok.timetask.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://betading.rishiqing.com/',
+    authServer: 'http://dev1.ngrok.timetask.cn/',
     // 日事清前端文件地址
-    frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
+    // frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
+    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/',
+    // 
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
     stsServer: 'http://182.92.222.40:8300/sts/',

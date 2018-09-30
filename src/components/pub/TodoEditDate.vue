@@ -55,7 +55,8 @@
     <v-touch class="date-repeat" @tap="gotoRepeat">
       <span class="list-key u-pull-left">重复</span>
       <i class="icon2-arrow-right arrow u-pull-right light-color"></i>
-      <span class="list-value u-pull-right light-color">{{repeatText}}</span>
+      <span v-if="!isNewRepeat" class="list-value u-pull-right light-color">{{repeatText}}</span>
+      <span v-else class="list-value u-pull-right light-color">{{repeatTypeNew}}</span>
     </v-touch>
     <v-touch tag="p" class="date-clear" @tap="tapEmpty">清除日期放入收纳箱</v-touch>
   </div>
@@ -180,6 +181,7 @@
   }
 </style>
 <script>
+  import moment from 'moment'
   import dateUtil from 'ut/dateUtil'
 
   /**
@@ -207,10 +209,13 @@
         days: [],
         //  重复功能相关
         dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复，none表示dateType被清空
-        selectNumDate: null  //  表示重复当前选中的日期
+        selectNumDate: null,  //  表示重复当前选中的日期
       }
     },
     computed: {
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      },
       numToday () {
         return dateUtil.clearTime(new Date()).getTime()
       },
@@ -223,17 +228,26 @@
       currentTodoDate () {
         return this.$store.state.pub.currentTodoDate
       },
+      isNewRepeat () {
+        return this.currentTodo.rrule !== undefined
+      },
       repeatText () {
-        var text
-        var c = this.currentTodoDate
-        if (this.dateType === 'repeat' && c.repeatType) {
-          var arr = this.currentTodoDate.repeatBaseTime.split(',')
-          text = dateUtil.repeatDayText(c.repeatType, arr)
-          if (c.isLastDate) {
-            text += '、最后一天'
+        if (!this.isNewRepeat) {
+          var text
+          var c = this.currentTodoDate
+          if (this.dateType === 'repeat' && c.repeatType) {
+            var arr = this.currentTodoDate.repeatBaseTime.split(',')
+            text = dateUtil.repeatDayText(c.repeatType, arr)
+            if (c.isLastDate) {
+              text += '、最后一天'
+            }
           }
+          return (text || '不') + '重复'
         }
-        return (text || '不') + '重复'
+      },
+      repeatTypeNew () {
+        var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
+        return dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
       }
     },
     methods: {
@@ -257,6 +271,7 @@
         this.selectNumDate = []
         this.clearType()
         this.clearSelected()
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         if (e) e.preventDefault()
       },
       tapBackToday (e) {
@@ -272,6 +287,7 @@
         if (e) e.preventDefault()
       },
       tapChangeType (e, type) {
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         this.dateType = type
         this.resetType()
         if (e) e.preventDefault()
@@ -281,6 +297,7 @@
         e.preventDefault()
       },
       tapDay (e, day) {
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         //  如果是在repeat状态下点击日期，那么清除重复，进入single状态
         if (this.dateType === 'repeat') {
           this.dateType = 'single'
@@ -404,7 +421,11 @@
           newObj.isLastDate !== oldObj.isLastDate
       },
       gotoRepeat () {
-        this.$router.push('/todoEdit/repeat')
+        if (this.isBackNewVersion) {
+          this.$router.push('/todoEdit/repeatNew')
+        } else {
+          this.$router.push('/todoEdit/repeat')
+        }
       },
       saveTodoDateState () {
         var sorted = this.selectNumDate.sort((a, b) => { return a > b ? 1 : -1 })
@@ -428,10 +449,15 @@
         var o = {
           startDate: c.startDate,
           endDate: c.endDate,
-          dates: c.dates
+          dates: c.dates,
         }
         //  如果重复相关属性存在，那么处理重复相关的其他属性
-        if (c.repeatType) {
+        if (this.currentTodo.rrule) {
+          o.isCloseRepeat = false
+          o.rrule = this.currentTodo.rrule
+          o.startDate = moment().format('YYYY/MM/DD')
+          o.endDate = moment().format('YYYY/MM/DD')
+        } else if (c.repeatType) {
           o.repeatType = c.repeatType
           o.repeatBaseTime = c.repeatBaseTime
           o.alwaysRepeat = c.alwaysRepeat
@@ -476,6 +502,7 @@
       }
     },
     created () {
+      console.log(this.currentTodo)
       this.initData()
       var that = this
       window.rsqadmg.exec('setTitle', {title: '日期选择'})
@@ -488,6 +515,10 @@
         }
       })
       this.$store.dispatch('setNav', {isShow: false})
+    },
+    mounted () {
+      // var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
+      // this.repeatTypeNew = dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
     },
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存

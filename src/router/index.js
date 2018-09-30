@@ -18,6 +18,7 @@ import TodoEditTime from 'com/pub/TodoEditTime'
 import TodoEditAlert from 'com/pub/TodoEditAlert'
 import TodoEditDate from 'com/pub/TodoEditDate'
 import TodoEditRepeat from 'com/pub/TodoEditRepeat'
+import TodoEditRepeatNew from 'com/pub/NewRepeat/TodoEditRepeat'
 import Me from 'com/me/Main'
 import kefu from 'com/me/kefu'
 import desp from 'com/pub/desp'
@@ -158,6 +159,12 @@ const router = new Router({
       path: '/todoEdit/repeat',
       name: 'todoEditRepeat',
       component: TodoEditRepeat,
+      meta: {requireAuth: false}
+    },
+    {
+      path: '/todoEdit/repeatNew',
+      name: 'todoeditrepeatnew',
+      component: TodoEditRepeatNew,
       meta: {requireAuth: false}
     },
     {

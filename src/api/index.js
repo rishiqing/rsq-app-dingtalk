@@ -11,6 +11,14 @@ Vue.use(VueResource)
 // 恶心链接：http://stackoverflow.com/questions/34945562/vue-resource-root-options-not-used
 Vue.http.options.root = window.rsqConfig.apiServer
 
+Vue.http.interceptors.push((request, next) => {
+  request.headers.set('platform', 'dingtalk')
+  next(
+    (response) => {
+      return response
+    })
+})
+
 export default {
   todo,
   system,

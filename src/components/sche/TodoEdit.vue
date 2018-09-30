@@ -292,6 +292,9 @@
       currentNumDate () {
         return this.$store.getters.defaultNumTaskDate
       },
+      isNewRepeat () {
+        return this.currentTodo.rrule !== undefined
+      },
       dates () {
         var dates = this.$store.state.todo.currentTodo.dates
         var datesArray = dates.split(',')
@@ -307,6 +310,12 @@
       time () {
         var dates = this.$store.state.todo.currentTodo.clock
         return dates.startTime + '-' + dates.endTime
+      },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      },
+      isNewRepeat () {
+        return this.currentTodo.rrule !== undefined
       }
     },
     components: {
@@ -497,45 +506,70 @@
       },
       prepareDelete () {
         var that = this
-        if (that.currentTodo.isCloseRepeat) {
-          window.rsqadmg.exec('confirm', {
-            message: '确定要删除此任务？',
-            success () {
-              window.rsqadmg.execute('showLoader', {text: '删除中...'})
-              that.deleteCurrentTodo({todo: that.currentTodo})
-                .then(() => {
+        if (!this.isBackNewVersion) {
+          if (that.currentTodo.isCloseRepeat) {
+            window.rsqadmg.exec('confirm', {
+              message: '确定要删除此任务？',
+              success () {
+                window.rsqadmg.execute('showLoader', {text: '删除中...'})
+                that.deleteCurrentTodo({todo: that.currentTodo})
+                  .then(() => {
+                    window.rsqadmg.exec('hideLoader')
+                    window.rsqadmg.execute('toast', {message: '删除成功'})
+                    that.$router.replace(window.history.back())
+                  })
+              }
+            })
+          } else {
+            window.rsqadmg.exec('actionsheet', {
+              buttonArray: ['仅删除此任务', '删除此任务及以后的任务', '删除所有的重复任务'],
+              success: function (res) {
+                window.rsqadmg.execute('showLoader', {text: '删除中...'})
+                var promise
+                switch (res.buttonIndex) {
+                  case 0:
+                    promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'today'})
+                    break
+                  case 1:
+                    promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'after'})
+                    break
+                  case 2:
+                    promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'all'})
+                    break
+                  default:
+                    break
+                }
+                promise.then(() => {
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
                   that.$router.replace(window.history.back())
                 })
-            }
-          })
-        } else {
-          window.rsqadmg.exec('actionsheet', {
-            buttonArray: ['仅删除此任务', '删除此任务及以后的任务', '删除所有的重复任务'],
-            success: function (res) {
-              window.rsqadmg.execute('showLoader', {text: '删除中...'})
-              var promise
-              switch (res.buttonIndex) {
-                case 0:
-                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'today'})
-                  break
-                case 1:
-                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'after'})
-                  break
-                case 2:
-                  promise = that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'all'})
-                  break
-                default:
-                  break
               }
-              promise.then(() => {
+            })
+          }
+        } else {
+          if (!that.isNewRepeat) {
+            window.rsqadmg.exec('confirm', {
+              message: '确定要删除此任务？',
+              success () {
+                window.rsqadmg.execute('showLoader', {text: '删除中...'})
+                that.deleteCurrentTodo({todo: that.currentTodo})
+                  .then(() => {
+                    window.rsqadmg.exec('hideLoader')
+                    window.rsqadmg.execute('toast', {message: '删除成功'})
+                    that.$router.replace(window.history.back())
+                  })
+              }
+            })
+          } else {
+            window.rsqadmg.execute('showLoader', {text: '删除中...'})
+            that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'today'})
+              .then(() => {
                 window.rsqadmg.exec('hideLoader')
                 window.rsqadmg.execute('toast', {message: '删除成功'})
                 that.$router.replace(window.history.back())
               })
-            }
-          })
+          }
         }
       },
       more () {
@@ -627,36 +661,49 @@
           .then(() => {
             var c = this.currentTodo
             var isEdited = this.$store.state.todo.isRepeatFieldEdit
-            if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
-              var that = this
-              window.rsqadmg.exec('actionsheet', {
-                buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
-                success: function (res) {
-                  window.rsqadmg.execute('showLoader', {text: '更新中...'})
-                  var promise
-                  switch (res.buttonIndex) {
-                    case 0:
-                      promise = that.updateRepeat({type: 'today'})
-                      break
-                    case 1:
-                      promise = that.updateRepeat({type: 'after'})
-                      break
-                    case 2:
-                      promise = that.updateRepeat({type: 'all'})
-                      break
-                    default:
-                      break
+            if (!this.isBackNewVersion) {
+              if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
+                var that = this
+                window.rsqadmg.exec('actionsheet', {
+                  buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
+                  success: function (res) {
+                    window.rsqadmg.execute('showLoader', {text: '更新中...'})
+                    var promise
+                    switch (res.buttonIndex) {
+                      case 0:
+                        promise = that.updateRepeat({type: 'today'})
+                        break
+                      case 1:
+                        promise = that.updateRepeat({type: 'after'})
+                        break
+                      case 2:
+                        promise = that.updateRepeat({type: 'all'})
+                        break
+                      default:
+                        break
+                    }
+                    promise.then(() => {
+                      window.rsqadmg.exec('hideLoader')
+                      window.rsqadmg.execute('toast', {message: '更新成功'})
+                      return next()
+                    })
                   }
-                  promise.then(() => {
-                    window.rsqadmg.exec('hideLoader')
-                    window.rsqadmg.execute('toast', {message: '更新成功'})
-                    return next()
-                  })
-                }
-              })
+                })
+              } else {
+                return next()
+              }
             } else {
-              return next()
-            }
+              // var that = this
+              // if (c.pContainer !== 'inbox' && this.isNewRepeat && isEdited) {
+              //   var promise = that.updateRepeat({type: 'today'})
+              //   window.rsqadmg.execute('showLoader', {text: '更新中...'})
+              //   promise.then(() => {
+              //     window.rsqadmg.exec('hideLoader')
+              //     window.rsqadmg.execute('toast', {message: '更新成功'})
+              //     return next()
+              //   })
+                return next()
+              } 
           })
           .catch(() => {
             next(false)
@@ -677,6 +724,9 @@
       })
     },
     mounted () {
+      // console.log(this.isBackNewVersion)
+      // console.log(this.isNewRepeat)
+
 //      console.log('编辑界面的url是' + window.location.href)
     },
     beforeRouteEnter (to, from, next) {
