@@ -704,7 +704,6 @@
               //   })
                 return next()
               } 
-            }
           })
           .catch(() => {
             next(false)
