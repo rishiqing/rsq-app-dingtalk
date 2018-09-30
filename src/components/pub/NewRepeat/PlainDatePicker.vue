@@ -2,7 +2,7 @@
   <div class="date-picker">
     <div class="dp-title">
       <v-touch
-        class="el-icon-arrow-left"
+        class="icon2-arrow-left arrow u-pull-left"
         tag="i"
         @tap="tapChangeMonth($event, -1)"/>
       <div class="dp-title-text">
@@ -10,7 +10,7 @@
       </div>
       <v-touch
         tag="i"
-        class="el-icon-arrow-right"
+        class="icon2-arrow-right arrow u-pull-right"
         @tap="tapChangeMonth($event, 1)"/>
     </div>
     <div class="dp-content">

@@ -210,7 +210,6 @@
         //  重复功能相关
         dateType: '',  //  single单日期, range起止日期, discrete, 离散间隔日期，repeat:使用重复，none表示dateType被清空
         selectNumDate: null,  //  表示重复当前选中的日期
-        repeatTypeNew: ''
       }
     },
     computed: {
@@ -245,6 +244,10 @@
           }
           return (text || '不') + '重复'
         }
+      },
+      repeatTypeNew () {
+        var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
+        return dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
       }
     },
     methods: {
@@ -284,6 +287,7 @@
         if (e) e.preventDefault()
       },
       tapChangeType (e, type) {
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         this.dateType = type
         this.resetType()
         if (e) e.preventDefault()
@@ -293,6 +297,7 @@
         e.preventDefault()
       },
       tapDay (e, day) {
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         //  如果是在repeat状态下点击日期，那么清除重复，进入single状态
         if (this.dateType === 'repeat') {
           this.dateType = 'single'
@@ -512,9 +517,8 @@
       this.$store.dispatch('setNav', {isShow: false})
     },
     mounted () {
-
-      var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
-      this.repeatTypeNew = dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
+      // var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
+      // this.repeatTypeNew = dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
     },
     beforeRouteLeave (to, from, next) {
       //  做pub区缓存

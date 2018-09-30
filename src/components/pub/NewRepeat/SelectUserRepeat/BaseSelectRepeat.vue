@@ -50,12 +50,12 @@
               </v-touch>
             </li>
             <li>
-              <v-touch
+<!--               <v-touch
                 class="list-item-info"
                 @tap="showSubPage('subDeadline')">
                 <p class="list-item-key">截止日期</p>
                 <p class="list-item-value">{{ deadlineText }}</p>
-              </v-touch>
+              </v-touch> -->
             </li>
           </ul>
         </div>
@@ -68,7 +68,7 @@
                 <span>每天</span>
                 <i
                   v-show="localType === 'everyDay'"
-                  class="el-icon-check" />
+                  class="icon2-selected finish" />
               </v-touch>
             </li>
             <li>
@@ -78,7 +78,7 @@
                 <span>每周</span>
                 <i
                   v-show="localType === 'everyWeek'"
-                  class="el-icon-check" />
+                  class="icon2-selected finish" />
               </v-touch>
             </li>
             <li>
@@ -88,7 +88,7 @@
                 <span>每月</span>
                 <i
                   v-show="localType === 'everyMonth'"
-                  class="el-icon-check" />
+                  class="icon2-selected finish" />
               </v-touch>
             </li>
             <li>
@@ -98,7 +98,7 @@
                 <span>每年</span>
                 <i
                   v-show="localType === 'everyYear'"
-                  class="el-icon-check" />
+                  class="icon2-selected finish" />
               </v-touch>
             </li>
           </ul>
