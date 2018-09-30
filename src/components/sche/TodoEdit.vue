@@ -292,6 +292,9 @@
       currentNumDate () {
         return this.$store.getters.defaultNumTaskDate
       },
+      isNewRepeat () {
+        return this.currentTodo.rrule !== undefined
+      },
       dates () {
         var dates = this.$store.state.todo.currentTodo.dates
         var datesArray = dates.split(',')
@@ -658,35 +661,50 @@
           .then(() => {
             var c = this.currentTodo
             var isEdited = this.$store.state.todo.isRepeatFieldEdit
-            if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
-              var that = this
-              window.rsqadmg.exec('actionsheet', {
-                buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
-                success: function (res) {
-                  window.rsqadmg.execute('showLoader', {text: '更新中...'})
-                  var promise
-                  switch (res.buttonIndex) {
-                    case 0:
-                      promise = that.updateRepeat({type: 'today'})
-                      break
-                    case 1:
-                      promise = that.updateRepeat({type: 'after'})
-                      break
-                    case 2:
-                      promise = that.updateRepeat({type: 'all'})
-                      break
-                    default:
-                      break
+            if (!this.isBackNewVersion) {
+              if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
+                var that = this
+                window.rsqadmg.exec('actionsheet', {
+                  buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
+                  success: function (res) {
+                    window.rsqadmg.execute('showLoader', {text: '更新中...'})
+                    var promise
+                    switch (res.buttonIndex) {
+                      case 0:
+                        promise = that.updateRepeat({type: 'today'})
+                        break
+                      case 1:
+                        promise = that.updateRepeat({type: 'after'})
+                        break
+                      case 2:
+                        promise = that.updateRepeat({type: 'all'})
+                        break
+                      default:
+                        break
+                    }
+                    promise.then(() => {
+                      window.rsqadmg.exec('hideLoader')
+                      window.rsqadmg.execute('toast', {message: '更新成功'})
+                      return next()
+                    })
                   }
-                  promise.then(() => {
-                    window.rsqadmg.exec('hideLoader')
-                    window.rsqadmg.execute('toast', {message: '更新成功'})
-                    return next()
-                  })
-                }
-              })
+                })
+              } else {
+                return next()
+              }
             } else {
-              return next()
+              if (this.isNewRepeat) {
+                var that = this
+                promise = that.updateRepeat({type: 'today'})
+                window.rsqadmg.execute('showLoader', {text: '更新中...'})
+                promise.then(() => {
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '更新成功'})
+                  return next()
+                })
+              } else {
+                return next()
+              }
             }
           })
           .catch(() => {

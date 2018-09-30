@@ -402,7 +402,7 @@ export default {
    * @return {string}     转换结果
    */
   rruleToText (obj, day) {
-    let weekArr = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+    let weekArr = ['周一', '周二', '周三', '周四', '周五', '周六','周日']
     if (obj.freq === 0) {
       let date = new Date(this.dateTotimestamp(day))
       return `每年${date.getMonth() + 1}月${date.getDate()}日重复`
@@ -416,11 +416,15 @@ export default {
         }
         arr[i] = arr[i] + '日'
       }
-      return '每月' + arr.toString() + '重复'
+      let d = arr.toString()
+      if (d === 'undefined日') {
+        d = new Date(this.dateTotimestamp(day)).getDate() + '日'
+      }
+      return '每月' + d + '重复'
     } else if (obj.freq === 2) {
       let week = []
       for (let i = 0, len = obj.byweekday.length; i < len; i++) {
-        week.push(weekArr[obj.byweekday[i].weekday + 1])
+        week.push(weekArr[obj.byweekday[i].weekday])
       }
       return '每' + week.join('、') + '重复'
     } else if (obj.freq === 3) {

@@ -181,6 +181,7 @@
   }
 </style>
 <script>
+  import moment from 'moment'
   import dateUtil from 'ut/dateUtil'
 
   /**
@@ -267,6 +268,7 @@
         this.selectNumDate = []
         this.clearType()
         this.clearSelected()
+        this.$store.commit('SAVE_CURRENT_RRULE',{rrule: ''})
         if (e) e.preventDefault()
       },
       tapBackToday (e) {
@@ -445,7 +447,12 @@
           dates: c.dates,
         }
         //  如果重复相关属性存在，那么处理重复相关的其他属性
-        if (c.repeatType) {
+        if (this.currentTodo.rrule) {
+          o.isCloseRepeat = false
+          o.rrule = this.currentTodo.rrule
+          o.startDate = moment().format('YYYY/MM/DD')
+          o.endDate = moment().format('YYYY/MM/DD')
+        } else if (c.repeatType) {
           o.repeatType = c.repeatType
           o.repeatBaseTime = c.repeatBaseTime
           o.alwaysRepeat = c.alwaysRepeat
@@ -454,9 +461,6 @@
           o.repeatOverDate = c.repeatOverDate
         } else {
           o.isCloseRepeat = true
-        }
-        if (this.currentTodo.rrule) {
-          o.rrule = this.currentTodo.rrule
         }
         var actParamse = JSON.parse(JSON.stringify(o))
         o.createActive = {
@@ -508,6 +512,7 @@
       this.$store.dispatch('setNav', {isShow: false})
     },
     mounted () {
+
       var rruleObj = this.$rrule.fromString(this.currentTodo.rrule).origOptions
       this.repeatTypeNew = dateUtil.rruleToText(rruleObj, this.currentTodo.startDate)
     },

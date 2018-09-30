@@ -6,7 +6,7 @@ export default {
   'SEND_TO_CORP_CONV': 'msg/sendasynccorpmessage',
   'SEND_REMIND': 'msg/remind',
 
-  'AVATAR_CDN': 'https://rishiqing-avatar.oss-cn-beijing.aliyuncs.com/',
+  'AVATAR_CDN': 'https://www.rishiqing.com/task/rsqAttach/userAvatar/',
   'SYS_AVATAR_CDN': 'https://rishiqing-images.oss-cn-beijing.aliyuncs.com/avatar/',
   'CHECK_AUTH': 'task/login/authAjax',
   'POST_LOGIN': 'task/j_spring_security_check',
