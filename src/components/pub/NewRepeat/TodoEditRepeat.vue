@@ -66,6 +66,8 @@
       }
     },
     mounted () {
+      window.rsqadmg.execute('setTitle', {title: '设置重复'})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
       var that = this
       // console.log(this.$rrule.fromString("FREQ=DAILY;UNTIL=20180301T160000Z").origOptions)
       this.weekRepeat()
@@ -160,9 +162,8 @@
         }
       },
       custom () {
-                this.findDefualt()
+        this.findDefualt()
         this.findCustom()
-
         var that = this
         selectRepeat.show({
           // 当前史时间戳

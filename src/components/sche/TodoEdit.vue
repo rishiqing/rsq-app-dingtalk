@@ -693,18 +693,17 @@
                 return next()
               }
             } else {
-              if (this.isNewRepeat) {
-                var that = this
-                promise = that.updateRepeat({type: 'today'})
-                window.rsqadmg.execute('showLoader', {text: '更新中...'})
-                promise.then(() => {
-                  window.rsqadmg.exec('hideLoader')
-                  window.rsqadmg.execute('toast', {message: '更新成功'})
-                  return next()
-                })
-              } else {
+              // var that = this
+              // if (c.pContainer !== 'inbox' && this.isNewRepeat && isEdited) {
+              //   var promise = that.updateRepeat({type: 'today'})
+              //   window.rsqadmg.execute('showLoader', {text: '更新中...'})
+              //   promise.then(() => {
+              //     window.rsqadmg.exec('hideLoader')
+              //     window.rsqadmg.execute('toast', {message: '更新成功'})
+              //     return next()
+              //   })
                 return next()
-              }
+              } 
             }
           })
           .catch(() => {
