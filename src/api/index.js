@@ -12,7 +12,7 @@ Vue.use(VueResource)
 Vue.http.options.root = window.rsqConfig.apiServer
 
 Vue.http.interceptors.push((request, next) => {
-  request.headers.set('from', 'dd')
+  request.headers.set('platform', 'dingtalk')
   next(
     (response) => {
       return response
