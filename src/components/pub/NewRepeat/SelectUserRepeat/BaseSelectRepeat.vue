@@ -645,10 +645,10 @@
       border-bottom: none;
     }
     .list-item-info p.list-item-key {
-      font-size: 14px; color: #9B9B9B;line-height:22px;
+      font-size: 14px; color: #9B9B9B;line-height:22px;padding-bottom: 15px;
     }
     .list-item-info p.list-item-value {
-      font-size: 17px; color: #000000;line-height:24px;
+      font-size: 17px; color: #000000;line-height:24px;padding-bottom: 15px;
     }
     .repeat-list li .single-line {
       position: relative;height: 56px;line-height: 56px;color: #000000;

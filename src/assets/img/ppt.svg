@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="21px" viewBox="0 0 18 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>ppt@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="搜索" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-125.000000, -145.000000)">
+            <g id="ppt" transform="translate(125.000000, 145.000000)">
+                <g id="Page-1">
+                    <polygon id="Fill-1" fill="#FFC96D" points="0 0 0 20.6976127 17.9153846 20.6976127 17.9153846 4.8727321 13.4692308 0"></polygon>
+                    <polygon id="Fill-2" fill="#FFE9C8" points="13.4691785 0 13.4691785 4.87002653 17.9158554 4.8727321"></polygon>
+                    <polygon id="Fill-3" fill="#FFB44C" points="17.9155938 8.84689019 17.9155938 4.87240743 13.4689169 4.87024297"></polygon>
+                </g>
+                <polygon id="Fill-7" fill="#FFFFFF" opacity="0.702841938" points="4.61592 13.932504 13.97592 13.932504 13.97592 11.100024 4.61592 11.100024"></polygon>
+                <polygon id="Fill-9" fill="#FFFFFF" points="11.143224 6.588288 4.615704 6.588288 4.615704 9.420768 4.615704 9.420768 4.615704 17.473968 7.448184 17.473968 7.448184 9.420768 11.143224 9.420768 11.143224 13.932288 13.975704 13.932288 13.975704 9.420768 13.975704 6.588288"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

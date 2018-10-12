@@ -28,8 +28,8 @@ export default {
       kanbanItem: null,
       todoDeployId: null,
       noteFile: [],
-      allDoneSubTodosCount: 0,
-      allSubTodosCount: 0,
+      allDoneSubtodosCount: 0,
+      allSubtodosCount: 0,
       clock: {},
       receiverUser: [],
       KSLList: [],
@@ -50,5 +50,31 @@ export default {
     obj['repeatBaseTime'] = null
     obj['repeatOverDate'] = ''
     return obj
+  },
+  defaultKanbanItem () {
+    return {
+      KSLList: [],
+      TSLList: [],
+      actions: [],
+      allKList: [],
+      allTList: [],
+      allowUpdate: false,
+      comments: [],
+      dates: null,
+      displayOrder: 65533,
+      editAuthority: 'all',
+      id: null,
+      isCurrentUserFocus: false,
+      isWeb: true,
+      joinUser: '',
+      kanbanCard: null,
+      kanbanItemJoinLinks: [],
+      name: '',
+      note: '',
+      noteFile: [],
+      noteFiles: [],
+      openToPublic: false,
+      subItems: []
+    }
   }
 }

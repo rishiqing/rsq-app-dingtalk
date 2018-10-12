@@ -1,29 +1,46 @@
 <template>
-  <div class="">
-    <div class="topest"></div>
-    <div class="wrap">
-      <input class="write" type="text" placeholder="在这里写下想法" v-model="inputTitle">
-      <v-touch @tap="saveTodo" v-show="inputTitle !== ''" class="btn-create">
-        <input value="创建" class="create"/>
-      </v-touch>
+  <div class="inbox-main">
+    <div class="inbox-item">
+      <div class="topest"/>
+      <div class="wrap">
+        <input
+          v-model="inputTitle"
+          class="write"
+          type="text"
+          placeholder="输入内容快速添加任务">
+        <v-touch
+          v-show="inputTitle !== ''"
+          class="btn-create"
+          @tap="saveTodo">
+          <span class="create">创建</span>
+        </v-touch>
+      </div>
+      <div class="margin-block"/>
+      <div class="fff">
+        <r-todo-item-list
+          v-if="items !== null && items.length > 0"
+          :items="items"
+          :is-checkable="false"/>
+      </div>
     </div>
-    <div class="margin-block"></div>
-    <div class="InboxItem">
-      <r-todo-item-list
-        :items="items"
-        :is-checkable="false"
-        v-if="items != null && items.length > 0"
-      ></r-todo-item-list>
-    </div>
+    <r-nav/>
+    <!-- <div class="tips">收纳箱中的任务没有具体的日期，它可能是灵光乍现的想法，可能是同事拜托你的一件小事…</div> -->
   </div>
+
 </template>
 <script>
   import TodoItemList from 'com/sche/TodoItemList'
+  import nav from 'com/Nav'
 
   export default {
+    name: 'InboxMain',
+    components: {
+      'r-todo-item-list': TodoItemList,
+      'r-nav': nav
+    },
     data () {
       return {
-        titleName: '收纳箱',
+        titleName: '记事',
         inputTitle: ''
       }
     },
@@ -32,14 +49,24 @@
         return this.$store.state.inbox.items
       }
     },
-    components: {
-      'r-todo-item-list': TodoItemList
+    mounted () {
+      this.fetchItems()
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+      this.$store.dispatch('setNav', {isShow: false})
     },
     methods: {
       fetchItems () {
         this.$store.dispatch('fetchInboxItems')
       },
+      toCreate () {
+        this.$router.push('/inbox/new')
+      },
       saveTodo () {
+        if (!this.inputTitle || /^\s+$/.test(this.inputTitle)) {
+          window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
+          return
+        }
         window.rsqadmg.execute('showLoader', {text: '创建中...'})
         this.$store.dispatch('submitCreateTodoItem', {newItem: {pTitle: this.inputTitle}, todoType: 'inbox'})
           .then(() => {
@@ -48,73 +75,106 @@
             window.rsqadmg.execute('toast', {message: '创建成功'})
           })
       }
-    },
-    mounted () {
-      this.fetchItems()
-      window.rsqadmg.exec('setTitle', {title: this.titleName})
-      window.rsqadmg.exec('setOptionButtons', {hide: true})
-      this.$store.dispatch('setNav', {isShow: false})
     }
   }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  .inbox-main{
+    // min-height: 100%;
+  }
+  .tips{
+    position: fixed;
+    bottom: 3.8%;
+    z-index: 0;
+    color: #9B9B9B;
+    font-size: 14px;
+    line-height: 18px;
+    width: 93.2%;
+    text-align: center;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    height: 4.9%;
+  }
+  .inbox-item{
+    // background-color: white;
+    // margin-top: 20px;
+    margin-bottom: 50px;
+    // border-bottom:0.5px solid #D4D4D4 ;
+    // position: relative;
+    // z-index: 2;
+  }
   .wrap{
     position: fixed;
-    height: 1.45rem;
+    height: 56px;
     width: 100%;
-    top: 10px;
+    top: 20px;
     left: 0;
     right: 0;
     z-index: 2;
   }
-  /*input::-webkit-input-placeholder { !* WebKit browsers *!*/
-    /*font-family: PingFangSC-Regular;*/
-    /*font-size: 0.453rem;*/
-    /*color: #999999;*/
-    /*line-height:normal;*/
-    /*height: 1.612rem;*/
-  /*}*/
+  .wrap:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .wrap:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
   .topest{
-    background-color: #F8F8F8;
-    height: 10px;
+    background-color: #F5F5F5;
+    height: 20px;
     z-index: 2;
     position: fixed;
     width: 100%;
   }
   .create{
-    -webkit-appearance: none;
-    display: block;
+    // box-sizing: border-box;
+    // display: block;
     text-align: center;
-    border: 1px solid #55A8FD;
+    width:45px;
+    height: 26px;
     border-radius: 2px;
-    /*height: 0.666rem;*/
-    line-height: 0.66rem;
-    display: flex;
-    align-items: center;
-    width:1.413rem;
-    font-size: 15px;
-    color:#55A8FD;
+    font-size: 13px;
+    color:#fff;
     position: absolute;
-    margin-top:-0.4rem;
+    margin-top: -0.33rem;
     top: 50%;
     right:0.35rem;
-    /*margin-top: -1.34rem;*/
-    /*margin-right:0.4rem;*/
-    /*float: right;*/
     z-index: 3;
+    padding-top: 2px;
+    background-color: #2F7DCD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .write{
     line-height: 0.612rem;
-    padding-bottom: 0.4rem;
-    padding-top: 0.4rem;
-    border-bottom:1px solid #E3E3E3;
-    border-top:1px solid #E3E3E3;
-    /*position: fixed;*/
-    /*top:10px;*/
+    height: 56px;
+    // border-bottom:0.5px solid #D4D4D4;
+    // border-top:0.5px solid #D4D4D4;
     background: #FFFFFF;
-    padding-left:0.3rem;
+    padding-left:15px;
     padding-right: 2.432rem;
-    margin-bottom: 0.224rem;
+    // margin-bottom: 0.224rem;
     z-index: 2;
     width: 100%;
     text-overflow: ellipsis;
@@ -124,14 +184,13 @@
   }
   .write::-webkit-input-placeholder { /* WebKit browsers */
     font-family: PingFangSC-Regular;
-    font-size: 0.453rem;
+    font-size: 17px;
     color: #999999;
-    /*line-height:normal;*/
-    height: 1.4rem;
+    height: 100%;
+    line-height: 17px
   }
   .margin-block {
-    height: 1.9rem;
-    z-index: 1;
+  height: 96px;
   }
   .input-panel {
     position: fixed;
@@ -141,5 +200,38 @@
     box-sizing: border-box;
     width: 80%;height:100%;
     padding: 10px;
+  }
+  .fff{
+    background-color: #fff;
+    position: relative;
+  }
+  .fff:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .fff:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .fff:empty:after,.fff:empty:before {
+    border-top: 0;
   }
 </style>

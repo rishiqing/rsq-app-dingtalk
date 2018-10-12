@@ -14,18 +14,13 @@ try {
 }
 
 module.exports = {
-  release: {
-    env: require('./release.env.js'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: true,
-      extract: true
-    },
-    productionSourceMap: true,
-    index: path.resolve(__dirname, '../dist/release/mobile/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/release/mobile/'),
+  build: {
+    env: require('./prod.env'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/release/mobile/',
+    assetsPublicPath: './',
+    productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -37,38 +32,35 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
+    // 日事清地址
+    rsqServer: 'https://www.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'https://ding.rishiqing.com/',
+    apiServer: 'https://qywx.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'https://ding.rishiqing.com/',
+    authServer: 'https://qywx.rishiqing.com/qywxbackauth/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/qywxbackwebapp/',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
-    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    stsServer: 'https://sts-server.rishiqing.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
-    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'https://ding.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
-      root: 'dingtalk/'
+      root: 'dingtalk/',
+      imageBucket: 'rishiqing-images',
+      kanbanCoverImagePath: 'cover/custom/kanban/'
     },
     version: 2000000
   },
   beta: {
     env: require('./beta.env'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: true,
-      extract: true
-    },
-    productionSourceMap: true,
-    index: path.resolve(__dirname, '../dist/beta/mobile/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/beta/mobile/'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/beta/mobile/',
+    assetsPublicPath: './',
+    productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
@@ -80,37 +72,34 @@ module.exports = {
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
+    // 日事清地址
+    rsqServer: 'https://betaold.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'http://beta.dd.rsq.etoutiao.cn/',
+    apiServer: 'https://qywx-beta.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://beta.dd.rsq.etoutiao.cn/main/',
+    authServer: 'https://qywx-beta.rishiqing.com/qywxbackauth/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/',
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/qywxbackwebapp/',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
-    stsServer: 'http://182.92.222.40:8300/sts/',
+    stsServer: 'https://sts-server.rishiqing.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
-    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'http://beta.dd.rsq.etoutiao.cn/remind/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
-      root: 'dingtalk/'
+      root: 'dingtalk/',
+      imageBucket: 'rishiqing-images',
+      kanbanCoverImagePath: 'cover/custom/kanban/'
     },
     version: 2000000
   },
   dev: {
     env: require('./dev.env'),
-    // /build/utils.js和vue-loader中使用
-    cssLoader: {
-      minimize: false,
-      extract: false
-    },
     port: devPort,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static/',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/assets',
     proxyTable: {},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
@@ -119,23 +108,24 @@ module.exports = {
     // just be aware of this issue when enabling this option.
     cssSourceMap: true,
     hotPath: '/__webpack_hmr',
+    // 日事清地址
+    rsqServer: 'http://beta.rishiqing.com/',
     // 日事清api的后台地址
     apiServer: 'http://dev1.ngrok.timetask.cn/',
     // 日事清-portlet的权限认证后台地址
     authServer: 'http://dev1.ngrok.timetask.cn/',
     // 日事清前端文件地址
     // frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
-    frontServer: 'http://' + ip.address() + ':' + (process.env.PORT || devPort) + '/',
-    // 
+    frontServer: '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
-    stsServer: 'http://182.92.222.40:8300/sts/',
-    // 钉钉提醒服务器，用于发送钉钉内的通知提醒
-    remindServer: 'http://betading.rishiqing.com/',
+    stsServer: 'https://sts-server.rishiqing.com/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
-      root: 'dingtalk/'
+      root: 'dingtalk/',
+      imageBucket: 'rishiqing-images',
+      kanbanCoverImagePath: 'cover/custom/kanban/'
     },
     version: 2000000
   }

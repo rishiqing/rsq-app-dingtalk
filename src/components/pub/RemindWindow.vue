@@ -1,15 +1,18 @@
 <template>
   <div>
-    <div class="modal">
-    </div>
+    <div class="modal" />
     <div class="window">
       <div class="window-top">
-        <img src="../../assets/img/tanchuang.png" alt="">
+        <img
+          src="../../assets/img/tanchuang.png"
+          alt="">
       </div>
       <div class="window-middle">
         <p class="window-title">日事清v2.0上线了</p>
-        <p class="window-content">1现在创建任务的时候可以发DING了<br/>
+        <p class="window-content">
+          1现在创建任务的时候可以发DING了
           2计划功能移至pc端了，钉钉日事清pc端稍后上线
+        </p>
         <p class="more-content">点击查看更多，了解本次更新全部内容</p>
       </div>
       <div class="window-bottom">
@@ -23,7 +26,26 @@
     </div>
   </div>
 </template>
-<style>
+<script>
+  export default {
+    name: 'RemindWindow',
+    data () {
+      return {}
+    },
+    methods: {
+      SwitchToexplain () {
+        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
+        this.$router.push('/pub/explain')
+      },
+      SwitchTosche () {
+        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
+        window.rsqadmg.exec('setItem', this.$store.state.env.version)
+      }
+    }
+  }
+</script>
+<style lang="scss" scoped>
   div{
     margin:0;
     padding: 0;
@@ -62,7 +84,6 @@
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    /*background-color: #3E86D6;*/
     background-image: linear-gradient(-90deg, #69ACEF 0%, #3E86D6 100%);
   }
   .window-top>img{
@@ -122,21 +143,3 @@
     background-color: white;
   }
 </style>
-<script>
-  export default {
-    data () {
-      return {}
-    },
-    methods: {
-      SwitchToexplain () {
-        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
-        window.rsqadmg.exec('setItem', this.$store.state.env.version)
-        this.$router.push('/pub/explain')
-      },
-      SwitchTosche () {
-        this.$store.commit('SYS_GUIDE_SHOW', {isShow: false})
-        window.rsqadmg.exec('setItem', this.$store.state.env.version)
-      }
-    }
-  }
-</script>

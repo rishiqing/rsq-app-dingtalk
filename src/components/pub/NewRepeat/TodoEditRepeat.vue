@@ -59,7 +59,7 @@
     },
     computed: {
       rrule () {
-        return this.$store.state.todo.currentTodo.rrule
+        return this.$store.state.todo.currentTodo.rrule || ''
       },
       item() {
         return this.$store.state.todo.currentTodo
@@ -246,11 +246,11 @@
 <style lang="scss" scoped>
   .repeat{
     ul{
-      // margin-top: 12px;
       width: 100%;
       background:rgba(255,255,255,1);
       box-shadow:0px 0.5px 0px 0px rgba(217,217,217,1),0px -0.5px 0px 0px rgba(217,217,217,1);
-      // padding-left: 15px;
+      padding-left: 15px;
+      padding-right: 15px; 
       li{
         width:100%;
         height:56px;

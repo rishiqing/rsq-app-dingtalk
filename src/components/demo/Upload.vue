@@ -28,7 +28,7 @@
                 </v-touch>
               </template>
               <template v-else>
-                <template v-if="task.file.type === 'application/ppt'">
+                <template v-if="task.file.type === 'application/ppt' || 'application/vnd.openxmlformats-officedocument.presentationml.presentation">
                   <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/ppt.2c7e64eb9b.png" alt="task.img.name"/>
                   <span class="word">{{task.img.name.substr(0,30)}}</span>
                   <v-touch @tap="deleteTask(task)">
@@ -36,7 +36,7 @@
                   </v-touch>
                 </template>
                 <template v-else>
-                  <template v-if="task.file.type === 'application/docx'">
+                  <template v-if="task.file.type === 'application/doc' || 'application/vnd.openxmlformats-officedocument.wordprocessingml.document">
                     <img class="demo-preview-img" src="https://res-front-cdn.timetask.cn/beta/images/word.b44eea8fcf.png" alt="task.img.name"/>
                     <span class="word">{{task.img.name.substr(0,30)}}</span>
                     <v-touch @tap="deleteTask(task)">

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>compressed_file@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 19.9028803 17.3571429 19.9028803 17.3571429 0 0 0"></polygon>
+    </defs>
+    <g id="搜索" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-362.000000, -349.000000)">
+            <g id="compressed_file" transform="translate(362.000000, 349.000000)">
+                <g id="Page-1">
+                    <polygon id="Fill-1" fill="#69D6EF" points="0 0 0 19.9584123 17.2755495 19.9584123 17.2755495 4.69870595 12.9881868 0"></polygon>
+                    <polygon id="Fill-2" fill="#DDF9FF" points="12.9881364 0 12.9881364 4.69609701 17.2760034 4.69870595"></polygon>
+                    <polygon id="Fill-3" fill="#26BADB" points="17.2757512 8.53092982 17.2757512 4.69839288 12.9878842 4.69630572"></polygon>
+                </g>
+                <g id="Group-55">
+                    <polygon id="Fill-7" fill="#FFFFFF" points="7.20321429 17.1875289 10.6170171 17.1875289 10.6170171 14.1146203 7.20321429 14.1146203"></polygon>
+                    <polygon id="Fill-9" fill="#FFFFFF" points="7.46982 13.5994603 8.90976857 13.5994603 8.90976857 12.1595117 7.46982 12.1595117"></polygon>
+                    <polygon id="Fill-10" fill="#FFFFFF" points="8.91046286 11.999826 10.3504114 11.999826 10.3504114 10.5598774 8.91046286 10.5598774"></polygon>
+                    <polygon id="Fill-11" fill="#FFFFFF" points="7.43024571 10.5196089 8.87019429 10.5196089 8.87019429 9.07966029 7.43024571 9.07966029"></polygon>
+                    <polygon id="Fill-12" fill="#FFFFFF" points="7.41011143 7.61888314 8.85006 7.61888314 8.85006 6.17893457 7.41011143 6.17893457"></polygon>
+                    <polygon id="Fill-13" fill="#FFFFFF" points="8.87019429 6.15880029 10.3101429 6.15880029 10.3101429 4.71885171 8.87019429 4.71885171"></polygon>
+                    <polygon id="Fill-14" fill="#FFFFFF" points="8.89032857 9.059526 10.3302771 9.059526 10.3302771 7.61957743 8.89032857 7.61957743"></polygon>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Clip-8"></g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

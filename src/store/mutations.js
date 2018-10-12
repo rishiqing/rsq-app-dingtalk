@@ -69,6 +69,14 @@ export default {
     state.staff.list = p.list
   },
   /**
+   * realuser
+   * @param {[type]} state [description]
+   * @param {[type]} p     [description]
+   */
+  SYS_STF__REAL_LST_READY (state, p) {
+    state.realStaff.list = p.list
+  },
+  /**
    * 以openid作为key值进行缓存
    * @param state
    * @param p
@@ -100,7 +108,14 @@ export default {
   SYS_NAV_SHOW (state, p) {
     state.env.isShowNav = p.isShow
   },
-
+  /**
+   * 设置子任务title
+   * @param {[type]} state [description]
+   * @param {[type]} p     [description]
+   */
+  SYS_SUB_TILTE (state, p) {
+    state.todo.currentSubtodo.title = p.title
+  },
   /* ----------------inbox----------------- */
   /**
    *
@@ -119,8 +134,10 @@ export default {
    * @constructor
    */
   CHILDTASK_TODO_CREATED (state, p) {
-    console.log('现在的currentTodo是' + JSON.stringify(state.todo.currentTodo))
-    state.todo.currentTodo.subTodos.unshift(p.item)
+    if (!state.todo.currentTodo.subTodos) {
+      state.todo.currentTodo.subTodos = []
+    }
+    // state.todo.currentTodo.subTodos.push(p.item)
   },
   INB_TODO_CREATED (state, p) {
     if (!state.inbox.items) {
@@ -215,6 +232,16 @@ export default {
   TD_CURRENT_TODO_SET (state, p) {
     state.todo.currentTodo = p.item
   },
+  /**
+   * 设置当前的子任务
+   * @param state
+   * @param p
+   * @constructor
+   */
+  TD_CURRENT_SUBTODO_SET (state, p) {
+    state.todo.currentSubtodo = {...p.item}
+    state.todo.currentSubtodoDate = {...p.item}
+  },
   TD_CURRENT_TODO_REPEAT_SET (state, p) {
     var i = p.item
     state.todo.currentTodoRepeat = {
@@ -223,7 +250,7 @@ export default {
       pNote: i.pNote || null,
       oldPTitle: i.pTitle,
       oldPNote: i.pNote || null,
-      oldSubTodos: JSON.parse(JSON.stringify(i.subTodos || [])),
+      oldSubtodos: JSON.parse(JSON.stringify(i.subTodos || [])),
       createTaskDate: 'not set',
       type: 'not set'
     }
@@ -269,16 +296,13 @@ export default {
    * @constructor
    */
   TD_TODO_UPDATED (state, p) {
-    // console.log('state.todo.currentTodo是' + JSON.stringify(state.todo.currentTodo))
-    // console.log('p.todo是' + JSON.stringify(p.todo))
     util.extendObject(state.todo.currentTodo, p.todo)
-    // console.log('state.todo.currentTodo之后是' + JSON.stringify(state.todo.currentTodo))
   },
   TD_SUBTODO_UPDATED (state, p) {
     let items = state.todo.currentTodo.subTodos
     for (var i = 0; i < items.length; i++) {
       if (items[i].id === p.item.id) {
-        util.extendObject(items[i], p.subTodo)
+        util.extendObject(items[i], p.subtodo)
         break
       }
     }
@@ -292,17 +316,10 @@ export default {
    */
   TD_TODO_DELETED (state, p) {
     let items = p.item.pContainer === 'inbox' ? state.inbox.items : state.schedule.items
-    let index = items.indexOf(p.item)
-    if (index > -1) {
-      items.splice(index, 1)
-    }
-  },
-  TD_COMMENT_DELETE (state, p) {
-    let items = state.todo.currentTodo.comments
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id === p.item.id) {
-        items.splice(i, 1)
-        break
+    if (items) {
+      let index = items.indexOf(p.item)
+      if (index > -1) {
+        items.splice(index, 1)
       }
     }
   },
@@ -358,6 +375,15 @@ export default {
   TD_COMMENT_CREATED (state, p) {
     state.todo.currentTodo.comments.push(p.comment)
   },
+  TD_COMMENT_DELETE (state, p) {
+    let items = state.todo.currentTodo.comments
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+        break
+      }
+    }
+  },
   /**
    * 重置用于提醒的时间model
    * @param state
@@ -371,8 +397,23 @@ export default {
   PUB_TODO_TIME_UPDATE (state, p) {
     util.extendObject(state.pub.currentTodoTime, p.data)
   },
+  PUB_SUB_TODO_DATE_UPDATE (state, p) {
+    util.extendObject(state.todo.currentSubtodoDate, p.data)
+  },
+  PUB_SUB_TODO_DATE_UPDATE_EDIT (state, p) {
+    util.extendObject(state.todo.currentSubtodo, p.data)
+  },
+  PUB_SUB_TODO_USER (state, p) {
+    state.subUserId = p.id
+  },
   PUB_TODO_TIME_DELETE (state, p) {
     state.pub.currentTodoTime = {}
+  },
+  PUB_TITLE_SUB (state, p) {
+    state.pub.subtitle = p
+  },
+  PUB_ID_SUB (state, p) {
+    state.pub.pubId = p
   },
   PUB_TODO_TIME_CLOCK_UPDATE (state, p) {
     util.extendObject(state.pub.currentTodoTime.clock, p.data)
@@ -386,15 +427,197 @@ export default {
     }
     util.extendObject(state.pub.currentTodoDate, p.data)
   },
+  PUB_TODO_DATE_UPDATE_EDIT (state, p) {
+    if (!state.pub.currentTodoDateEdit) {
+      state.pub.currentTodoDateEdit = {}
+    }
+    util.extendObject(state.pub.currentTodoDateEdit, p.data)
+  },
   PUB_TODO_DATE_DELETE (state, p) {
     state.pub.currentTodoDate = null
   },
-  TD_DESP_CREATED (state, p) {
-    state.todo.currentTodo.pNote = p.desp.pNote
+  TD_NOTE_CREATED (state, p) {
+    state.todo.currentTodo.pNote = p.note.pNote
   },
   REPLY_COMMENT_CREATED (state, p) {
     state.replyId = p.item.authorId
     state.replyName = p.item.authorName
+  },
+  REPLY_COMMENT_DELETE (state, p) {
+    state.replyId = null
+    state.replyName = null
+  },
+  SAVE_RECORD (state, p) {
+    state.record = p.item
+  },
+  SAVE_USER (state, p) {
+    state.userList = p.item
+  },
+  SAVE_MEMBER (state, p) {
+    state.memberList = p
+  },
+  SAVE_PLANS (state, p) {
+    state.planList = p
+  },
+  UPDATA_PLAN (state, p) {
+    state.currentPlan.userRoles = [...p]
+  },
+  SET_CURRENT_PLAN (state, p) {
+    state.currentPlan = p
+  },
+  SAVE_CHILD_PLAN (state, p) {
+    state.childPlanList = p
+  },
+  SAVE_CARD (state, p) {
+    state.cardList = p
+  },
+  ADD_SUB_PLAN (state, p) {
+    state.childPlanList.push(p)
+  },
+  ADD_CARD (state, p) {
+    state.cardList.push(p)
+  },
+  DELETE_CHILD_PLAN (state, p) {
+    // alert(JSON.stringify(state.childPlanList))
+    // alert(state.childPlanList.indexOf(p))
+    state.childPlanList.splice(state.childPlanList.indexOf(p), 1)
+    // alert(JSON.stringify(state.childPlanList))
+  },
+  UPDATE_SUBPLAN_NAME (state, p) {
+    for (var i = 0; i < state.childPlanList.length; i++) {
+      if (state.childPlanList[i].id === p.id) {
+        state.childPlanList[i].name = p.name
+      }
+    }
+  }, // 其实直接更改当前的item不就行了，有必要去列表里面去找吗
+  CANCEL_STAR (state, p) {
+    for (var i = 0; i < state.planList.length; i++) {
+      if (state.planList[i].id === p.kanbanId) {
+        state.planList[i].starMark = false
+      }
+    }
+    state.currentPlan.starMark = false
+  },
+  SAVE_STAR (state, p) {
+    for (var i = 0; i < state.planList.length; i++) {
+      if (state.planList[i].id === p.kanbanId) {
+        state.planList[i].starMark = true
+      }
+    }
+    state.currentPlan.starMark = true
+  },
+  DELETE_PLAN (state, p) {
+    for (var i = 0; i < state.planList.length; i++) {
+      if (state.planList[i].id === p.id) {
+        state.planList.splice(i, 1)
+      }
+    }
+  },
+  SAVE_CURRENT_CARD_ID (state, p) {
+    state.kanbanCardId = p.id
+    // console.log(p.kanbanItemList)
+    if (p.kanbanItemList !== null) {
+      state.cardItemLength = p.kanbanItemList.length
+    } else {
+      state.cardItemLength = 0
+    }
+    state.currentCard = p
+  },
+  DELETE_CARD (state, p) {
+    for (var i = 0; i < state.cardList.length; i++) {
+      if (state.cardList[i].id === p.id) {
+        state.cardList.splice(i, 1)
+      }
+    }
+  },
+  SAVE_CURRENT_LEFT (state, p) {
+    state.pos = p.pos
+    state.num = p.num
+  },
+  SAVE_CURRENT_SUBPLAN (state, p) {
+    state.currentSubPlan = p
+  },
+  SAVE_LABELS (state, p) {
+    state.labels = p
+  },
+  SET_EMPTY_CURRENT_SUB_PLAN (state, p) {
+    state.currentSubPlan = ''
+    state.pos = ''
+    state.num = ''
+  },
+  PLAN_COVER_LIST_SET (state, p) {
+    state.plan.coverList = p.coverList
+  },
+  PLAN_NAME_UPDATE (state, p) {
+    state.currentPlan.name = p.name
+  },
+  PLAN_IMG_UPDATE (state, p) {
+    state.currentPlan.cover = p.cover
+  },
+  PLAN_NEW_TODO_DATE (state, p) {
+    state.plan.currentKanbanItem.dates = p.dates
+    state.plan.currentKanbanItem.startDate = p.startDate
+    state.plan.currentKanbanItem.endDate = p.endDate
+  },
+  PLAN_CURRENT_KANBAN_ITEM_SET (state, p) {
+    state.plan.currentKanbanItem = p.item
+  },
+  PLAN_CURRENT_KANBAN_ITEM_UPDATE (state, p) {
+    util.extendObject(state.plan.currentKanbanItem, p.kanbanItem)
+  },
+  PLAN_CURRENT_KANBAN_SUBITEM_CREATED (state, p) {
+    if (!state.plan.currentKanbanItem.subItems) {
+      state.plan.currentKanbanItem.subItems = []
+    }
+    // console.log(p)
+    // state.plan.currentKanbanItem.subItems.push(p.item)
+  },
+  PLAN_KANBAN_SUBITEM_UPDATE (state, p) {
+    const target = state.plan.currentKanbanItem.subItems.find(subItem => {
+      return subItem.id === p.item.id
+    })
+    util.extendObject(target, p.item)
+  },
+  PLAN_KANBAN_SUBITEM_DELETE (state, p) {
+    const arr = state.plan.currentKanbanItem.subItems
+    const target = arr.find(subItem => {
+      return subItem.id === p.item.id
+    })
+    const index = arr.indexOf(target)
+    arr.splice(index, 1)
+  },
+  PLAN_KANBAN_ITEM_COMMENT_CREATED (state, p) {
+    const item = state.plan.currentKanbanItem
+    if (!item.commentList) {
+      item.commentList = []
+    }
+    item.commentList.push(p.comment)
+  },
+  PLAN_KANBAN_ITEM_COMMENT_DELETE (state, p) {
+    let items = state.plan.currentKanbanItem.commentList
+    for (var i = 0; i < items.length; i++) {
+      if (items[i].id === p.item.id) {
+        items.splice(i, 1)
+        break
+      }
+    }
+  },
+  REPLY_KANBAN_ITEM_COMMENT_CREATED (state, p) {
+    state.replyId = p.item.authorId
+    state.replyName = p.item.authorName
+  },
+  REPLY_KANBAN_ITEM_COMMENT_DELETE (state, p) {
+    state.replyId = null
+    state.replyName = null
+  },
+  DELAY_SHOW_CHECKBOX (state) {
+    state.todo.delayShowCheckbox = true
+  },
+  RESET_DELAY_SHOW_CHECKBOX (state) {
+    state.todo.delayShowCheckbox = false
+  },
+  SLIDER_MARK (state, p) {
+    state.pub.sliderId = p.mark
   },
   SAVE_CURRENT_RRULE (state, p) {
     state.todo.currentTodo.rrule = p.rrule

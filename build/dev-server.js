@@ -12,8 +12,8 @@ var ip = require('ip')
 var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
-const webpackConfig = process.env.NODE_ENV === 'testing'
-  ? require('./webpack.release.conf.js')
+var webpackConfig = process.env.NODE_ENV === 'testing'
+  ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
@@ -27,6 +27,7 @@ var proxyTable = config.dev.proxyTable
 var app = express()
 var compiler = webpack(webpackConfig)
 
+console.log('-----' + webpackConfig.output.publicPath)
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,
   quiet: true
@@ -67,7 +68,11 @@ Object.keys(proxyTable).forEach(function (context) {
 })
 
 // handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
+app.use(require('connect-history-api-fallback')({
+  rewrites: [
+    { from: /^\/rsqddmapp/, to: '/assets/index.html'}
+  ]
+}))
 
 // serve webpack bundle output
 app.use(devMiddleware)
@@ -78,9 +83,10 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+console.log('staticPath', staticPath)
 app.use(staticPath, express.static('./static'))
 
-var uri = 'http://' + ip.address() + ':' + '8090' + '/'
+var uri = 'http://' + ip.address() + ':' + port + '/'
 
 var _resolve
 var readyPromise = new Promise(resolve => {

@@ -1,46 +1,110 @@
 <template>
   <div class="">
-    <div class="edit" >
-        <!--<textarea type="text"-->
-                  <!--class="edit-text"-->
-                  <!--v-if="isEdit"-->
-               <!--ref="titleInput"-->
-               <!--:value="itemTitle"-->
-                  <!--@blur="inputBlur($event.target.value)"-->
-               <!--@input="inputChange($event.target.value)"-->
-                  <!--:class="{'padding-left-input':isCheckable}"-->
-                  <!--@focus="IsDisabled($event)"></textarea>-->
-      <v-touch class="wrap-icon"
-               v-if="isCheckable"
-               @tap="clickCheckOut">
-        <i class="icon2-check-box select-title"
-           :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"></i>
-        <div class="hide" :class="{'for-hide-title':itemChecked}"></div>
-        <i class="icon2-selected hide" :class="{'isdisplay-title':itemChecked}"></i>
+    <div class="edit">
+      <v-touch
+        v-if="isCheckable"
+        class="wrap-icon"
+        @tap="clickCheckOut">
+        <i
+          :class="{'icon-check_box_outline_blank': !itemChecked, 'icon-check': itemChecked}"
+          class="icon2-check-box select-title"/>
+        <i
+          :class="{'is-display-title':itemChecked}"
+          class="icon2-selected hide"/>
       </v-touch>
-      <input type="text" placeholder="输入任务标题"
-              ref="titleInput"
-              :value="itemTitle"
-              @input="inputChange($event.target.value)"
-              @blur="inputBlur($event.target.value)"
-              :class="{'padding-left-input':isCheckable,'real-width':isMaxlength(itemTitle),'new-padding-left':newCheckable,'inbox-padding-left':!isCheckable,'edit-border':isEdit,'edit-text-font':isEdit,'new-text-font':newCheckable}"
-              @focus="IsDisabled($event)"/>
-        <!--@blur="inputBlur($event.target.value)"-->
+      <div class="pb">
+        <input
+          ref="titleInput"
+          :value="itemTitle"
+          :class="{'padding-fix':!isCheckable,'edit-border':isShowBottomBorder}"
+          :placeholder="placeholder"
+          class="title-input"
+          type="text"
+          @input="inputChange"
+          @blur="inputBlur"
+          @focus="checkDisabled">
+      </div>
     </div>
   </div>
 </template>
-<style scoped>
+<script>
+  export default {
+    name: 'InputTitleText',
+    props: {
+      //  标题的内容，默认为空字符串
+      itemTitle: {
+        type: String,
+        default: ''
+      },
+      //  是否显示checkbox选择框
+      isCheckable: {
+        type: Boolean,
+        default: false
+      },
+      //  是否为选中状态
+      itemChecked: {
+        type: Boolean,
+        default: false
+      },
+      //  是否被禁用编辑
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+      //  被禁用编辑的提示，默认为''，不提示；如果要显示提示文字，需要传入提示的文字
+      disabledText: {
+        type: String,
+        default: ''
+      },
+      //  是否显示底部的border
+      isShowBottomBorder: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data () {
+      return {
+        placeholder: '请输入任务标题'
+      }
+    },
+    computed: {},
+    methods: {
+      checkDisabled (e) {
+        if (this.isDisabled) {
+          e.target.blur()
+          if (this.disabledText) {
+            window.rsqadmg.execute('toast', {message: this.disabledText})
+          }
+        }
+      },
+      inputBlur (e) {
+        this.$emit('text-blur', e.target.value)
+      },
+      inputChange (e) {
+        this.$emit('text-change', e.target.value)
+      },
+      clickCheckOut () {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
+        this.$emit('click-checkout', !this.itemChecked)
+      }
+    }
+  }
+</script>
+<style lang="scss" scoped>
   .edit-text-font{
     font-family: PingFangSC-Medium;
-  }
-  .new-text-font{
-    font-family: PingFangSC-Regular;
   }
   .wrap-icon{
     display: flex;
     align-items: center;
-    height: 1.28rem;
-    position: relative;
+    height: 64px;
+    position: absolute;
+    justify-content:center;
+    // width: 1.2rem;
+    margin-left: 15px;
   }
   .edit-text{
     font-family: PingFangSC-Medium;
@@ -52,43 +116,38 @@
     display: none;
   }
   .edit-border{
-    border-bottom: 1px solid #e0e0e0;
+    // border-bottom: 0.5px solid #D4D4D4;
   }
   .edit{
+    font-size: 17px;
     display: flex;
     align-items: center;
     position: relative;
     background-color: white;
   }
-  .real-width{
-    /*width:88%;*/
+  .title-input{
     text-overflow: ellipsis;
     overflow: hidden;
     white-space:nowrap
   }
   .select-title{
     color:#b1b1b1;
-    font-size: 0.506rem;
-    /*position: absolute;*/
-    top:0.39rem;
-    /*margin-top: -0.2rem;*/
-    margin-left:0.35rem;
+    font-size: 20px;
+    // top:0.39rem;
+    // margin-left:20px;
     background: #FFFFFF;
     border-radius: 1px;
   }
-  .isdisplay-title{
+  .is-display-title{
     display: block;
-    position:absolute;
-    top:0.3rem;
-    /*margin-top: -0.29rem;*/
-    left: 0.46rem;
+    // transform: translateX(-17px) translateY(0px);
     font-size: 15px;
-    color:#55A8FD;
+    color: #999;
+    margin-left: -17px;
   }
   .for-hide-title{
     position: absolute;
     top:0.35rem;
-    /*margin-top: -0.29rem;*/
     left: 0.75rem;
     display: block;
     width: 2px;
@@ -98,91 +157,47 @@
   }
   .padding-left-input{
     margin-left: 0.1rem;
-    padding-left: 0.2rem;
-  }
-  .inbox-padding-left{
     padding-left: 0.3rem;
   }
   input::-webkit-input-placeholder { /* WebKit browsers */
-    /*font-family: PingFangSC-Regular;*/
-    font-size: 0.506rem;
+    font-size: 17px;
+    height: 100%;
+    line-height: 17px;
     color: #8C8C8C;
     letter-spacing: 0;
     padding-left: 0.1rem;
+    padding-top: 2px;
+  }
+  .pb{
+    height: 100%;
+    width: 100%;
+    margin-left: 15px;
+  }
+  .pb:after{
+    margin-left: 15px;
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
   }
   input[type='text']{
-    /*font-family: PingFangSC-Regular;*/
-    /*height:1.458rem;*/
+    height: 64px;
     background: #FFFFFF;
-    /*border-top:1px solid #E0E0E0 ;*/
-    line-height:0.72rem ;
-    padding-bottom:0.305rem ;
-    padding-top: 0.305rem;
-    font-size: 0.506rem;
+    line-height:24px ;
+    padding: 0.3rem;
     border-radius: 0;
+    color: #3D3D3D;
+    // margin-left: 15px;
+    padding-left: 35px;
   }
-  /*.padding-left-input-{*/
-    /*padding-left:0.3rem;*/
-  /*}*/
-  .padding-left-input{
-    /*padding-left: 1.5rem;*/
+  .padding-fix{
+    padding-left: 0 !important;
   }
 </style>
-<script>
-  export default {
-    data () {
-      return {
-      }
-    },
-    computed: {
-      paddingObject () {
-        if (!this.isCheckable) {
-          return {'padding-left': '0'}
-        } else {
-          return {}
-        }
-      }
-    },
-    props: {
-      newCheckable: Boolean,
-      isCheckable: Boolean,
-      itemTitle: String,
-      itemChecked: Boolean,
-      disabled: Boolean,
-      isEdit: Boolean
-    },
-    methods: {
-      onPanMove () {
-        console.log('jjjjjjj')
-        alert('Hhh')
-      },
-      isMaxlength (title) {
-        title = title || ''
-        return title.length > 15
-      },
-      IsDisabled (e) {
-        if (this.disabled) {
-          e.target.blur()
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
-      },
-      inputBlur (value) {
-        this.$emit('text-blur', value)
-      },
-      inputChange (value) {
-        this.$emit('text-change', value)
-      },
-      clickCheckOut () {
-        if (this.disabled) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
-        this.$emit('click-checkout', !this.itemChecked)
-      }
-    }
-//    beforeRouteLeave (to, from, next) {
-//      this.$emit('text-blur', this.content)
-//    }
-  }
-</script>

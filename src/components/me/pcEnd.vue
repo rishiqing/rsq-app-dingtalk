@@ -8,25 +8,45 @@
       <div class="first">
         <p class="explain-title">1.输入www.rishiqing.com进入日事清官网 点击右上角登录</p>
         <div class="explain-img">
-          <img  class="pcEnd-img" src="../../assets/img/Group7.png" alt="">
+          <img
+            class="pcEnd-img"
+            src="../../assets/img/Group7.png">
         </div>
       </div>
       <div class="second">
         <p class="explain-title">2.选择钉钉扫码登录，并使用钉钉扫描二维码</p>
         <div class="explain-img">
-          <img class="pcEnd-img" src="../../assets/img/Group8.png" alt="">
+          <img
+            class="pcEnd-img"
+            src="../../assets/img/Group8.png">
         </div>
       </div>
       <div class="second">
         <p class="explain-title">3.进入日事清，安排计划,分配日程</p>
         <div class="explain-img last">
-          <img  class="pcEnd-img last-picture" src="../../assets/img/Group.png" alt="">
+          <img
+            class="pcEnd-img last-picture"
+            src="../../assets/img/Group.png">
         </div>
       </div>
     </div>
   </div>
 </template>
-<style scoped>
+<script>
+  export default {
+    name: 'PcEnd',
+    data () {
+      return {
+        titleName: '日事清PC端'
+      }
+    },
+    mounted () {
+      window.rsqadmg.exec('setTitle', {title: this.titleName})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
+    }
+  }
+</script>
+<style lang="scss" scoped>
   .pcEnd-img{
     width:7.413rem;
     height: 4.96rem;
@@ -81,7 +101,6 @@
   }
   .explain-img>img{
     width:7.413rem;
-    /*height: 8.864rem;*/
   }
   .explain-img{
     width: 9.32rem;
@@ -90,22 +109,4 @@
     justify-content: center;
     margin-top: 0.533rem;
   }
-  .explain-bottom>div{
-    /*margin-top: 10px;*/
-    /* border-bottom: 1px solid #E4E4E4;*/
-  }
 </style>
-<script>
-  export default {
-    data () {
-      return {
-        titleName: '日事清PC端'
-      }
-    },
-    mounted () {
-      window.rsqadmg.exec('setTitle', {title: this.titleName})
-      window.rsqadmg.exec('setOptionButtons', {hide: true})
-//      this.$store.dispatch('setNav', {isShow: true})
-    }
-  }
-</script>

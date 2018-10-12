@@ -1,0 +1,60 @@
+.el-message-box--center{
+	padding-bottom: 0;
+}
+.el-message-box--center{
+	border-radius: 15px;
+}
+.el-message-box__btns{
+	padding: 0;
+}
+.el-button{
+	width: 50%;
+	margin: 0;
+	font-family: PingFangSC-Regular;
+	font-size: 17px;
+	color: #2F7DCD;
+	text-align: center;
+}
+.el-button+.el-button,.el-message-box__btns button:nth-child(2){
+	margin-left: 0;
+}
+.el-button--primary{
+	background: rgba(255,255,255,0.96);
+	border-color: #D9D9D9;
+}
+.el-button:focus, .el-button:hover{
+	background-color: #fff;
+    border-color: #D9D9D9;
+    color: #409EFF;
+}
+.el-message-box__btns button:nth-child(1){
+	color: #000000;
+}
+.el-message-box__title{
+	font-family: PingFangSC-Medium;
+	font-size: 17px;
+	color: #000000;
+	line-height: 24px;
+}
+.el-button--small:nth-child(1){
+	border-left: 0;
+}
+.el-button--small, .el-button--small.is-round{
+	padding: 12px 15px;
+	border-radius: 0;
+	border-bottom: 0;
+	border-right: 0;
+}
+.el-message-box__errormsg{
+	display: none;
+}
+.el-input__inner{
+	height: 46px;
+}
+.el-message-box__input{
+	padding-top: 0;
+}
+.el-message-box--center .el-message-box__header{
+	padding-top: 10px;
+	font-weight: bold;
+}

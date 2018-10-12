@@ -115,6 +115,12 @@ export default {
     }
     return arr
   },
+  getZeroTime (initDate) {
+    var year = initDate.getFullYear()
+    var month = initDate.getMonth()
+    var date = initDate.getDate()
+    return new Date(year, month, date)
+  },
   /**
    * 格式化输出日期
    * single类型：直接输出arr中的单日期，如“xx月xx日”
@@ -129,7 +135,8 @@ export default {
     }
     var funFormat = mills => {
       var d = new Date(mills)
-      return (d.getMonth() + 1) + '月' + (d.getDate()) + '日'
+      var year = d.getFullYear() === new Date().getFullYear() ? '' : d.getFullYear() + '年'
+      return year + (d.getMonth() + 1) + '月' + (d.getDate()) + '日'
     }
     switch (type) {
       case 'single':
@@ -227,7 +234,6 @@ export default {
     if (dateType === 'none' || dateResult.length === 0) {
       dateType = ''
     }
-    sep = sep || '/'
     var result
     switch (dateType) {
       case 'repeat':  //  repeat类型，默认startDate和endDate与single相同
@@ -268,10 +274,10 @@ export default {
       noRepeat: '不重复',
       userRepeat: '自定义重复',
       everyDay: '每天重复',
-      everyWeek: '每周重复',
-      everyMonth: '每月重复',
-      everyYear: '每年重复',
-      weekday: '工作日重复（周一至周五）'
+      everyWeek: '每周重复 ',
+      everyMonth: '每月重复 ',
+      everyYear: '每年重复 ',
+      weekday: '工作日重复 (周一至周五)'
     }
     return map[code]
   },
@@ -385,12 +391,6 @@ export default {
       }
     }
   },
-  /**
-   * 日期单独转换时间戳
-   * @author lumozx
-   * @param  {string} date 日期
-   * @return {number}      时间戳
-   */
   dateTotimestamp (date) {
     return moment(date, 'YYYY.MM.DD').valueOf()
   },
