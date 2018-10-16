@@ -35,15 +35,15 @@ module.exports = {
     // 日事清地址
     rsqServer: 'https://www.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'https://qywx.rishiqing.com/',
+    apiServer: 'https://ding.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'https://qywx.rishiqing.com/qywxbackauth/',
+    authServer: 'https://ding.rishiqing.com/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/qywxbackwebapp/',
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
-    stsServer: 'https://sts-server.rishiqing.com/sts/',
+    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
@@ -73,17 +73,17 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清地址
-    rsqServer: 'https://betaold.rishiqing.com/',
+    rsqServer: 'http://beta.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'https://qywx-beta.rishiqing.com/',
+    apiServer: 'http://beta.dd.rsq.etoutiao.cn/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'https://qywx-beta.rishiqing.com/qywxbackauth/',
+    authServer: 'http://beta.dd.rsq.etoutiao.cn/main/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/qywxbackwebapp/',
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
-    stsServer: 'https://sts-server.rishiqing.com/sts/',
+    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
@@ -119,7 +119,7 @@ module.exports = {
     frontServer: '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
-    stsServer: 'https://sts-server.rishiqing.com/sts/',
+    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
