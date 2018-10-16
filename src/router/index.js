@@ -23,6 +23,9 @@ import SubTodoNew from 'com/pub/SubTodoNew'
 import PlanSubTodoNew from 'com/pub/PlanSubTodoNew'
 // import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
+import DingPlus15Days from 'com/pub/DingPlus15Days'
+import Buy from 'com/pub/Buy'
+import Updata from 'com/pub/Updata'
 import PcEnd from 'com/me/PcEnd'
 import PlanList from 'com/plan/PlanList'
 import PlanNameEdit from 'com/plan/PlanNameEdit'
@@ -340,6 +343,27 @@ const router = new Router({
       name: 'checkFailure',
       component: CheckFailure,
       meta: {requireAuth: true}
+    },
+    // 剩余15天
+    {
+      path: '/dingplus15days',
+      name: 'dingplus15days',
+      component: DingPlus15Days,
+      meta: {requireAuth: false}
+    },
+    // 试用到期
+    {
+      path: '/buy',
+      name: 'buy',
+      component: Buy,
+      meta: {requireAuth: false}
+    },
+    // 超出人员
+    {
+      path: '/updata',
+      name: 'updata',
+      component: Updata,
+      meta: {requireAuth: false}
     },
     //  产品介绍页面
     {
