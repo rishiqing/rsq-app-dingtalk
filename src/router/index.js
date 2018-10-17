@@ -26,6 +26,7 @@ import CheckFailure from 'com/pub/CheckFailure'
 import DingPlus15Days from 'com/pub/DingPlus15Days'
 import Buy from 'com/pub/Buy'
 import Updata from 'com/pub/Updata'
+import Version from 'com/pub/Version'
 import PcEnd from 'com/me/PcEnd'
 import PlanList from 'com/plan/PlanList'
 import PlanNameEdit from 'com/plan/PlanNameEdit'
@@ -363,6 +364,13 @@ const router = new Router({
       path: '/updata',
       name: 'updata',
       component: Updata,
+      meta: {requireAuth: false}
+    },
+    // 收费说明
+    {
+      path: '/version',
+      name: 'version',
+      component: Version,
       meta: {requireAuth: false}
     },
     //  产品介绍页面

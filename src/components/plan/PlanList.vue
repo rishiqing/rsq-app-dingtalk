@@ -1,5 +1,20 @@
 <template>
   <div>
+    <v-touch
+      @tap="watchVersion"
+      class="version">
+      <div class="left">
+        <img src="../../assets/img/version.png">
+        <div class="text">
+          <span class="bb">试用版</span> 
+          <span class="day">2018-09-09</span>
+        </div>
+      </div>
+      <div class="right">
+        收费说明
+        <i class="icon2-arrow-right-small arrow"></i>
+      </div>
+    </v-touch>
     <ul
       v-if="planItems.length > 0"
       :class="{'plan-count': planCount}"
@@ -98,6 +113,9 @@
             }
           }
         }
+      },
+      watchVersion () {
+        this.$router.push('/version')
       }
     }
   }
@@ -220,5 +238,55 @@
   line-height: 36px;
   margin: 0 auto;
   margin-top: 30px;
+  }
+  .version{
+    margin-top: 20px;
+    width:100%;
+    height:56px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 2px 4px 0px rgba(43,136,254,0.16);
+    display: flex;
+    justify-content: space-between;
+    .left{
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+      img{
+        display: block;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+      }
+      .text{
+        span{
+          display: block
+        }
+        .bb{
+          height:21px;
+          font-size:15px;
+          font-family:PingFangSC-Medium;
+          font-weight:500;
+          color:rgba(79,119,170,1);
+          line-height:21px;
+        }
+        .day{
+        height:17px;
+        font-size:12px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(140,140,140,1);
+        line-height:17px;
+        }
+      }
+    }
+    .right{
+      margin-right: 15px;
+      height:56px;
+      font-size:13px;
+      font-family:PingFangSC-Regular;
+      font-weight:400;
+      color:rgba(157,177,201,1);
+      line-height:56px;
+    }
   }
 </style>
