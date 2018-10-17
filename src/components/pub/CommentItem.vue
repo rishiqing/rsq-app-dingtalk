@@ -158,6 +158,11 @@
           // this.deleteComment(this.item)
         }
       }
+    },
+    mounted () {
+      if (this.item.imgList) {
+        this.item.fileList = this.item.fileList.concat(this.item.imgList)
+      }
     }
   }
 </script>
