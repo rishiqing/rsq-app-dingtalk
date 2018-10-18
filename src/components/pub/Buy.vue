@@ -2,7 +2,7 @@
   <div class="alert">
     <img class="alert-img" src="../../assets/img/alertplus.svg">
     <div class="alert-text">服务已到期</div>
-    <div class="alert-text2">您的服务已到期，请及时联系单位管理员前往购买服务</div>
+    <div class="alert-text2">您的服务已到期，请购买/续费后继续使用</div>
     <a href="#" class="buy">前往购买</a>
     <div class="foot">
       <img src="../../assets/img/code.png" class="code">

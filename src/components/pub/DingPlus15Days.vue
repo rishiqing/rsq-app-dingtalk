@@ -2,8 +2,8 @@
   <div class="alert">
     <img class="alert-img" src="../../assets/img/alertplus.svg">
     <div class="alert-text">试用提醒</div>
-    <div class="alert-text2">您的试用期限剩余{{day}}天，请尽快购买付费版本</div>
-    <a href="#" class="buy">前往购买</a>
+    <div class="alert-text2">日事清现已升级为付费应用，试用期为{{day}}天，请及时续费避免到期停用影响您的正常工作</div>
+    <a href="#" class="buy">前往续费</a>
     <a href="#" class="go">继续试用</a>
     <div class="foot">
       <img src="../../assets/img/code.png" class="code">
