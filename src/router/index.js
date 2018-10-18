@@ -24,6 +24,7 @@ import PlanSubTodoNew from 'com/pub/PlanSubTodoNew'
 // import NoPermission from 'com/pub/NoPermission'
 import CheckFailure from 'com/pub/CheckFailure'
 import DingPlus15Days from 'com/pub/DingPlus15Days'
+import DingPlus3Days from 'com/pub/DingPlus3Days'
 import Buy from 'com/pub/Buy'
 import Updata from 'com/pub/Updata'
 import Version from 'com/pub/Version'
@@ -344,6 +345,13 @@ const router = new Router({
       name: 'checkFailure',
       component: CheckFailure,
       meta: {requireAuth: true}
+    },
+    // 剩余3天
+    {
+      path: '/dingplus3days',
+      name: 'dingplus3days',
+      component: DingPlus3Days,
+      meta: {requireAuth: false}
     },
     // 剩余15天
     {
