@@ -19,6 +19,24 @@ function getJsonFromUrl() {
   return result;
 }
 
+function checkDevice() {
+  var userAgent = window.navigator.userAgent.toLowerCase()
+  var ios = /iphone|ipod|ipad/.test( userAgent )
+  var Windows = /windows/.test( userAgent )
+  var Macintosh = /macintosh/.test( userAgent )
+  var result = {}
+
+  if (ios) {
+    result['os'] = 'iOS'
+  } else if (Windows) {
+    result['os'] = 'Windows'
+  } else if (Macintosh) {
+    result['os'] = 'Macintosh'
+  } else {
+    result['os'] = 'unknow'
+  }
+  return result
+}
 //写cookies
 
 function setCookie(name,value)
@@ -596,4 +614,5 @@ rsqAdapterManager.register({
       }
     });
   },
+  checkDevice: checkDevice,
 })
