@@ -36,14 +36,27 @@
       },
       userId () {
         return this.loginUser.authUser.userId
+      },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
       }
     },
     mounted () {
       var corpId = this.loginUser.authUser.corpId
+     if (this.isBackNewVersion) {
+      if (this.item.accessIds) {
+        this.item.memberIds = this.item.accessIds
+      }
+      this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: this.item.memberIds.split(',')})
+        .then(idMap => {
+          this.local = util.getMapValuePropArray(idMap)
+        })
+     } else {
       this.$store.dispatch('fetchUseridFromRsqid', {corpId: corpId, idArray: this.item.joinUserIds.split(',')})
         .then(idMap => {
           this.local = util.getMapValuePropArray(idMap)
         })
+     }
     }
   }
 

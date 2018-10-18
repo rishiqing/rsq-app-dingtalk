@@ -110,23 +110,18 @@
       return {
         editItem: {},
         joinUserRsqIds: [],
-        planMember: [],
+        // planMember: [],
         error: false
       }
     },
     computed: {
-      // planMember () {
-      //   // var that = this
-      //   var arr = []
-      //   if (this.$store.state.currentPlan) {
-      //     var len = this.$store.state.currentPlan.userRoles.length
-      //     console.log(len, 1)
-      //     for (let i = 0; i < len; i++) {
-      //       arr.push(this.$store.state.currentPlan.userRoles[i].userId)
-      //     }
-      //   }
-      //   return arr
-      // },
+      planMember () {
+        var that = this
+        var arr = that.currentPlan.userRoles.map(function (o) {
+          return o.userId
+        })
+        return arr
+      },
       currentPlan () {
         return this.$store.state.currentPlan
       },
@@ -364,7 +359,7 @@
                   })
                 })
             }
-            that.planMember = that.editItem.accessIds.split(',')
+            // that.planMember = that.editItem.accessIds.split(',')
             this.joinUserRsqIds = this.editItem.joinUserIds.split(',')
           })
           .then(() => {
