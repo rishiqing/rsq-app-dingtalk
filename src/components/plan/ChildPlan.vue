@@ -258,6 +258,9 @@
       },
       removePlanControl () {
         return this.currentPlan.editControl.removeKB
+      },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
       }
     },
     watch: {
@@ -452,8 +455,13 @@
         }
       },
       regularDate (date) {
-        let year = date.substring(0, 4) === new Date().getFullYear().toString() ? '' : date.substring(0, 4) + '年'
-        return year + parseInt(date.substring(5, 7)) + '月' + parseInt(date.substring(8, 10)) + '日'
+        if (this.isBackNewVersion) {
+          let year = date.substring(0, 4) === new Date().getFullYear().toString() ? '' : date.substring(0, 4) + '年'
+          return year + parseInt(date.substring(4, 6)) + '月' + parseInt(date.substring(6, 8)) + '日'
+        } else {
+          let year = date.substring(0, 4) === new Date().getFullYear().toString() ? '' : date.substring(0, 4) + '年'
+          return year + parseInt(date.substring(5, 7)) + '月' + parseInt(date.substring(8, 10)) + '日'
+        }
       },
       initLayout () {
         var that = this
