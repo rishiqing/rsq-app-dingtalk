@@ -4,7 +4,7 @@
       @tap="watchVersion"
       class="version">
       <div class="left">
-        <img src="../../assets/img/version.png">
+        <img src="../../assets/img/version.svg">
         <div class="text">
           <span class="bb">试用版</span> 
           <span class="day">2018-09-09</span>
@@ -266,7 +266,7 @@
           font-size:15px;
           font-family:PingFangSC-Medium;
           font-weight:500;
-          color:rgba(79,119,170,1);
+          color:#458CDA;
           line-height:21px;
         }
         .day{

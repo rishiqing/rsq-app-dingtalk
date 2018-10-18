@@ -1075,7 +1075,7 @@
   }
   .set{
     font-size: 14px;
-    color: #4F77AA;
+    color: #458CDA;
     width: 19px;
     height: 19px;
   }

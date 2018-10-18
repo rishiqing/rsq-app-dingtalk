@@ -829,8 +829,8 @@
     background: #FEFEFE;
   }
   .sel-selected .sel-icon-selected-bg {
-    border: solid 1px #5684BA;
-    background: #5684BA;
+    border: solid 1px #458CDA;
+    background: #458CDA;
   }
   .sel-icon-selected {
     display: none;
@@ -855,7 +855,7 @@
     position: absolute;
     top: 0;right: 0;height: 100%;
     padding-right: 45px;
-    line-height: 56px;color: #4F77AA;
+    line-height: 56px;color: #458CDA;
   }
   .sel-member-blank {
     margin: 100px auto 0;
@@ -885,7 +885,7 @@
     white-space: nowrap;
     position: relative;
     .all-people{
-      color: #4F77AA
+      color: #458CDA
     }
   }
   .back-auto{

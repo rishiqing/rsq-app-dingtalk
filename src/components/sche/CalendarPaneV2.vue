@@ -77,7 +77,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    top: 0;display: inline-block;background: #4F77AA;
+    top: 0;display: inline-block;background: #458CDA;
   }
   .cal-table {
     border-collapse: collapse;
