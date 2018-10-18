@@ -1,16 +1,18 @@
 <template>
 <div class="version-all">
-  <div class="version">
-    <div class="text1">试用版</div>
-    <div class="text2">不知道几人的试用版</div>
-    <div class="day">到期时间：2018-10-31</div>
-  </div>
-  <img class="img-table" src="../../assets/img/table.png">
-  <img class="img-table" src="../../assets/img/table.png">
-  <div class="code-all">
-    <img src="../../assets/img/code.png" class="code">
-    <div class="tips">长按识别二维码，为您解答疑惑</div>
-    <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+  <div class="inner">
+    <div class="version">
+      <div class="text1">试用版</div>
+      <div class="text2">不知道几人的试用版</div>
+      <div class="day">到期时间：2018-10-31</div>
+    </div>
+    <img class="img-table" src="../../assets/img/table.png">
+    <img class="img-table" src="../../assets/img/table.png">
+    <div class="code-all">
+      <img src="../../assets/img/code.png" class="code">
+      <div class="tips">长按识别二维码，为您解答疑惑</div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+    </div>
   </div>
   <div class="foot">
     <a href="#" class="buy">立即续费</a>
@@ -35,6 +37,15 @@
 </script>
 <style lang="scss" scoped>
 .version-all{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.inner{
+  width: 100%;
+  height: calc(100vh - 66px);
+overflow: scroll;
+ -webkit-overflow-scrolling: touch;    
 }
 .version{
   margin-left: 15px;
@@ -79,7 +90,7 @@
   width: 100%;
   margin: 0 auto;
   margin-top: 21px;
-  margin-bottom: 160px;
+  margin-bottom: 94px;
     .code{
       display: block;
       margin: 0 auto;
@@ -113,10 +124,9 @@
     }
 }
 .foot{
-  position: fixed;
-  bottom: 0;
+  overflow: hidden;
   width:100%;
-  height:66px;
+  height:100%;
   background:rgba(255,255,255,1);
   .buy{
     display: block;
