@@ -317,7 +317,11 @@
             // console.log(res)
             that.$store.commit('SET_CURRENT_PLAN', res)
             that.$store.commit('SAVE_CHILD_PLAN', res.childKanbanList)
+            window.rsqadmg.execute('setTitle', {title: that.currentPlan.name}) 
           })
+      }
+      if (that.currentPlan) {
+        window.rsqadmg.execute('setTitle', {title: that.currentPlan.name}) 
       }
       var creatorId = this.$store.state.loginUser.rsqUser.id
       for (var i = 0; i < this.userRoles.length; i++) {
