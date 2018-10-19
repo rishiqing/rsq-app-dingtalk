@@ -36,7 +36,7 @@
       <div class="plan-member-count">
         <span class="plan-member-word">计划成员</span>
         <div class="wrap-plan-member-count-num">
-          <span class="plan-member-count-num">{{ currentPlan.userRoles.length }}人</span>
+          <span class="plan-member-count-num">{{ selectedLocalList.length }}人</span>
         </div>
       </div>
       <v-touch
