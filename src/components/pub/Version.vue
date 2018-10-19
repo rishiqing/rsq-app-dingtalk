@@ -126,7 +126,6 @@ overflow: scroll;
 .foot{
   overflow: hidden;
   width:100%;
-  height:100%;
   background:rgba(255,255,255,1);
   .buy{
     display: block;
