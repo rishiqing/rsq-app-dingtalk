@@ -40,7 +40,7 @@
     },
     data () {
       return {
-        titleName: '记事',
+        titleName: '收纳箱',
         inputTitle: ''
       }
     },

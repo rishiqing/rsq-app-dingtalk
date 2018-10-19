@@ -26,7 +26,7 @@
         if (this.plan) {
           return '计划'
         } else if (this.isInbox) {
-          return '记事'
+          return '收纳箱'
         } else {
           return '日程'
         }

@@ -34,7 +34,7 @@
       }
     },
     mounted () {
-      window.rsqadmg.execute('setTitle', {title: '新建记事'})
+      window.rsqadmg.execute('setTitle', {title: '新建收纳箱'})
     },
     methods: {
       delayCall (func) {
