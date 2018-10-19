@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="foot">
-    <a href="#" class="buy">立即续费</a>
+    <v-touch @tap="buy" class="buy">立即续费</v-touch>
   </div>
 </div>
 </template>
@@ -32,6 +32,9 @@
       window.rsqadmg.exec('setTitle', {title: '收费说明'})
     },
     methods: {
+      buy () {
+        alert('系统升级中')
+      }
     }
   }
 </script>
