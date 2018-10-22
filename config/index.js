@@ -56,10 +56,10 @@ module.exports = {
   },
   beta: {
     env: require('./beta.env'),
-    index: path.resolve(__dirname, '../dist/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
+    index: path.resolve(__dirname, '../dist/beta/mobile/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/beta/mobile/'),
     assetsSubDirectory: './',
-    assetsPublicPath: './',
+    assetsPublicPath: '/dingtalk/beta/mobile/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -85,6 +85,7 @@ module.exports = {
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
+    remindServer: 'http://ding.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
@@ -113,7 +114,7 @@ module.exports = {
     // 日事清api的后台地址
     apiServer: 'http://dev1.ngrok.timetask.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://dev1.ngrok.timetask.cn/',
+    authServer: 'http://dev1.ngrok.timetask.cn/rsqauth/',
     // 日事清前端文件地址
     // frontServer: 'http://' + devIp + ':' + (process.env.PORT || devPort) + '/',
     frontServer: '/',
