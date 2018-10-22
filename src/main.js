@@ -91,8 +91,9 @@ window.rsqadmg.exec('auth', {
     store.dispatch('getAllUsers')
 
     // router.replace('/dingplus15days?day=15')
+    // router.replace('/dingplus3days?day=3')
     // router.replace('/buy')
-    router.replace('/updata')
+    // router.replace('/updata')
     /* eslint-disable no-new */
     new Vue({
       el: '#app',
