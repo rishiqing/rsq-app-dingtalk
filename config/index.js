@@ -75,10 +75,10 @@ module.exports = {
     // 日事清地址
     rsqServer: 'http://beta.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'http://beta.dd.rsq.etoutiao.cn/',
+    apiServer: 'http://betading.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://beta.dd.rsq.etoutiao.cn/main/',
+    authServer: 'http://betading.rishiqing.com/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/',
