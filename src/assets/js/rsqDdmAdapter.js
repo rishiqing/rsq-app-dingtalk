@@ -532,6 +532,126 @@ rsqAdapterManager.register({
       }
     })
   },
+  /**
+   * timePicker2魔改版
+   * @param  {[type]} params [description]
+   * @return {[type]}        [description]
+   */
+  timePicker2: function(params){
+    var hours = [],
+    minites = [],
+    symbol = [{ label: ' ', value: 0 }];
+    if (!hours.length) {
+      for (var i = 0; i< 24; i++) {
+        var hours_item = {};
+        hours_item.label = ('' + i).length === 1 ? '0' + i + '时': '' + i + '时';
+        hours_item.value = i;
+        hours.push(hours_item);
+      }
+    }
+    if (!minites.length) {
+      for (var j= 0; j < 60; j++) {
+        var minites_item = {};
+        minites_item.label = ('' + j).length === 1 ? '0' + j + '分': '' + j + '分';
+        minites_item.value = j;
+        minites.push(minites_item);
+      }
+    }
+    var defString = params.strInit || '00:00';
+    var defArray = [defString.substr(0, 2), ':', defString.substr(3, 2)];
+    var defArray2 = [defString.substr(0, 2), ':', defString.substr(3, 2)];
+    if (defString.substr(0, 2) !== '23') {
+      defArray2[0] = Number(defString.substr(0, 1) + (defString.substr(1, 1) * 1 + 1))
+      if (defString.substr(0, 1) === '1' && (defString.substr(1, 1) * 1 + 1) === 10) {
+        defArray2[0] = 20
+      }
+    }
+    var defString2 = params.strInit2 || defArray2.join('');
+    weui2.picker(hours, symbol, minites, {
+      id: 'time-picker' + new Date().getTime(),  // 使用变化的id，保证不做缓存，每次都新建picker
+      defaultValue: defArray,
+      onChange: function (result) {
+        var h = (102 - parseInt(document.querySelectorAll('.weui-picker__content')[0].style.transform.split(',')[1]))/34
+        var m = (102 - parseInt(document.querySelectorAll('.weui-picker__content')[2].style.transform.split(',')[1]))/34
+        var hz = 0 
+        var mz = 0
+        if (isNaN(m)){
+          m = parseInt(result[2].value)
+        }
+        if (h < 10) {
+          hz = "0" + h
+        } else {
+          hz = h
+        }
+        if (m < 10) {
+          mz = "0" + m
+        } else {
+          mz = m
+        }
+        result = [
+        {
+          label: hz +"时",
+          value: hz
+        },
+        {
+          label: '',
+          value: 0
+        },{
+          label: mz +"分",
+          value: mz
+        }]
+        if (params.start) {
+          var f = result[0].label.substr(0,1)
+          var s = result[0].label.substr(1,1) * 1 + 1
+          if (s === 10 && f === '0') {
+            f = ''
+          }
+          if (s === 10 && f === '1') {
+            f = '2'
+            s = '0'
+          }
+          var timeEnd = f + s === '24' ? '23' : f + s
+          var time2 = timeEnd + ':' + result[2].label.substr(0,2)
+          document.querySelector('#endTime').innerHTML = time2
+
+        }
+        var time = result[0].label.substr(0,2) + ':' + result[2].label.substr(0,2)
+        document.querySelector('._c ._s-time').innerHTML = time
+      },
+      onConfirm: function(result) {
+        let startTime =  document.querySelector('#startTime').innerHTML
+        let endTime = document.querySelector('#endTime').innerHTML
+        // var time = result[0].label + ':' + result[2].label;
+        // var result = {value: time}
+        rsqChk(params.success, [startTime, endTime]);
+      }
+    });
+      document.querySelector('#endTime').innerHTML = defString2
+    //设定左右切换
+      document.querySelector("#_tl").addEventListener('click', () => {
+      document.querySelector("#_tr").classList.remove('_c')
+      document.querySelector("#_tl").classList.add('_c')
+      var h = document.querySelectorAll('.weui-picker__content')[0].style.transform.split(',')
+      var m = document.querySelectorAll('.weui-picker__content')[2].style.transform.split(',')
+      var hourtNew = 102 - document.querySelector('._c ._s-time').innerText.split(':')[0] * 34 + 'px'
+      var minNew = 102 - document.querySelector('._c ._s-time').innerText.split(':')[1] * 34 + 'px'
+      document.querySelectorAll('.weui-picker__content')[0].style.transform = h[0] + ',' + hourtNew + ',' + h[2]
+      document.querySelectorAll('.weui-picker__content')[2].style.transform = m[0] + ',' + minNew + ',' + m[2]
+    })
+    document.querySelector("#_tr").addEventListener('click', () => {
+      document.querySelector("#_tl").classList.remove('_c')
+      document.querySelector("#_tr").classList.add('_c')
+      var h = document.querySelectorAll('.weui-picker__content')[1].style.transform.split(',')
+      var m = document.querySelectorAll('.weui-picker__content')[2].style.transform.split(',')
+      var hourtNew = 102 - document.querySelector('._c ._s-time').innerText.split(':')[0] * 34 + 'px'
+      var minNew = 102 - document.querySelector('._c ._s-time').innerText.split(':')[1] * 34 + 'px'
+      document.querySelectorAll('.weui-picker__content')[0].style.transform = h[0] + ',' + hourtNew + ',' + h[2]
+      document.querySelectorAll('.weui-picker__content')[2].style.transform = m[0] + ',' + minNew + ',' + m[2]
+    })
+    if (!params.start) {
+      document.querySelector("#_tr").click()
+    }
+  },
   disableBounce: function(){
     //  去掉iOS的回弹效果
     dd.ui.webViewBounce.disable();
