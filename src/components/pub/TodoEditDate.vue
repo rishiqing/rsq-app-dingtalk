@@ -417,7 +417,7 @@
           dates: c.dates
         }
         //  如果重复相关属性存在，那么处理重复相关的其他属性
-        if (this.isBackNewVersion) {
+        if (this.isNewRepeat) {
           o.isCloseRepeat = false
           o.rrule = this.currentTodo.rrule
           o.startDate = moment().format('YYYY/MM/DD')
