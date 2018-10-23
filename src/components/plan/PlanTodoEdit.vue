@@ -68,18 +68,18 @@
                 </v-touch>
               </div>
             </div>
-            <v-touch
-              class="bottom"
-              @tap="switchToComment">
-              <img
-                class="talk-png"
-                src="../../assets/img/talk.png">
-              参与讨论
-            </v-touch>
           </div>
         </div>
       </div>
     </div>
+    <v-touch
+      class="bottom"
+      @tap="switchToComment">
+      <img
+        class="talk-png"
+        src="../../assets/img/talk.png">
+      参与讨论
+    </v-touch>
   </div>
 </template>
 <script>
@@ -381,6 +381,10 @@
   }
 </script>
 <style lang="scss" scoped>
+.itm-edt{
+  max-height: calc(100vh - 47px);
+  overflow: scroll;
+}
   .deleteTask{
     padding-bottom: 2rem;
     background-color: #f6f6f6;
@@ -438,10 +442,6 @@
     display: flex;
     align-items: center;
     background-color: white;
-    position: fixed;
-    bottom: 0;
-    left:0;
-    right: 0;
     justify-content: center;
     width:100%;
     border-top:1px solid #DADADA ;

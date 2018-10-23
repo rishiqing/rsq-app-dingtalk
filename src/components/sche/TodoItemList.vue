@@ -63,6 +63,9 @@
     padding-left: 15px;
     // overflow-y: auto;
     overflow: hidden;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 150px)
   }
   .sche-list:after {
     content: " ";
