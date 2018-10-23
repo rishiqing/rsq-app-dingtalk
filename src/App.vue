@@ -4,7 +4,6 @@
     class="rsq-webview">
     <router-view />
     <r-nav
-      v-if="isAddNav"
       v-show="isShowNav" />
   </div>
 </template>

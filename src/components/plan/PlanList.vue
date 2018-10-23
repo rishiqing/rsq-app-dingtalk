@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pl">
     <v-touch
       @tap="watchVersion"
       class="version">
@@ -35,7 +35,7 @@
         @tap="toCreate"
       >新建计划</v-touch>
     </div>
-    <r-nav/>
+
     <v-touch @tap="toCreate">
       <img
         class="main_inbox"
@@ -121,8 +121,12 @@
   }
 </script>
 <style lang="scss" scoped>
+  .pl{
+    max-height: calc(100vh - 50px);
+    overflow: scroll;
+  }
   .plan-count{
-    margin-bottom: 1.5rem;
+    // margin-bottom: 1.5rem;
   }
   .post-new-plan{
     font-size: 18px;

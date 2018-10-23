@@ -453,6 +453,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   store.state.env.isShowNav = false
   store.state.sys.currentPath = to.path
+  if (to.name === 'sche' || to.name === 'PlanList' || to.name == 'inbox') {
+    store.state.env.isShowNav = true
+  }
 
   if (!to.matched.some(record => record.meta.requireAuth)) {
     return next()
