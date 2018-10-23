@@ -153,7 +153,11 @@
         return this.$store.state.pub.currentTodoDate
       },
       isNewRepeat () {
-        return this.currentTodo.rrule !== ''
+        if (this.currentTodo.rrule !== '' && this.currentTodo.rrule !== undefined) {
+          return true
+        } else {
+          return false
+        }
       },
       rruleText () {
         return this.currentTodo.rrule
