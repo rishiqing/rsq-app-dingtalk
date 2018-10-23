@@ -137,7 +137,11 @@
         return this.$store.state.pub.currentTodoDate
       },
       isNewRepeat () {
-        return this.currentKanbanItem.rrule !== undefined
+        if (this.currentKanbanItem.rrule !== '' && this.currentKanbanItem.rrule !== undefined) {
+          return true
+        } else {
+          return false
+        }
       }
     },
     created () {

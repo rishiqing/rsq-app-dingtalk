@@ -18,6 +18,15 @@
       plan: {
         type: Boolean,
         default: false
+      },
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+      //  被禁用编辑的提示，默认为''，不提示；如果要显示提示文字，需要传入提示的文字
+      disabledText: {
+        type: String,
+        default: ''
       }
     },
     data () {
@@ -56,6 +65,10 @@
         }, 50)
       },
       moveToPlan () {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
         if (this.plan && this.kanbanItem.editControl.move) {
           this.$router.push({ name: 'MoveToPlan', query: {target: 'plan'} })
         } else if (!this.plan && this.$store.state.todo.currentTodo.editControl.from) {

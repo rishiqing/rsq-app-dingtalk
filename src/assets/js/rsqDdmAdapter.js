@@ -515,23 +515,43 @@ rsqAdapterManager.register({
     })
   },
   timePicker: function(params){
-    var strInit = params.strInit || '00:00'
-    dd.biz.util.timepicker({
-      format: 'HH:mm',
-      value: strInit, //默认显示时间  0.0.3
-      onSuccess : function(res) {
-        rsqChk(params.success, [res]);
-        //onSuccess将在点击完成之后回调
-        /*{
-                     value: "10:00"
-                 }
-                 */
-      },
-      onFail : function(err) {
-        alert(JSON.stringify(err));
+    var minites = []
+    for (var j= 0; j <= 100; j++) {
+      var minites_item = {};
+      minites_item.label = j
+      minites_item.value = j;
+      minites.push(minites_item);
+    }
+    var when = [{label: '提前', value: 'begin'}]
+    var unit = [{label: '分钟', value: 'min'},{label: '小时', value: 'hour'}]
+    var defaultValue = ['begin', '50', 'min']
+    weui.picker(when, minites, unit, {
+      id: 'time-picker' + new Date().getTime(),  // 使用变化的id，保证不做缓存，每次都新建picker
+      defaultValue: defaultValue,
+      onConfirm: function(result) {
+        var result = {value: result}
+        rsqChk(params.success, [result]);
       }
-    })
+    });
   },
+  // timePicker: function(params){
+  //   var strInit = params.strInit || '00:00'
+  //   dd.biz.util.timepicker({
+  //     format: 'HH:mm',
+  //     value: strInit, //默认显示时间  0.0.3
+  //     onSuccess : function(res) {
+  //       rsqChk(params.success, [res]);
+  //       //onSuccess将在点击完成之后回调
+  //       /*{
+  //                    value: "10:00"
+  //                }
+  //                */
+  //     },
+  //     onFail : function(err) {
+  //       alert(JSON.stringify(err));
+  //     }
+  //   })
+  // },
   /**
    * timePicker2魔改版
    * @param  {[type]} params [description]

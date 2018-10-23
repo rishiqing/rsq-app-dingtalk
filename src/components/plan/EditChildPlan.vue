@@ -76,7 +76,7 @@
       delayCall (func) {
         window.setTimeout(() => {
           this[func].apply(this, Array.prototype.slice.call(arguments, 1))
-        }, 50)
+        }, 350)
       }
     }
   }

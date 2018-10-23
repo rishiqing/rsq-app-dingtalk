@@ -122,8 +122,10 @@
 </script>
 <style lang="scss" scoped>
   .pl{
-    max-height: calc(100vh - 50px);
-    overflow: scroll;
+    height: calc(100vh - 50px);
+    overflow: hidden;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling: touch;
   }
   .plan-count{
     // margin-bottom: 1.5rem;

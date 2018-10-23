@@ -153,7 +153,11 @@
         return this.$store.state.pub.currentTodoDate
       },
       isNewRepeat () {
-        return this.currentTodo.rrule !== ''
+        if (this.currentTodo.rrule !== '' && this.currentTodo.rrule !== undefined) {
+          return true
+        } else {
+          return false
+        }
       },
       rruleText () {
         return this.currentTodo.rrule
@@ -693,10 +697,10 @@
     }
   }
   tr{
-    border-bottom: 0.5px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
   }
   td{
-    border-right: 0.5px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
   }
   thead td{
     border-right: 0;

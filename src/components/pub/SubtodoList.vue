@@ -47,6 +47,17 @@
     components: {
       'r-todo-item-list': TodoItemList
     },
+    props: {
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+      //  被禁用编辑的提示，默认为''，不提示；如果要显示提示文字，需要传入提示的文字
+      disabledText: {
+        type: String,
+        default: ''
+      }
+    },
     data () {
       return {
         titleName: '子任务',
@@ -87,10 +98,18 @@
     },
     methods: {
       showEditSubtodo (item) {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
         this.$store.dispatch('setCurrentSubtodo', item)
         this.$router.push('/sche/todo/' + this.currentTodo.id + '/subtodo/' + item.id)
       },
       saveTodo () {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
         var backDate = {
           dates: null,
           endDate: '',
@@ -104,6 +123,10 @@
         this.$router.push('/sche/todo/' + this.currentTodo.id + '/subtodo/create')
       },
       clickCheckOut (item) {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
         this.$store.dispatch('submitSubtodoFinish', {item: item, status: !item.isDone})
             .then(function () {
               this.$store.dispatch('saveTodoAction', {editItem: {status: !item.isDone, type: 17}})
