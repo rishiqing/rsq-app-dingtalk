@@ -35,8 +35,7 @@
         @tap="toCreate"
       >新建计划</v-touch>
     </div>
-
-    <v-touch @tap="toCreate">
+    <v-touch @tap="toCreate" v-if="planItems.length > 0">
       <img
         class="main_inbox"
         src="../../assets/img/add.svg">

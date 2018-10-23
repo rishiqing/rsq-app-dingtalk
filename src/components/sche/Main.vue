@@ -36,7 +36,7 @@
           </v-touch>
         </div>
       </r-pull-to-refresh>
-      <v-touch @tap="createNew">
+      <v-touch @tap="createNew" v-if="items.length!==0">
         <img
           class="main_inbox"
           src="../../assets/img/add.svg">
