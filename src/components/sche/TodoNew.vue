@@ -219,13 +219,14 @@
         }
         this.$store.dispatch('submitCreateTodoItem', {newItem: this.currentTodo, todoType: todoType})
           .then(item => {
-            if (this.currentTodo.clock && this.currentTodo.clock.startTime && item.clock && item.clock.alert) {
-              //  如果item.clock.alert存在，说明设置了alert，那么就发送设置的提醒
-              item.clock.alert = clockAlert
-              return this.$store.dispatch('handleRemind', {item})
-            } else {
-              return item
-            }
+            // if (this.currentTodo.clock && this.currentTodo.clock.startTime && item.clock && item.clock.alert) {
+            //   //  如果item.clock.alert存在，说明设置了alert，那么就发送设置的提醒
+            //   item.clock.alert = clockAlert
+            //   return this.$store.dispatch('handleRemind', {item})
+            // } else {
+            //   return item
+            // }
+            return item
           })
           .then(item => {
             window.rsqadmg.execute('toast', {message: '创建成功'})

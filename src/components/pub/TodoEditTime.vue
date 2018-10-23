@@ -304,12 +304,13 @@
 
         return this.$store.dispatch('updateTodoTime', {clock: clockObject})
           .then(item => {
-            if (item.clock && item.clock.alert) {
-              jsUtil.extendObject(item.clock, clockObject)
-              return this.$store.dispatch('handleRemind', {item})
-            } else {
-              return item
-            }
+            // if (item.clock && item.clock.alert) {
+            //   jsUtil.extendObject(item.clock, clockObject)
+            //   return this.$store.dispatch('handleRemind', {item})
+            // } else {
+            //   return item
+            // }
+            return item
           })
           .then(() => {
             this.$store.commit('PUB_TODO_TIME_DELETE')
