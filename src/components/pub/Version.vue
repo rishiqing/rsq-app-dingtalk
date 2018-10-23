@@ -7,7 +7,7 @@
       <div class="day">到期时间：2018-10-31</div>
     </div>
     <img class="img-table" src="../../assets/img/table.png">
-    <img class="img-table" src="../../assets/img/table.png">
+    <img class="img-table" src="../../assets/img/table2.png">
     <div class="code-all">
       <img src="../../assets/img/code.png" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
