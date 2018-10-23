@@ -189,7 +189,7 @@
               once = true
             }
           })
-        }, 50)
+        }, 400)
       },
       disableAlert () {
         if (!this.noAlert) {

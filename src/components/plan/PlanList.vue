@@ -7,7 +7,7 @@
         <img src="../../assets/img/version.svg">
         <div class="text">
           <span class="bb">试用版</span> 
-          <span class="day">2018-09-09</span>
+          <span class="day">2019-10-31</span>
         </div>
       </div>
       <div class="right">
@@ -35,8 +35,7 @@
         @tap="toCreate"
       >新建计划</v-touch>
     </div>
-
-    <v-touch @tap="toCreate">
+    <v-touch @tap="toCreate" v-if="planItems.length > 0">
       <img
         class="main_inbox"
         src="../../assets/img/add.svg">
