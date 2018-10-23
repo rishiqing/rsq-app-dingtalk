@@ -60,11 +60,16 @@
                   src="../../assets/img/moveplan.svg"
                   class="icon2-member sche move-to">
                 <r-move-plan
+                  :is-disabled="!isEditable"
+                  :disabled-text="disabledText"
                   :item="editItem"/>
               </div>
 
             </div>
-            <r-input-subtodo/>
+            <r-input-subtodo
+              :is-disabled="!isEditable"
+              :disabled-text="disabledText"
+            />
             <r-comment-list
               :disabled="!isEditable"
               :items="todoComments"
