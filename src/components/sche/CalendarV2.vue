@@ -1,7 +1,6 @@
 <template>
   <v-touch
     :class="{'animate': transDirection === 'v'}"
-    :style="{'height': (topBase + titleHeight + calHeight) + 'px'}"
     :pan-options="{ direction: 'all', threshold: 10 }"
     class="c-cal-main"
     @panstart="onPanMove"
@@ -407,21 +406,20 @@
 <style lang="scss" scoped>
   @import '../../assets/css/variables.scss';
   .c-cal-main {
-    position: fixed;color:white;font-size: 1.4rem;
-    height: 81px;background: #458CDA;
+    position: relative;color:white;font-size: 1.4rem;
+background: #458CDA;
     border-bottom: 0.5px solid #E4E4E4;
     z-index: 999;
     margin-top: -1px;
   }
   .cal-title {
-    position: fixed;top: 0;left: 0;right: 0;
     text-align: center;height: 53px;line-height: 52px;
     margin-bottom: -1px;background: $mainColor;font-size: 14px;
   }
-  .cal-title-today {position:fixed;top:0;height:30px;left:10px;width:30px;
+  .cal-title-today {position:relative;top:0;height:30px;left:10px;width:30px;
     font-size: 1.8rem;font-weight: bold;z-index:9999;}
   .cal-week-title {
-    position: fixed;top: 53px;left: 0;right: 0;width: 100%;
+    width: 100%;
     padding: 0;height: 31px;line-height: 30px;
     margin-bottom: -1px;color:white;background: #458CDA;font-size:1.2rem;
   }
@@ -435,7 +433,7 @@
     font-family: PingFangSC-Medium;
   }
   .cal-content {
-    position: fixed;left: 0;right: 0;top:84px;padding:0;overflow:hidden;
+    padding:0;overflow:hidden;
   }
   .cal-outer {position:relative;width:100%;overflow:visible;}
   .cal-inner {
