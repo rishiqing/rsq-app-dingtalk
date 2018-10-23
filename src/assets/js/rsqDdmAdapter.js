@@ -696,6 +696,15 @@ rsqAdapterManager.register({
     })
   },
   /**
+   * error
+   * @author lumozx
+   * @param  {[type]} params [description]
+   * @return {[type]}        [description]
+   */
+  error: function(params){
+    console.log(params)
+  },
+  /**
    * 从localStorage中获取值
    * @param params
    */
