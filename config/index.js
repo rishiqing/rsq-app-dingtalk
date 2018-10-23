@@ -43,7 +43,8 @@ module.exports = {
     // 日事清前端文件地址
     frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
-    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    // stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    stsServer: 'https://sts-server.rishiqing.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
@@ -120,7 +121,8 @@ module.exports = {
     frontServer: '/',
     // 阿里云OSS STS认证的server地址
     // stsServer: 'http://' + ip.address() + ':' + (process.env.STS_PORT || stsPort) + '/sts/'
-    stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    // stsServer: 'https://stsserver.hz.taeapp.com/sts/',
+    stsServer: 'https://sts-server.rishiqing.com/sts/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
