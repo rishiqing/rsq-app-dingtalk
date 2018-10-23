@@ -697,10 +697,10 @@
     }
   }
   tr{
-    border-bottom: 0.5px solid #d4d4d4;
+    border-bottom: 1px solid #d4d4d4;
   }
   td{
-    border-right: 0.5px solid #d4d4d4;
+    border-right: 1px solid #d4d4d4;
   }
   thead td{
     border-right: 0;

@@ -251,6 +251,7 @@
       box-shadow:0px 0.5px 0px 0px rgba(217,217,217,1),0px -0.5px 0px 0px rgba(217,217,217,1);
       padding-left: 15px;
       padding-right: 15px; 
+      border-bottom: 1px solid #d4d4d4; 
       li{
         width:100%;
         height:56px;
@@ -260,6 +261,10 @@
         font-weight:400;
         color:rgba(61,61,61,1);
         line-height:56px;
+        border-bottom: 1px solid #d4d4d4; 
+      }
+      li:last-child{
+        border: 0;
       }
       i{
         float: right;
