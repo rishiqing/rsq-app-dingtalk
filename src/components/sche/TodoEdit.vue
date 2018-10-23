@@ -168,9 +168,9 @@
         })
       },
       createIds () {
-        if (this.createIdObject.length > 0) {
-          return [this.createIdObject[0].id]
-        }
+        // if (this.createIdObject.length > 0) {
+        //   return [this.createIdObject[0].id]
+        // }
         return []
       },
       isInbox () {
