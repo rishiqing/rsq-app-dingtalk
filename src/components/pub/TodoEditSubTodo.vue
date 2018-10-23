@@ -75,6 +75,9 @@
       currentSubtodo () {
         return this.$store.state.todo.currentSubtodo
       },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      },
       pubId () {
         return this.$store.state.pub.pubId
       },
@@ -107,6 +110,7 @@
       this.findId(this.realUserRsqIds)
     },
     mounted () {
+      var that = this
       window.rsqadmg.execute('setTitle', {title: '编辑子任务'})
       util.extendObject(this.editItem, this.currentSubtodo)
       if (this.$store.state.pub.subtitle) {
@@ -114,7 +118,11 @@
       }
       this.$store.commit('PUB_TITLE_SUB', this.editItem.name)
       this.joinUserRsqIds = this.$store.state.todo.currentSubtodo.joinUsers.map(function (arr) {
-        return arr.id.toString()
+        if (that.isBackNewVersion) {
+          return arr.toString()
+        } else {
+          return arr.id.toString()
+        }
       })
       if (this.subId.length !== 0) {
         this.joinUserRsqIds = this.subId
