@@ -11,7 +11,7 @@
     <div class="code-all">
       <img src="../../assets/img/code.png" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <span>177-1037-6397</span></div>
     </div>
   </div>
   <div class="foot">
@@ -117,7 +117,7 @@ overflow: scroll;
       margin-top: 10px;
       display: flex;
       justify-content:center;
-      a{
+      span{
         font-size:14px;
         font-family:PingFangSC-Regular;
         font-weight:400;
