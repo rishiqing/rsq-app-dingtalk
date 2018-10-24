@@ -157,7 +157,7 @@
     mounted () {
       window.rsqadmg.execute('setTitle', {title: '任务详情'})
       this.initPlan()
-      document.body.scrollTop = document.documentElement.scrollTop = 0
+      // document.body.scrollTop = document.documentElement.scrollTop = 0
     },
     beforeRouteLeave (to, from, next) {
       if (this.error) {
