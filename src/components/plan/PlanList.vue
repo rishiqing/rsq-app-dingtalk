@@ -99,7 +99,6 @@
     watch: {
       planItems (newId) {
         this.arr = [...newId]
-        console.log(this.arr)
       }
     },
     mounted () {
