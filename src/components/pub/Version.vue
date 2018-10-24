@@ -3,7 +3,7 @@
   <div class="inner">
     <div class="version">
       <div class="text1">试用版</div>
-      <div class="text2">试用版</div>
+      <div class="text2">当前版本：试用版</div>
       <div class="day">到期时间：2019-10-31</div>
     </div>
     <img class="img-table" src="../../assets/img/table.png">
