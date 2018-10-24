@@ -85,6 +85,7 @@
     data () {
       return {
         editItem: {
+          rrule:'',
           isChecked: false,
           isAllDay: true
 //          receiverIds: []

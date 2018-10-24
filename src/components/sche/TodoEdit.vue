@@ -240,7 +240,7 @@
     },
     mounted () {
      window.rsqadmg.exec('setOptionButtons', {hide: true})
-      document.body.scrollTop = document.documentElement.scrollTop = 0
+      // document.body.scrollTop = document.documentElement.scrollTop = 0
     },
     methods: {
       findId (id) {

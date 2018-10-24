@@ -1233,6 +1233,9 @@ export default {
   replyKanbanItemComment ({commit, state}, props) {
     commit('REPLY_KANBAN_ITEM_COMMENT_CREATED', {item: props.item})
   },
+  saveCurrentRrule ({commit}, props) {
+    commit('SAVE_CURRENT_RRULE', {rrule: props.rrule})
+  },
   /**
    * 企业微信消息发送
    * @param  {[type]} options.state    [description]

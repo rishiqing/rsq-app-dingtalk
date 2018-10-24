@@ -7,9 +7,12 @@
     @touchend="touchEnd">
     <v-touch @tap="toChildPlan">
       <div class="forward-plan">
+        <div
+        class="img-fix">
         <img
-          :src="item.cover"
+          :src="cacheImg"
           class="plan-image">
+        </div>
         <span class="plan-name">{{ item.name }}</span>
       </div>
     </v-touch>
@@ -49,7 +52,8 @@
         startx: 0,
         starty: 0,
         directionFristTouch: true,
-        sliderD: null
+        sliderD: null,
+        cacheImg:''
       }
     },
     computed: {
@@ -72,6 +76,19 @@
     },
     mounted () {
       this.$store.commit('SLIDER_MARK', { mark: null })
+      var that = this
+      // 图片地址 后面加时间戳是为了避免缓存
+      let c = this.item.cover
+      var img_url = c
+      var img = new Image()
+      img.src = img_url
+      img.onload = function(){
+        if (img.width > 1600 || img.height > 1600) {
+          that.cacheImg = ''
+        } else {
+          that.cacheImg = c
+        }
+      }
     },
     methods: {
       getDirection (startx, starty, endx, endy) {
@@ -216,11 +233,16 @@
     align-items: center;
     height: 100%;
   }
-  .plan-image{
+  .img-fix{
     width: 36px;
     height: 36px;
+    overflow: hidden;
     border-radius: 2px;
   }
+  .plan-image{
+    width: 100%;
+    height: 100%;
+      }
   .plan-name{
     width: 7.4rem;
     text-overflow: ellipsis;
