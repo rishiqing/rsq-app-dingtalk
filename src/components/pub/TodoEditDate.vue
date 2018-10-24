@@ -525,8 +525,14 @@
       if (to.name !== 'todoNew' && to.name !== 'todoEdit' && to.name !== 'demo') {
         return next()
       }
-//      next()
-      this.submitTodo(next, to)
+      var editItem = this.getSubmitResult()
+      var start = moment(editItem.startDate, 'YYYY/MM/DD').valueOf()
+      var newD = moment().valueOf()
+      if (start < newD) {
+        next()
+      } else {
+        this.submitTodo(next, to)
+      }
     }
   }
 </script>

@@ -59,7 +59,21 @@
     },
     computed: {
       planItems () {
-        return this.$store.state.planList
+        if (this.$store.state.planList.length <= 0) {
+          return this.$store.state.planList
+        } else {
+          let arr1 = []
+          let arr2 = []
+          for (let i = 0;i < this.$store.state.planList.length; i++) {
+            if (this.$store.state.planList[i].starMark) {
+              arr1.push(this.$store.state.planList[i])
+            } else {
+              arr2.push(this.$store.state.planList[i])
+            }
+          }
+          return arr1.concat(arr2)
+        }
+        // return this.$store.state.planList
       },
       planCount () {
         return this.planItems.length > 8
@@ -100,18 +114,18 @@
       },
       listSort (item) {
         // console.log(this.arr)
-        var that = this
-        for (let i = 0; i < that.arr.length; i++) {
-          if (item.id === that.arr[i].id) {
-            if (!item.starMark) {
-              var select = that.arr.splice(i, 1)[0]
-              that.arr.unshift(select)
-            } else {
-              var select2 = that.arr.splice(i, 1)[0]
-              that.arr.push(select2)
-            }
-          }
-        }
+        // var that = this
+        // for (let i = 0; i < that.arr.length; i++) {
+        //   if (item.id === that.arr[i].id) {
+        //     if (!item.starMark) {
+        //       var select = that.arr.splice(i, 1)[0]
+        //       that.arr.unshift(select)
+        //     } else {
+        //       var select2 = that.arr.splice(i, 1)[0]
+        //       that.arr.push(select2)
+        //     }
+        //   }
+        // }
       },
       watchVersion () {
         this.$router.push('/version')
