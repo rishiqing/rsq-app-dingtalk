@@ -424,8 +424,8 @@
         if (this.isNewRepeat) {
           o.isCloseRepeat = false
           o.rrule = this.currentTodo.rrule
-          o.startDate = moment().format('YYYY/MM/DD')
-          o.endDate = moment().format('YYYY/MM/DD')
+          // o.startDate = moment().format('YYYY/MM/DD')
+          // o.endDate = moment().format('YYYY/MM/DD')            
         } else if (c.repeatType) {
           o.repeatType = c.repeatType
           o.repeatBaseTime = c.repeatBaseTime
@@ -527,8 +527,9 @@
       }
       var editItem = this.getSubmitResult()
       var start = moment(editItem.startDate, 'YYYY/MM/DD').valueOf()
-      var newD = moment().valueOf()
+      var newD = moment(moment().format('YYYY/MM/DD'),'YYYY/MM/DD').valueOf()
       if (start < newD) {
+        console.log(start,newD)
         next()
       } else {
         this.submitTodo(next, to)

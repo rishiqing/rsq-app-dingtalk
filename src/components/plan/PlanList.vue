@@ -135,10 +135,6 @@
 </script>
 <style lang="scss" scoped>
   .pl{
-    height: calc(100vh - 50px);
-    overflow: hidden;
-    overflow-y:scroll;
-    -webkit-overflow-scrolling: touch;
   }
   .plan-count{
     // margin-bottom: 1.5rem;
@@ -164,6 +160,10 @@
     margin-top: 20px;
     overflow-x: hidden;
     position: relative;
+    height: calc(100vh - 150px);
+    overflow: hidden;
+    overflow-y:scroll;
+    -webkit-overflow-scrolling: touch;
     // border-top: 0.5px solid #d4d4d4;
     // border-bottom: 0.5px solid #d4d4d4;
   }
