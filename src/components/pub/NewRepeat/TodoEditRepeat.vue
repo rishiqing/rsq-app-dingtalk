@@ -54,13 +54,11 @@
         repeatArr: null,
         repeatWeekArr: null,
         until: null,
-        rruleText: ''
+        rruleText: '',
+        rrule:''
       }
     },
     computed: {
-      rrule () {
-        return this.$store.state.todo.currentTodo.rrule || ''
-      },
       item() {
         return this.$store.state.todo.currentTodo
       }
@@ -69,6 +67,7 @@
       window.rsqadmg.execute('setTitle', {title: '设置重复'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       var that = this
+      this.rrule = this.$store.state.todo.currentTodo.rrule || ''
       // console.log(this.$rrule.fromString("FREQ=DAILY;UNTIL=20180301T160000Z").origOptions)
       this.weekRepeat()
       this.monRepeat()
@@ -177,13 +176,15 @@
           // 结束时间，null或者不标准的都是永不结束
           repeatOverDate: this.until,
           success: function (result) {
-            that.$store.commit('SAVE_CURRENT_RRULE',{rrule: result})
-            var rruleObj = that.$rrule.fromString(that.item.rrule).origOptions
-            that.rruleText = dateUtil.rruleToText(rruleObj,that.item.startDate)
-            that.until = rruleObj.until
-            that.findDefualt()
-            that.findCustom()
-
+            that.$store.dispatch('saveCurrentRrule',{rrule: result})
+              .then(function () {
+                that.rrule = result
+                var rruleObj = that.$rrule.fromString(that.item.rrule).origOptions
+                that.rruleText = dateUtil.rruleToText(rruleObj,that.item.startDate)
+                // that.until = rruleObj.until
+                that.findDefualt()
+                that.findCustom()
+              })
             // that.findCustom()
             // if (result.repeatType) {
             //   that.selected = null
@@ -231,6 +232,7 @@
         }
         i.checked = true
         this.$store.commit('SAVE_CURRENT_RRULE',{rrule: i.rrule})
+        this.rrule = i.rrule
         this.rruleText = ''
         this.until = null
       }
