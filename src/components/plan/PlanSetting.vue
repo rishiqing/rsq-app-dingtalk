@@ -405,6 +405,7 @@
     display: flex;
     align-items: center;
     margin-left: 0.5rem;
+    overflow: hidden;
   }
   .plan-set-second{
     padding-left: 15px;
