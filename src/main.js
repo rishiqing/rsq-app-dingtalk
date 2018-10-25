@@ -118,8 +118,8 @@ window.rsqadmg.exec('auth', {
           }
         }
       } else {
-        var last = check_date_diff(res.muteInfo.SOON_EXPIRE.muteExpire)
-        router.replace('/dingplus3days?day=' + parseInt(last))
+        // var last = check_date_diff(res.muteInfo.SOON_EXPIRE.muteExpire)
+        // router.replace('/dingplus3days?day=' + parseInt(last))
       }
     })
 
