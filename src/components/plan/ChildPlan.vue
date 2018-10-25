@@ -576,6 +576,7 @@
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   center: true,
+                  closeOnClickModal:false,
                   inputValue: item.name,
                   inputValidator: value => {
                     if (!value || /^\s+$/.test(value)) {
