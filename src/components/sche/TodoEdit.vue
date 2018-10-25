@@ -14,7 +14,8 @@
               :is-disabled="!isEditable"
               :disabled-text="disabledText"
               :is-show-bottom-border="true"
-              @click-checkout="finishChecked"/>
+              @click-checkout="finishChecked"
+              @text-blur="saveTitle"/>
             <r-input-note
               :content="editItem.pNote"
               :has-left-space="!isInbox"
