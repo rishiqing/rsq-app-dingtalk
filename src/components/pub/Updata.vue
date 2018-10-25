@@ -5,9 +5,9 @@
     <div class="alert-text2">您公司的实际使用人数超过购买人数，请联系单位管理员前往升级应用套餐，如需帮助请根据下方二维码联系服务人员</div>
     <a href="#" class="buy">前往升级</a>
     <div class="foot">
-      <img src="../../assets/img/code.png" class="code">
+      <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+       <div class="phone"><img src="../../assets/img/phone.svg"> <a :href="'tel:' + phone">{{phone}}</a></div>
     </div>
   </div>
 
@@ -20,8 +20,18 @@
       }
     },
     computed: {
+      code () {
+        return this.$store.state.plus.saleQrCodeUrl
+      },
+      phone () {
+        return this.$store.state.plus.salePhoneNumber
+      }
     },
     methods: {
+    },
+    mounted () {
+      window.rsqadmg.exec('setTitle', {title: '日事清'})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
     }
   }
 </script>

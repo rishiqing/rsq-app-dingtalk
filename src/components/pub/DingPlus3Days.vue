@@ -4,16 +4,17 @@
     <div class="alert-text">到期提醒</div>
     <div class="alert-text2">您的使用期限仅剩余{{day}}天，请及时购买/续费 避免因到期停用而影响您的正常工作</div>
     <a href="#" class="buy">前往续费</a>
-    <a href="#" class="go">继续试用</a>
+    <v-touch @tap="go" class="go">继续试用</v-touch>
     <div class="foot">
-      <img src="../../assets/img/code.png" class="code">
+      <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <a :href="'tel:' + phone">{{phone}}</a></div>
     </div>
   </div>
 
 </template>
 <script>
+  import axios from 'axios'
   export default {
     name: 'dingplus3days',
     data () {
@@ -22,11 +23,37 @@
       }
     },
     computed: {
+      code () {
+        return this.$store.state.plus.saleQrCodeUrl
+      },
+      phone () {
+        return this.$store.state.plus.salePhoneNumber
+      },
+      corpId () {
+        return this.$store.state.loginUser.authUser.corpId
+      },
+      userId () {
+        return this.$store.state.loginUser.authUser.userId
+      }
     },
     methods: {
+      go () {
+        var that = this
+        axios.post(rsqConfig.authServer + `corp/user/popup?corpId=${this.corpId}&userId=${this.userId}`, {
+            popupType: 'SOON_EXPIRE'
+          })
+          .then(function (res) {
+            if (res.data.errmsg === 'ok') {
+              that.$router.replace('/')
+            }
+          })
+      }
     },
     mounted () {
+      window.rsqadmg.exec('setTitle', {title: '日事清'})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.day = this.$route.query.day
+      console.log(this.$store.state)
     }
   }
 </script>

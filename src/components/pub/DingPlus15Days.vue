@@ -26,6 +26,8 @@
     methods: {
     },
     mounted () {
+      window.rsqadmg.exec('setTitle', {title: '日事清'})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
       this.day = this.$route.query.day
     }
   }

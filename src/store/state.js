@@ -22,6 +22,10 @@ export default {
     currentPath: '',
     appId: window.rsqadmg.store.app.appid
   },
+  // 付费相关信息
+  plus:{
+
+  },
   /**
    * 当前登录的用户，基本结构如下：
    * {
