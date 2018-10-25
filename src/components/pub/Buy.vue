@@ -5,9 +5,9 @@
     <div class="alert-text2">您的服务已到期，请购买/续费后继续使用</div>
     <a href="#" class="buy">前往购买</a>
     <div class="foot">
-      <img src="../../assets/img/code.png" class="code">
+      <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <a href="tel:177-1037-6397">177-1037-6397</a></div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <a :href="'tel:' + phone">{{phone}}</a></div>
     </div>
   </div>
 
@@ -20,8 +20,18 @@
       }
     },
     computed: {
+      code () {
+        return this.$store.state.plus.saleQrCodeUrl
+      },
+      phone () {
+        return this.$store.state.plus.salePhoneNumber
+      }
     },
     methods: {
+    },
+    mounted () {
+      window.rsqadmg.exec('setTitle', {title: '日事清'})
+      window.rsqadmg.exec('setOptionButtons', {hide: true})
     }
   }
 </script>

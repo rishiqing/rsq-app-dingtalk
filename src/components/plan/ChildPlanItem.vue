@@ -51,6 +51,7 @@
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   inputValue: that.item.name,
+                  closeOnClickModal:false,
                   center: true,
                   title: '修改名称',
                   inputValidator: value => {

@@ -56,6 +56,8 @@
           cancelButtonText: '取消',
           center: true,
           title: '新建子计划',
+          inputValue:'',
+          closeOnClickModal:false,
           inputPlaceholder: '请输入子计划名称',
           inputValidator: value => {
             if (!value || /^\s+$/.test(value)) {

@@ -621,5 +621,8 @@ export default {
   },
   SAVE_CURRENT_RRULE (state, p) {
     state.todo.currentTodo.rrule = p.rrule
+  },
+  PLUS (state, p) {
+    state.plus = p
   }
 }

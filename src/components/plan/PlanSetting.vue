@@ -453,6 +453,7 @@
     max-width: 100%;
     width: 100%;
     margin-left: -8px;
+    overflow-y:hidden; 
   }
   .plan-member-word{
     font-family: PingFangSC-Regular;

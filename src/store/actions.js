@@ -92,7 +92,7 @@ export default {
           commit('INB_TODO_CREATED', {item: item})
         })
     }).catch(err => {
-      alert(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     })
   },
   // -----------------inbox actions end-------------------------
@@ -192,7 +192,7 @@ export default {
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
@@ -221,7 +221,7 @@ export default {
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   createSubtodo ({commit, state, dispatch}, p) {
@@ -244,7 +244,7 @@ export default {
         return item
       })
       .catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
@@ -273,7 +273,7 @@ export default {
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
