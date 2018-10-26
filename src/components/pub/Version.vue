@@ -4,7 +4,6 @@
     <div class="version">
       <div class="text1">试用版</div>
       <div class="text2">当前版本：试用版</div>
-      <div class="day"> </div>
     </div>
     <img class="img-table" src="../../assets/img/table.png">
     <img class="img-table" src="../../assets/img/table2.png">
@@ -63,7 +62,7 @@ overflow: scroll;
   background-size: 100% 100%;
   overflow: hidden;
   .text1{
-    margin-top: 16px;
+    margin-top: 26px;
     margin-left: 16px;
     height:18px;
     font-size:18px;

@@ -7,7 +7,6 @@
         <img src="../../assets/img/version.svg">
         <div class="text">
           <span class="bb">试用版</span> 
-          <span class="day"> </span>
         </div>
       </div>
       <div class="right">
