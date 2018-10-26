@@ -42,7 +42,7 @@
                   :index-title="''"
                   :select-title="'请选择成员'"
                   :user-rsq-ids="idArray"
-                  :selected-rsq-ids="joinUserRsqIds"
+                  :selected-rsq-ids="selectRsqIds"
                   :creater-rsq-ids="joinUserRsqIds"
                   :disabled-rsq-ids="joinUserRsqIds"
                   @member-changed="saveMember"/>
@@ -91,7 +91,8 @@
 //          receiverIds: []
         },
         joinUserRsqIds: [],
-        idArray: []
+        idArray: [],
+        selectRsqIds:[]
       }
     },
     computed: {
@@ -126,6 +127,14 @@
     },
     mounted () {
       window.rsqadmg.exec('setOptionButtons', {hide: true})
+      if (this.editItem.receiverIds === null) {
+        this.editItem.receiverIds = this.$store.state.loginUser.rsqUser.id.toString()
+      }
+      if (this.editItem.receiverIds.split(',').length >= 0) {
+        this.selectRsqIds = this.editItem.receiverIds.split(',')
+      } else {
+       this.selectRsqIds = [this.$store.state.loginUser.rsqUser.id] 
+      }
       this.joinUserRsqIds = [this.$store.state.loginUser.rsqUser.id]
       // if (this.editItem.receiverIds !== null || this.editItem.receiverIds !== undefined) {
       //   console.log(this.editItem.receiverIds)
