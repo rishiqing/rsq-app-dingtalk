@@ -7,7 +7,7 @@
         <img src="../../assets/img/version.svg">
         <div class="text">
           <span class="bb">试用版</span> 
-          <span class="day">2019-10-31</span>
+          <span class="day"> </span>
         </div>
       </div>
       <div class="right">
@@ -135,6 +135,7 @@
 </script>
 <style lang="scss" scoped>
   .pl{
+    position: relative;  
   }
   .plan-count{
     // margin-bottom: 1.5rem;
@@ -160,7 +161,7 @@
     margin-top: 20px;
     overflow-x: hidden;
     position: relative;
-    height: calc(100vh - 150px);
+    max-height: calc(100vh - 150px);
     overflow: hidden;
     overflow-y:scroll;
     -webkit-overflow-scrolling: touch;

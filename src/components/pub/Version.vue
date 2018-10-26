@@ -4,7 +4,7 @@
     <div class="version">
       <div class="text1">试用版</div>
       <div class="text2">当前版本：试用版</div>
-      <div class="day">到期时间：2019-10-31</div>
+      <div class="day"> </div>
     </div>
     <img class="img-table" src="../../assets/img/table.png">
     <img class="img-table" src="../../assets/img/table2.png">
@@ -33,7 +33,7 @@
     },
     methods: {
       buy () {
-        alert('系统升级中')
+        window.rsqadmg.exec('alert', {message: '系统升级中'})
       }
     }
   }
