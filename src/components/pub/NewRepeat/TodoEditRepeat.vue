@@ -272,7 +272,7 @@
         float: right;
         height: 56px;
         line-height: 56px;
-        margin-right: 15px;
+        margin-right: 30px;
         color: #55A8FD;
         font-size: 15px;
         font-weight: bold;
