@@ -101,7 +101,7 @@
       },
       prepareDelete () {
         var that = this
-        if (that.currentTodo.isCloseRepeat) {
+        if (that.currentTodo.isCloseRepeat || that.isBackNewVersion) {
           window.rsqadmg.exec('confirm', {
             message: '确定要删除此任务？',
             success () {

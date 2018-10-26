@@ -86,7 +86,7 @@
           删除
         </v-touch>
         <v-touch
-          v-else
+          v-if="fix"
           tag="a"
           class="delete-plan-btn weui-btn out"
           href="javascript:;"
@@ -120,7 +120,8 @@
         disabledLocalList: [],  //  本地禁用的人员列表
         creatorList: [], // 创建者
         memArray: [],
-        idArray: []
+        idArray: [],
+        fix: false
       }
     },
     computed: {
