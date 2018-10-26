@@ -76,6 +76,9 @@
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
       },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      },
       currentDate () { return this.$store.getters.defaultTaskDate },
       isIE () { return this.item.pContainer === 'IE' },
       isIU () { return this.item.pContainer === 'IU' },
