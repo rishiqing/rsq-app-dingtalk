@@ -2,15 +2,16 @@
 <div class="version-all">
   <div class="inner">
     <div class="version">
-      <div class="text1">试用版</div>
-      <div class="text2">当前版本：试用版</div>
+      <div class="text1" :class="{'has-day' : !hasVerKey}">{{ver}}</div>
+      <div class="text2">当前版本：{{verNow}}</div>
+      <div v-if="!hasVerKey" class="day">到期时间：{{day}}</div>
     </div>
     <img class="img-table" src="../../assets/img/table.png">
     <img class="img-table" src="../../assets/img/table2.png">
     <div class="code-all">
-      <img src="../../assets/img/code.png" class="code">
+      <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <span>177-1037-6397</span></div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <a :href="'tel:' + phone">{{phone}}</a></div>
     </div>
   </div>
   <div class="foot">
@@ -19,6 +20,7 @@
 </div>
 </template>
 <script>
+  import moment from 'moment'
   export default {
     name: 'Version',
     data () {
@@ -26,6 +28,43 @@
       }
     },
     computed: {
+      code () {
+        return this.$store.state.plus.saleQrCodeUrl
+      },
+      phone () {
+        return this.$store.state.plus.salePhoneNumber
+      },
+      hasVerKey () {
+        return this.verKey === ''
+      },
+      verKey () {
+        return this.$store.state.plus.specKey
+      },
+      ver () {
+        if (this.verKey === '') {
+          return '免费版'
+        } else if (this.verKey === 'TRIAL') {
+          return '试用版'
+        } else if (this.verKey === 'STANDARD') {
+          return '企业版'
+        } else {
+          return ''
+        }
+      },
+      verNow () {
+        if (this.verKey === '') {
+          return '免费版'
+        } else if (this.verKey === 'TRIAL') {
+          return '试用版'
+        } else if (this.verKey === 'STANDARD') {
+          return this.$store.state.plus.buyNumber + '人企业版'
+        } else {
+          return ''
+        }
+      },
+      day () {
+        return moment(this.$store.state.plus.serviceExpire).format('YYYY-MM-DD')
+      }
     },
     mounted () {
       window.rsqadmg.exec('setTitle', {title: '收费说明'})
@@ -61,6 +100,9 @@ overflow: scroll;
   background-position: 100% 100%;
   background-size: 100% 100%;
   overflow: hidden;
+  .has-day {
+    margin-top: 16px !important;
+  }
   .text1{
     margin-top: 26px;
     margin-left: 16px;
