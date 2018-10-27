@@ -11,7 +11,7 @@
     <div class="code-all">
       <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
-      <div class="phone"><img src="../../assets/img/phone.svg"> <a :href="'tel:' + phone">{{phone}}</a></div>
+      <div class="phone"><img src="../../assets/img/phone.svg"> <span>{{phone}}</span></div>
     </div>
   </div>
   <div class="foot">
