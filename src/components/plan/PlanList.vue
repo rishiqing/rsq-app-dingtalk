@@ -6,7 +6,8 @@
       <div class="left">
         <img src="../../assets/img/version.svg">
         <div class="text">
-          <span class="bb">试用版</span> 
+          <span class="bb">{{ver}}</span> 
+          <span v-if="!hasVerKey" class="day">到期时间： {{day}} </span>
         </div>
       </div>
       <div class="right">
@@ -42,6 +43,7 @@
   </div>
 </template>
 <script>
+  import moment from 'moment'
   import Plan from 'com/plan/Plan'
   import Nav from 'com/Nav'
 
@@ -57,6 +59,26 @@
       }
     },
     computed: {
+      day () {
+        return moment(this.$store.state.plus.serviceExpire).format('YYYY-MM-DD')
+      },
+      hasVerKey () {
+        return this.verKey === ''
+      },
+      verKey () {
+        return this.$store.state.plus.specKey
+      },
+      ver () {
+        if (this.verKey === '') {
+          return '免费版'
+        } else if (this.verKey === 'TRIAL') {
+          return '试用版'
+        } else if (this.verKey === 'STANDARD') {
+          return '企业版'
+        } else {
+          return ''
+        }
+      },
       planItems () {
         if (this.$store.state.planList.length <= 0) {
           return this.$store.state.planList
@@ -109,7 +131,12 @@
     },
     methods: {
       toCreate () {
-        this.$router.push('/plan/create')
+        if (this.hasVerKey) {
+          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
+          return
+        } else {
+          this.$router.push('/plan/create')
+        }
       },
       listSort (item) {
         // console.log(this.arr)
