@@ -54,13 +54,11 @@
         repeatArr: null,
         repeatWeekArr: null,
         until: null,
-        rruleText: ''
+        rruleText: '',
+        rrule:''
       }
     },
     computed: {
-      rrule () {
-        return this.$store.state.todo.currentTodo.rrule
-      },
       item() {
         return this.$store.state.todo.currentTodo
       }
@@ -69,6 +67,7 @@
       window.rsqadmg.execute('setTitle', {title: '设置重复'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
       var that = this
+      this.rrule = this.$store.state.todo.currentTodo.rrule || ''
       // console.log(this.$rrule.fromString("FREQ=DAILY;UNTIL=20180301T160000Z").origOptions)
       this.weekRepeat()
       this.monRepeat()
@@ -177,13 +176,15 @@
           // 结束时间，null或者不标准的都是永不结束
           repeatOverDate: this.until,
           success: function (result) {
-            that.$store.commit('SAVE_CURRENT_RRULE',{rrule: result})
-            var rruleObj = that.$rrule.fromString(that.item.rrule).origOptions
-            that.rruleText = dateUtil.rruleToText(rruleObj,that.item.startDate)
-            that.until = rruleObj.until
-            that.findDefualt()
-            that.findCustom()
-
+            that.$store.dispatch('saveCurrentRrule',{rrule: result})
+              .then(function () {
+                that.rrule = result
+                var rruleObj = that.$rrule.fromString(that.item.rrule).origOptions
+                that.rruleText = dateUtil.rruleToText(rruleObj,that.item.startDate)
+                // that.until = rruleObj.until
+                that.findDefualt()
+                that.findCustom()
+              })
             // that.findCustom()
             // if (result.repeatType) {
             //   that.selected = null
@@ -231,6 +232,7 @@
         }
         i.checked = true
         this.$store.commit('SAVE_CURRENT_RRULE',{rrule: i.rrule})
+        this.rrule = i.rrule
         this.rruleText = ''
         this.until = null
       }
@@ -246,11 +248,12 @@
 <style lang="scss" scoped>
   .repeat{
     ul{
-      // margin-top: 12px;
       width: 100%;
       background:rgba(255,255,255,1);
       box-shadow:0px 0.5px 0px 0px rgba(217,217,217,1),0px -0.5px 0px 0px rgba(217,217,217,1);
-      // padding-left: 15px;
+      padding-left: 15px;
+      padding-right: 15px; 
+      border-bottom: 1px solid #d4d4d4; 
       li{
         width:100%;
         height:56px;
@@ -260,12 +263,16 @@
         font-weight:400;
         color:rgba(61,61,61,1);
         line-height:56px;
+        border-bottom: 1px solid #d4d4d4; 
+      }
+      li:last-child{
+        border: 0;
       }
       i{
         float: right;
         height: 56px;
         line-height: 56px;
-        margin-right: 15px;
+        margin-right: 30px;
         color: #55A8FD;
         font-size: 15px;
         font-weight: bold;

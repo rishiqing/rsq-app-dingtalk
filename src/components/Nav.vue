@@ -1,26 +1,57 @@
 <template>
-  <div class="bot" style="position: fixed;bottom: 0;left: 0;right: 0;">
-      <div class="left">
-        <v-touch class="left-sche" @tap="reload('/sche')" :class="{'is-active': '/sche' == currentPath}">
-          <span><i class="icon2-schedule richeng" :class="{'is-active': '/sche' == currentPath}"></i></span>
-          <p class="sche " :class="{'is-active': '/sche' == currentPath}">日程</p>
-        </v-touch>
-      </div>
-      <div class="mid">
-        <v-touch class="" @tap="createNew">
-          <i class="icon2-add-circle add" ></i>
-        </v-touch>
-      </div>
-      <div class="right">
-        <v-touch class="right-me" @tap="reload('/me')" :class="{'is-active': '/me' == currentPath}">
-          <i class="icon2-member me" :class="{'is-active': '/me' == currentPath}"></i>
-          <p class="my" :class="{'is-active': '/me' == currentPath}">我</p>
-        </v-touch>
-      </div>
+  <div
+    class="bot"
+    style="position: fixed;bottom: 0;left: 0;right: 0;">
+    <div class="con">
+      <v-touch
+        class="left"
+        @tap="reload('/sche')">
+        <div
+          :class="{'is-active': '/sche' == currentPath}"
+          class="left-sche">
+          <span>
+            <img
+              v-show="'/sche' === currentPath"
+              src="../assets/img/sches.svg"
+              class="icon2-schedule richeng icon">
+            <img
+              v-show="'/sche' !== currentPath"
+              src="../assets/img/sche.svg"
+              class="icon2-schedule richeng icon">
+          </span>
+          <p
+            :class="{'is-active': '/sche' == currentPath}"
+            class="sche">
+            我的日程
+          </p>
+        </div>
+      </v-touch>
+      <v-touch
+        class="right"
+        @tap="reload('/plan/list')">
+        <div
+          :class="{'is-active': '/plan/list' === currentPath}"
+          class="right-me">
+          <img
+            v-show="'/plan/list' === currentPath"
+            src="../assets/img/plans.svg"
+            class="icon">
+          <img
+            v-show="'/plan/list' !== currentPath"
+            src="../assets/img/planns.svg"
+            class="icon">
+          <p
+            :class="{'is-active': '/plan/list' === currentPath}"
+            class="my">
+            计划管理
+          </p>
+        </div>
+      </v-touch>
     </div>
+  </div>
 </template>
 <script>
-  import def from 'ut/defaultUtil'
+  // import def from 'ut/defaultUtil'
 
   export default {
     name: 'Nav',
@@ -42,18 +73,25 @@
       reload (page) {
         this.$router.replace(page)
       },
-      createNew () {
-        //  过去的日期不允许创建任务
-        if (this.currentNumDate + 24 * 3600 * 1000 < new Date().getTime()) {
-          return window.rsqadmg.exec('toast', {message: '过去的日期不能创建日程'})
-        }
-        this.$store.dispatch('setCurrentTodo', def.allDefaultTodo())
-        this.$router.push('/todo/new/schedule')
+      toInbox () {
+        this.$router.push('/inbox')
       }
     }
   }
 </script>
-<style scoped>
+<style lang="scss" scoped>
+  .right-me{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    width: 100%;
+    padding-top: 4px;
+  }
+  .icon,.left-sche{
+    font-size:0.586rem;
+    margin: 0 auto;
+    padding-top: 4px;
+  }
   .is-active{
     color:#55A8FD
   }
@@ -66,23 +104,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top:1px solid #CDCDCD;
-    height: 1.306rem;
+    // border-top:0.5px solid #D4D4D4;
+    height: 50px;
     background-color: #FDFDFF;;
   }
   .richeng{
     font-size: 0.586rem;
     color: #999999;
-    /*display: block;*/
   }
   .sche{
     font-family: PingFangSC-Regular;
-    font-size: 10px;
+    font-size: 12px;
     color: #999999;
     letter-spacing: 0;
     margin:0;
     padding:0;
-    margin-top:0.053rem;
+    // margin-top:0.053rem;
+    margin-bottom: 4px;
   }
   .me{
     display: block;
@@ -91,44 +129,41 @@
   }
   .my{
     font-family: PingFangSC-Regular;
-    font-size: 10px;
+    font-size: 12px;
     color: #999999;
     letter-spacing: 0;
     margin: 0;
     padding:0;
     margin:0 auto;
-    margin-top:0.053rem;
+    display: flex;
+    justify-content:center;
+    // margin-top:0.053rem;
+    margin-bottom: 4px;
   }
   .left{
-    position: absolute;
-    left: 2.053rem;
-    /*bottom:0.23rem;*/
-    /*padding-bottom:0.026rem;*/
-    height: 1.306rem;
-    /*top:50%;*/
-    /*margin-top: -0.453rem;*/
+    // position: absolute;
+    // left: 2.053rem;
+    // height: 1.306rem;
+    width: 33.333%;
     display: flex;
     align-items: center;
-    /*justify-content: center;*/
+    text-align: center;
   }
   .right{
     text-align: center;
-    /*padding-bottom:0.026rem;*/
-    position: absolute;
-    right: 2.11rem;
-    /*bottom:0.23rem;*/
-    /*bottom:50%;*/
-    /*margin-bottom: -0.45rem;*/
-    height: 1.306rem;
+    // position: absolute;
+    // right: 2.11rem;
+    // height: 1.306rem;
     display: flex;
     align-items: center;
-    /*justify-content: center;*/
+    width: 33.333%;
   }
   .mid{
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 1.306rem;
+    // height: 1.306rem;
+    width: 33.333%;
   }
   .add{
     color:#4D93DE;
@@ -139,10 +174,25 @@
     content:'';
     display: block;
     clear: both;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
   }
-  img{
-    width: 1.866rem;
-    height: 1.866rem;
-    margin-top:3.653rem ;
+  .icon{
+    width: 22px;
+    height:22px
+  }
+  .con{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

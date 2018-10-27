@@ -5,7 +5,13 @@
 html, body {
     height: 100%;
     width: 100%;
-    display: inline-block;
+  background-color: #f6f6f6
+}
+/**
+ * html中的font-size用来给rem做基准，这里设置body的font-size，用来给weui中的组件做基准
+ */
+body {
+  font-size: 16px;
 }
 *{
   -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -279,3 +285,122 @@ input[type="button"].cmt-send-btn-submit {
     padding: 0 16px;overflow-y: auto;background: #fff;
     position: absolute;left: 0;right: 0;top: 67px;bottom: 0;
 }
+.mui-switch {
+  width: 52px;
+  height: 31px;
+  position: absolute;
+  top:0.35rem;
+  right:15px;
+  border: 1px solid #dfdfdf;
+  background-color: #fdfdfd;
+  box-shadow: #dfdfdf 0 0 0 0 inset;
+  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-clip: content-box;
+  display: inline-block;
+  -webkit-appearance: none;
+  user-select: none;
+  outline: none; }
+.mui-switch:before {
+  content: '';
+  width: 29px;
+  height: 29px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  border-radius: 20px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+.mui-switch:checked {
+  border-color: #44DB5E;
+  box-shadow: #44DB5E 0 0 0 16px inset;
+  background-color: #44DB5E; }
+.mui-switch:checked:before {
+  left: 21px; }
+
+.btn-group {
+  padding-top: 15px;
+}
+.btn-wrap {
+  padding: 15px 15px 0;
+}
+
+div.el-message-box {
+  width: 8rem;
+}
+div.el-message-box input.el-input__inner {
+  border: 1px solid #dcdfe6;
+}
+
+.common-field {
+  position: relative;
+  background: transparent;
+}
+.common-field .outer-wrap {
+  padding-left: 0.3rem;
+}
+.common-field:last-child .outer-wrap {
+  border-bottom: none;
+}
+
+.icon-field-group .common-field {
+  padding-left: 33px;
+}
+.icon-field-group .common-field:last-child,.icon-field-group .common-field:last-child:after {
+  border-bottom: 0;
+}
+.icon-field-group .common-field .outer-wrap {
+  padding-left: 0;
+}
+
+/* 去掉element-ui的右上角的按钮 */
+button.el-message-box__headerbtn i.el-message-box__close {
+  display: none;
+}
+
+.icon-field-group{
+  // border-top: 0.5px solid #D4D4D4;
+  // border-bottom: 0.5px solid #D4D4D4;
+  background-color: #fff;
+  padding-left: 15px;
+  position: relative;
+}
+.icon-field-group:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d9d9d9;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+.icon-field-group:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d9d9d9;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+}
+.common-field .bottom-border{
+  border-bottom: 0 !important;
+}
+  .weui-btn:after{
+    border: 0
+  }

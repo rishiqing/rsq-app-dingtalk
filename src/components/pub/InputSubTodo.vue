@@ -1,92 +1,111 @@
 <template>
-  <div class="subtodo">
-    <v-touch class="" @tap="showSubTodo">
-      <span class="date">子任务</span>
-      <span class="now" :class="{'edit-padding-left':editTime}">{{subtodoString}}</span>
-      <i class="icon2-arrow-right-small arrow"></i>
-    </v-touch>
-  </div>
+  <v-touch @tap="showSubtodo">
+    <div class="outer-wrap has-padding">
+      <span class="inner-key">子任务</span>
+      <span class="inner-value">{{ subtodoString }}</span>
+      <i class="icon2-arrow-right-small arrow"/>
+    </div>
+  </v-touch>
 </template>
-<style lang="" scoped>
-  .subtodo{
-    background-color: white;
+<script>
+  export default {
+    name: 'InputSubtodo',
+    props: {
+      item: {
+        type: Object,
+        required: true
+      },
+      //  是否被禁用编辑
+      isDisabled: {
+        type: Boolean,
+        default: false
+      },
+      //  被禁用编辑的提示，默认为''，不提示；如果要显示提示文字，需要传入提示的文字
+      disabledText: {
+        type: String,
+        default: ''
+      },
+      todoType: {
+        type: String,
+        default: 'sche'
+      }
+    },
+    data () {
+      return {}
+    },
+    computed: {
+      subtodoString () {
+        let finishedCount = 0
+        let unfinishedCount = 0
+        let result = null
+        const subtodo = this.item.subTodos || this.item.subItems || []
+
+        for (let i = 0; i < subtodo.length; i++) {
+          if (subtodo[i].isDone) {
+            finishedCount++
+          } else {
+            unfinishedCount++
+          }
+        }
+        if (finishedCount === 0 && unfinishedCount === 0) {
+          return ''
+        } else {
+          result = '已完成' + finishedCount + '/' + (unfinishedCount + finishedCount) + '条'
+          return result
+        }
+      }
+    },
+    methods: {
+      showSubtodo () {
+        if (this.isDisabled) {
+          window.rsqadmg.execute('toast', {message: this.disabledText})
+          return
+        }
+        this.$store.commit('PUB_ID_SUB', this.item.id)
+        this.$router.push('/' + this.todoType + '/todo/' + this.item.id + '/subtodo')
+      }
+    }
+  }
+</script>
+<style lang="scss" scoped>
+  .outer-wrap{
+    display: flex;
+    align-items: center;
     position: relative;
-    /*height:1.3rem;*/
-    line-height: 1.3rem;
-    /*padding-left:3% ;*/
-    /*border-bottom:1px solid #E3E3E3;*/
+    line-height: 56px;
+    background-color: transparent;
   }
-  .arrow{
-    color: #999999;
-    font-size: 21px;
-    position: absolute;
-    top:0.38rem;
-    right: 0.2rem;
-  }
-  .now {
-    position: absolute;
-    top:0.01rem;
-    right: 0.88rem;
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    color: #999999;
-    letter-spacing: 0;
-  }
-  .edit-padding-left{
-    left:1.7rem
-  }
-  span{
+  .inner-key{
     display: block;
     font-family: PingFangSC-Regular;
     font-size: 17px;
     color: #333333;
   }
-</style>
-<script>
-  export default {
-    data () {
-      return {}
-    },
-    props: {
-      item: Object,
-      editTime: Boolean,
-      disabled: Boolean
-    },
-    computed: {
-      subtodoString () {
-        var finishcount = 0
-        var unfinishcount = 0
-        var result = null
-        var subtodo = this.item.subTodos
-        // console.log('---' + subtodo + '----') // 这一行输出两次
-        if (subtodo === undefined) {
-          // console.log('果然相等')
-          return ''
-        } else {
-          for (var i = 0; i < subtodo.length; i++) {
-            if (subtodo[i].isDone) {
-              finishcount++
-            } else {
-              unfinishcount++
-            }
-          }
-          if (finishcount === 0 && unfinishcount === 0) {
-            return ''
-          } else {
-            result = finishcount + '条已完成, ' + unfinishcount + '条未完成'
-            return result
-          }
-        }
-      }
-    },
-    methods: {
-      showSubTodo () {
-        if (this.disabled) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
-        this.$router.push('/todo/' + this.item.id + '/subTodo')
-      }
-    }
+  .inner-value {
+    display: block;
+    position: absolute;
+    right: 0.82666rem;
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: rgba(25,31,37,0.56);
+    letter-spacing: 0;
+    line-height: 56px
   }
-</script>
+  .arrow{
+    color: #999999;
+    font-size: 21px;
+    position: absolute;
+    height: 100%;
+    line-height: 56px;
+    right: 0.2rem;
+  }
+  .has-padding{
+    padding-left: 3%;
+  }
+  .edit-padding-left{
+    left:1.3rem
+  }
+  .bottom-border{
+    // border-bottom: 1px solid #E0E0E0;
+  }
+</style>

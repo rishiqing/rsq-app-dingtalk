@@ -7,7 +7,7 @@ var RsqPreviewer = Vue.extend(BasePreviewer)
 
 var rsqPreviewer = null
 /**
- * selectUserRepeat单例模式
+ * 单例模式
  * @returns {ActionSheet}
  */
 function getSelectDateModal (options) {

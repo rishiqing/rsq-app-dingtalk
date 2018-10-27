@@ -9,7 +9,7 @@ export default {
         .then((res) => {
           resolve(res.json())
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
@@ -29,7 +29,7 @@ export default {
         .then((res) => {
           resolve(res.json())
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
@@ -38,10 +38,10 @@ export default {
     return new Promise((resolve, reject) => {
       Vue.http.get(mapping.GET_LOGOUT)
         .then((res) => {
-          window.rsqadmg.log('response.status:' + res.status)
+          window.rsqadmg.error('response.status:' + res.status)
           resolve(res)
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
@@ -52,7 +52,7 @@ export default {
         .then((res) => {
           resolve(res.json())
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
@@ -63,7 +63,7 @@ export default {
         .then((res) => {
           resolve(res.json())
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
@@ -80,21 +80,23 @@ export default {
         .then((res) => {
           resolve(res.json())
         }, (res) => {
-          window.rsqadmg.log('login error:' + JSON.stringify(res))
+          window.rsqadmg.error('login error:' + JSON.stringify(res))
           reject(res)
         })
     })
   },
-  getOSSClient (data) {
-    var urllib = window.OSS.urllib
-    var OSS = window.OSS.Wrapper
-    var stsServer = window.rsqConfig.stsServer
-    var region = window.rsqConfig.ossRegion
-    var bucket = window.rsqConfig.ossBucket
+  getOSSClient (data, options) {
+    options = options || {}
+    const urllib = window.OSS.urllib
+    const OSS = window.OSS.Wrapper
+    const stsServer = options.stsServer || window.rsqConfig.stsServer
+    const region = options.ossRegion || window.rsqConfig.ossRegion
+    const bucket = options.ossBucket || window.rsqConfig.ossBucket
     return urllib.request(stsServer + data.pathId, {
       method: 'GET'
     }).then(function (result) {
-      var credential = JSON.parse(result.data)
+      // alert('--')
+      const credential = JSON.parse(result.data)
       return new OSS({
         secure: true,  //  https
         region: region,

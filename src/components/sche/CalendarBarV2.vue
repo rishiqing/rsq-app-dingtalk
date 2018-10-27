@@ -1,38 +1,56 @@
 <template>
-  <div class="cal-bar" :style="{'left': barOffsetStyle}">
+  <div
+    :style="{'left': barOffsetStyle}"
+    class="cal-bar">
     <table class="cal-table">
       <tr>
-        <td class="cal-weekday"
-            v-for="day in days"
-            :key="day.date.getTime()"
-        >
-          <div class="cal-day-tag" :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"></div>
-          <v-touch class="cal-day" @tap="calDayClick(day.date)"
-                   :class="{'cal-day--focus': isHighLight(day.date)}">
-            {{dateText(day)}}
+        <td
+          v-for="day in days"
+          :key="day.date.getTime()"
+          class="cal-weekday">
+          <v-touch
+            :class="{'cal-day--focus': isHighLight(day.date)}"
+            class="cal-day"
+            @tap="calDayClick(day.date)">
+            <div
+              :class="{'tag-active': day.showTag&&!isHighLight(day.date)}"
+              class="cal-day-tag" />
+            {{ dateText(day) }}
           </v-touch>
         </td>
       </tr>
     </table>
   </div>
 </template>
-<script scoped>
+<script>
   export default {
+    name: 'CalendarBar',
+    props: {
+      days: {
+        type: Array,
+        required: true
+      },
+      barIndex: {
+        type: Number,
+        required: true
+      },
+      highlightDay: {
+        type: Date,
+        required: true
+      },
+      todayValue: {
+        type: Number,
+        required: true
+      }
+    },
     data () {
       return {}
-    },
-    props: {
-      days: Array,
-      barIndex: Number,
-      highlightDay: Date,
-      todayValue: Number
     },
     computed: {
       barOffsetStyle () {
         return (this.barIndex * 100) + '%'
       }
     },
-    components: {},
     methods: {
       dateText (day) {
         //  如果是当天，则显示“今”这个字
@@ -42,6 +60,7 @@
         return this.highlightDay != null && date.getTime() === this.highlightDay.getTime()
       },
       calDayClick (date) {
+        this.$store.commit('SCH_TODO_CACHE_DELETE_ALL')
         if (date.getTime() !== this.highlightDay.getTime()) {
           this.$emit('click-cal-bar-day', date)
         }
@@ -49,7 +68,7 @@
     }
   }
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
   @import '../../assets/css/variables.scss';
   .cal-bar {
     position: absolute;
@@ -74,7 +93,7 @@
     color: #FFFFFF;
     line-height: 12px;
   }
-  .cal-day-tag {position:absolute;top:5px;right: 23px;border-radius:50%;}
+  .cal-day-tag {position:absolute;top:-7px;right: 13px;border-radius:50%;}
   .tag-active {width:4px;height:4px;background:#30FFA8;}
   .cal-day {
     margin:0 auto;
@@ -84,6 +103,7 @@
     font-family: PingFangSC-Medium;
     font-size: 15px;
     color: #FFFFFF;
+    position: relative;
   }
   .cal-day--focus {
     background:white;

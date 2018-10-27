@@ -1,5 +1,6 @@
 <template>
-  <div class="router-view">
+  <!--收纳箱任务和日程任务公用的编辑页面-->
+  <div class="router-view todo-fix">
     <div class="itm-edt z-index-xs">
       <div class="content">
         <div class="itm-edt-fields" >
@@ -8,265 +9,177 @@
               ref="title"
               :is-edit="true"
               :is-checkable="!isInbox"
-              :item-title="editItem.pTitle"
+              :item-title="editItem.pTitle "
               :item-checked="editItem.pIsDone"
-              :disabled="!checkEdit()"
-              @text-blur="saveTitle"
+              :is-disabled="!isEditable"
+              :disabled-text="disabledText"
+              :is-show-bottom-border="true"
               @click-checkout="finishChecked"
-            ></r-input-title>
+              @text-blur="saveTitle"/>
+            <r-input-note
+              :content="editItem.pNote"
+              :has-left-space="!isInbox"
+              :is-disabled="!isEditable"
+              :disabled-text="disabledText"/>
           </div>
-          <v-touch @tap="SwitchToDesp">
-            <div id="noteEditable" contenteditable="true" class="desp editor-style"
-                 name="note" rows="5"
-                 :class="{'remindColor':hasDecrip(),'contentColor':!hasDecrip(),'inbox-padding':isInbox,'sche-padding':!isInbox}"
-                 placeholder="添加任务描述..." onfocus="this.blur();">
-              添加任务描述...
-            </div>
-          </v-touch>
           <div class="itm--edit-todo ">
-            <div class="edit-padding-left">
-              <div class="first-date">
-                <i class="icon2-schedule sche"></i>
+            <div class="icon-field-group">
+              <div class="common-field">
+                <i class="icon2-schedule sche"/>
                 <r-input-date
-                  :disabled="!checkEdit()"
+                  :is-disabled="!isEditable"
+                  :disabled-text="disabledText"
                   :item="editItem"
-                  :sep="'/'"
-                  :edit-time="true"
-                ></r-input-date>
+                  :sep="'/'"/>
               </div>
-              <div class="first-date" v-show="!isInbox">
-                <div class="time-border">
-                  <i class="icon2-alarm sche"></i>
-                  <r-input-time
-                    :disabled="!checkEdit()"
-                    :item="editItem"
-                    :edit-time="true"
-                    v-if="editItem.pContainer !== 'inbox'"
-                  ></r-input-time>
-                </div>
+              <div
+                v-if="!isInbox"
+                class="common-field">
+                <i class="icon2-alarm sche"/>
+                <r-input-time
+                  :is-disabled="!isEditable"
+                  :disabled-text="disabledText"
+                  :item="editItem"/>
               </div>
-              <div class="first-date">
-                <i class="icon2-member sche"></i>
+              <div class="common-field">
+                <i class="icon2-member sche"/>
                 <r-input-member
-                  :disabled="!checkEdit()"
+                  :is-disabled="!isEditable"
+                  :disabled-text="disabledText"
                   :edit-time="true"
-                  :is-native="true"
+                  :is-native="false"
                   :index-title="'执行人'"
                   :select-title="'请选择成员'"
-                  :user-rsq-ids="[]"
+                  :user-rsq-ids="idArray"
                   :selected-rsq-ids="joinUserRsqIds"
-                  :disabled-rsq-ids="[]"
-                  @member-changed="saveMember"
-                ></r-input-member>
+                  :creater-rsq-ids="createIds"
+                  :disabled-rsq-ids="[createIds, rsqUser]"
+                  @member-changed="saveMember"/>
               </div>
-              <div class="first-date">
-                <i class="icon2-subplan-web sche"></i>
-                <r-input-sub-todo
-                  :disabled="!checkEdit()"
-                  :item="currentTodo"
-                  :edit-time="true"
-                ></r-input-sub-todo>
+              <div class="common-field">
+                <img
+                  src="../../assets/img/moveplan.svg"
+                  class="icon2-member sche move-to">
+                <r-move-plan
+                  :is-disabled="!isEditable"
+                  :disabled-text="disabledText"
+                  :item="editItem"/>
               </div>
+
             </div>
+            <r-input-subtodo
+              :is-disabled="!isEditable"
+              :disabled-text="disabledText"
+            />
             <r-comment-list
-              :disabled="!checkEdit()"
+              :disabled="!isEditable"
               :items="todoComments"
-              ></r-comment-list>
-            <div class="bottom">
-              <v-touch @tap="SwitchToComent">
-                <input type="text" class="bot" placeholder="输入讨论内容或发送文件" onfocus="this.blur();">
-              </v-touch>
+              :todo-id="currentTodo.id"/>
+            <div class="btn-group delete-task" >
+              <div class="btn-wrap">
+                <v-touch
+                  tag="a"
+                  class="weui-btn weui-btn_warn kong"
+                  href="javascript:;"
+                  @tap="delayCallFix">
+                  删除任务
+                </v-touch>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <v-touch
+      class="bottom"
+      @tap="switchToComment">
+      <img
+        class="talk-png"
+        src="../../assets/img/talk.png">
+      参与讨论
+    </v-touch>
   </div>
 </template>
-<style scoped>
-  .remindColor{
-    color: #A5A5A5;
-  }
-  .contentColor{
-    color: #333333
-  }
-  .first-date{
-    position: relative;
-    padding-left: 1.1rem;
-  }
-  .sche{
-    font-size:0.586rem;
-    color:#55A8FD;
-    position: absolute;
-    top: 50%;
-    margin-top: -0.29rem;
-    left:0.3rem
-  }
-  .edit-padding-left{
-    background-color: white;
-  }
-  .time-border{
-    border-bottom: 1px solid #E0E0E0;
-    /*position: relative;*/
-    /*padding-left: 1.1rem;*/
-  }
-  input::-webkit-input-placeholder { /* WebKit browsers */
-    font-family: STHeitiSC-Light;
-    font-size: 15px;
-    color: #A3A3A3;
-    letter-spacing: 0;
-  }
-  .content{
-    background-color: white;
-  }
-  .desp{
-    /*border-bottom: 1px solid #E0E0E0;*/
-    margin-bottom: 10px;
-    padding-top:0.193rem ;
-    padding-bottom: 0.293rem;
-    padding-right: 0.3rem;
-    line-height: 0.586rem;
-    font-family: PingFangSC-Regular;
-    font-size: 0.373rem;
-    /*color: #333333;*/
-    letter-spacing: 0;
-    background-color: white;
-    min-height:0.586rem;
-    /*display: flex;*/
-    /*align-items: center;*/
-  }
-  .inbox-padding{
-    padding-left: 0.3rem;
-  }
-  .sche-padding{
-    padding-left: 1.1rem;
-  }
-  input{
-    line-height: 0.933rem;
-    width:6.8rem;
-  }
-  .bottom{
-    height: 1.333rem;
-    display: flex;
-    align-items: center;
-    background-color: white;
-    position: fixed;
-    bottom: 0;
-    left:0;
-    right: 0;
-    justify-content: center;
-    width:100%;
-    border-top:1px solid #DADADA ;
-    background-color: #FDFDFF ;
-  }
-  .bot{
-    padding-left: 2%;
-    width:9.2rem;
-    height:0.945rem ;
-    border:1px solid #E0E0E0 ;
-    border-radius: 4px;
-  }
-  .send>input{
-    width: 300px;
-    height: 50px;
-    border: 1px solid red;
-  }
-  p{
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    color: #333333;
-  }
-  .ding{
-    height:2rem;
-    line-height: 1rem;
-    font-family: PingFangSC-Regular;
-    font-size: 17px;
-    color: #333333;
-    position:relative;
-    background-color: white;
-    border-bottom:1px solid #E0E0E0;
-  }
-  .message{
-    font-family: PingFangSC-Regular;
-    font-size: 13px;
-    color: #999999;
-  }
-  .mui-switch {
-    width: 52px;
-    height: 31px;
-    position: absolute;
-    top:0.55rem;
-    right:0.55rem;
-    border: 1px solid #dfdfdf;
-    background-color: #fdfdfd;
-    box-shadow: #dfdfdf 0 0 0 0 inset;
-    border-radius: 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    background-clip: content-box;
-    display: inline-block;
-    -webkit-appearance: none;
-    user-select: none;
-    outline: none; }
-  .mui-switch:before {
-    content: '';
-    width: 29px;
-    height: 29px;
-    position: absolute;
-    top: 0px;
-    left: 0;
-    border-radius: 20px;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
-  .mui-switch:checked {
-    border-color: #67B2FE;
-    box-shadow: #67B2FE 0 0 0 16px inset;
-    background-color: #67B2FE; }
-  .mui-switch:checked:before {
-    left: 21px; }
-  .mui-switch.mui-switch-animbg {
-    transition: background-color ease 0.4s; }
-  .mui-switch.mui-switch-animbg:before {
-    transition: left 0.3s; }
-  .mui-switch.mui-switch-animbg:checked {
-    box-shadow: #dfdfdf 0 0 0 0 inset;
-    background-color: #67B2FE;
-    transition: border-color 0.4s, background-color ease 0.4s; }
-</style>
 <script>
   import { Promise } from 'es6-promise'
   import moment from 'moment'
   import InputTitleText from 'com/pub/InputTitleText'
+  import InputNote from 'com/pub/InputNote'
   import InputDate from 'com/pub/InputDate'
   import InputTime from 'com/pub/InputTime'
+  import MoveToPlan from 'com/pub/MoveToPlan'
   import InputMember from 'com/pub/InputMember'
-  import InputSubTodo from 'com/pub/InputSubTodo'
+  import InputSubtodo from 'com/pub/SubtodoList'
   import SendConversation from 'com/demo/SendConversation'
   import util from 'ut/jsUtil'
   import dateUtil from 'ut/dateUtil'
-  import ComentList from 'com/pub/ComentList'
+  import CommentList from 'com/pub/CommentList'
+
   export default {
+    name: 'TodoEdit',
+    components: {
+      'r-input-title': InputTitleText,
+      'r-input-date': InputDate,
+      'r-input-time': InputTime,
+      'r-input-member': InputMember,
+      'r-input-subtodo': InputSubtodo,
+      'r-input-note': InputNote,
+      'r-comment-list': CommentList,
+      'r-send-conversation': SendConversation,
+      'r-move-plan': MoveToPlan
+    },
     data () {
       return {
+        disabledText: '过去的任务不能编辑',
         editItem: {},
-        joinUserRsqIds: []
+        newList: '',
+        joinUserRsqIds: [],
+        idArray: []
       }
     },
     computed: {
+      isNewRepeat () {
+        return this.currentTodo.rrule !== undefined
+      },
+      isBackNewVersion () {
+        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      },
+      rsqUser () {
+        return this.$store.getters.loginUser.rsqUser.id
+      },
       currentTodo () {
         return this.$store.state.todo.currentTodo || {}
       },
       pNote () {
         return this.$store.state.todo.currentTodo.pNote
       },
+      note () {
+        return this.$store.state.todo.currentTodo.note
+      },
+      pUserId () {
+        return [this.$store.state.todo.currentTodo.pUserId]
+      },
+      createIdObject () {
+        var arr = this.$store.state.todo.currentTodo.receiverUser || []
+        // console.log(arr)
+        return arr.filter(function (o) {
+          if (o.joinUser.isCreator) {
+            return o.id || 0
+          }
+        })
+      },
+      createIds () {
+        // if (this.createIdObject.length > 0) {
+        //   return [this.createIdObject[0].id]
+        // }
+        return []
+      },
       isInbox () {
         return this.currentTodo.pContainer === 'inbox'
+      },
+      //  对于日程中任务来说，过去的任务是disabled，无法编辑的。只有收纳箱中的任务和未来的任务才是可以编辑的
+      isEditable () {
+        return this.isInbox || this.currentNumDate + 24 * 3600 * 1000 > new Date().getTime()
       },
       dynamicId () {
         return this.$route.params.todoId
@@ -292,9 +205,6 @@
       currentNumDate () {
         return this.$store.getters.defaultNumTaskDate
       },
-      isNewRepeat () {
-        return this.currentTodo.rrule !== undefined
-      },
       dates () {
         var dates = this.$store.state.todo.currentTodo.dates
         var datesArray = dates.split(',')
@@ -305,67 +215,83 @@
         }
         return newArray
       },
-      fileCount () {
-      },
       time () {
         var dates = this.$store.state.todo.currentTodo.clock
         return dates.startTime + '-' + dates.endTime
       },
-      isBackNewVersion () {
-        return this.$store.state.loginUser.rsqUser.isBackNewVersion
+      delayShowCheckbox () {
+        return this.$store.state.todo.delayShowCheckbox
       },
-      isNewRepeat () {
-        return this.currentTodo.rrule !== undefined
+      realUserRsqIds () {
+        return this.$store.state.realStaff.list
       }
     },
-    components: {
-      'r-input-title': InputTitleText,
-      'r-input-date': InputDate,
-      'r-input-time': InputTime,
-      'r-input-member': InputMember,
-      'r-input-sub-todo': InputSubTodo,
-//      'r-input-note': InputNoteText,
-      'r-comment-list': ComentList,
-      'r-send-conversation': SendConversation
+    created () {
+      this.initData()
+//      var that = this
+      window.rsqadmg.execute('setTitle', {title: '任务详情'})
+//      window.rsqadmg.execute('setOptionButtons', {
+//        btns: [{key: 'more', name: '更多'}],
+//        success (res) {
+//          if (res.key === 'more') {
+//            that.more()
+//          }
+//        }
+//      })
+    },
+    mounted () {
+     window.rsqadmg.exec('setOptionButtons', {hide: true})
+      // document.body.scrollTop = document.documentElement.scrollTop = 0
     },
     methods: {
-      hasDecrip () {
-        var description = document.getElementById('noteEditable')
-        if (description) {
-          return description.innerText === '添加任务描述...'
+      findId (id) {
+        var that = this
+        for (let i = 0; i < id.length; i++) {
+          for (let j = 0; j < id[i].userList.length; j++) {
+            that.idArray.push(id[i].userList[j].id)
+          }
+          if (Array.isArray(id[i].childList)) {
+            if (id[i].childList) {
+              that.findId(id[i].childList)
+            }
+          }
         }
       },
-      //  过去的日程不允许更新日程详情
-      checkEdit () {
-        var enabled = this.currentNumDate + 24 * 3600 * 1000 > new Date().getTime()
-        return enabled
+      delayCallFix (e) {
+        window.setTimeout(() => {
+          this.prepareDelete(e)
+        }, 50)
       },
       initData () {
-        window.rsqadmg.exec('showLoader', {'text': '加载中'})
+        var that = this
+        // window.rsqadmg.exec('showLoader', {'text': '加载中'})
         return this.$store.dispatch('getTodo', {todo: {id: this.dynamicId}})
             .then(item => {
               util.extendObject(this.editItem, item)
-              var noteElement = document.getElementById('noteEditable')
-              if (this.pNote !== null) {
-                noteElement.innerHTML = this.pNote
-              }
               var joinUserArray = util.getMapValuePropArray(this.editItem.receiverUser, 'joinUser')
               this.joinUserRsqIds = joinUserArray.map(obj => {
                 return obj['id'] + ''
               })
             })
           .then(() => {
+            this.findId(this.realUserRsqIds)
             this.fetchCommentIds()
-            window.rsqadmg.exec('hideLoader')
+            // window.rsqadmg.exec('hideLoader')
           })
-          .catch(err => {
-            window.rsqadmg.exec('hideLoader')
-            if (err.code === 400320) {
-              this.$router.push('/pub/CheckFailure')
-            } else if (err.code === 400318) {
-              this.$router.push('/pub/noPermission')
-            }
-          })
+         .catch(err => {
+           // window.rsqadmg.exec('hideLoader')
+           if (err.code === 400320 && that.isInbox) {
+             that.$router.push('/pub/check-failure?from=isInbox')
+           } else if (err.code === 400320) {
+             that.$router.push('/pub/check-failure')
+           } else if (err.code === 400318) {
+             that.$router.push('/pub/noPermission')
+           } else if (err.code === 501001) {
+            that.$router.go(0)
+           } else {
+            that.$router.push('/pub/check-failure')
+           }
+         })
       },
       fetchCommentIds () {
         //  根据评论中的rsqId获取userId，用来显示头像
@@ -380,151 +306,207 @@
             that.commonComments.forEach(c => {
               const user = idMap[c.authorId]
               if (user) {
-                that.$set(c, 'authorAvatar', user.avatar)
-                that.$set(c, 'authorName', 'dingding-' + user.name)
+                // that.$set(c, 'authorAvatar', user.avatar)
+                // that.$set(c, 'authorName', 'dingding-' + user.name)
+                that.$set(c, 'qywxShowAvatar', user.avatar)
+                that.$set(c, 'qywxShowName', user.name)
               }
             })
           })
       },
-      SwitchToComent () {
-        if (!this.checkEdit()) {
+      switchToComment () {
+        if (!this.isEditable) {
           window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
           return
         }
-        this.$router.push('/pub/coment')
-      },
-      SwitchToDesp () {
-        if (!this.checkEdit()) {
-          window.rsqadmg.execute('toast', {message: '过去的任务不能编辑'})
-          return
-        }
-        this.$router.push('/pub/desp')
+        this.$router.push('/sche/todo/comment')
       },
       saveTitle (newTitle) {
-        if (!newTitle) {
+        // var that = this
+        if (!newTitle || /^\s+$/.test(newTitle)) {
           window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
           return Promise.reject()
         }
-        if (newTitle !== this.editItem.pTitle) {
+        if (this.currentTodo.kanbanId) {
+          return this.$store.dispatch('updateKanbanItem', {id: this.currentTodo.id, name: newTitle})
+        } else {
+          if (newTitle !== this.editItem.pTitle) {
 //          window.rsqadmg.exec('showLoader', {text: '保存中...'})
-          var params = {pTitle: newTitle}
-          return this.$store.dispatch('updateTodo', {editItem: params})
-            .then(() => {
-              this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
-            })
-            .then(() => {
-              return this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: newTitle, type: 9}})
-            })
-            .then(() => {
-              this.editItem.pTitle = newTitle
+            var params = {pTitle: newTitle}
+            return this.$store.dispatch('updateTodo', {editItem: params})
+              .then(() => {
+                this.$store.commit('TD_CURRENT_TODO_REPEAT_EDITED', params)
+              })
+              .then(() => {
+                return this.$store.dispatch('saveTodoAction', {editItem: {idOrContent: newTitle, type: 9}})
+              })
+              .then(() => {
+                this.editItem.pTitle = newTitle
+
 //              this.editItem.pTitle = newTitle
 //              window.rsqadmg.exec('hideLoader')
 //              window.rsqadmg.execute('toast', {message: '保存成功'})
-            })
-        } else {
-          return Promise.resolve()
+                // var url = window.location.href.split('#')
+                // var name = that.loginUser.authUser.name
+                // var addArray = this.joinUserRsqIds.join(',')
+                // var mem = this.newList ? this.newList : addArray
+                // var datas = {
+                //   corpId: that.loginUser.authUser.corpId,
+                //   agentid: this.corpId,
+                //   title: name + ' 修改了任务标题',
+                //   url: url[0] + '#' + '/sche/todo/' + this.currentTodo.id,
+                //   description: this.editItem.pTitle,
+                //   receiverIds: mem
+                // }
+                // console.log(mem)
+                // that.$store.dispatch('qywxSendMessage', datas)
+              })
+          } else {
+            return Promise.resolve()
+          }
         }
       },
-      saveMember (idArray) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
-        var that = this
-        var compRes = util.compareList(this.joinUserRsqIds, idArray)
-//        console.log('比较之后的结果是' + JSON.stringify(compRes))
-        var params = {
+      saveMember (idArray, old) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
+        this.newList = idArray.join(',')
+        window.rsqadmg.execute('setTitle', {title: '任务详情'})
+        // var that = this
+        // var idArrayName = []
+        // var oldName = []
+        // var compRes = {}
+        // var params = {}
+        var compResCache = util.compareList(this.joinUserRsqIds, idArray)
+        var paramsCache = {
           receiverIds: idArray.join(','),
-          addJoinUsers: compRes.addList.join(','),
-          deleteJoinUsers: compRes.delList.join(',')
+          addJoinUsers: compResCache.addList.join(','),
+          deleteJoinUsers: compResCache.delList.join(',')
         }
+        // var ask = Array.from(new Set(idArray.concat(old))).join(',')
+        // var ask = ''
+        // var name = this.loginUser.authUser.name
+        // var des = ''
         window.rsqadmg.execute('showLoader', {text: '保存中...'})
-        this.$store.dispatch('updateTodo', {editItem: params}).then(() => {
-          this.joinUserRsqIds = idArray
+        this.$store.dispatch('updateTodo', {editItem: paramsCache}).then(() => {
+          // this.joinUserRsqIds = idArray
           window.rsqadmg.exec('hideLoader')
-          window.rsqadmg.execute('toast', {message: '保存成功'})
-//          console.log('params的addJoinUsers是' + params.addJoinUsers)
-          if (params.addJoinUsers) {
-            var time = util.SendConversationTime(this.currentTodo)
-            var date = util.SendConversationDate(this.currentTodo)
-            var note = this.editItem.pNote
-            var newnote = note.replace(/<\/?.+?>/g, '\n').replace(/(\n)+/g, '\n')
-            var data = {
-              msgtype: 'oa',
-              msgcontent: {
-                message_url: window.location.href,
-                head: {
-                  text: '日事清',
-                  bgcolor: 'FF55A8FD'
-                },
-                body: {
-                  title: that.currentTodo.pTitle,
-                  form: [
-                    {key: '日期：', value: date},
-                    {key: '时间：', value: time}
-                  ],
-                  content: newnote,
-                  author: that.loginUser.authUser.name// 这里要向后台要值
-                }
-              }
-            }
-            var IDArrays = params.addJoinUsers.split(',')
-//            console.log('IDArrays是' + IDArrays)
-            var empIDArray = []
-            this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: IDArrays})
-              .then(idMap => {
-                for (var i = 0; i < IDArrays.length; i++) {
-                  empIDArray.push(idMap[IDArrays[i]].emplId)
-                }
-//                console.log(empIDArray)
-                data['userid_list'] = empIDArray.toString()
-                that.$store.dispatch('sendAsyncCorpMessage', {
-                  corpId: that.loginUser.authUser.corpId,
-                  data: data
-                }).then(res => {
-                  if (res.errcode !== 0) {
-                    alert('发送失败：' + JSON.stringify(res))
-                  } else {
-                    console.log('发送成功！')
-                  }
-                })
-              })
-          }
+          // window.rsqadmg.execute('toast', {message: '保存成功'})
+          //  重新获取用户头像
+          this.fetchCommentIds()
+          // this.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: idArray}).then(function (res) {
+          //   let res1 = util.getMapValuePropArray(res)
+          //   idArrayName = res1.map(function (o) {
+          //     return o.name
+          //   })
+          // })
+          // .then(function () {
+          //   return that.$store.dispatch('fetchUseridFromRsqid', {corpId: that.loginUser.authUser.corpId, idArray: old}).then(function (res) {
+          //     let res2 = util.getMapValuePropArray(res)
+          //     oldName = res2.map(function (o) {
+          //       return o.name
+          //     })
+          //   })
+          // })
+          // .then(function () {
+            // compRes = util.compareList(oldName, idArrayName)
+            // var compResId = util.compareList(old, idArray)
+            // params = {
+            //   receiverIds: idArray.join(','),
+            //   addJoinUsers: compRes.addList.join(','),
+            //   deleteJoinUsers: compRes.delList.join(',')
+            // }
+            // if (params.addJoinUsers === '') {
+            //   des = name + ' 移除了任务成员' + compRes.delList.join('、')
+            //   ask = compResId.delList.join(',')
+            // } else if (params.deleteJoinUsers === '') {
+            //   des = name + ' 添加了任务成员' + compRes.addList.join('、')
+            //   ask = compResId.addList.join(',')
+            // } else {
+            //   des = name + ' 添加了任务成员' + compRes.addList.join('、') + ',' + '移除了任务成员' + compRes.delList.join('、')
+            //   ask = Array.from(new Set(compResId.addList.concat(compResId.delList))).join(',')
+            // }
         })
+          // .then(function () {
+            // if (params.addJoinUsers || params.deleteJoinUsers) {
+            //   var url = window.location.href.split('#')
+            //   var datas = {
+            //     corpId: that.loginUser.authUser.corpId,
+            //     agentid: that.corpId,
+            //     title: des,
+            //     url: url[0] + '#' + '/sche/todo/' + that.currentTodo.id,
+            //     description: that.currentTodo.pTitle,
+            //     receiverIds: ask
+              // }
+              // console.log(params)
+              // that.$store.dispatch('qywxSendMessage', datas)
+            // }
+          // })
+          // var compRes2 = util.compareList(oldName, idArrayName)
+        // })
       },
       finishChecked (status) {
+        var that = this
+        // var create = this.createIds[0].toString()
+        // var url = window.location.href.split('#')
+        // var name = this.loginUser.authUser.name
         if (status !== this.editItem.isDone) {
-          this.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
+          that.$store.dispatch('updateTodo', {editItem: {pIsDone: status}})
               .then(() => {
-//                this.$store.dispatch('saveTodoAction', {editItem: {status: status, type: 5}})
-//                  .then(() => {
-//                  })
                 this.editItem.pIsDone = status
-                var str = status ? '任务已完成' : '任务已重启'
-                window.rsqadmg.execute('toast', {message: str})
+                // var str = status ? '任务已完成' : '任务已重启'
+                // var todoStatus = status ? ' 完成了任务' : ' 重启了任务'
+                // window.rsqadmg.execute('toast', {message: str})
+                // var datas = {
+                //   corpId: that.loginUser.authUser.corpId,
+                //   agentid: that.corpId,
+                //   title: name + todoStatus,
+                //   url: url[0] + '#' + '/sche/todo/' + that.currentTodo.id,
+                //   description: that.currentTodo.pTitle,
+                //   receiverIds: create
+                // }
+                // console.log(datas)
+                // that.$store.dispatch('qywxSendMessage', datas)
               })
         }
       },
       deleteCurrentTodo (p) {
         return this.$store.dispatch('deleteTodo', p)
       },
-      prepareDelete () {
+      prepareDelete (e) {
+//        if (e.target.innerText === '删除任务') {
         var that = this
-        if (!this.isBackNewVersion) {
-          if (that.currentTodo.isCloseRepeat) {
-            window.rsqadmg.exec('confirm', {
-              message: '确定要删除此任务？',
-              success () {
-                window.rsqadmg.execute('showLoader', {text: '删除中...'})
-                that.deleteCurrentTodo({todo: that.currentTodo})
-                  .then(() => {
-                    window.rsqadmg.exec('hideLoader')
-                    window.rsqadmg.execute('toast', {message: '删除成功'})
-                    that.$router.replace(window.history.back())
-                  })
-              }
-            })
-          } else {
+        if (that.currentTodo.isCloseRepeat || that.isBackNewVersion) {
+          window.rsqadmg.exec('confirm', {
+            message: '确定要删除此任务？',
+            success () {
+              window.rsqadmg.execute('showLoader', {text: '删除中...'})
+              that.deleteCurrentTodo({todo: that.currentTodo})
+                .then(() => {
+                  that.$store.commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
+                  window.rsqadmg.exec('hideLoader')
+                  window.rsqadmg.execute('toast', {message: '删除成功'})
+                  // var url = window.location.href.split('#')
+                  // var name = that.$store.getters.loginUser.authUser.name
+                  // var addArray = that.joinUserRsqIds.join(',')
+                  // var mem = that.newList ? that.newList : addArray
+                  // var datas = {
+                  //   corpId: that.$store.getters.loginUser.authUser.corpId,
+                  //   agentid: that.$store.getters.loginUser.authUser.corpId,
+                  //   title: name + ' 删除了任务',
+                  //   url: url[0] + '#' + '/sche',
+                  //   description: that.$store.state.todo.currentTodo.pTitle,
+                  //   receiverIds: mem
+                  // }
+                  // console.log(datas)
+                  // that.$store.dispatch('qywxSendMessage', datas)
+                  that.$router.go(-1)
+                })
+            }
+          })
+        } else {
+          if (e.target.innerText === '删除任务') {
             window.rsqadmg.exec('actionsheet', {
               buttonArray: ['仅删除此任务', '删除此任务及以后的任务', '删除所有的重复任务'],
               success: function (res) {
-                window.rsqadmg.execute('showLoader', {text: '删除中...'})
+//                window.rsqadmg.execute('showLoader', {text: '删除中...'})
                 var promise
                 switch (res.buttonIndex) {
                   case 0:
@@ -542,40 +524,17 @@
                 promise.then(() => {
                   window.rsqadmg.exec('hideLoader')
                   window.rsqadmg.execute('toast', {message: '删除成功'})
-                  that.$router.replace(window.history.back())
+                  that.$router.go(-1)
                 })
               }
             })
-          }
-        } else {
-          if (!that.isNewRepeat) {
-            window.rsqadmg.exec('confirm', {
-              message: '确定要删除此任务？',
-              success () {
-                window.rsqadmg.execute('showLoader', {text: '删除中...'})
-                that.deleteCurrentTodo({todo: that.currentTodo})
-                  .then(() => {
-                    window.rsqadmg.exec('hideLoader')
-                    window.rsqadmg.execute('toast', {message: '删除成功'})
-                    that.$router.replace(window.history.back())
-                  })
-              }
-            })
-          } else {
-            window.rsqadmg.execute('showLoader', {text: '删除中...'})
-            that.deleteCurrentTodo({todo: that.currentTodo, isRepeat: true, type: 'today'})
-              .then(() => {
-                window.rsqadmg.exec('hideLoader')
-                window.rsqadmg.execute('toast', {message: '删除成功'})
-                that.$router.replace(window.history.back())
-              })
           }
         }
       },
       more () {
         var that = this
         var arr = ['发送到聊天', '发送提醒']
-        if (this.checkEdit()) {
+        if (this.isEditable) {
           arr.push('删除任务')
         }
         window.rsqadmg.exec('actionsheet', {
@@ -661,11 +620,11 @@
           .then(() => {
             var c = this.currentTodo
             var isEdited = this.$store.state.todo.isRepeatFieldEdit
-            if (!this.isBackNewVersion) {
-              if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
-                var that = this
+            if (c.pContainer !== 'inbox' && !c.isCloseRepeat && isEdited) {
+              var that = this
+              if (!this.isBackNewVersion) {
                 window.rsqadmg.exec('actionsheet', {
-                  buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务'],
+                  buttonArray: ['仅修改此任务', '修改此任务及以后的任务', '修改所有的重复任务', '取消'],
                   success: function (res) {
                     window.rsqadmg.execute('showLoader', {text: '更新中...'})
                     var promise
@@ -678,6 +637,11 @@
                         break
                       case 2:
                         promise = that.updateRepeat({type: 'all'})
+                        break
+                      case 3:
+                        promise = new Promise(function () {
+                        })
+                        window.rsqadmg.exec('hideLoader')
                         break
                       default:
                         break
@@ -693,49 +657,22 @@
                 return next()
               }
             } else {
-              // var that = this
-              // if (c.pContainer !== 'inbox' && this.isNewRepeat && isEdited) {
-              //   var promise = that.updateRepeat({type: 'today'})
-              //   window.rsqadmg.execute('showLoader', {text: '更新中...'})
-              //   promise.then(() => {
-              //     window.rsqadmg.exec('hideLoader')
-              //     window.rsqadmg.execute('toast', {message: '更新成功'})
-              //     return next()
-              //   })
-                return next()
-              } 
+              return next()
+            }
           })
           .catch(() => {
             next(false)
           })
+      },
+      noteChanged (p) {
+        alert('note changed: ' + JSON.stringify(p))
       }
     },
-    created () {
-      this.initData()
-      var that = this
-      window.rsqadmg.execute('setTitle', {title: '详情'})
-      window.rsqadmg.execute('setOptionButtons', {
-        btns: [{key: 'more', name: '更多'}],
-        success (res) {
-          if (res.key === 'more') {
-            that.more()
-          }
-        }
-      })
-    },
-    mounted () {
-      // console.log(this.isBackNewVersion)
-      // console.log(this.isNewRepeat)
-
-//      console.log('编辑界面的url是' + window.location.href)
-    },
-    beforeRouteEnter (to, from, next) {
-      next()
-    },
     beforeRouteLeave (to, from, next) {
+      this.$store.commit('RESET_DELAY_SHOW_CHECKBOX')
       //  判断是否需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
       if (to.name === 'sche') {
-        next(false)
+        // next(false)
         this.checkIfRepeatEdited(next)
       } else {
         return next()
@@ -743,3 +680,187 @@
     }
   }
 </script>
+<style lang="scss" scoped>
+.itm-edt{
+  max-height: calc(100vh - 47px);
+  overflow: scroll;
+}
+  .delete-task{
+    padding-bottom: 2rem;
+    background-color: #f6f6f6;
+  }
+  .sche{
+    font-size:0.586rem;
+    color:#55A8FD;
+    position: absolute;
+    top: 50%;
+    margin-top: -0.29rem;
+    left:0
+  }
+  input::-webkit-input-placeholder { /* WebKit browsers */
+    font-family: STHeitiSC-Light;
+    font-size: 15px;
+    color: #A3A3A3;
+    letter-spacing: 0;
+  }
+  .content{
+    background-color: white;
+  }
+  input{
+    line-height: 0.933rem;
+    width:6.8rem;
+  }
+  .bottom{
+    height: 46px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    justify-content: center;
+    width:100%;
+    border-top:1px solid #DADADA ;
+    background-color: #FDFDFF ;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #4A4A4A;
+    letter-spacing: 0;
+    text-align: center;
+  }
+  .bottom:before{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .bot{
+    padding-left: 2%;
+    width:8.6rem;
+    height:0.945rem ;
+    border:1px solid #E0E0E0 ;
+    border-radius: 4px;
+  }
+  .send>input{
+    width: 300px;
+    height: 50px;
+    border: 1px solid red;
+  }
+  p{
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+  }
+  .ding{
+    height:2rem;
+    line-height: 1rem;
+    font-family: PingFangSC-Regular;
+    font-size: 17px;
+    color: #333333;
+    position:relative;
+    background-color: white;
+    border-bottom:1px solid #E0E0E0;
+  }
+  .message{
+    font-family: PingFangSC-Regular;
+    font-size: 13px;
+    color: #999999;
+  }
+  .mui-switch {
+    width: 52px;
+    height: 31px;
+    position: absolute;
+    top:0.55rem;
+    right:0.55rem;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none; }
+  .mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+  .mui-switch:checked {
+    border-color: #67B2FE;
+    box-shadow: #67B2FE 0 0 0 16px inset;
+    background-color: #67B2FE; }
+  .mui-switch:checked:before {
+    left: 21px; }
+  .mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; }
+  .mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s; }
+  .mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #67B2FE;
+    transition: border-color 0.4s, background-color ease 0.4s; }
+  .itm-edt-fields{
+     padding-top: 20px;
+  }
+  .sub-todo-png{
+    width: 0.586rem;
+    height: 0.586rem;
+  }
+  .talk-png{
+    width: 17px;
+    height: 17px;
+    margin-right: 9.3px;
+    margin-top: 3px;
+  }
+  .itm-group{
+    // border-top: 0.5px solid #d4d4d4;
+  }
+  .itm-group:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .common-field{
+    // border-bottom: 0.5px solid #d4d4d4;
+    height: 56px;
+    line-height: 56px
+  }
+  .common-field:after{
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1px solid #d4d4d4;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+  }
+  .sub-todo{
+    margin-top: 20px;
+  }
+  .move-to{
+    height: 22px;
+    width: 22px;
+  }
+</style>

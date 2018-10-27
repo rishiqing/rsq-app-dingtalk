@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="71px" height="56px" viewBox="0 0 71 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="空白页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="选择计划2-copy" transform="translate(-172.000000, -240.000000)">
+            <g id="Group" transform="translate(172.000000, 240.000000)">
+                <rect id="Rectangle-3" stroke="#55A8FD" fill="#FFFFFF" x="0.5" y="0.5" width="69.3354241" height="54.4026726" rx="4"></rect>
+                <polygon id="Rectangle-34-Copy-3" fill="#DDF0FF" points="18.4144797 15 64.6595162 15 64.6595162 23 18.4144797 23"></polygon>
+                <polygon id="Rectangle-34-Copy-6" fill="#DDF0FF" points="18.4144797 28 44.6595162 28 44.6595162 36 18.4144797 36"></polygon>
+                <polygon id="Rectangle-34-Copy-7" fill="#DDF0FF" points="18.4144797 42 35.6595162 42 35.6595162 50 18.4144797 50"></polygon>
+                <path d="M0.5,11.4298903 L69.8354241,11.4298903 L69.8354241,4 C69.8354241,2.06700338 68.2684208,0.5 66.3354241,0.5 L4,0.5 C2.06700338,0.5 0.5,2.06700338 0.5,4 L0.5,11.4298903 Z" id="Rectangle-3" stroke="#55A8FD" fill="#DDF0FF"></path>
+                <polyline id="Path-2" stroke="#55A8FD" stroke-linecap="round" points="7.06239746 18.5388771 9.30564696 21.0298811 13.3816686 16.8364055"></polyline>
+                <circle id="Oval" stroke="#55A8FD" cx="9" cy="32" r="3"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

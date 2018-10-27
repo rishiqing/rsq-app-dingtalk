@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="21px" viewBox="0 0 18 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>pdf@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="搜索" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-124.000000, -189.000000)">
+            <g id="pdf" transform="translate(124.000000, 189.000000)">
+                <g id="Page-1">
+                    <polygon id="Fill-1" fill="#FD5D5D" points="0 0 0 20.8165645 17.9153846 20.8165645 17.9153846 4.9007363 13.4692308 0"></polygon>
+                    <polygon id="Fill-2" fill="#FFEBEB" points="13.4691785 0 13.4691785 4.89801518 17.9158554 4.9007363"></polygon>
+                    <polygon id="Fill-3" fill="#E64343" points="17.9155938 8.89773438 17.9155938 4.90040977 13.4689169 4.89823287"></polygon>
+                </g>
+                <text id="PDF" font-family="HelveticaNeue-Bold, Helvetica Neue" font-size="6" font-weight="bold" fill="#FFFFFF">
+                    <tspan x="3" y="14">PDF</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

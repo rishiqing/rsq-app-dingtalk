@@ -8,7 +8,23 @@
   </div>
 
 </template>
-<style>
+<script>
+  export default {
+    data () {
+      return {}
+    },
+    methods: {
+      returnTo () {
+        this.$router.replace('/sche')
+      }
+    }
+//    beforeRouteLeave (to, from, next) {
+//      this.$router.replace('/sche')
+//      next('/sche')
+//    }
+  }
+</script>
+<style lang="scss" scoped>
   .no-permission{
     text-align: center;
     position: absolute;
@@ -43,21 +59,5 @@
   }
 
 </style>
-<script>
-  export default {
-    data () {
-      return {}
-    },
-    methods: {
-      returnTo () {
-        this.$router.replace('/sche')
-      }
-    }
-//    beforeRouteLeave (to, from, next) {
-//      this.$router.replace('/sche')
-//      next('/sche')
-//    }
-  }
-</script>
 
 

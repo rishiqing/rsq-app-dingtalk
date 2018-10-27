@@ -5,17 +5,19 @@
       'auth', 'sign',
       'init',
       'log',
+      'error',
       'disableBounce',
-      'setTitle', 'setOptionButtons', 'selectDeptMember', 'selectMember',
+      'setTitle', 'setOptionButtons','hideOptionButtons', 'selectDeptMember', 'selectMember',
       'alert',
       'confirm',
       'prompt',
       'showLoader',
       'hideLoader',
       'actionsheet',
-      'toast', 'picker', 'datePicker', 'timePicker', 'deleteUserCache',
+      'toast', 'picker', 'datePicker', 'timePicker', 'timePicker2', 'deleteUserCache',
       'notify','pickConversation', 'getItem', 'setItem', 'deleteItem',
-      'checkVersion', 'upgradeVersion'
+      'checkVersion', 'upgradeVersion','topTips',
+      'checkDevice'
     ];
   function register(adapter){
     extend(mgrObj, adapter);
@@ -117,6 +119,9 @@
     log: function(message){
       rsqadmg.execute('log', {message: message});
     },
+    error: function(message){
+      rsqadmg.execute('error', {message: message});
+    },
     register: register,
     exec: execute,
     execute: execute,
@@ -124,3 +129,68 @@
   };
 
 })(window);
+// (function (window, document) {
+//   var ALERT_ID = 'rsqWeAlert'
+//   var TOAST_ID = 'toast'
+//   function makeElement (params) {
+//     var tag = params.tag || "div"
+//     var ele = document.createElement(tag)
+//     if (params.id) {
+//       ele.setAttribute("id", params.id)
+//     }
+//     if (params.classList) {
+//       ele.setAttribute("class", params.classList)
+//     }
+//     if (params.style) {
+//       ele.setAttribute("style", params.style)
+//     }
+//     return ele
+//   }
+//   function alertTemplate (options){
+//     var title = options.title || '提示'
+//     var msg = options.message || ''
+//     var btn = options.button || '确定'
+//     var html =
+//       '<div class="weui-mask"></div>' +
+//       '<div class="weui-dialog">' +
+//       '<div class="weui-dialog__hd">' +
+//       '<strong class="weui-dialog__title">' + title + '</strong>' +
+//       '</div>' +
+//       '<div class="weui-dialog__bd">' + msg + '</div>' +
+//       '<div class="weui-dialog__ft">' +
+//       '<a id="rsqAlertBtn" href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary">' + btn + '</a>' +
+//       '</div>' +
+//       '</div>'
+//     return html
+//   }
+//   function ToastTemplate() {
+//     return  '<div class="weui_mask_transparent"></div><div class="weui_toast"><i class="weui_icon_toast"></i><p class="weui_toast_content">' + '创建完成' + '</p></div></div>'
+//   }
+//   function showAlert (params) {
+//     var ele = makeElement({id: ALERT_ID})
+//     console.log(alertTemplate(params))
+//     ele.innerHTML = alertTemplate(params)
+//     document.body.appendChild(ele)
+//     var btn = ele.querySelector(".weui-dialog__btn")
+//     btn.addEventListener('click', hideAlert)
+//   }
+//   function hideAlert (params) {
+//     var ele = document.getElementById(ALERT_ID)
+//     document.body.removeChild(ele)
+//   }
+//   function showToast (params) {
+//     var ele = makeElement({id: TOAST_ID})
+//     ele.innerHTML = ToastTemplate()
+//     document.body.appendChild(ele)
+//   }
+//   function hideToast (params) {
+//     var ele = document.getElementById(TOAST_ID)
+//     document.body.removeChild(ele)
+//   }
+//   window.rsqwork = {
+//     showAlert: showAlert,
+//     hideAlert: hideAlert,
+//     showToast: showToast,
+//     hideToast: hideToast
+//   }
+// })(window, document)

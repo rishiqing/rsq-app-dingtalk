@@ -1,21 +1,56 @@
 <template>
-  <div><div class="avatar" :style="style">
-    <span v-if="!this.src">{{ userInitial }}</span>
-  </div></div>
-  <!--<div>-->
-    <!--<div class="avatar" style="font:'9px/100px Helvetica, Arial, sans-serif';font-weight:'bold';color:#fff;background-color:#cddc39;line-height:24px;width:24px;height:24px;text-align:center;vertical-align:middle;">-->
-      <!--<span>WM</span>-->
-    <!--</div>-->
-  <!--</div>-->
-  <!--<div>-->
-    <!--<div class="avatar" style="background:url(http://static.dingtalk.com/media/lADOD3zI380B080B0w_467_467.jpg) no-repeat;background-size:24px 24px;background-origin:'content-box';width:24px;height:24px;text-align:center;vertical-align:middle;">-->
-    <!--</div>-->
-  <!--</div>-->
+  <div>
+    <div
+      :style="style"
+      class="avatar">
+      <span v-if="!src">{{ userInitial }}</span>
+    </div>
+  </div>
 </template>
 <script>
   export default{
+    name: 'TextAvatar',
+    props: {
+      username: {
+        type: String,
+        default: null
+      },
+      initials: {
+        type: String,
+        default: null
+      },
+      backgroundColor: {
+        type: String,
+        default: null
+      },
+      color: {
+        type: String,
+        default: '#FFFFFF'
+      },
+      size: {
+        type: Number,
+        default: 24
+      },
+      src: {
+        type: String,
+        default: ''
+      },
+      rounded: {
+        type: Boolean,
+        default: true
+      },
+      roundRadius: {
+        type: String,
+        default: '50%'
+      },
+      lighten: {
+        type: Number,
+        default: 80
+      }
+    },
     data () {
       return {
+        initialBackgroundColor: '#FFFFFF',
         backgroundColors: [
           '#F44336', '#FF4081', '#9C27B0', '#673AB7',
           '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688',
@@ -23,45 +58,14 @@
           '#FF9800', '#FF5722', '#795548', '#9E9E9E', '#607D8B']
       }
     },
-    props: {
-      username: {
-        type: String,
-        required: true
-      },
-      initials: {
-        type: String
-      },
-      backgroundColor: {
-        type: String
-      },
-      color: {
-        type: String
-      },
-      size: {
-        type: Number,
-        default: 24
-      },
-      src: {
-        type: String
-      },
-      rounded: {
-        type: Boolean,
-        default: true
-      },
-      lighten: {
-        type: Number,
-        default: 80
-      }
-    },
-
-    mounted () {
-      this.$emit('avatar-initials', this.username, this.userInitial)
-    },
-
     computed: {
       background () {
-        return this.backgroundColor ||
+        if (this.username) {
+          return this.backgroundColor ||
             this.randomBackgroundColor(this.username.length, this.backgroundColors)
+        } else {
+          return this.initialBackgroundColor
+        }
       },
 
       fontColor () {
@@ -77,7 +81,7 @@
         const style = {
           width: this.size + 'px',
           height: this.size + 'px',
-          borderRadius: (this.rounded) ? '50%' : 0,
+          borderRadius: (this.rounded) ? this.roundRadius : 0,
           textAlign: 'center',
           verticalAlign: 'middle'
         }
@@ -106,9 +110,11 @@
       },
 
       userInitial () {
-        const initials = this.initials || this.initial(this.username)
-        return initials
+        return this.initials || (this.username ? this.initial(this.username) : '')
       }
+    },
+    mounted () {
+      this.$emit('avatar-initials', this.username, this.userInitial)
     },
     methods: {
       /**

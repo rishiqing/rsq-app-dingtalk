@@ -4,8 +4,6 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 
-const c = config[process.env.NODE_ENV]
-
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
@@ -15,9 +13,11 @@ module.exports = {
     app: './src/main.js'
   },
   output: {
-    path: c.assetsRoot,
+    path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: url.resolve(c.frontServer, c.assetsPublicPath)
+    publicPath: process.env.NODE_ENV === 'production'
+      ? url.resolve(config.build.frontServer, config.build.assetsPublicPath)
+      : path.join(config.dev.frontServer, config.dev.assetsPublicPath)
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="17px" viewBox="0 0 22 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3@3x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="日程" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="日程-收纳箱-任务详情" transform="translate(-23.000000, -506.000000)">
+            <g id="Group-3" transform="translate(23.000000, 506.000000)">
+                <g id="Group-6">
+                    <path d="M4.41896552,15.3873518 L21.6017241,15.3873518" id="XMLID_1800_" stroke="#55A8FD"></path>
+                    <path d="M4.70344828,8.33201581 L21.6017241,8.33201581" id="XMLID_1799_" stroke="#55A8FD"></path>
+                    <path d="M4.70344828,1.27667984 L21.6017241,1.27667984" id="XMLID_1798_" stroke="#55A8FD"></path>
+                    <ellipse id="XMLID_1803_" fill="#55A8FD" cx="1.40344828" cy="1.20108696" rx="1" ry="1"></ellipse>
+                    <ellipse id="XMLID_1801_" fill="#55A8FD" cx="1.40344828" cy="8.4076087" rx="1" ry="1"></ellipse>
+                    <ellipse id="XMLID_1802_" fill="#55A8FD" cx="1.40344828" cy="15.226087" rx="1" ry="1"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

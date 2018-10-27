@@ -22,6 +22,10 @@ export default {
     currentPath: '',
     appId: window.rsqadmg.store.app.appid
   },
+  // 付费相关信息
+  plus:{
+
+  },
   /**
    * 当前登录的用户，基本结构如下：
    * {
@@ -31,9 +35,18 @@ export default {
    */
   loginUser: null,
   /**
+   * 子任务执行者ID
+   * @type {String}
+   */
+  subUserId: '',
+  /**
    * 公司成员相关
    */
   staff: {
+    //  公司成员的主列表，注意只有当公司人员发生变动的情况下才修改此列表
+    list: null
+  },
+  realStaff: {
     //  公司成员的主列表，注意只有当公司人员发生变动的情况下才修改此列表
     list: null
   },
@@ -60,12 +73,36 @@ export default {
     // 当前的todoItem，可能是收纳箱中的，也可能是日程中的
     currentTodo: {
       subTodos: [],
-      comments: []
+      comments: [],
+      rrule: ''
+    },
+    //  当点击子任务进入子任务编辑状态时，该字段用来存储当前的子任务
+    currentSubtodo: {
+      title: ''
+    },
+    // 存储自子任务的时间
+    currentSubtodoDate: {
+      dates: null,
+      endDate: '',
+      isCloseRepeat: true,
+      isLastDate: true,
+      repeatBaseTime: null,
+      repeatType: null,
+      startDate: ''
     },
     //  用于处理重复的任务修改时，需要用户选择“仅修改当前日程”、“修改当前以及以后日程”、“修改所有重复日程”
     currentTodoRepeat: {},
-    //  重复相关的字段是否修改过，目前的条件是如果title/note/subTodos修改过，认为修改过
-    isRepeatFieldEdit: false
+    //  重复相关的字段是否修改过，目前的条件是如果title/note/subtodos修改过，认为修改过
+    isRepeatFieldEdit: false,
+    //  如果是从日期页面跳回到编辑页面的，那么即使不在收纳箱中了，那么也暂时不显示checkbox
+    delayShowCheckbox: false
+  },
+  /**
+   * 计划相关的存储
+   */
+  plan: {
+    coverList: null,
+    currentKanbanItem: {}
   },
   /**
    * 组件之间需要共享的临时数据
@@ -88,7 +125,23 @@ export default {
      *   repeatBaseTime: null
      * }
      */
-    currentTodoDate: null
+    currentTodoDate: null,
+    /**
+     * 编辑子任务
+     * @type {[type]}
+     */
+    currentTodoDateEdit: null,
+    /**
+     * 子任务标题
+     * @type {String}
+     */
+    subtitle: '',
+    pubId: '',
+    /**
+     * 当前滑动的ID
+     * @type {Number}
+     */
+    sliderId: null
   },
   //  --------缓存相关--------
   /**
@@ -108,5 +161,18 @@ export default {
    */
   dayHasTodoCache: {},
   replyId: null,
-  replyName: null
+  replyName: null,
+  record: [],
+  userList: [],
+  memberList: [],
+  selectedMember: [],
+  planList: [],
+  currentPlan: '',
+  childPlanList: [],
+  cardList: [],
+  kanbanCardId: '',
+  currentSubPlan: '',
+  pos: '',
+  num: '',
+  labels: []
 }

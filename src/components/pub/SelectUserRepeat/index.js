@@ -27,6 +27,7 @@ function show (options) {
   vm.repeatType = options.repeatType || ''
   vm.repeatStrTimeArray = options.repeatStrTimeArray || []
   vm.isLastDate = options.isLastDate || false
+  vm.repeatOverDate = options.repeatOverDate || null
 
   //  append to body
   Vue.nextTick(function () {

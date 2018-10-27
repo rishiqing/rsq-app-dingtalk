@@ -292,6 +292,7 @@ p {
 
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*
 a {
     color: #1EAEDB;
 }
@@ -299,7 +300,7 @@ a {
 a:hover {
     color: #0FA0CE;
 }
-
+*/
 /* Buttons
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 /*
@@ -374,7 +375,7 @@ input[type="button"] {
     border-radius: 4px;
     outline: 0;
     border:none;
-    padding: 15px;
+    padding: 5px;
     /* letter-spacing: .5rem; */
 }
 input[type="button"].btn-xxl {
@@ -486,7 +487,7 @@ select {
     box-sizing: border-box;
     -webkit-appearance: none;
     box-shadow: none;
-    line-height: 150%;
+    line-height: 100%;
     font-size: 16px;
 }
 input[type="email"],

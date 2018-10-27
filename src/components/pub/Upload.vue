@@ -1,39 +1,28 @@
 <template>
-  <div class="" style="position:relative;">
-      <input class="file-input" type="file" id="imgInp" name="uploads[]" multiple="multiple" @change="addToTask"/>
-      <ul class="ul-list">
-        <r-upload-item
-          v-for="(task, index) in taskList"
-          :key="index"
-          :task="task"
-          @upload-item-delete="deleteTask"
-        ></r-upload-item>
-      </ul>
-    <!--<div @click="cancelUpload">测试</div>-->
+  <div style="position:relative;">
+    <input
+      id="imgInp"
+      class="file-input"
+      type="file"
+      name="uploads[]"
+      multiple="multiple"
+      @change="addToTask">
+    <ul class="ul-list">
+      <r-upload-item
+        v-for="(task, index) in taskList"
+        :key="index"
+        :task="task"
+        @upload-item-delete="deleteTask"/>
+    </ul>
   </div>
 </template>
-<style lang="scss">
-  .ul-list{
-    margin-top: -15px;
-  }
-  .file-input {
-    cursor: pointer;
-    position:absolute;
-    top: -1rem;
-    font-size:30px;
-    left:0.3rem;
-    width:0.848rem;
-    height: 0.7rem;
-    /*Opacity settings for all browsers*/
-    opacity: 0;
-    -moz-opacity: 0;
-    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
-  }
-</style>
 <script>
   import UploadItem from 'com/pub/UploadItem'
-
   export default {
+    name: 'Upload',
+    components: {
+      'r-upload-item': UploadItem
+    },
     data () {
       return {
         taskList: []  //  上传任务的taskList，每个task，包括image和file两个对象
@@ -61,9 +50,6 @@
         })
       }
     },
-    components: {
-      'r-upload-item': UploadItem
-    },
     methods: {
       deleteTask (task) {
         for (var i = 0; i < this.taskList.length; i++) {
@@ -84,13 +70,14 @@
         for (var i = 0; i < files.length; i++) {
           var file = files[i]
           if (parseInt(file.size) > 50 * 1024 * 1024) {
-            window.dd.device.notification.alert({
-              message: '上传文件最大容量不超过50M',
-              title: '提示', // 可传空
-              buttonName: '确定',
-              onSuccess: function () {
-              }
-            })
+            window.rsqadmg.execute('alert', {message: '单个文件大小不能超过50M'})
+//            window.dd.device.notification.alert({
+//              message: '上传文件最大容量不超过50M',
+//              title: '提示', // 可传空
+//              buttonName: '确定',
+//              onSuccess: function () {
+//              }
+//            })
           } else {
             var url = URL.createObjectURL(file)
             this.taskList.push({
@@ -133,11 +120,27 @@
         this.$store.dispatch('cancelUploadToOSS', {
           pathId: this.unionId
         }).then(() => {
-          alert(1)
+          // alert(1)
         })
       }
-    },
-    mounted () {},
-    beforeDestroy () {}
+    }
   }
 </script>
+<style lang="scss" scoped>
+  .ul-list{
+    margin-top: -8px;
+  }
+  .file-input {
+    cursor: pointer;
+    position:absolute;
+    top: -1rem;
+    font-size:30px;
+    left:0.3rem;
+    width:0.848rem;
+    // height: 0.7rem;
+    /*Opacity settings for all browsers*/
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+  }
+</style>

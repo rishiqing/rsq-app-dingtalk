@@ -27,14 +27,15 @@ module.exports = merge(baseWebpackConfig, {
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       env: 'dev',
-      backendServer: config.dev.backendServer,
+      rsqServer: config.dev.rsqServer,
       authServer: config.dev.authServer,
       apiServer: config.dev.apiServer,
       stsServer: config.dev.stsServer,
-      remindServer: config.dev.remindServer,
       ossRegion: config.dev.aliOSS.region,
       ossBucket: config.dev.aliOSS.bucket,
       ossRoot: config.dev.aliOSS.root,
+      ossImageBucket: config.dev.aliOSS.imageBucket,
+      ossKanbanCoverImagePath: config.dev.aliOSS.kanbanCoverImagePath,
       version: config.dev.version,
       filename: 'index.html',
       template: 'index.html',

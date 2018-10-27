@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="20px" viewBox="0 0 18 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>word@2x</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="搜索" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-127.000000, -277.000000)">
+            <g id="word" transform="translate(127.000000, 277.000000)">
+                <g id="Page-1">
+                    <polygon id="Fill-1" fill="#5BBBFF" points="0 0 0 19.9584123 17.2755495 19.9584123 17.2755495 4.69870595 12.9881868 0"></polygon>
+                    <polygon id="Fill-2" fill="#C8E7FF" points="12.9881364 0 12.9881364 4.69609701 17.2760034 4.69870595"></polygon>
+                    <polygon id="Fill-3" fill="#399FFF" points="17.2757512 8.53092982 17.2757512 4.69839288 12.9878842 4.69630572"></polygon>
+                </g>
+                <g id="Group-48" transform="translate(4.788177, 7.876552)" fill="#FFFFFF">
+                    <polygon id="Fill-7" points="0 8.11596059 2.254633 8.11596059 2.254633 0 0 0"></polygon>
+                    <polygon id="Fill-9" points="5.38669951 8.11596059 7.64133251 8.11596059 7.64133251 0 5.38669951 0"></polygon>
+                    <polygon id="Fill-10" opacity="0.7" points="2.07507635 7.93101724 3.89987377 6.21206158 5.66620936 7.93101724 5.66620936 5.31008867 3.87031442 3.591133 2.07507635 5.39507882"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,28 +1,26 @@
 <template>
-  <div id="app" class="rsq-webview">
-    <router-view></router-view>
-    <r-nav v-if="isAddNav" v-show="isShowNav"></r-nav>
-    <r-guide v-if="isShowGuide"></r-guide>
-    <transition name="fade">
-      <div class="wrap-start-img" v-if="engine">
-        <div class="wrap-inside">
-          <img ref="imgStart" src="../src/assets/img/start.png" alt="" class="start-img">
-          <p class="start-text">欢迎使用日事清,即刻开始享受工作...</p>
-        </div>
-      </div>
-    </transition>
+  <div
+    id="app"
+    class="rsq-webview">
+    <router-view />
+    <r-nav
+      v-show="isShowNav" />
   </div>
 </template>
 <script>
   import Nav from 'com/Nav'
   import Guide from 'com/pub/RemindWindow'
-
+  import Start from 'com/me/Start'
   export default {
-    name: 'app',
+    name: 'App',
+    components: {
+      'r-nav': Nav,
+      'r-guide': Guide,
+      'r-start': Start
+    },
     data () {
       return {
-        engine: true,
-        count: 0
+        engine: true
       }
     },
     computed: {
@@ -36,70 +34,41 @@
         return this.$store.state.env.isShowGuide
       }
     },
-    watch: {
-      count () {
-        console.log('改变了')
-        this.engine = true
-      }
-    },
-    components: {
-      'r-nav': Nav,
-      'r-guide': Guide
-    },
     mounted () {
-//      var that = this
-//      this.$refs.imgStart.onload = () => {
-//        console.log('进来了')
-//        that.count ++
-//      }
+      // window.alert('客户端的userAgent: ' + window.navigator.userAgent.toLowerCase())
+      //  生产环境下下载动效
+      const that = this
       window.setTimeout(
         () => {
-//          console.log(this)
-          this.engine = false
-        }, 2000
+          that.engine = false
+          //  删除加载动效
+          const ele = document.getElementById('splashLoading')
+          if (ele) {
+            ele.classList.add('ease-hide')
+            window.setTimeout(() => {
+              ele.parentNode.removeChild(ele)
+            }, 300)
+          }
+        }, 200
       )
     }
   }
 </script>
 <style>
-  .fade-enter-active, .fade-leave-active {
+  .fade-enter-active, .fade-leave-active, .ease-hide{
     transition: opacity 1s
   }
   .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */ {
     opacity: 0
   }
-  .wrap-inside{
-    text-align: center;
-  }
-  .wrap-start-img{
-    background: #3296FA;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1006;
-    width: 100%;
-    height: 100%;
-  }
-  .start-img{
-    /*width: 181px;*/
-    /*height: 281px;*/
-    /*width: 4.826rem;*/
-    /*height: 7.493rem;*/
-    width: 7.493rem;
-    height: 4.826rem;
-  }
-  .start-text{
-    font-family: PingFangSC-Semibold;
-    font-size: 16px;
-    color: #FFFFFF;
-    margin-top: 54px;
-  }
   .rsq-webview{
-    background-color: #F8F8F8;
+    background-color: #F5F5F5;
+    max-height: 100%;
     height:100%;
+    z-index: -9999;
     -webkit-overflow-scrolling: touch;
+    overflow: auto;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 </style>

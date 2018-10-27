@@ -3,8 +3,7 @@ var path = require('path')
 var url = require('url')
 var OSS = require('ali-oss')
 var readdir = require('recursive-readdir')
-var homedir = require('home-dir')
-var secret = require(homedir('/.dingtalk/frontend/secret'))
+var secret = require('../secret')
 var STS = OSS.STS;
 var co = require('co')
 var sts = new STS({
@@ -17,8 +16,6 @@ var ossRootPath = 'dingtalk/'
 var roleArn = secret.aliOSS.roleArn
 var sessionName = 'dingtalkFrontUser'
 var expiration = 900
-
-var uploadRetryTimes = 5
 
 var argv = process.argv
 if(argv.length < 3){
@@ -48,37 +45,16 @@ co(function* () {
     var relativePath = path.relative(uploadDir, file)
     var mills = new Date().getTime()
     var uploadName = url.resolve(ossRootPath, relativePath)
-
-    var checkpoint = null;
-    for (var j = 0; j < uploadRetryTimes; j++) {
-      try {
-        var res = yield client.multipartUpload(uploadName, file, {
-          checkpoint: checkpoint,
-          progress: function* (p, cpt){
-            checkpoint = cpt
-            console.log(chalk.blue('>>---' + Math.ceil(p * 100) + '% : ' + (new Date().getTime() - mills) + 'ms, ' + relativePath + ' --> ' + uploadName))
-          }
-        });
-        console.log(chalk.green('||---done, ' + (new Date().getTime() - mills) + 'ms, ' + relativePath + ' --> ' + uploadName))
-        break
-      } catch (err) {
-        if (j < uploadRetryTimes - 1) {
-          console.log(chalk.red(' WARN retry: ' + (j + 1) + ' '), chalk.red(relativePath + ' --> ' + uploadName), chalk.red(err))
-        } else {
-          console.log(chalk.white.bgRed(' ERROR '), chalk.red(relativePath + ' --> ' + uploadName), chalk.red(err))
-        }
-      }
+    var res = yield client.put(uploadName, file);
+    if(res.res.status == 200){
+      console.log(chalk.blue('>>---' + (new Date().getTime() - mills) + 'ms, ' + relativePath + ' --> ' + uploadName))
+    } else {
+      console.log(chalk.white.bgRed(' ERROR '), chalk.red(file + ' --> ' + uploadName))
+      console.log(res)
+      break
     }
-
-    // if(res.res.status == 200){
-    //   console.log(chalk.blue('>>---' + (new Date().getTime() - mills) + 'ms, ' + relativePath + ' --> ' + uploadName))
-    // } else {
-    //   console.log(chalk.white.bgRed(' ERROR '), chalk.red(file + ' --> ' + uploadName))
-    //   console.log(res)
-    //   break
-    // }
   }
-  // console.log(chalk.blue('>>finish upload'))
+  console.log(chalk.blue('>>finish upload'))
 }).catch(function (err) {
   console.log(err);
 });

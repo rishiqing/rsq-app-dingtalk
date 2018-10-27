@@ -14,7 +14,7 @@
 </template>
 <style lang="scss">
   .login-form {
-    position: absolute;left: 10%;width: 80%;top: 20%;background: #f8f8f8;padding: 10px;
+    position: absolute;left: 10%;width: 80%;top: 20%;background: #f5f5f5;padding: 10px;
   }
 </style>
 <script>

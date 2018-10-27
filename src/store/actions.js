@@ -2,6 +2,7 @@ import { Promise } from 'es6-promise'
 import api from 'api/index'
 import util from 'ut/jsUtil'
 import dateUtil from 'ut/dateUtil'
+import bizUtil from 'ut/bizUtil'
 import moment from 'moment'
 
 export default {
@@ -91,7 +92,7 @@ export default {
           commit('INB_TODO_CREATED', {item: item})
         })
     }).catch(err => {
-      alert(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     })
   },
   // -----------------inbox actions end-------------------------
@@ -191,7 +192,7 @@ export default {
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
@@ -207,29 +208,43 @@ export default {
    */
   createSingleScheduleItem ({commit, state, dispatch}, {newItem, dateStruct}) {
     var strDate = moment(dateStruct.dateResult[0]).format('YYYY-MM-DD')
-    console.log('strdate是' + strDate)
+    // console.log('strdate是' + strDate)
     var itemCache = state.dateTodosCache
     //  读取顺序号
     return dispatch('fetchScheduleItems', {strDate})
       .then(() => {
         newItem['pDisplayOrder'] = util.getNextOrder(itemCache[strDate], 'pDisplayOrder')
+        // alert(JSON.stringify(newItem))
         return api.todo.postNewTodo(newItem)
           .then(item => {
             commit('SCH_TODO_CREATED', {item: item, list: itemCache[strDate]})
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
-  createSubTodo ({commit, state, dispatch}, p) {
-    var name = p.newItem.pTitle
-    return api.todo.postSubTodo({name: name, todoId: p.todoId})
+  createSubtodo ({commit, state, dispatch}, p) {
+    var datas = {}
+    datas.name = p.name
+    datas.todoId = p.todoId
+    datas.startDate = p.startDate
+    datas.endDate = p.endDate
+    datas.joinUsers = p.joinUsers ? p.joinUsers.toString() : ''
+    datas.dates = p.dates
+    return api.todo.postSubtodo(datas)
       .then(item => {
         commit('CHILDTASK_TODO_CREATED', {item: item})
+        return item
+      })
+  },
+  moveToPlan ({state}, p) {
+    return api.todo.moveToPlan(p)
+      .then(item => {
+        return item
       })
       .catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
@@ -258,7 +273,7 @@ export default {
             return item
           })
       }).catch(err => {
-        alert(JSON.stringify(err))
+        console.log(JSON.stringify(err))
       })
   },
   /**
@@ -309,9 +324,9 @@ export default {
         commit('SCH_LIST_TODO_CHECKED', {item: p.item, status: p.status})
       })
   },
-  submitSubTodoFinish ({commit}, p) {
+  submitSubtodoFinish ({commit}, p) {
     // console.log('p,status是' + p.status)
-    return api.todo.putSubTodoProps({id: p.item.id, isDone: p.status})
+    return api.todo.putSubtodoProps({id: p.item.id, isDone: p.status})
       .then((item) => {
         // console.log('和后台拿数据回来' + JSON.stringify(item))
         commit('SCH_LIST_SUBTODO_CHECKED', {item: p.item, status: p.status})
@@ -330,6 +345,17 @@ export default {
   },
   updateCurrentTodo ({ commit }, item) {
     commit('TD_CURRENT_TODO_UPDATE', {item})
+  },
+  /**
+   * 设置子任务编辑时，当前正在编辑的子任务
+   * @param commit
+   * @param item
+   */
+  setCurrentSubtodo ({commit}, item) {
+    commit('TD_CURRENT_SUBTODO_SET', {item: item})
+  },
+  updateCurrentSubtodo ({commit}, item) {
+    commit('TD_CURRENT_SUBTODO_UPDATE', {item: item})
   },
   /**
    * 首先检查schedule的items中是否已经获取到todo的详细信息，如果没有获取过，则请求服务器获取
@@ -397,7 +423,6 @@ export default {
           var curArrayIndex = todo.pContainer === 'inbox'
             ? 0
             : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
-
           if (!dateUtil.isInDateStruct(curArrayIndex, targetDateStruct)) {
             commit('TD_TODO_DELETED', {item: todo})
           }
@@ -493,8 +518,8 @@ export default {
       })
   },
   saveTodoAction ({commit, state}, p) {
-    var todo = p.todo || state.todo.currentTodo
-    var editItem = p.editItem
+    const todo = p.todo || state.todo.currentTodo
+    const editItem = p.editItem
     const realName = state.loginUser.rsqUser.realName
     editItem['todoId'] = todo.id
     if (editItem.type === 9) {
@@ -506,8 +531,10 @@ export default {
     } else if (editItem.type === 7) {
       editItem['comment'] = realName + ' 创建了子任务'
     } else if (editItem.type === 17 && editItem.status) {
+      console.log('子任务的操作进来了吗')
       editItem['comment'] = realName + ' 完成了子任务' + '"' + p.name + '"'
     } else if (editItem.type === 17 && !editItem.status) {
+      console.log('子任务的操作进来了吗')
       editItem['comment'] = realName + ' 重启了子任务' + '"' + p.name + '"'
     } else if (editItem.type === 10) {
       editItem['comment'] = realName + ' 更新了子任务内容为' + '"' + editItem.idOrContent + '"'
@@ -518,33 +545,20 @@ export default {
         commit('TD_COMMENT_CREATED', {comment: record})
       })
   },
-  updateSubTodo ({commit, state}, p) {
+  updateSubtodo ({commit, state}, p) {
     //  p.todo不存在，则默认读取currentTod
-    // var id = state.todo.currentTodo.subTodos[0].id
-    // var id = p.item.id
-    p.item.name = p.name
     var item = p.item
-    //  如果id存在，则ajax更新
-    // var editItem = p.editItem
-    // console.log('todo的id是' + id)
-    // editItem['id'] = id
-    return api.todo.putSubTodoProps(item)
-      .then(subTodo => {
-        commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
-      })
-  },
-  updateSubTodoCheck ({commit, state}, p) {
-    //  p.todo不存在，则默认读取currentTodo
-    // var id = state.todo.currentTodo.subTodos[0].id
-    // var id = p.item.id
-    p.item.name = p.name
-    var item = p.item
-    //  如果id存在，则ajax更新
-    // var editItem = p.editItem
-    // editItem['id'] = id
-    return api.todo.putSubTodoProps(item)
-      .then(subTodo => {
-        commit('TD_SUBTODO_UPDATED', {subTodo: subTodo, item: item})
+    var temp = {}
+    temp.name = p.name
+    temp.id = p.id
+    temp.joinUsers = p.joinUsers
+    temp.endDate = p.endDate
+    temp.startDate = p.startDate
+    temp.isDone = p.isDone
+    temp.dates = p.dates
+    return api.todo.putSubtodoProps(temp)
+      .then(subtodo => {
+        commit('TD_SUBTODO_UPDATED', {subtodo: subtodo, item: item})
       })
   },
   /**
@@ -603,7 +617,6 @@ export default {
       //  清除缓存数据
       var sourceDateStruct = dateUtil.backend2frontend(todo)
       var curArrayIndex = todo.pContainer === 'inbox' ? 0 : moment(state.schedule.strCurrentDate, 'YYYY-MM-DD').toDate().getTime()
-
       dispatch('invalidateDateItems', {dateStruct: sourceDateStruct, exceptDateNum: curArrayIndex})
       commit('TD_TODO_DELETED', {item: todo})
     })
@@ -615,10 +628,10 @@ export default {
         commit('TD_COMMENT_DELETE', {item: item})
       })
   },
-  deleteSubTodo ({commit, state, dispatch}, p) {
+  deleteSubtodo ({commit, state, dispatch}, p) {
     // var todo = p.todo || state.todo.currentTodo留待以后查看
     var item = p.item
-    return api.todo.deleteSubTodo(item)
+    return api.todo.deleteSubtodo(item)
       .then(() => {
         commit('TD_SUBTODO_DELETE', {item: item})
       })
@@ -630,31 +643,19 @@ export default {
    * @param p
    */
   getDatesHasTodo ({commit, state}, p) {
-    var hasCache = true
     var start = p.startDate.getTime()
     var end = p.endDate.getTime()
     //  如果start和end中有一天没有缓存，那么就强制从服务器读取缓存
-    for (var d = start; d <= end; d += 24 * 3600 * 1000) {
-      if (!state.dayHasTodoCache.hasOwnProperty(String(d))) {
-        hasCache = false
-        break
-      }
-    }
-    var promise
-    if (hasCache) {
-      promise = Promise.resolve()
-    } else {
-      promise = api.todo.getDatesHasTodo({
+    var promise = api.todo.getDatesHasTodo({
         startDate: dateUtil.dateNum2Text(start, '-'),
         endDate: dateUtil.dateNum2Text(end, '-')
       })
-        .then(result => {
-          p.daysHasTodo = result.date.split(',').map(text => {
-            return moment(text).valueOf()
-          })
-          commit('TD_DATE_HAS_TD_CACHE', p)
+      .then(result => {
+        p.daysHasTodo = result.date.split(',').map(text => {
+          return moment(text).valueOf()
         })
-    }
+        commit('TD_DATE_HAS_TD_CACHE', p)
+      })
     return promise.then(() => {
       var cache = state.dayHasTodoCache
       var resultArray = []
@@ -679,6 +680,16 @@ export default {
       return Promise.resolve()
     }
   },
+  getAllUsers ({commit, state}) {
+    if (state.realStaff.list == null) {
+      return api.todo.getAllUsers()
+        .then(list => {
+          commit('SYS_STF__REAL_LST_READY', {list: list})
+        })
+    } else {
+      return Promise.resolve()
+    }
+  },
   /**
    * 根据传入的openid获取相应的rsqid，首先从缓存中读取，如果缓存中不存在，则从服务器读取
    * @param commit
@@ -688,6 +699,7 @@ export default {
    * @param p.corpId
    */
   fetchRsqidFromUserid ({commit, state}, p) {
+    // alert('近来了')
     var openidsNotInCache = []
     var result = {}
     var cache = state.openidCache
@@ -702,6 +714,7 @@ export default {
     if (openidsNotInCache.length > 0) {
       promise = api.appAuth.getOpenidMap({corpId: p.corpId, idArray: openidsNotInCache})
         .then(resp => {
+          // alert('返回来' + JSON.stringify(resp))
           var mapList = resp.result
           mapList.forEach(idMap => {
             //  双向缓存
@@ -742,6 +755,7 @@ export default {
       promise = api.appAuth.getRsqidMap({corpId: p.corpId, idArray: idsNotInCache})
         .then(resp => {
           var mapList = resp.result
+          // alert('mapList' + JSON.stringify(mapList))
           mapList.forEach(idMap => {
             //  双向缓存
             var key = idMap['rsqUserId']
@@ -758,7 +772,6 @@ export default {
     })
   },
   postTodoComment ({commit, state}, props) {
-    // if (props.commentContent) {
     var currentItem = state.todo.currentTodo
     var replyId = state.replyId
     var replyName = state.replyName
@@ -779,16 +792,16 @@ export default {
     //   return Promise.resolve()
     // }
   },
-  ReplyCommentItem ({commit, state}, props) {
+  replyCommentItem ({commit, state}, props) {
     commit('REPLY_COMMENT_CREATED', {item: props.item})
   },
-  postdesp ({commit, state}, props) {
+  postNote ({commit, state}, props) {
     if (props.pNote) {
       var currentItem = state.todo.currentTodo
       props['id'] = currentItem.id
-      return api.todo.postdesp(props)
-        .then((desp) => {
-          commit('TD_DESP_CREATED', {desp: desp})
+      return api.todo.postNote(props)
+        .then((note) => {
+          commit('TD_NOTE_CREATED', {note: note})
         })
     } else {
       return Promise.resolve()
@@ -853,6 +866,39 @@ export default {
           })
       })
   },
+  /**
+   * 上传计划的封面图片
+   * @param commit
+   * @param state
+   * @param p.pathId：corpId，用来获取权限
+   * @param p.task：上传任务，其中需要包含file、progress和finished字段。
+   * @param p.savedName：保存到OSS之后的文件名，使用时间戳命名
+   */
+  uploadKanbanCoverImage ({commit, state}, p) {
+    const pathId = p.pathId
+    const path = window.rsqConfig.ossKanbanCoverImagePath
+    const task = p.task
+    const f = task.file
+    return api.system.getOSSClient({pathId: pathId}, {
+      stsServer: window.rsqConfig.stsServer + 'cover/custom/kanban/',
+      ossBucket: window.rsqConfig.ossImageBucket
+    })
+      .then(client => {
+        const name = path + p.savedName
+        return client.multipartUpload(name, f, {
+          progress: function (p) {
+            return function (done) {
+              const pro = Math.floor(p * 100)
+              task.progress = pro
+              if (pro >= 1) {
+                task.finished = true
+              }
+              done()
+            }
+          }
+        })
+      })
+  },
   //  dingtalk/130350304726297460/2126PictureUnlock_haokan1171162_16:9.pictureunlock.jpg
   getOSSUrl ({commit, state}, p) {},
   /**
@@ -906,20 +952,11 @@ export default {
         mills_array: millsArray,
         remind_array: remindArray,
         userid_list: state.loginUser.authUser.userId,
-        msgtype: 'oa',
+        msgtype: 'textcard',
         msgcontent: {
-          message_url: url[0] + '#' + '/todo/' + item.id,
-          head: {
-            text: '日事清',
-            bgcolor: 'FF55A8FD'
-          },
-          body: {
-            title: '任务提醒',
-            form: [
-              {key: '任务名称：', value: item.pTitle},
-              {key: '时间：', value: c.startTime + '-' + c.endTime}
-            ]
-          }
+          url: url[0] + '#' + '/sche/todo/' + item.id,
+          title: item.pTitle,
+          description: '日程提醒'
         }
       }
       promise = dispatch('sendRemind', {corpId: state.loginUser.authUser.corpId, data: data})
@@ -932,14 +969,314 @@ export default {
     })
   },
   sendRemind ({commit, state}, p) {
-    var appId = state.sys.appId
+    // var appId = state.sys.appId
     var urlParams = {
-      corpid: p.corpId,
-      appid: appId
+      corpid: p.corpId
+      // appid: appId
     }
     return api.appAuth.sendRemind({
       urlParams,
       data: p.data
     })
+  },
+  getRecord ({commit, state}, p) {
+    return api.todo.getRecord(p)
+      .then((item) => {
+        // console.log('移动计划之后item' + JSON.stringify(item))
+        commit('SAVE_RECORD', {item: item})
+        return item
+      })
+  },
+  fetchUsers ({commit, state}, p) {
+    return api.todo.fetchUsers(p)
+      .then((item) => {
+        console.log('返回来的是' + JSON.stringify(item))
+        commit('SAVE_USER', {item: item})
+        return item
+      })
+  },
+  sendMessage ({commit, state}, p) {
+    return api.todo.sendMessage(p)
+      .then((result) => {
+        return result
+      })
+  },
+  postPlan ({commit, state}, p) {
+    return api.todo.postPlan(p)
+      .then((result) => {
+        return result
+      })
+  },
+  getPlan ({commit, state}, p) {
+    return api.todo.getPlan(p)
+      .then((result) => {
+        return result
+      })
+  },
+  getChildKanbanList ({commit, state}, p) {
+    return api.todo.getChildKanbanList(p)
+      .then((result) => {
+        return result
+      })
+  },
+  getCardList ({commit, state}, p) {
+    return api.todo.getCardList(p)
+      .then((result) => {
+        return result
+      })
+  },
+  postSubPlan ({commit, state}, p) {
+    return api.todo.postSubPlan(p)
+      .then((result) => {
+        return result
+      })
+  },
+  postCard ({commit, state}, p) {
+    return api.todo.postCard(p)
+      .then((result) => {
+        return result
+      })
+  },
+  deleteChildPlan ({commit, state}, p) {
+    return api.todo.deleteChildPlan(p)
+      .then((res) => {
+        commit('DELETE_CHILD_PLAN', p)
+      })
+  },
+  updateName ({commit, state}, p) {
+    return api.todo.updateName(p)
+      .then((res) => {
+        return res
+      })
+  },
+  updataPlan ({commit, state}, p) {
+    return api.todo.updataPlan(p)
+      .then((res) => {
+        return res
+      })
+  },
+  cancelStar ({commit, state}, p) {
+    return api.todo.cancelStar(p)
+      .then((res) => {
+        commit('CANCEL_STAR', p)
+      })
+  },
+  saveStar  ({commit, state}, p) {
+    return api.todo.saveStar(p)
+      .then((res) => {
+        commit('SAVE_STAR', p)
+      })
+  },
+  deletePlan  ({commit, state}, p) {
+    return api.todo.deletePlan(p)
+      .then((res) => {
+        commit('DELETE_PLAN', p)
+      })
+  },
+  quitPlan ({commit, state}, p) {
+    return api.todo.quitPlan(p)
+      .then((res) => {
+        commit('DELETE_PLAN', p) // 暂使用delete
+      })
+  },
+  finishCardItem ({commit, state}, p) {
+    return api.todo.finishCardItem(p)
+      .then((res) => {
+        // commit('QUIT_PLAN', p) // 这里用不用该前端的参与人呢？
+      })
+  },
+  updateCardName ({commit, state}, p) {
+    return api.todo.updateCardName(p)
+      .then((res) => {
+        return res
+      })
+  },
+  deleteCard  ({commit, state}, p) {
+    return api.todo.deleteCard(p)
+      .then((res) => {
+        commit('DELETE_CARD', p)
+      })
+  },
+  updatePlanName ({commit, state}, p) {
+    return api.todo.updatePlanName(p)
+      .then((res) => {
+        commit('PLAN_NAME_UPDATE', p)
+      })
+  },
+  planToPlan ({state}, p) {
+    return api.todo.planToPlan(p)
+      .then(item => {
+        return item
+      })
+      .catch(err => {
+        // alert(JSON.stringify(err))
+      })
+  },
+  updatePlanImg ({commit, state}, p) {
+    return api.todo.updatePlanName(p)
+      .then((res) => {
+        commit('PLAN_IMG_UPDATE', p)
+      })
+  },
+  getLabels ({commit, state}, p) {
+    return api.todo.getLabels(p)
+      .then((result) => {
+        // commit('SAVE_LABELS', result)
+        return result
+      })
+  },
+  updatePlanMember ({commit, state}, p) {
+    return api.todo.updatePlanMember(p)
+      .then((result) => {
+        // commit('SAVE_LABELS', result)
+        return result
+      })
+  },
+  getTemplate ({commit, state}, p) {
+    return api.todo.getTemplate()
+      .then((result) => {
+        //  目前在企业微信中只使用四个模板，因此这里将这四个模板取出来
+        commit('PLAN_COVER_LIST_SET', {coverList: bizUtil.extractTemplate(result)})
+        return result
+      })
+  },
+  createKanbanItem ({commit, state}, p) {
+    return api.todo.submitKanbanItem(p)
+      .then((res) => {
+        return res
+      })
+  },
+  deleteKanbanItem ({commit, state}, p) {
+    return api.todo.deleteKanbanItem(p)
+      .then((res) => {
+        // commit('DELETE_CARD', p)
+      })
+  },
+  updateKanbanItem  ({commit, state}, p) {
+    return api.todo.updateKanbanItem(p)
+      .then((res) => {
+        commit('PLAN_CURRENT_KANBAN_ITEM_UPDATE', {kanbanItem: res})
+        // commit('DELETE_CARD', p)
+      })
+  },
+  getKanbanItem ({commit, state}, p) {
+    return api.todo.getKanbanItem(p)
+      .then((res) => {
+        commit('PLAN_CURRENT_KANBAN_ITEM_UPDATE', {kanbanItem: res})
+        //  筛选出操作记录，保存在独立的缓存里
+        let arr = res.commentList
+        if (arr) {
+          arr = arr.filter(i => {
+            return i.type !== 0
+          })
+        }
+        commit('SAVE_RECORD', {item: arr})
+        return res
+      })
+  },
+  createKanbanSubtodo ({commit, state}, p) {
+    var datas = {}
+    datas.name = p.name
+    datas.kanbanItemId = p.id
+    datas.startDate = p.startDate
+    datas.endDate = p.endDate
+    datas.joinUser = p.joinUsers ? p.joinUsers.toString() : ''
+    datas.dates = p.dates
+    return api.todo.createKanbanSubtodo(datas)
+      .then((result) => {
+        commit('PLAN_CURRENT_KANBAN_SUBITEM_CREATED', {item: result})
+        return result
+      })
+  },
+  updateKanbanSubtodo ({commit, state}, p) {
+    return api.todo.putKanbanSubtodo(p)
+      .then((res) => {
+        commit('PLAN_KANBAN_SUBITEM_UPDATE', {item: res})
+        // commit('DELETE_CARD', p)
+      })
+  },
+  deleteKanbanSubtodo ({commit, state}, p) {
+    return api.todo.deleteKanbanSubtodo(p)
+      .then((res) => {
+        commit('PLAN_KANBAN_SUBITEM_DELETE', {item: res})
+      })
+  },
+  setCurrentKanbanItem ({commit}, item) {
+    commit('PLAN_CURRENT_KANBAN_ITEM_SET', {item: item})
+  },
+  createKanbanItemComment ({commit, state}, props) {
+    // if (props.commentContent) {
+    const currentItem = state.plan.currentKanbanItem
+    const replyId = state.replyId
+    const replyName = state.replyName
+    props['kanbanItemId'] = currentItem.id
+    props['type'] = 0
+    if (replyId !== null) {
+      props['atIds'] = replyId
+      props.commentContent = '@' + replyName + '&' + props.commentContent
+    }
+
+    return api.todo.postKanbanItemComment(props)
+      .then((com) => {
+        com.type = 0
+        commit('PLAN_KANBAN_ITEM_COMMENT_CREATED', {comment: com})
+        return com
+      })
+  },
+  deleteKanbanItemComment ({commit, state, dispatch}, p) {
+    var item = p.item
+    return api.todo.deleteKanbanItemComment(item)
+      .then(() => {
+        commit('PLAN_KANBAN_ITEM_COMMENT_DELETE', {item: item})
+      })
+  },
+  replyKanbanItemComment ({commit, state}, props) {
+    commit('REPLY_KANBAN_ITEM_COMMENT_CREATED', {item: props.item})
+  },
+  saveCurrentRrule ({commit}, props) {
+    commit('SAVE_CURRENT_RRULE', {rrule: props.rrule})
+  },
+  /**
+   * 企业微信消息发送
+   * @param  {[type]} options.state    [description]
+   * @param  {[type]} options.dispatch [description]
+   * @param  {[type]} p                [description]
+   * @return {[type]}                  [description]
+   */
+  qywxSendMessage ({getters, state, dispatch}, p) {
+    var data = {
+      'msgtype': 'textcard',
+      'agentid': p.agentid,
+      'textcard': {
+        'title': p.title,
+        'description': p.description,
+        'url': p.url
+      }
+    }
+    console.log(p)
+    var IDArrays = []
+    if (p.receiverIds) {
+      IDArrays = p.receiverIds.split(',')
+    }
+    var empIDArray = []
+    dispatch('fetchUseridFromRsqid', {corpId: p.corpId, idArray: IDArrays})
+      .then(idMap => {
+        for (var i = 0; i < IDArrays.length; i++) {
+          if (idMap[IDArrays[i]].userId === getters.loginUser.authUser.userId) {
+            continue
+          }
+          empIDArray.push(idMap[IDArrays[i]].userId)
+        }
+        data['touser'] = empIDArray.toString().split(',').join('|')
+        dispatch('sendAsyncCorpMessage', {
+          corpId: p.corpId,
+          data: data
+        }).then(res => {
+          if (res.errcode !== 0) {
+          } else {
+            console.log('发送成功！')
+          }
+        })
+      })
   }
 }

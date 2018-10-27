@@ -1,4 +1,5 @@
 var path = require('path')
+var url = require('url')
 var utils = require('./utils')
 var webpack = require('webpack')
 var config = require('../config')
@@ -24,7 +25,8 @@ var webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.beta.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+    publicPath: url.resolve(config.beta.frontServer, config.beta.assetsPublicPath)
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -52,16 +54,17 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      env: 'beta',
-      backendServer: config.beta.backendServer,
+      env: 'prod',
+      rsqServer: config.beta.rsqServer,
       authServer: config.beta.authServer,
       apiServer: config.beta.apiServer,
       stsServer: config.beta.stsServer,
-      remindServer: config.beta.remindServer,
       version: config.beta.version,
       ossRegion: config.beta.aliOSS.region,
       ossBucket: config.beta.aliOSS.bucket,
       ossRoot: config.beta.aliOSS.root,
+      ossImageBucket: config.dev.aliOSS.imageBucket,
+      ossKanbanCoverImagePath: config.dev.aliOSS.kanbanCoverImagePath,
       filename: process.env.NODE_ENV === 'testing'
         ? 'index.html'
         : config.beta.index,
