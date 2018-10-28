@@ -35,13 +35,13 @@ module.exports = {
     // 日事清地址
     rsqServer: 'https://www.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'https://ding.rishiqing.com/',
+    apiServer: 'https://www.workbei.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'https://ding.rishiqing.com/',
+    authServer: 'https://www.workbei.com/backauth/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
-    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com',
+    frontServer: 'https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/workbei/',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     // stsServer: 'https://stsserver.hz.taeapp.com/sts/',
     stsServer: 'https://sts-server.rishiqing.com/sts/',
