@@ -28,6 +28,9 @@
       }
     },
     computed: {
+      corpId () {
+        return this.$store.state.loginUser.authUser.corpId
+      },
       code () {
         return this.$store.state.plus.saleQrCodeUrl
       },
@@ -71,7 +74,8 @@
     },
     methods: {
       buy () {
-        window.rsqadmg.exec('alert', {message: '系统升级中'})
+        // window.rsqadmg.exec('alert', {message: '系统升级中'})
+        window.location.href = 'https://h5.dingtalk.com/appcenter/detail.html?showmenu=false&dd_share=false&goodsCode=FW_GOODS-1000330934&corpId=' + this.corpId
       }
     }
   }

@@ -3,7 +3,7 @@
     <img class="alert-img" src="../../assets/img/alertplus.svg">
     <div class="alert-text">使用人数超员</div>
     <div class="alert-text2">您公司的实际使用人数超过购买人数，请前往升级应用套餐，如需帮助请根据下方二维码联系服务人员</div>
-    <a href="#" class="buy">前往升级</a>
+    <a :href="'https://h5.dingtalk.com/appcenter/detail.html?showmenu=false&dd_share=false&goodsCode=FW_GOODS-1000330934&corpId=' + corpId" class="buy">前往升级</a>
     <div class="foot">
       <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
@@ -20,6 +20,9 @@
       }
     },
     computed: {
+      corpId () {
+        return this.$store.state.loginUser.authUser.corpId
+      },
       code () {
         return this.$store.state.plus.saleQrCodeUrl
       },

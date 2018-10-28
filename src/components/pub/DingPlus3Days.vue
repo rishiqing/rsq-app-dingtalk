@@ -3,7 +3,7 @@
     <img class="alert-img" src="../../assets/img/alertplus.svg">
     <div class="alert-text">到期提醒</div>
     <div class="alert-text2">您的使用期限仅剩余{{day}}天，请及时购买/续费 避免因到期停用而影响您的正常工作</div>
-    <a href="#" class="buy">前往续费</a>
+    <a :href="'https://h5.dingtalk.com/appcenter/detail.html?showmenu=false&dd_share=false&goodsCode=FW_GOODS-1000330934&corpId=' + corpId" class="buy">前往续费</a>
     <v-touch @tap="go" class="go">继续试用</v-touch>
     <div class="foot">
       <img :src="code" class="code">
