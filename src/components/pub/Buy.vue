@@ -3,7 +3,7 @@
     <img class="alert-img" src="../../assets/img/alertplus.svg">
     <div class="alert-text">服务已到期</div>
     <div class="alert-text2">您的服务已到期，请购买/续费后继续使用</div>
-    <a href="#" class="buy">前往购买</a>
+    <a :href="'https://h5.dingtalk.com/appcenter/detail.html?showmenu=false&dd_share=false&goodsCode=FW_GOODS-1000330934&corpId=' + corpId" class="buy">前往购买</a>
     <div class="foot">
       <img :src="code" class="code">
       <div class="tips">长按识别二维码，为您解答疑惑</div>
@@ -20,6 +20,9 @@
       }
     },
     computed: {
+      corpId () {
+        return this.$store.state.loginUser.authUser.corpId
+      },
       code () {
         return this.$store.state.plus.saleQrCodeUrl
       },
