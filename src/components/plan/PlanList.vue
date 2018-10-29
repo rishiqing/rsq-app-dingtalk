@@ -23,7 +23,8 @@
         v-for="item in arr"
         :key="item.id"
         :item="item"
-        @list-sort="listSort"/>
+        @list-sort="listSort"
+        @alert-change="alertChange"/>
     </ul>
     <div
       v-else
@@ -40,22 +41,26 @@
         class="main_inbox"
         src="../../assets/img/add.svg">
     </v-touch>
+    <r-mask-alert v-if="alert" @alert-change="alertChange"/>
   </div>
 </template>
 <script>
   import moment from 'moment'
   import Plan from 'com/plan/Plan'
   import Nav from 'com/Nav'
+  import MaskAlert from 'com/plan/MaskAlert'
 
   export default {
     name: 'PlanList',
     components: {
       'r-plan': Plan,
-      'r-nav': Nav
+      'r-nav': Nav,
+      'r-mask-alert': MaskAlert
     },
     data () {
       return {
-        arr: []
+        arr: [],
+        alert:false
       }
     },
     computed: {
@@ -130,9 +135,12 @@
       })
     },
     methods: {
+      alertChange (k) {
+        this.alert = k
+      },
       toCreate () {
         if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
+          this.alert = true
           return
         } else {
           this.$router.push('/plan/create')
@@ -161,7 +169,8 @@
 </script>
 <style lang="scss" scoped>
   .pl{
-    position: relative;  
+    position: relative; 
+    overflow:hidden; 
   }
   .plan-count{
     // margin-bottom: 1.5rem;

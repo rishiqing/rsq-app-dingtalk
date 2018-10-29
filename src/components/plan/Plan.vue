@@ -122,7 +122,7 @@
       },
       toChildPlan () {
         if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
+          this.$emit('alert-change', true)
           return
         }  else {
           var that = this
@@ -141,7 +141,7 @@
       },
       touchStart (ev) {
         if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
+          this.$emit('alert-change', true)
           return
         }  else {
           ev = ev || event
