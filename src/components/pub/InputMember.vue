@@ -7,21 +7,23 @@
         class="inner-key">
         {{ indexTitle }}</span>
       <div class="inner-value">
-        <div
-          v-for="(avatar,index) in avatarConcat"
-          v-if="index < 5"
-          :key="index"
-          :style="{ backgroundImage: 'url(' + avatar.avatar + ')' }"
-          class="avatar"
-        >
-          <span v-if="!avatar.avatar">{{ avatar.name }}</span>
-        </div>
+      <avatar
+        class="avatar"
+        v-for="(avatar,index) in avatarConcat"
+        v-if="index < 5"
+        :src="avatar.avatar"
+        :username="avatar.name"
+        :size="36"
+        :key="index"
+        :round-radius="'50px'"
+        :background-color="'#4A90E2'" />
       <span class="count">{{ selectedLocalList.length }}人</span></div>
       <i class="icon2-arrow-right-small arrow"/>
     </div>
   </v-touch>
 </template>
 <script>
+  import Avatar from 'com/pub/TextAvatar'
   import { Promise } from 'es6-promise'
   import util from 'ut/jsUtil'
   import SelectMember from 'com/pub/SelectMember'
@@ -91,6 +93,9 @@
         disabledLocalList: [],  //  本地禁用的人员列表
         creatorList: []// 创建者
       }
+    },
+    components: {
+      'avatar': Avatar
     },
     computed: {
       loginUser () {
