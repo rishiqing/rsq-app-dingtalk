@@ -74,10 +74,7 @@ Vue.prototype.$rrule = RRule
 
 function check_date_diff(time){ //检测日期的间隔时间
  var checkDate = time
- var nowTime   = new Date();// 当前时间
- var the_year  = nowTime.getYear(); 
- var the_month = nowTime.getMonth() + 1; 
- var the_day   = nowTime.getDate();
+ var nowTime   = new Date().getTime();// 当前时间
  
  var thesecond = 24 * 60 * 60 *1000
 console.log(checkDate, nowTime)
