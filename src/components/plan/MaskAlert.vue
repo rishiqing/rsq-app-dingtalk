@@ -53,7 +53,6 @@
   }
     .alert{
       position: fixed;
-      height:391px;
       background:rgba(255,255,255,1);
       border-radius:10px;
       top: 68px;
@@ -71,18 +70,17 @@
       .title{
         height:24px;
         font-size:17px;
-        font-family:PingFangSC;
+        font-family:PingFangSC-Medium;
         font-weight:500;
         color:rgba(0,0,0,1);
         line-height:24px;
         text-align: center;
         margin-top: 18px;
-        font-weight: bold;
       }
       .text{
         margin: 0 22px;
         font-size:14px;
-        font-family:PingFangSC;
+        font-family:PingFangSC-Regular;
         font-weight:600;
         color:rgba(61,61,61,1);
         line-height:20px;
