@@ -492,12 +492,15 @@ export default {
   updateTodo ({commit, state}, p) {
     //  p.todo不存在，则默认读取currentTodo
     var todo = p.todo || state.todo.currentTodo
+    var fix1 = JSON.stringify(state.todo.currentTodo.comments)
+    var fix2 = JSON.parse(fix1)
     // var items = p.items
     //  如果id存在，则ajax更新
     var editItem = p.editItem
     editItem['id'] = todo.id
     return api.todo.putTodoProps(editItem)
       .then(todo => {
+        todo.comments = fix2
         commit('TD_TODO_UPDATED', {todo: todo})
         return todo
       })
