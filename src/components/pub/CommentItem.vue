@@ -7,7 +7,9 @@
       <avatar
         :src="item.qywxShowAvatar"
         :username="item.qywxShowName"
-        :size="30" />
+        :size="30"
+        :round-radius="'2px'"
+        :background-color="'#4A90E2'" />
     </div>
     <div class="right">
       <div class="top">
