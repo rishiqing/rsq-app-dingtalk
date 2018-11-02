@@ -287,6 +287,7 @@
 <style lang="scss" scoped>
   .plan-member .avatar{
     margin-right: 0.3rem;
+    overflow:hidden;
     float: left;
   }
   input::placeholder{
