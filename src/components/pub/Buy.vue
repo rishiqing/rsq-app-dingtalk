@@ -30,7 +30,7 @@
     methods: {
     },
     mounted () {
-      window.rsqadmg.exec('setTitle', {title: '日事清'})
+      window.rsqadmg.exec('setTitle', {title: '功倍'})
       window.rsqadmg.exec('setOptionButtons', {hide: true})
     }
   }

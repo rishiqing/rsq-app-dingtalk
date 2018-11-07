@@ -559,7 +559,7 @@
                         oa: {
                           message_url: window.location.href,
                           head: {
-                            text: '日事清',
+                            text: '功倍',
                             bgcolor: 'FF55A8FD'
                           },
                           body: {
