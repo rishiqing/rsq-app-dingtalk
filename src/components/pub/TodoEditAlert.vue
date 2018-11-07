@@ -84,11 +84,14 @@
       }
     },
     computed: {
+      todo () {
+        return this.$store.state.todo.currentTodo
+      },
       todoClock () {
         return this.$store.state.pub.currentTodoTime.clock || {}
       },
       baseDate () {
-        return this.todoClock.taskDate || this.$store.getters.defaultTaskDate
+        return this.todo.startDate
       },
       numStartTime () {
         return this.getNumDateTime(this.todoClock.startTime)
@@ -295,9 +298,11 @@
       saveTodoAlert () {
         var list = this.mergeList()
         var that = this
-        var alertNew = list.some(function (o) {
-          return jsUtil.alertRule2Time(o.schedule, that.numStartTime, that.numEndTime) < new Date().getTime()
-        })
+        if (this.todo.startDate === this.todo.endDate && this.todo != '' && this.todo.dates === null) {
+          var alertNew = list.some(function (o) {
+            return jsUtil.alertRule2Time(o.schedule, that.numStartTime, that.numEndTime) < new Date().getTime()
+          })
+        }
         if (alertNew) {
           window.rsqadmg.exec('alert', {message: '提醒时间早于当前时间，可能不会收到提醒!'})
         }

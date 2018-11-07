@@ -119,7 +119,7 @@ export default {
     } else {
       return api.todo.getScheduleTodos({startDate: strCurrentDate, endDate: strCurrentDate})
         .then(todos => {
-          let reverseTodo = todos.reverse()
+          let reverseTodo = todos
           //  坑……不显示deletedDate字段为当前日期的日程，新版本需要优化
           var compareDate = moment(strDate).format('YYYYMMDD')
           reverseTodo = reverseTodo.filter(t => {
