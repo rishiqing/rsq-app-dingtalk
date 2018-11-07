@@ -16,10 +16,10 @@ try {
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/release/mobile/index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist/release/mobile/'),
+    index: path.resolve(__dirname, '../dist/workbei/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/workbei/'),
     assetsSubDirectory: './',
-    assetsPublicPath: '/dingtalk/release/mobile/',
+    assetsPublicPath: '/dingtalk/workbei/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
