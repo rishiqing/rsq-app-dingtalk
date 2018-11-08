@@ -116,12 +116,7 @@
     },
     methods: {
       toCreate () {
-        if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
-          return
-        } else {
-          this.$router.push('/plan/create')
-        }
+        this.$router.push('/plan/create')
       },
       listSort (item) {
         // console.log(this.arr)

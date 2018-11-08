@@ -121,37 +121,27 @@
         return Math.atan2(angy, angx) * 180 / Math.PI
       },
       toChildPlan () {
-        if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
-          return
-        }  else {
-          var that = this
-          this.$store.dispatch('getChildKanbanList', this.item).then(
-            (res) => {
-              this.$store.commit('SET_CURRENT_PLAN', res)
-              that.$store.commit('SAVE_CHILD_PLAN', res.childKanbanList)
-              that.$store.dispatch('getLabels', this.item).then((res) => {
-                that.$store.commit('SAVE_LABELS', res)
-              }).then(() => {
-                this.$store.commit('SET_EMPTY_CURRENT_SUB_PLAN')
-                that.$router.push('/plan/' + this.currentPlan.id + '/child-plan')
-              })
+        var that = this
+        this.$store.dispatch('getChildKanbanList', this.item).then(
+          (res) => {
+            this.$store.commit('SET_CURRENT_PLAN', res)
+            that.$store.commit('SAVE_CHILD_PLAN', res.childKanbanList)
+            that.$store.dispatch('getLabels', this.item).then((res) => {
+              that.$store.commit('SAVE_LABELS', res)
+            }).then(() => {
+              this.$store.commit('SET_EMPTY_CURRENT_SUB_PLAN')
+              that.$router.push('/plan/' + this.currentPlan.id + '/child-plan')
             })
-          }
+          })
       },
       touchStart (ev) {
-        if (this.hasVerKey) {
-          window.rsqadmg.exec('alert', {message: '「计划管理」目前属于付费版功能，请前往升级企业版'})
-          return
-        }  else {
-          ev = ev || event
-          if (ev.touches.length === 1) {
-            // 记录开始位置
-            this.startX = ev.touches[0].clientX
-          }
-          this.startx = ev.touches[0].pageX
-          this.starty = ev.touches[0].pageY
+        ev = ev || event
+        if (ev.touches.length === 1) {
+          // 记录开始位置
+          this.startX = ev.touches[0].clientX
         }
+        this.startx = ev.touches[0].pageX
+        this.starty = ev.touches[0].pageY
       },
       touchMove (ev) {
         if (!this.$refs.star) {
