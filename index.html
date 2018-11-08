@@ -29,80 +29,72 @@ gio('send');
     <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
     <!-- <link rel="stylesheet" href="https://rishiqing-front.oss-cn-beijing.aliyuncs.com/dingtalk/public/element-ui.css"> -->
     <style type="text/css">
-      .splash-loading {
+     .splash-loading {
         position:fixed;left:0;top:0;right:0;bottom:0;background:#f5f5f5;color: #fff;
         display: flex;
         align-items: center;
         transition: all 0.3s ease-in-out;
       }
-      .splash-wrap {
-        position: absolute;left: 10%;top:25%;right:10%;
+     .spinner {
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+        margin: 100px auto;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 .40px rgba(121, 121, 121, .2);
+        margin-bottom: 0;
+        margin-top: 0;
       }
-      .splash-wrap > * {
-        text-align: center;
+
+      .spinner i {
+          position: absolute;
+          clip: rect(0, 40px, 40px, 20px);
+          width: 40px;
+          height: 40px;
+          animation: spinner-circle-clipper 1s ease-in-out infinite;
       }
-      .splash-wrap img {
-        width: 100%;
+      
+      @keyframes spinner-circle-clipper {
+          0% {
+              transform: rotate(0deg);
+          }
+      
+          100% {
+              transform: rotate(180deg);
+          }
       }
-      .splash-wrap p {
-        margin: 20px 0;
-        font-size: 18px;
+      
+      .spinner i:after {
+          position: absolute;
+          clip: rect(0, 40px, 40px, 20px);
+          width: 40px;
+          height: 40px;
+          content: '';
+          animation: spinner-circle 1s ease-in-out infinite;
+          border-radius: 50%;
+          box-shadow: inset 0 0 0 2px #797979;
       }
-      div.ease-hide {
-        opacity: 0;
+      
+      @keyframes spinner-circle {
+          0% {
+              transform: rotate(-180deg);
+          }
+      
+          100% {
+              transform: rotate(180deg);
+          }
       }
-      .spinner {
-  margin: 100px auto;
-  width: 50px;
-  height: 60px;
-  text-align: center;
-  font-size: 10px;
-}
-
-.spinner > div {
-  background-color: #d4d4d4;
-  height: 30%;
-  width: 3px;
-  display: inline-block;
-  margin: 0 2px;
-  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-  animation: stretchdelay 1.2s infinite ease-in-out;
-}
-
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
-
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
-
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
-
-@-webkit-keyframes stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
-
-@keyframes stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
+      #splashLoading .text {
+        font-size: 16px;
+        color:#797979;
+        margin-top: 12px;
+      }
+      #splashLoading .all{
+        margin: 0 auto;
+      }
+      #splashLoading .block{
+        height: 210px
+      }
     </style>
     <!-- 引入组件库 -->
     <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
@@ -143,8 +135,11 @@ gio('send');
   <body>
   <div id="app"></div>
   <div id="splashLoading" class="splash-loading">
-      <div class="spinner">
-        <div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>
+    <div class="all">
+      <div class="spinner"><i></i></div>
+      <div class="text">正在进入日事清...</div>
+      <div class="block"></div>
+    </div>
   </div>
    <script type="text/javascript" src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
     <script src="https://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
