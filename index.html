@@ -33,65 +33,78 @@
         transition: all 0.3s ease-in-out;
       }
      .spinner {
-    font-size: 20px;
-    width: 40px;
-    height: 40px;
-    margin: 100px auto;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 .40px rgba(121, 121, 121, .2);
-    margin-bottom: 0;
-    margin-top: 0;
-}
+        font-size: 20px;
+        width: 40px;
+        height: 40px;
+        margin: 100px auto;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 .40px rgba(121, 121, 121, .2);
+        margin-bottom: 0;
+        margin-top: 0;
+      }
 
-.spinner i {
-    position: absolute;
-    clip: rect(0, 40px, 40px, 20px);
-    width: 40px;
-    height: 40px;
-    animation: spinner-circle-clipper 1s ease-in-out infinite;
-}
-
-@keyframes spinner-circle-clipper {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(180deg);
-    }
-}
-
-.spinner i:after {
-    position: absolute;
-    clip: rect(0, 40px, 40px, 20px);
-    width: 40px;
-    height: 40px;
-    content: '';
-    animation: spinner-circle 1s ease-in-out infinite;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 2px #797979;
-}
-
-@keyframes spinner-circle {
-    0% {
-        transform: rotate(-180deg);
-    }
-
-    100% {
-        transform: rotate(180deg);
-    }
-}
-#splashLoading .text {
-  font-size: 16px;
-  color:#797979;
-  margin-top: 12px;
-}
-#splashLoading .all{
-  margin: 0 auto;
-}
-#splashLoading .block{
-  height: 210px
-}
+      .spinner i {
+          position: absolute;
+          clip: rect(0, 40px, 40px, 20px);
+          width: 40px;
+          height: 40px;
+          animation: spinner-circle-clipper 1s ease-in-out infinite;
+      }
+      
+      @keyframes spinner-circle-clipper {
+          0% {
+              transform: rotate(0deg);
+          }
+      
+          100% {
+              transform: rotate(180deg);
+          }
+      }
+      
+      .spinner i:after {
+          position: absolute;
+          clip: rect(0, 40px, 40px, 20px);
+          width: 40px;
+          height: 40px;
+          content: '';
+          animation: spinner-circle 1s ease-in-out infinite;
+          border-radius: 50%;
+          box-shadow: inset 0 0 0 2px #797979;
+      }
+      
+      @keyframes spinner-circle {
+          0% {
+              transform: rotate(-180deg);
+          }
+      
+          100% {
+              transform: rotate(180deg);
+          }
+      }
+      #splashLoading .text {
+        font-size: 16px;
+        color:#797979;
+        margin-top: 12px;
+      }
+      #splashLoading .all{
+        margin: 0 auto;
+      }
+      #splashLoading .block{
+        height: 210px
+      }
+      #splashLoading #alert {
+        position: absolute;
+        bottom: 40px;
+        text-align: center;
+        width:100%;
+        height:44px;
+        font-size:16px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(121,121,121,1);
+        line-height:22px;
+        color: #797979;
+      }
     </style>
     <!-- 引入组件库 -->
     <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
@@ -110,6 +123,14 @@
         ossKanbanCoverImagePath: '<%= htmlWebpackPlugin.options.ossKanbanCoverImagePath %>',
         version: '<%= htmlWebpackPlugin.options.version %>'
       }
+    </script>
+    <script type="text/javascript">
+      var s = null
+      clearTimeout(s)
+      var s = setTimeout(() => {
+        var text = document.getElementById('alert').innerHTML = '<div>哎呀！加载出现了问题</div> <div>请联系我们：177-1037-6397</div>'
+      },10000)
+      var test = document.getElementById('alert')
     </script>
     <script>
       //  只在企业微信中打开
@@ -132,12 +153,12 @@
   <body>
   <div id="app"></div>
   <div id="splashLoading" class="splash-loading">
-  <div class="all">
-           <div class="spinner"><i></i></div>
-       <div class="text">正在进入日事清...</div>
-       <div class="block"></div>
-  </div>
-
+    <div class="all">
+      <div class="spinner"><i></i></div>
+      <div class="text">正在进入日事清...</div>
+      <div class="block"></div>
+    </div>
+    <div id="alert"></div>
   </div>
    <script type="text/javascript" src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script>
     <script src="https://g.alicdn.com/dingding/open-develop/1.6.9/dingtalk.js"></script>
