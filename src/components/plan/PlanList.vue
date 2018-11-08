@@ -1,20 +1,5 @@
 <template>
   <div class="pl">
-    <v-touch
-      @tap="watchVersion"
-      class="version">
-      <div class="left">
-        <img src="../../assets/img/version.svg">
-        <div class="text">
-          <span class="bb">{{ver}}</span> 
-          <span v-if="!hasVerKey" class="day">到期时间： {{day}} </span>
-        </div>
-      </div>
-      <div class="right">
-        收费说明
-        <i class="icon2-arrow-right-small arrow"></i>
-      </div>
-    </v-touch>
     <ul
       v-if="planItems.length > 0"
       :class="{'plan-count': planCount}"
