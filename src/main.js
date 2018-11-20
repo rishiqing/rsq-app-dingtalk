@@ -72,19 +72,6 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$rrule = RRule
 
-function check_date_diff(time){ //检测日期的间隔时间
- var checkDate = time
- var nowTime   = new Date();// 当前时间
- var the_year  = nowTime.getYear(); 
- var the_month = nowTime.getMonth() + 1; 
- var the_day   = nowTime.getDate();
- 
- var thesecond = 24 * 60 * 60 *1000
-console.log(checkDate, nowTime)
- var diffTime    = (checkDate - nowTime)/thesecond; 
- 
- return diffTime; 
-}
 
 window.rsqadmg.exec('auth', {
   success: function (rsqUser, authUser) {
@@ -93,36 +80,12 @@ window.rsqadmg.exec('auth', {
       authUser: authUser
     }
 
-    // console.log(rsqUser, authUser)
+    console.log(rsqUser, authUser)
     // growingUtil.growingIoMethod(rsqUser)
     //  去掉iOS的回弹效果
     // window.rsqadmg.exec('disableBounce')
 
     store.state.env.isAddNav = true
-    rsqAdapterManager.ajax.get(rsqConfig.authServer + 'corp/user/popup', {
-      corpId: authUser.corpId,
-      userId: authUser.userId
-    }, function(resSign){
-      var res = JSON.parse(resSign)
-      console.log(res)
-      store.commit('PLUS', res)
-      if (res.specKey !== ''){
-        if (res.serviceExpire < new Date().getTime()) {
-          router.replace('/buy')
-        } else if (res.totalNumber > res.buyNumber && res.specKey !== 'TRIAL'){
-          router.replace('/updata')
-        } else if (new Date().getTime() <= res.muteInfo.SOON_EXPIRE.muteExpire){
-          var last = check_date_diff(res.muteInfo.SOON_EXPIRE.muteExpire)
-          if (0 <= last && last <= 3 && res.isAdmin) {
-              router.replace('/dingplus3days?day=' + parseInt(last))
-          }
-        }
-      } else {
-        // var last = check_date_diff(res.muteInfo.SOON_EXPIRE.muteExpire)
-        // router.replace('/dingplus3days?day=' + parseInt(last))
-      }
-    })
-
 
     store.dispatch('fetchStaffList')
     //  获取组织结构
@@ -130,7 +93,6 @@ window.rsqadmg.exec('auth', {
 
     // router.replace('/dingplus15days?day=15')
     // router.replace('/dingplus3days?day=3')
-
     /* eslint-disable no-new */
     new Vue({
       el: '#app',
@@ -142,6 +104,8 @@ window.rsqadmg.exec('auth', {
   },
   error: function () {
     window.rsqadmg.exec('alert', {
+      title:' ',
+      buttonName: '知道了',
       message: '企业成员数据同步中，请稍后……',
       success: function () {
         window.location.href = 'https://www.rishiqing.com'

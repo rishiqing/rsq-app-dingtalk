@@ -51,6 +51,18 @@
           }
         }, 200
       )
+      var know = document.getElementById('know')
+      var er = document.getElementById('tbError')
+      know.onclick= function () {
+        er.parentNode.removeChild(er)
+        window.location.reload()
+      }
+      window.setTimeout(() => {
+        const ele = document.getElementById('tbError')
+        if (ele) {
+          ele.classList.add('tbHas')
+        }
+      },14000)
     }
   }
 </script>
