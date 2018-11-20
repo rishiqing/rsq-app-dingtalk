@@ -86,7 +86,7 @@
           删除
         </v-touch>
         <v-touch
-          v-if="fix"
+          v-else
           tag="a"
           class="delete-plan-btn weui-btn out"
           href="javascript:;"
