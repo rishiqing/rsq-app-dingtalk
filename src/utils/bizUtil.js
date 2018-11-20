@@ -19,7 +19,7 @@ export default {
       })
     }
     const templateArray = []
-    const templateNameArray = ['工作计划', '研发计划', '销售计划', '战略计划']
+    const templateNameArray = ['工作安排', '双十一大促', '店铺管理', '爆品打造']
     templateNameArray.forEach(name => {
       const templateToFind = [name]
 
