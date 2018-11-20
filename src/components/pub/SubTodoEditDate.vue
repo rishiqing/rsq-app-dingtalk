@@ -145,14 +145,14 @@
       this.initData()
       var that = this
       window.rsqadmg.exec('setTitle', {title: '日期选择'})
-      window.rsqadmg.exec('setOptionButtons', {
-        btns: [{key: 'backToday', name: '今天'}],
-        success (res) {
-          if (res.key === 'backToday') {
-            that.tapBackToday()
-          }
-        }
-      })
+      // window.rsqadmg.exec('setOptionButtons', {
+      //   btns: [{key: 'backToday', name: '今天'}],
+      //   success (res) {
+      //     if (res.key === 'backToday') {
+      //       that.tapBackToday()
+      //     }
+      //   }
+      // })
       this.$store.dispatch('setNav', {isShow: false})
     },
     methods: {
