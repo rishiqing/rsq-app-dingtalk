@@ -19,7 +19,7 @@
       'r-nav': Nav,
       'r-guide': Guide,
       'r-start': Start,
-      'r-nav': nav
+      'r-mask-alert': MaskAlert
     },
     data () {
       return {
