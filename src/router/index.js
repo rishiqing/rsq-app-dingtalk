@@ -47,6 +47,7 @@ import InboxNew from 'com/inbox/InboxNew'
 import MoveToPlanList from 'com/pub/MoveToPlanList'
 import MoveToPlanItem from 'com/pub/MoveToPlanItem'
 import TodoEditRepeatNew from 'com/pub/NewRepeat/TodoEditRepeat'
+import VIP from 'com/pub/VIP'
 
 Vue.use(Router)
 
@@ -379,6 +380,13 @@ const router = new Router({
       path: '/version',
       name: 'version',
       component: Version,
+      meta: {requireAuth: false}
+    },
+    // 试用到期
+    {
+      path: '/vip',
+      name: 'vip',
+      component: VIP,
       meta: {requireAuth: false}
     },
     //  产品介绍页面
