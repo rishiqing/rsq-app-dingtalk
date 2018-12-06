@@ -46,8 +46,10 @@
     left: 0;
     right: 0;
     bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background:rgba(0,0,0,0.2);
-    z-index: 9999999;
+    z-index: 999999999999;
   }
     .alert{
       position: fixed;
@@ -57,7 +59,7 @@
       width: 291px;
       height: 372px;
       overflow: hidden;
-      z-index: 99999999;
+      z-index: 999999999999999999;
       left: 50%;
       margin-left: -145px;
       img{
@@ -78,7 +80,7 @@
         margin: 0 24px;
         font-size:14px;
         font-family:PingFangSC-Regular;
-        font-weight:600;
+        font-weight:400;
         color:rgba(61,61,61,1);
         line-height:20px;
         margin-top: 9px;
@@ -87,8 +89,8 @@
         margin-top: 47px;
         height:46px;
         font-size:17px;
-        font-family:PingFangSC-Medium;
-        font-weight:500;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
         color:rgba(70,125,185,1);
         line-height:46px;
         text-align: center;

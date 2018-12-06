@@ -97,8 +97,8 @@
         margin-top: 24px;
         height:46px;
         font-size:17px;
-        font-family:PingFangSC-Medium;
-        font-weight:500;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
         color:rgba(70,125,185,1);
         line-height:46px;
         text-align: center;
