@@ -65,7 +65,6 @@
     components: {
       'r-calendar': Calendar,
       'r-pull-to-refresh': Pull,
-      'r-mask-alert': MaskAlert,
       'r-todo-item-list': TodoItemList
     },
     data () {
