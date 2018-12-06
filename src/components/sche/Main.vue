@@ -42,11 +42,9 @@
           src="../../assets/img/add.svg">
       </v-touch>
     </div>
-    <r-mask-alert v-if="alert" @alert-change="alertChange"/>
   </div>
 </template>
 <script>
-  import MaskAlert from 'com/sche/AlertUser'
   import def from 'ut/defaultUtil'
   import Calendar from 'com/sche/CalendarV2'
   import Pull from 'com/pub/Pull2Refresh'
@@ -68,8 +66,7 @@
       'r-calendar': Calendar,
       'r-pull-to-refresh': Pull,
       'r-mask-alert': MaskAlert,
-      'r-todo-item-list': TodoItemList,
-      'r-nav': nav
+      'r-todo-item-list': TodoItemList
     },
     data () {
       return {
@@ -77,8 +74,7 @@
         currentDate: new Date(),
         paddingTop: CAL_STATE['bar'].value,
         isShowAnimate: false,
-        enablePullToRefresh: false,
-        alert: false
+        enablePullToRefresh: false
       }
     },
     computed: {
@@ -110,11 +106,6 @@
       }
     },
     mounted () {
-      if (window.localStorage.getItem('first')) {
-          this.alert = false
-        } else {
-          this.alert = true
-        }
       this.$store.commit('TD_DATE_HAS_TD_CACHE_DELETE_ALL')
       window.rsqadmg.exec('setTitle', {title: this.formatTitleDate(this.dateSelect)})
       this.$store.dispatch('setNav', {isShow: true})
@@ -140,10 +131,6 @@
       this.pullRefresh()
     },
     methods: {
-      alertChange (k) {
-        window.localStorage.setItem('first',true)
-        this.alert = false
-      },
       createNew () {
         //  过去的日期不允许创建任务
         if (this.currentNumDate + 24 * 3600 * 1000 > new Date().getTime()) {
