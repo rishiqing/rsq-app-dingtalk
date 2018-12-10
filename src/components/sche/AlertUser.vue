@@ -3,21 +3,18 @@
     <v-touch class="mask" @tap="close" ref="close">
     </v-touch>
       <div class="alert" ref="stop">
-        <img class="alert-logo" src="../../assets/img/alertlogo.png">
-        <div class="title">升级企业版</div>
-        <div class="text text1">
-          <span>「计划管理」功能目前属于付费版功能。</span>通过看板的形式将计划拆分成多个步骤或子目标，您可以实时了解团队当前工作进展，直观便捷。
+        <img src="../../assets/img/user.svg">
+        <div class="title">VIP专属客户服务</div>
+        <div class="text">
+          我们会为您提供一次专业的远程演示，方便您快速了解如何使用日事清。现在领取限时赠送服务礼包。
         </div>
-        <div class="text text2">
-          企业版在web端可使用「数据导出」「思维导图」「甘特图」「番茄钟」「office在线编辑」「统计」「自定义权限」等精彩功能。
-        </div>
-        <v-touch @tap="watchVer" class="bottom">查看收费说明</v-touch>
+        <v-touch @tap="watchVer" class="bottom">领取权益</v-touch>
       </div>
     </div>
 </template>
 <script>
   export default {
-    name: 'MaskAlert',
+    name: 'AlertUser',
     data () {
       return {
       }
@@ -31,7 +28,8 @@
         this.$emit('alert-change', false)
       },
       watchVer () {
-        this.$router.push('/version')
+        this.$emit('alert-change', false)
+        this.$router.push('/vip')
       }
     }
   }
@@ -48,53 +46,47 @@
     left: 0;
     right: 0;
     bottom: 0;
+    width: 100vw;
+    height: 100vh;
     background:rgba(0,0,0,0.2);
-    z-index: 9999999;
+    z-index: 999999999999;
   }
     .alert{
       position: fixed;
       background:rgba(255,255,255,1);
       border-radius:10px;
       top: 68px;
+      width: 291px;
+      height: 372px;
+      overflow: hidden;
+      z-index: 999999999999999999;
       left: 50%;
       margin-left: -145px;
-      width: 291px;
-      overflow: hidden;
-      z-index: 99999999;
-      .alert-logo{
-        width: 36px;
-        height: 36px;
-        display: block;
-        margin: 0 auto;
-        margin-top: 29px;
+      img{
+        width: 100%;
+        vertical-align: center;
       }
       .title{
-        height:22px;
+        margin-top: 15px;
+        text-align: center;
+        height:26px;
         font-size:19px;
         font-family:PingFangSC-Medium;
         font-weight:500;
-        color:rgba(0,0,0,1);
-        line-height:22px;
-        text-align: center;
-        margin-top: 9px;
+        color:rgba(61,61,61,1);
+        line-height:26px;
       }
       .text{
         margin: 0 24px;
         font-size:14px;
         font-family:PingFangSC-Regular;
-        font-weight:600;
+        font-weight:400;
         color:rgba(61,61,61,1);
         line-height:20px;
-        margin-top: 24px;
-        span{
-          font-weight: bold;
-        }
-      }
-      .text2{
-        margin-top: 21px;
+        margin-top: 9px;
       }
       .bottom{
-        margin-top: 24px;
+        margin-top: 47px;
         height:46px;
         font-size:17px;
         font-family:PingFangSC-Regular;

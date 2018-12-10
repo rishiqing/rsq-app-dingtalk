@@ -65,8 +65,7 @@
     components: {
       'r-calendar': Calendar,
       'r-pull-to-refresh': Pull,
-      'r-todo-item-list': TodoItemList,
-      'r-nav': nav
+      'r-todo-item-list': TodoItemList
     },
     data () {
       return {
