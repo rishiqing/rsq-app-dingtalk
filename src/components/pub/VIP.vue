@@ -41,9 +41,10 @@
   .vip{
     position: relative;  
     width: 100%;
-    min-height: calc(100% - 30px);
+    min-height: calc(100% - 60px);
     background-color: #fff;
     padding-top: 30px;
+    padding-bottom: 30px; 
     .logo{
       display: block;
       width: 56px;
