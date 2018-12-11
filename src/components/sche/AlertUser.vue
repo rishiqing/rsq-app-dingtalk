@@ -84,7 +84,7 @@
         margin-top: 9px;
       }
       .bottom{
-        margin-top: 47px;
+        margin-top: 39px;
         height:46px;
         font-size:17px;
         font-family:PingFangSC-Regular;
