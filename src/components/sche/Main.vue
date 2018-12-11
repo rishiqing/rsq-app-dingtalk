@@ -42,8 +42,8 @@
           src="../../assets/img/add.svg">
       </v-touch>
     </div>
-     <r-mask-alert v-if="alert" @alert-change="alertChange"/>
     <r-nav/>
+    <r-mask-alert v-if="alert" @alert-change="alertChange"/>
   </div>
 </template>
 <script>
@@ -261,7 +261,8 @@
     z-index: 9999999;
   }
   .calendar {
-    overflow-y: auto;
+    position: relative;
+    overflow:hidden;
   }
   .itm-lst{
     text-align: center;
