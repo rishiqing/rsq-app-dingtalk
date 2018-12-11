@@ -2,7 +2,7 @@
   <div class="vip">
     <img class="logo" src="../../assets/img/viplogo.svg">
     <div class="title">功倍VIP专属用户顾问</div>
-    <img :src="code" class="code">
+    <img src="../../assets/img/Group 2.svg" class="code">
     <div class="text">长按添加专属用户顾问</div>
     <div class="border"></div>
     <div class="text2">我们会为您提供以下服务</div>
@@ -11,7 +11,7 @@
       <div class="c"><div class="one"><img src="../../assets/img/two.svg"></div> <div class="text3">业务流程梳理</div></div>
       <div class="c"><div class="one"><img src="../../assets/img/three.svg"></div> <div class="text3">业务流程梳理</div></div>
     </div>
-    <div class="phone"><div class="p">联系电话</div><div class="p2">{{phone}}</div></div>
+    <div class="phone"><div class="p">联系电话</div><div class="p2">189-1108-5566</div></div>
   </div>
 </template>
 <script>
