@@ -2,7 +2,7 @@
   <div class="vip">
     <img class="logo" src="../../assets/img/viplogo.svg">
     <div class="title">功倍VIP专属用户顾问</div>
-    <img src="../../assets/img/Group2.svg" class="code">
+    <img src="../../assets/img/Group2.png" class="code">
     <div class="text">长按添加专属用户顾问</div>
     <div class="border"></div>
     <div class="text2">我们会为您提供以下服务</div>
@@ -41,14 +41,14 @@
   .vip{
     position: relative;  
     width: 100%;
-    height: 100%;
+    min-height: calc(100% - 30px);
     background-color: #fff;
+    padding-top: 30px;
     .logo{
       display: block;
       width: 56px;
       height: 56px;
       margin: 0 auto;
-      margin-top: 30px;
     }
     .title{
       height:16px;
