@@ -43,7 +43,6 @@
     width: 100%;
     height: 100%;
     background-color: #fff;
-    overflow: hidden;
     .logo{
       display: block;
       width: 56px;
@@ -67,7 +66,6 @@
       height: 167px;
       margin-top: 18px;
       display: block;
-      border-radius: 4px;
     }
     .text{
       margin-top: 18px;
