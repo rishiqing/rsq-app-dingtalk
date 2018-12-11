@@ -41,15 +41,15 @@
   .vip{
     position: relative;  
     width: 100%;
-    height: 100%;
+    min-height: calc(100% - 60px);
     background-color: #fff;
-    overflow: hidden;
+    padding-top: 30px;
+    padding-bottom: 30px; 
     .logo{
       display: block;
       width: 56px;
       height: 56px;
       margin: 0 auto;
-      margin-top: 30px;
     }
     .title{
       height:16px;
