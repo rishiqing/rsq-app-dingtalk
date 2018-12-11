@@ -3,13 +3,9 @@
     id="app"
     class="rsq-webview">
     <router-view />
-    <r-nav
-      v-show="isShowNav" />
-    <r-mask-alert v-if="alert" @alert-change="alertChange"/>
   </div>
 </template>
 <script>
-  import MaskAlert from 'com/sche/AlertUser'
   import Nav from 'com/Nav'
   import Guide from 'com/pub/RemindWindow'
   import Start from 'com/me/Start'
@@ -18,13 +14,11 @@
     components: {
       'r-nav': Nav,
       'r-guide': Guide,
-      'r-start': Start,
-      'r-mask-alert': MaskAlert
+      'r-start': Start
     },
     data () {
       return {
-        engine: true,
-        alert: false
+        engine: true
       }
     },
     computed: {
@@ -39,10 +33,6 @@
       }
     },
     methods: {
-      alertChange (k) {
-        window.localStorage.setItem('first',true)
-        this.alert = false
-      },
     },
     mounted () {
       // window.alert('客户端的userAgent: ' + window.navigator.userAgent.toLowerCase())
@@ -57,11 +47,6 @@
             ele.classList.add('ease-hide')
             window.setTimeout(() => {
               ele.parentNode.removeChild(ele)
-              if (window.localStorage.getItem('first')) {
-                that.alert = false
-              } else {
-                that.alert = true
-              }
             }, 300)
           }
         }, 200
