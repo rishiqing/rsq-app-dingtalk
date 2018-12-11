@@ -47,6 +47,7 @@ import InboxNew from 'com/inbox/InboxNew'
 import MoveToPlanList from 'com/pub/MoveToPlanList'
 import MoveToPlanItem from 'com/pub/MoveToPlanItem'
 import TodoEditRepeatNew from 'com/pub/NewRepeat/TodoEditRepeat'
+import VIP from 'com/pub/VIP'
 
 Vue.use(Router)
 
@@ -398,6 +399,12 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/vip',
+      name: 'vip',
+      component: VIP,
+      meta: {requireAuth: false}
     }
     //  ------------------------
 
