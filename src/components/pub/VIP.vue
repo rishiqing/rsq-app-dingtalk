@@ -2,7 +2,7 @@
   <div class="vip">
     <img class="logo" src="../../assets/img/viplogo.svg">
     <div class="title">功倍VIP专属用户顾问</div>
-    <img src="../../assets/img/Group 2.svg" class="code">
+    <img src="../../assets/img/Group2.svg" class="code">
     <div class="text">长按添加专属用户顾问</div>
     <div class="border"></div>
     <div class="text2">我们会为您提供以下服务</div>
