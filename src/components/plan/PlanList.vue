@@ -25,6 +25,7 @@
         class="main_inbox"
         src="../../assets/img/add.svg">
     </v-touch>
+    <r-nav/>
   </div>
 </template>
 <script>
