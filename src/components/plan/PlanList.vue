@@ -41,6 +41,7 @@
         class="main_inbox"
         src="../../assets/img/add.svg">
     </v-touch>
+    <r-nav/>
     <r-mask-alert v-if="alert" @alert-change="alertChange"/>
   </div>
 </template>
