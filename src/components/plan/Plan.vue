@@ -90,7 +90,7 @@
       img.src = img_url
       img.onload = function(){
         if (img.width > 1600 || img.height > 1600) {
-          that.cacheImg = ''
+          that.cacheImg = 'https://images.timetask.cn/cover/default/kanban_v1/cover-default-7.png'
         } else {
           that.cacheImg = c
         }
