@@ -9,6 +9,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin')
+var HtmlWebpackExcludeAssetsPlugin = require('html-webpack-exclude-assets-plugin')
 
 var env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -69,6 +70,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         : config.build.index,
       template: 'index.html',
       inject: true,
+      excludeAssets: [/app.*.css/],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -107,6 +109,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ]),
+    new HtmlWebpackExcludeAssetsPlugin(),
     // 将css样式直接嵌入到index.html页面中
     new StyleExtHtmlWebpackPlugin({
       position: 'head-bottom'
