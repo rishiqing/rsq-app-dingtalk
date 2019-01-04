@@ -128,7 +128,9 @@
       var s = null
       clearTimeout(s)
       var s = setTimeout(() => {
-        var text = document.getElementById('alert').innerHTML = '<div>哎呀！加载出现了问题</div> <div>请联系我们：177-1037-6397</div>'
+        if (document.getElementById('alert')) {
+          var text = document.getElementById('alert').innerHTML = '<div>哎呀！加载出现了问题</div> <div>请联系我们：177-1037-6397</div>'
+        }
       },10000)
       var test = document.getElementById('alert')
     </script>
