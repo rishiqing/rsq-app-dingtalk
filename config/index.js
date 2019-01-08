@@ -74,19 +74,19 @@ module.exports = {
     // Set to `true` or `false` to always turn it on or off
     bundleAnalyzerReport: process.env.npm_config_report,
     // 日事清地址
-    rsqServer: 'http://beta.rishiqing.com/',
+    rsqServer: 'https://beta.rishiqing.com/',
     // 日事清api的后台地址
-    apiServer: 'http://betading.rishiqing.com/',
+    apiServer: 'https://betading.rishiqing.com/',
     // apiServer: 'http://dd.rsq.etoutiao.cn/',
     // 日事清-portlet的权限认证后台地址
-    authServer: 'http://betading.rishiqing.com/',
+    authServer: 'https://betading.rishiqing.com/',
     // authServer: 'http://dd.rsq.etoutiao.cn/rsqauth/',
     // 日事清前端文件地址
     frontServer: 'https://res-front-cdn.timetask.cn/',
     // 阿里云OSS STS认证的server地址，临时！！！！注意更新
     stsServer: 'https://sts-server.rishiqing.com/sts/',
     // stsServer: 'http://182.92.222.40:8300/sts/',
-    remindServer: 'http://ding.rishiqing.com/',
+    remindServer: 'https://ding.rishiqing.com/',
     aliOSS: {
       region: 'oss-cn-beijing',
       bucket: 'rishiqing-file',
