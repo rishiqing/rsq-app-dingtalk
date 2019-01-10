@@ -31,8 +31,8 @@ import router from './router'
 import store from './store'
 import weui from 'vue-weui'
 //  sentry相关
-import Raven from 'raven-js'
-import RavenVue from 'raven-js/plugins/vue'
+// import Raven from 'raven-js'
+// import RavenVue from 'raven-js/plugins/vue'
 import ElementUI from 'element-ui'
 // 图片轮播
 import VueAwesomeSwiper from 'vue-awesome-swiper'
@@ -40,17 +40,17 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 
 //  正式环境下配置sentry
-if (window.rsqConfig.env === 'prod') {
-  Raven
-    .config('https://8c36e59fcc6f4d1283c64115f5a99955@sentry.io/230122')
-    .addPlugin(RavenVue, Vue)
-    .install()
-} else {
-  // const ele = document.getElementById('splashLoading')
-  // if (ele) {
-  //   ele.parentNode.removeChild(ele)
-  // }
-}
+// if (window.rsqConfig.env === 'prod') {
+//   Raven
+//     .config('https://8c36e59fcc6f4d1283c64115f5a99955@sentry.io/230122')
+//     .addPlugin(RavenVue, Vue)
+//     .install()
+// } else {
+//   // const ele = document.getElementById('splashLoading')
+//   // if (ele) {
+//   //   ele.parentNode.removeChild(ele)
+//   // }
+// }
 document.addEventListener('touchend', function () {
   let inputArrays = document.querySelectorAll('input')
   if (inputArrays.length !== 0) {
