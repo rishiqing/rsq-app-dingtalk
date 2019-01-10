@@ -128,23 +128,23 @@ window.rsqadmg.exec('auth', {
     // router.replace('/dingplus15days?day=15')
     // router.replace('/dingplus3days?day=3')
 
-    const gio = window.gio;
-    gio('init', '8282882b138aee34', {});
-    var companyId   = rsqUser.team.id || '个人'
-    var companyName = rsqUser.team.name || '个人'
-    var orgType = rsqUser.team ? '企业' : '个人'
-    var platform = 'ding'
-    var vipType = '企业付费'
-    var telephoneNum = rsqUser.phoneNumber;
-    gio('setUserId', rsqUser.id);
-    gio('app.set', 'company_id', companyId);
-    gio('app.set', 'user_name', rsqUser.realName);
-    gio('app.set', 'company_name', companyName);
-    gio('app.set', 'personalOrCompany', orgType);
-    gio('app.set', 'isVip', vipType);
-    gio('app.set', 'platform', platform);
-    gio('app.set', 'telephone', telephoneNum);
-    gio('send');
+    // const gio = window.gio;
+    // gio('init', '8282882b138aee34', {});
+    // var companyId   = rsqUser.team.id || '个人'
+    // var companyName = rsqUser.team.name || '个人'
+    // var orgType = rsqUser.team ? '企业' : '个人'
+    // var platform = 'ding'
+    // var vipType = '企业付费'
+    // var telephoneNum = rsqUser.phoneNumber;
+    // gio('setUserId', rsqUser.id);
+    // gio('app.set', 'company_id', companyId);
+    // gio('app.set', 'user_name', rsqUser.realName);
+    // gio('app.set', 'company_name', companyName);
+    // gio('app.set', 'personalOrCompany', orgType);
+    // gio('app.set', 'isVip', vipType);
+    // gio('app.set', 'platform', platform);
+    // gio('app.set', 'telephone', telephoneNum);
+    // gio('send');
     /* eslint-disable no-new */
     new Vue({
       el: '#app',
