@@ -1,0 +1,7 @@
+const fs = require('fs')
+const path = require('path')
+const tar_path = path.join(__dirname,'dist/workbei')
+fs.renameSync(tar_path + '/index.html',tar_path + '/main.html')
+var rs = fs.createReadStream(__dirname + '/index_loading.html')
+var ws = fs.createWriteStream(tar_path + '/index.html')
+rs.pipe(ws)
