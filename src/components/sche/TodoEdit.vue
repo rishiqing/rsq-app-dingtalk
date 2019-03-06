@@ -327,9 +327,9 @@
           window.rsqadmg.execute('alert', {message: '任务标题不能为空'})
           return Promise.reject()
         }
-        if (this.currentTodo.kanbanId) {
-          return this.$store.dispatch('updateKanbanItem', {id: this.currentTodo.id, name: newTitle})
-        } else {
+        // if (this.currentTodo.kanbanId) {
+        //   return this.$store.dispatch('updateKanbanItem', {id: this.currentTodo.id, name: newTitle})
+        // } else {
           if (newTitle !== this.editItem.pTitle) {
 //          window.rsqadmg.exec('showLoader', {text: '保存中...'})
             var params = {pTitle: newTitle}
@@ -364,7 +364,7 @@
           } else {
             return Promise.resolve()
           }
-        }
+        // }
       },
       saveMember (idArray, old) { // 这个方法关键之处是每次要穿的参数是总接收id，增加的id减少的id
         this.newList = idArray.join(',')
